@@ -1,11 +1,12 @@
 // AstrBot Brasil — pacote de idioma pt-BR.
-// Chaves ainda não localizadas usam en-US como fallback temporário para
-// preservar funcionalidade enquanto a cobertura brasileira é ampliada.
+// Chaves ainda não localizadas usam en-US como fallback temporário para preservar funcionalidade.
 import enUS from '../en-US';
 import common from './core/common.json';
 import actions from './core/actions.json';
 import status from './core/status.json';
 import navigation from './core/navigation.json';
+import header from './core/header.json';
+import shared from './core/shared.json';
 import auth from './features/auth.json';
 import welcome from './features/welcome.json';
 import dashboard from './features/dashboard.json';
@@ -17,6 +18,9 @@ import platform from './features/platform.json';
 import config from './features/config.json';
 import chat from './features/chat.json';
 import conversation from './features/conversation.json';
+import command from './features/command.json';
+import persona from './features/persona.json';
+import sessionManagement from './features/session-management.json';
 import errors from './messages/errors.json';
 import success from './messages/success.json';
 import validation from './messages/validation.json';
@@ -28,7 +32,9 @@ export default {
     common: { ...enUS.core.common, ...common },
     actions: { ...enUS.core.actions, ...actions },
     status: { ...enUS.core.status, ...status },
-    navigation: { ...enUS.core.navigation, ...navigation }
+    navigation: { ...enUS.core.navigation, ...navigation },
+    header: { ...enUS.core.header, ...header },
+    shared: { ...enUS.core.shared, ...shared }
   },
   features: {
     ...enUS.features,
@@ -42,7 +48,10 @@ export default {
     platform: { ...enUS.features.platform, ...platform },
     config: { ...enUS.features.config, ...config },
     chat: { ...enUS.features.chat, ...chat },
-    conversation: { ...enUS.features.conversation, ...conversation }
+    conversation: { ...enUS.features.conversation, ...conversation },
+    command: { ...enUS.features.command, ...command },
+    persona: { ...enUS.features.persona, ...persona },
+    'session-management': { ...enUS.features['session-management'], ...sessionManagement }
   },
   messages: {
     ...enUS.messages,
