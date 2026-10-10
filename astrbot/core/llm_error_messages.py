@@ -1,6 +1,14 @@
-"""Translations for built-in LLM request failures."""
+"""Traduções das falhas internas de solicitações a LLMs."""
 
 LLM_ERROR_MESSAGES = {
+    "pt-BR": {
+        "invalidSessionProviderType": "O modelo de chat (provedor) desta sessão possui um tipo inválido: {provider_type}",
+        "noProvider": "Falha na solicitação ao LLM: nenhum modelo de chat (provedor) disponível foi encontrado. Configure e ative um modelo na WebUI primeiro.",
+        "providerNotFound": "Falha na solicitação ao LLM: o provedor `{provider}` não foi encontrado. Revise a configuração do provedor ou selecione um modelo disponível.",
+        "invalidProviderType": "Falha na solicitação ao LLM: o tipo de provedor selecionado ({provider_type}) é inválido. Esta solicitação foi ignorada.",
+        "requestFailed": "Falha na solicitação ao LLM: {detail}",
+        "blockedProvider": "Falha na solicitação ao LLM: a URL base da API do provedor `{api_base}` foi bloqueada por motivos de segurança. Use outro provedor de IA.",
+    },
     "zh-CN": {
         "invalidSessionProviderType": "该会话来源的对话模型（提供商）的类型不正确: {provider_type}",
         "noProvider": "LLM 请求失败：未找到任何可用的对话模型（提供商）。请先在 WebUI 中配置并启用可用模型。",
