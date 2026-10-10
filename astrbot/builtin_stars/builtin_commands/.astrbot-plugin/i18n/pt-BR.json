@@ -1,0 +1,6 @@
+{
+  "metadata": {
+    "display_name": "Comandos integrados",
+    "desc": "Plugin interno do AstrBot Brasil que fornece comandos como /reset, /help e /sid."
+  }
+}
