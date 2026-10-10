@@ -1,0 +1,9 @@
+{
+  "title":"Detalhes do documento","backToKB":"Voltar para a base de conhecimento",
+  "states":{"loadError":"Falha ao carregar o documento","chunksLoadError":"Falha ao carregar os trechos","retry":"Tentar novamente"},
+  "info":{"title":"Informações do documento","name":"Nome do documento","type":"Tipo do arquivo","size":"Tamanho","chunkCount":"Quantidade de trechos","createdAt":"Enviado em"},
+  "chunks":{"title":"Trechos","empty":"Nenhum trecho","index":"Índice","content":"Conteúdo","charCount":"Caracteres","actions":"Ações","view":"Ver","edit":"Editar","delete":"Excluir","preview":"Prévia","search":"Pesquisar trechos","searchPlaceholder":"Digite palavras-chave...","showing":"Mostrando","deleteConfirm":"Excluir este trecho?","deleteSuccess":"Trecho excluído","deleteFailed":"Falha ao excluir trecho"},
+  "edit":{"title":"Editar trecho","content":"Conteúdo do trecho","cancel":"Cancelar","save":"Salvar","saveSuccess":"Trecho salvo","saveFailed":"Falha ao salvar trecho"},
+  "delete":{"title":"Excluir trecho","confirmText":"Excluir este trecho?","warning":"Esta ação não pode ser desfeita e pode afetar a recuperação da base de conhecimento.","cancel":"Cancelar","confirm":"Excluir","deleteSuccess":"Trecho excluído","deleteFailed":"Falha ao excluir trecho"},
+  "view":{"title":"Detalhes do trecho","index":"Índice","content":"Conteúdo","charCount":"Caracteres","vecDocId":"ID vetorial","close":"Fechar"}
+}
