@@ -1,19 +1,21 @@
-name: Unit Tests
+name: Testes unitários
 
 on:
   push:
     branches:
-      - master
+      - main
     paths-ignore:
       - 'README*.md'
       - 'changelogs/**'
       - 'dashboard/**'
   pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   unit-tests:
-    name: Run pytest suite (${{ matrix.os }})
+    name: Pytest (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
@@ -21,52 +23,47 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
-    # The Windows lane stays best-effort for now: the suite still has
-    # pre-existing Windows-specific failures there. Promote to blocking
-    # once those tests are fixed.
+    # O conjunto original ainda possui falhas específicas do Windows;
+    # por isso essa execução permanece informativa até elas serem corrigidas.
     continue-on-error: ${{ matrix.os == 'windows-latest' }}
 
     defaults:
       run:
-        # Windows runners default to pwsh; use bash so the same steps and
-        # test script work on all three platforms.
         shell: bash
 
     steps:
-      - name: Checkout
+      - name: Baixar código
         uses: actions/checkout@v7
 
-      - name: Set up Python
+      - name: Configurar Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
-      - name: Install uv
+      - name: Instalar uv
         run: |
           python -m pip install --upgrade pip
           python -m pip install uv
 
-      - name: Install Linux sandbox dependency
+      - name: Instalar dependência do sandbox no Linux
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y bubblewrap
 
-      - name: Enable and verify Linux sandbox execution
+      - name: Habilitar e verificar sandbox no Linux
         if: runner.os == 'Linux'
         run: |
-          # Ubuntu's AppArmor policy blocks user-namespace capabilities by default.
-          # Allow them on this ephemeral runner so the real sandbox tests can run.
           if [ -f /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
             sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           fi
           bwrap --unshare-all --ro-bind / / /bin/true
 
-      - name: Verify macOS sandbox dependency
+      - name: Verificar sandbox no macOS
         if: runner.os == 'macOS'
         run: test -x /usr/bin/sandbox-exec
 
-      - name: Run tests
+      - name: Executar testes
         run: |
           chmod +x scripts/run_pytests_ci.sh
           bash ./scripts/run_pytests_ci.sh ./tests
