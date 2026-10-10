@@ -1,13 +1,27 @@
 // AstrBot Brasil — pacote de idioma pt-BR.
-// Chaves ainda não localizadas usam en-US como fallback temporário para preservar funcionalidade.
+// A edição brasileira usa merge recursivo: qualquer chave ainda não traduzida
+// continua disponível via en-US sem apagar campos internos da configuração.
 import enUS from '../en-US';
 import common from './core/common.json'; import actions from './core/actions.json'; import status from './core/status.json'; import navigation from './core/navigation.json'; import header from './core/header.json'; import shared from './core/shared.json';
-import auth from './features/auth.json'; import welcome from './features/welcome.json'; import dashboard from './features/dashboard.json'; import about from './features/about.json'; import consoleMessages from './features/console.json'; import settings from './features/settings.json'; import provider from './features/provider.json'; import platform from './features/platform.json'; import config from './features/config.json'; import chat from './features/chat.json'; import conversation from './features/conversation.json'; import command from './features/command.json'; import persona from './features/persona.json'; import sessionManagement from './features/session-management.json'; import cron from './features/cron.json'; import stats from './features/stats.json'; import subagent from './features/subagent.json'; import toolUse from './features/tool-use.json'; import trace from './features/trace.json'; import chart from './features/chart.json'; import extension from './features/extension.json'; import knowledgeBaseIndex from './features/knowledge-base/index.json'; import knowledgeBaseDetail from './features/knowledge-base/detail.json'; import knowledgeBaseDocument from './features/knowledge-base/document.json'; import alkaidIndex from './features/alkaid/index.json'; import alkaidKnowledgeBase from './features/alkaid/knowledge-base.json'; import alkaidMemory from './features/alkaid/memory.json';
+import auth from './features/auth.json'; import welcome from './features/welcome.json'; import dashboard from './features/dashboard.json'; import about from './features/about.json'; import consoleMessages from './features/console.json'; import settings from './features/settings.json'; import provider from './features/provider.json'; import platform from './features/platform.json'; import config from './features/config.json'; import configMetadata from './features/config-metadata.json'; import chat from './features/chat.json'; import conversation from './features/conversation.json'; import command from './features/command.json'; import persona from './features/persona.json'; import sessionManagement from './features/session-management.json'; import cron from './features/cron.json'; import stats from './features/stats.json'; import subagent from './features/subagent.json'; import toolUse from './features/tool-use.json'; import trace from './features/trace.json'; import chart from './features/chart.json'; import extension from './features/extension.json'; import knowledgeBaseIndex from './features/knowledge-base/index.json'; import knowledgeBaseDetail from './features/knowledge-base/detail.json'; import knowledgeBaseDocument from './features/knowledge-base/document.json'; import alkaidIndex from './features/alkaid/index.json'; import alkaidKnowledgeBase from './features/alkaid/knowledge-base.json'; import alkaidMemory from './features/alkaid/memory.json';
 import errors from './messages/errors.json'; import success from './messages/success.json'; import validation from './messages/validation.json';
 
-export default {
-  ...enUS,
-  core:{...enUS.core,common:{...enUS.core.common,...common},actions:{...enUS.core.actions,...actions},status:{...enUS.core.status,...status},navigation:{...enUS.core.navigation,...navigation},header:{...enUS.core.header,...header},shared:{...enUS.core.shared,...shared}},
-  features:{...enUS.features,extension:{...enUS.features.extension,...extension},auth:{...enUS.features.auth,...auth},welcome:{...enUS.features.welcome,...welcome},dashboard:{...enUS.features.dashboard,...dashboard},about:{...enUS.features.about,...about},console:{...enUS.features.console,...consoleMessages},settings:{...enUS.features.settings,...settings},provider:{...enUS.features.provider,...provider},platform:{...enUS.features.platform,...platform},config:{...enUS.features.config,...config},chat:{...enUS.features.chat,...chat},conversation:{...enUS.features.conversation,...conversation},command:{...enUS.features.command,...command},persona:{...enUS.features.persona,...persona},'session-management':{...enUS.features['session-management'],...sessionManagement},cron:{...enUS.features.cron,...cron},stats:{...enUS.features.stats,...stats},subagent:{...enUS.features.subagent,...subagent},tooluse:{...enUS.features.tooluse,...toolUse},trace:{...enUS.features.trace,...trace},chart:{...enUS.features.chart,...chart},alkaid:{...enUS.features.alkaid,index:{...enUS.features.alkaid.index,...alkaidIndex},'knowledge-base':{...enUS.features.alkaid['knowledge-base'],...alkaidKnowledgeBase},memory:{...enUS.features.alkaid.memory,...alkaidMemory}},'knowledge-base':{...enUS.features['knowledge-base'],index:{...enUS.features['knowledge-base'].index,...knowledgeBaseIndex},detail:{...enUS.features['knowledge-base'].detail,...knowledgeBaseDetail},document:{...enUS.features['knowledge-base'].document,...knowledgeBaseDocument}}},
-  messages:{...enUS.messages,errors:{...enUS.messages.errors,...errors},success:{...enUS.messages.success,...success},validation:{...enUS.messages.validation,...validation}}
+function mergeDeep(base: any, patch: any): any {
+  if (Array.isArray(patch)) return [...patch];
+  if (patch === null || typeof patch !== 'object') return patch;
+  const result: any = base && typeof base === 'object' && !Array.isArray(base) ? { ...base } : {};
+  for (const [key, value] of Object.entries(patch)) {
+    result[key] = value && typeof value === 'object' && !Array.isArray(value)
+      ? mergeDeep(result[key], value)
+      : Array.isArray(value) ? [...value] : value;
+  }
+  return result;
+}
+
+const ptBR = {
+  core:{common,actions,status,navigation,header,shared},
+  features:{extension,auth,welcome,dashboard,about,console:consoleMessages,settings,provider,platform,config,'config-metadata':configMetadata,chat,conversation,command,persona,'session-management':sessionManagement,cron,stats,subagent,tooluse:toolUse,trace,chart,alkaid:{index:alkaidIndex,'knowledge-base':alkaidKnowledgeBase,memory:alkaidMemory},'knowledge-base':{index:knowledgeBaseIndex,detail:knowledgeBaseDetail,document:knowledgeBaseDocument}},
+  messages:{errors,success,validation}
 };
+
+export default mergeDeep(enUS, ptBR) as typeof enUS;
