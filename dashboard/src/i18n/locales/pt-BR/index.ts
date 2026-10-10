@@ -11,6 +11,9 @@ import welcome from './features/welcome.json';
 import dashboard from './features/dashboard.json';
 import about from './features/about.json';
 import consoleMessages from './features/console.json';
+import settings from './features/settings.json';
+import provider from './features/provider.json';
+import platform from './features/platform.json';
 import errors from './messages/errors.json';
 import success from './messages/success.json';
 import validation from './messages/validation.json';
@@ -30,7 +33,10 @@ export default {
     welcome: { ...enUS.features.welcome, ...welcome },
     dashboard: { ...enUS.features.dashboard, ...dashboard },
     about: { ...enUS.features.about, ...about },
-    console: { ...enUS.features.console, ...consoleMessages }
+    console: { ...enUS.features.console, ...consoleMessages },
+    settings: { ...enUS.features.settings, ...settings },
+    provider: { ...enUS.features.provider, ...provider },
+    platform: { ...enUS.features.platform, ...platform }
   },
   messages: {
     ...enUS.messages,
