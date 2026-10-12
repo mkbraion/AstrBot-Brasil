@@ -1,0 +1,14 @@
+{
+  "title":"Memória de longo prazo","subtitle":"Gerenciamento da memória de longo prazo do assistente de IA",
+  "memories":{"title":"Lista de memórias","content":"Conteúdo da memória","importance":"Nível de importância","createTime":"Criada em","lastAccess":"Último acesso","category":"Categoria"},
+  "categories":{"personal":"Informações pessoais","preferences":"Preferências","conversations":"Histórico de conversas","facts":"Informações factuais","skills":"Conhecimento de Skills"},
+  "importance":{"high":"Alta","medium":"Média","low":"Baixa"},
+  "actions":{"view":"Ver detalhes","edit":"Editar","delete":"Excluir","pin":"Fixar","unpin":"Desafixar"},
+  "filters":{"all":"Todas","category":"Por categoria","importance":"Por importância","dateRange":"Por período","title":"Filtros","userIdLabel":"Filtrar por ID do usuário","filterButton":"Filtrar","resetButton":"Limpar filtro","refreshButton":"Atualizar grafo"},
+  "search":{"title":"Pesquisar memória","userIdLabel":"ID do usuário","queryLabel":"Digite palavras-chave","searchButton":"Pesquisar","resultsTitle":"Resultados","noResults":"Nenhuma memória relevante encontrada","similarity":"Relevância","noTextContent":"Sem conteúdo textual"},
+  "addMemory":{"title":"Adicionar memória","textLabel":"Conteúdo textual","userIdLabel":"ID do usuário","summarizeLabel":"Gerar resumo","addButton":"Adicionar dados"},
+  "nodeDetails":{"title":"Detalhes do nó","id":"ID","type":"Tipo","name":"Nome","userId":"ID do usuário","timestamp":"Data/hora"},
+  "graphStats":{"title":"Estatísticas do grafo","nodeCount":"Quantidade de nós","edgeCount":"Quantidade de conexões"},
+  "factDialog":{"title":"Fato de memória","id":"ID","docId":"ID do documento","createdAt":"Criado em","updatedAt":"Atualizado em","metadata":"Metadados","metadataKey":"Chave","metadataValue":"Valor","loading":"Carregando...","close":"Fechar","noValue":"Nenhum","unknown":"Desconhecido"},
+  "messages":{"searchQueryRequired":"Informe palavras-chave","searchSuccess":"{count} memórias relevantes encontradas","searchNoResults":"Nenhuma memória relevante encontrada","searchError":"Falha na pesquisa","addSuccess":"Memória adicionada com sucesso!","addError":"Falha ao adicionar memória","factDetailsError":"Falha ao carregar os detalhes da memória","metadataParseError":"Não foi possível interpretar os metadados","relationNoMemoryData":"Esta relação não possui dados de memória associados"}
+}
