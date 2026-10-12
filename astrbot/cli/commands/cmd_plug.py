@@ -63,7 +63,9 @@ def new(name: str) -> None:
         raise click.ClickException("A versão deve usar o formato x.y ou x.y.z.")
     repo = click.prompt("URL do repositório do plugin", type=str)
     if not repo.startswith("http"):
-        raise click.ClickException("A URL do repositório deve começar com http ou https.")
+        raise click.ClickException(
+            "A URL do repositório deve começar com http ou https."
+        )
 
     click.echo("Baixando o template do plugin...")
     download_repository(
@@ -117,7 +119,9 @@ def list(all: bool) -> None:
         p for p in plugins if p["status"] == PluginStatus.NEED_UPDATE
     ]
     if need_update_plugins:
-        display_plugins(need_update_plugins, "Plugins com atualização disponível", "yellow")
+        display_plugins(
+            need_update_plugins, "Plugins com atualização disponível", "yellow"
+        )
 
     installed_plugins = [p for p in plugins if p["status"] == PluginStatus.INSTALLED]
     if installed_plugins:
@@ -156,7 +160,9 @@ def install(name: str | None, local_path: Path | None, proxy: str | None) -> Non
         return
 
     if name is None:
-        raise click.ClickException("Informe o nome do plugin ou o caminho de um plugin local.")
+        raise click.ClickException(
+            "Informe o nome do plugin ou o caminho de um plugin local."
+        )
 
     local_name_path = Path(name).expanduser()
     if local_name_path.exists() and local_name_path.is_dir():
@@ -194,7 +200,9 @@ def remove(name: str) -> None:
     plugin_path = plugin["local_path"]
 
     click.confirm(
-        f"Tem certeza de que deseja desinstalar o plugin {name}?", default=False, abort=True
+        f"Tem certeza de que deseja desinstalar o plugin {name}?",
+        default=False,
+        abort=True,
     )
 
     try:

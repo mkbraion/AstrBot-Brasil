@@ -15,7 +15,9 @@ def _initialize_config_from_env(astrbot_root: Path) -> None:
     from astrbot.core.config.astrbot_config import AstrBotConfig
 
     AstrBotConfig(config_path=str(astrbot_root / "data" / "cmd_config.json"))
-    click.echo("Configuração data/cmd_config.json inicializada com a senha inicial do dashboard.")
+    click.echo(
+        "Configuração data/cmd_config.json inicializada com a senha inicial do dashboard."
+    )
 
 
 async def initialize_astrbot(astrbot_root: Path, yes: bool = False) -> None:

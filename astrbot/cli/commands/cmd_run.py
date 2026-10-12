@@ -28,8 +28,15 @@ async def run_astrbot(astrbot_root: Path) -> None:
     await core_lifecycle.start()
 
 
-@click.option("--reload", "-r", is_flag=True, help="Recarrega plugins automaticamente durante o desenvolvimento")
-@click.option("--port", "-p", help="Porta do Dashboard do AstrBot", required=False, type=str)
+@click.option(
+    "--reload",
+    "-r",
+    is_flag=True,
+    help="Recarrega plugins automaticamente durante o desenvolvimento",
+)
+@click.option(
+    "--port", "-p", help="Porta do Dashboard do AstrBot", required=False, type=str
+)
 @click.option(
     "--reset-password",
     is_flag=True,
@@ -71,4 +78,6 @@ def run(reload: bool, port: str | None, reset_password: bool) -> None:
             "Não foi possível obter o arquivo de bloqueio. Verifique se outra instância está em execução."
         )
     except Exception as e:
-        raise click.ClickException(f"Erro durante a execução: {e}\n{traceback.format_exc()}")
+        raise click.ClickException(
+            f"Erro durante a execução: {e}\n{traceback.format_exc()}"
+        )
