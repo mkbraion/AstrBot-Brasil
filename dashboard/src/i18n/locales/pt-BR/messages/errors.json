@@ -1,0 +1,8 @@
+{
+  "network": { "timeout": "A solicitação expirou. Tente novamente mais tarde.", "connection": "Falha na conexão de rede. Verifique sua internet.", "server": "Erro no servidor.", "unavailable": "Serviço temporariamente indisponível", "forbidden": "Acesso negado" },
+  "validation": { "required": "Este campo é obrigatório", "invalid": "Formato inválido", "tooLong": "O valor informado é muito longo", "tooShort": "O valor informado é muito curto", "email": "Informe um endereço de e-mail válido", "url": "Informe uma URL válida", "number": "Informe um número válido" },
+  "auth": { "unauthorized": "Acesso não autorizado. Faça login novamente.", "forbidden": "Você não tem permissão para realizar esta operação", "tokenExpired": "Sua sessão expirou. Faça login novamente.", "invalidCredentials": "Usuário ou senha inválidos" },
+  "file": { "uploadFailed": "Falha ao enviar o arquivo", "invalidFormat": "Formato de arquivo não suportado", "tooLarge": "O arquivo excede o limite de tamanho", "notFound": "Arquivo não encontrado" },
+  "operation": { "failed": "A operação falhou", "cancelled": "Operação cancelada", "notSupported": "Operação não suportada", "conflict": "Conflito na operação. Tente novamente mais tarde." },
+  "browser": { "audioNotSupported": "Seu navegador não oferece suporte à reprodução de áudio." }
+}
