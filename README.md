@@ -1,243 +1,222 @@
-![AstrBot-Logo-Simplified](https://github.com/user-attachments/assets/36fb04e4-cc75-4454-bd8b-049d11aa86f9)
+# AstrBot Brasil 🇧🇷
 
+<p align="center">
+  <strong>Agentes de IA, chatbot multicanal e automação em português do Brasil.</strong><br>
+  Edição brasileira adaptada e mantida por <a href="https://github.com/mkbraion">@mkbraion</a>.
+</p>
 
-<div align="center">
+<p align="center">
+  <img alt="Python 3.12+" src="https://img.shields.io/badge/Python-3.12%2B-blue">
+  <img alt="Idioma pt-BR" src="https://img.shields.io/badge/idioma-pt--BR-009c3b">
+  <img alt="Licença AGPL-3.0-or-later" src="https://img.shields.io/badge/licen%C3%A7a-AGPL--3.0--or--later-blue">
+  <img alt="Edição brasileira" src="https://img.shields.io/badge/edi%C3%A7%C3%A3o-Brasil-ffdf00">
+</p>
 
-<a href="https://github.com/AstrBotDevs/AstrBot/blob/master/README_zh.md">简体中文</a> ｜
-<a href="https://github.com/AstrBotDevs/AstrBot/blob/master/README_zh-TW.md">繁體中文</a> ｜
-<a href="https://github.com/AstrBotDevs/AstrBot/blob/master/README_ja.md">日本語</a> ｜
-<a href="https://github.com/AstrBotDevs/AstrBot/blob/master/README_fr.md">Français</a> ｜
-<a href="https://github.com/AstrBotDevs/AstrBot/blob/master/README_es.md">Español</a> ｜
-<a href="https://github.com/AstrBotDevs/AstrBot/blob/master/README_ru.md">Русский</a> 
+> **AstrBot Brasil** é uma edição comunitária brasileira baseada no projeto open source AstrBot. O código original não foi criado por @mkbraion; esta edição concentra tradução, localização, documentação, experiência pt-BR e melhorias específicas da distribuição brasileira.
 
-<br>
+## O que é o AstrBot Brasil?
 
-<div>
-<a href="https://trendshift.io/repositories/21369" target="_blank"><img src="https://trendshift.io/api/badge/repositories/21369" alt="AstrBotDevs%2FAstrBot | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-<a href="https://hellogithub.com/repository/AstrBotDevs/AstrBot" target="_blank"><img src="https://api.hellogithub.com/v1/widgets/recommend.svg?rid=d127d50cd5e54c5382328acc3bb25483&claim_uid=ZO9by7qCXgSd6Lp&t=2" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-</div>
+AstrBot Brasil é uma plataforma de agentes de IA e chatbot que conecta modelos de linguagem a diferentes canais de comunicação. Pode ser usada para assistentes pessoais, automações, atendimento, agentes com ferramentas, bases de conhecimento e experiências de chat com IA.
 
-<br>
+A edição brasileira prioriza:
 
-<div>
-<a href="https://github.com/AstrBotDevs/AstrBot/releases/latest"><img src="https://img.shields.io/github/v/release/AstrBotDevs/AstrBot?color=76bad9"></a>
-<a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="python"></a>
-<a href="https://deepwiki.com/AstrBotDevs/AstrBot"><img src="https://img.shields.io/badge/-Ask_DeepWiki-007ec6?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAPoAAAD6AG1e1JrAAACIUlEQVRYw%2B2XP2gUQRTGv7d3JhYWQawkIBaCVWzETos0gmAnVoKNTSoLK0E7EQQrC20sBVFBtLPQRgTBtBaKjYgIQUSxiJq7fT%2BLvCGPJZdNLt4dQj5Y3u7sznzfzLw%2Fs9IO%2FicANiniCujEfWdsQgBLxAbsbraPZcmBfcAt4DNwKQsZNfEUsAB8YRV12LfA6ZHuedg7AO7ed%2Fc%2BUBcbQhbiu%2B6wXIM6EnZWkszMJe2Ke0n6I2la0v51hFeSMLN6OwIK6jJwEBdUYb2MAxRSz6sY4geiahFgLe1Hwq6YWe3us8AN4FQQU4QM64SPY69Xyr43fADgNjAPXHb3peSsD4FDQ0VLEjAHvIhBPS6AHvA1bBO9JPAXcHFbIRtJ5yzwIQZ9CZwAusDJENIkLqsG8DpNyIZJwSUk9wLHgakcesC1JCCjiHm1kYDNOEjptCxpSVK%2F8f73OFLxPLAYM3oCzEX7MXf%2FlJbc%2F8kWpA4HgQdpYI9IWAbeh83whi84cHXL%2B58EPBoQhnmm94EzwE3gZ2p%2FDhzdbhg%2BTaRr01x7ftb4%2FjBwFzjXrCvDpmLW9crVLNeR9CaapoGemb2TdCERW1tNaBNQ8jktwmozqwtpqRNtdWAjARYk39IS12ZWRX7vmJmA71nQZgi36gN7gCvAj5xc3P0jcH7kx7Ik5IC73wsh14GZsZySow5002l4Jr0b6%2Bm4eSyvpAn8lEzsx2QHo8RfUrlN%2BuPq4ksAAAAASUVORK5CYII%3D&labelColor=000000"></a>
-<a href="https://zread.ai/AstrBotDevs/AstrBot" target="_blank"><img src="https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff" alt="zread"/></a>
-<a href="https://hub.docker.com/r/soulter/astrbot"><img alt="Docker pull" src="https://img.shields.io/docker/pulls/soulter/astrbot.svg?color=76bad9"/></a>
-<a href="https://cloud.astrbot.app/market"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.soulter.top%2Fastrbot%2Fplugin-num&query=%24.result&suffix=%20plugins&label=Marketplace&cacheSeconds=3600"></a>
-<a href="https://gitcode.com/Soulter/AstrBot"><img src="https://gitcode.com/Soulter/AstrBot/star/badge.svg"></a>
-</div>
+- 🇧🇷 interface e documentação em português do Brasil;
+- 💻 instalação simples para Windows e PowerShell;
+- 🤖 suporte a provedores de IA como OpenAI, Anthropic, Gemini e serviços compatíveis;
+- 🧠 Agent, MCP, Skills, personas e base de conhecimento;
+- 🌐 dashboard WebUI e ChatUI;
+- 🔌 ecossistema de plugins;
+- 💬 integração com Telegram, Slack, Discord, LINE e outras plataformas suportadas;
+- 🛡️ sandbox e controle de acesso do agente ao computador.
 
-<br>
+## Captura de tela
 
-<a href="https://astrbot.app/">Documentation</a> ｜
-<a href="https://blog.astrbot.app/">Blog</a> ｜
-<a href="https://astrbot.featurebase.app/roadmap">Roadmap</a> ｜
-<a href="https://github.com/AstrBotDevs/AstrBot/issues">Issue Tracker</a> ｜
-<a href="mailto:community@astrbot.app">Email Support</a>
-</div>
+![Dashboard do AstrBot](https://github.com/user-attachments/assets/f17cdb90-52d7-4773-be2e-ff64b566af6b)
 
-AstrBot is an open-source all-in-one Agent chatbot platform that integrates with mainstream instant messaging apps. It provides reliable and scalable conversational AI infrastructure for individuals, developers, and teams. Whether you're building a personal AI companion, intelligent customer service, automation assistant, or enterprise knowledge base, AstrBot enables you to quickly build production-ready AI applications within your IM platform workflows.
+## Requisitos
 
-![screenshot_1 5x_postspark_2026-02-27_22-37-45](https://github.com/user-attachments/assets/f17cdb90-52d7-4773-be2e-ff64b566af6b)
+- Python 3.12 ou superior;
+- Windows 10/11, Linux ou macOS;
+- Git para contribuição;
+- `uv` recomendado para gerenciamento do ambiente Python.
 
-## Key Features
+## Instalação rápida
 
-1. 💯 Free & Open Source.
-2. ✨ AI LLM Conversations, Multimodal, Agent, MCP, Skills, Knowledge Base, Persona Settings, Auto Context Compression.
-3. 🤖 Supports integration with Dify, Alibaba Cloud Bailian, Coze, and other agent platforms.
-4. 🌐 Multi-Platform: QQ, WeChat Work, Feishu, DingTalk, WeChat Official Accounts, Telegram, Slack, and [more](#supported-messaging-platforms).
-5. 📦 Plugin Extensions with 1000+ plugins available for one-click installation.
-6. 🛡️ [Agent Sandbox](https://docs.astrbot.app/use/astrbot-agent-sandbox.html) for isolated, safe execution of code, shell calls, and session-level resource reuse.
-7. 💻 WebUI Support.
-8. 🌈 Web ChatUI Support with built-in agent sandbox and web search.
-9. 🌐 Internationalization (i18n) Support.
+### Windows — PowerShell
 
-## Quick Start
-
-### One-Click Cloud Deployment (RainYun)
-
-For users who want one-click 24-hour-online deployment and do not want to manage servers themselves, we recommend RainYun's one-click cloud deployment service ☁️:
-
-[![Deploy on RainYun](https://rainyun-apps.cn-nb1.rains3.com/materials/deploy-on-rainyun-en.svg)](https://app.rainyun.com/apps/rca/store/5994?ref=NjU1ODg0)
-
-### One-Click Deployment
-
-> [!NOTE]
-> Requires [uv](https://docs.astral.sh/uv/) to be installed.
-> For macOS users: due to macOS security checks, the first run of the `astrbot` command may take longer (about 10-20s).
-
-For users who want to quickly experience AstrBot, are familiar with command-line usage, and can install a `uv` environment on their own, we recommend the `uv` one-click deployment method ⚡️:
-
-```bash
+```powershell
+python --version
+pip install uv
 uv tool install astrbot --python 3.12
-astrbot init # Only execute this command for the first time to initialize the environment
+astrbot init
 astrbot run
 ```
 
-Update `astrbot`:
+Nas próximas execuções:
 
-```bash
+```powershell
+astrbot run
+```
+
+Para atualizar:
+
+```powershell
 uv tool upgrade astrbot --python 3.12
 ```
 
-### Docker Deployment
-
-For users familiar with containers and looking for a more stable, production-ready deployment method, we recommend deploying AstrBot with Docker / Docker Compose.
-
-Please refer to the official documentation: [Deploy AstrBot with Docker](https://docs.astrbot.app/deploy/astrbot/docker.html#%E4%BD%BF%E7%94%A8-docker-%E9%83%A8%E7%BD%B2-astrbot).
-
-### Desktop Application Deployment
-
-For users who want to use AstrBot on desktop and mainly use ChatUI, we recommend AstrBot App.
-
-Visit [AstrBot-desktop](https://github.com/AstrBotDevs/AstrBot-desktop) to download and install; this method is designed for desktop usage and is not recommended for server scenarios.
-
-### Launcher Deployment
-
-For desktop users who also want fast deployment and isolated multi-instance usage, we recommend AstrBot Launcher.
-
-Visit [AstrBot Launcher](https://github.com/Raven95676/astrbot-launcher) to download and install.
-
-**More deployment methods**
-
-If you need panel-based management or deeper customization, see [BT-Panel Deployment](https://docs.astrbot.app/deploy/astrbot/btpanel.html) for BT Panel app-store setup, [1Panel Deployment](https://docs.astrbot.app/deploy/astrbot/1panel.html) for 1Panel app-market deployment, [CasaOS Deployment](https://docs.astrbot.app/deploy/astrbot/casaos.html) for NAS/home-server visual deployment, and [Manual Deployment](https://docs.astrbot.app/deploy/astrbot/cli.html) for fully custom source-based installation with `uv`.
-
-
-## ❤️ Sponsors
-
-Welcome to sponsor us via [Afdian](https://afdian.com/a/astrbot_team) or [contact us](mailto:community@astrbot.app).
-
-<p align="center">
-  <a target="_blank" href="https://astrbot.app/#/sponsors">
-    <img alt="sponsors" src="https://sponsors.astrbot.app/?v=1">
-  </a>
-</p>
-
-
-## Supported Messaging Platforms
-
-Connect AstrBot to your favorite chat platform.
-
-| Platform | Maintainer |
-|---------|---------------|
-| QQ | Official |
-| OneBot v11 protocol implementation | Official |
-| Telegram | Official |
-| Wecom & Wecom AI Bot | Official |
-| WeChat Official Accounts | Official |
-| Feishu (Lark) | Official |
-| DingTalk | Official |
-| Slack | Official |
-| Discord | Official |
-| LINE | Official |
-| Satori | Official |
-| KOOK | Official |
-| Misskey | Official |
-| Mattermost | Official |
-| WhatsApp (Coming Soon) | Official |
-| [Matrix](https://github.com/stevessr/astrbot_plugin_matrix_adapter) | Community |
-| [Rocket.Chat](https://github.com/NET-Homeless/astrbot_plugin_rocket_chat_adapter) | Community |
-| [VoceChat](https://github.com/HikariFroya/astrbot_plugin_vocechat) | Community |
-
-## Supported Model Services
-
-| Service | Type |
-|---------|---------------|
-| OpenAI and Compatible Services | LLM Services |
-| Anthropic | LLM Services |
-| Google Gemini | LLM Services |
-| Moonshot AI | LLM Services |
-| Zhipu AI | LLM Services |
-| DeepSeek | LLM Services |
-| Ollama (Self-hosted) | LLM Services |
-| LM Studio (Self-hosted) | LLM Services |
-| [MiraRouter](https://mirarouter.com/) | LLM Services (API Gateway, supports all models) |
-| [AIHubMix](https://aihubmix.com/?aff=4bfH) | LLM Services (API Gateway, supports all models) |
-| [CompShare](https://www.compshare.cn/?ytag=GPU_YY-gh_astrbot&referral_code=FV7DcGowN4hB5UuXKgpE74) | LLM Services |
-| [302.AI](https://share.302.ai/rr1M3l) | LLM Services |
-| [TokenPony](https://www.tokenpony.cn/3YPyf) | LLM Services |
-| [SiliconFlow](https://docs.siliconflow.cn/cn/usercases/use-siliconcloud-in-astrbot) | LLM Services |
-| [PPIO Cloud](https://ppio.com/user/register?invited_by=AIOONE) | LLM Services |
-| ModelScope | LLM Services |
-| OneAPI | LLM Services |
-| Dify | LLMOps Platforms |
-| Alibaba Cloud Bailian Applications | LLMOps Platforms |
-| Coze | LLMOps Platforms |
-| OpenAI Whisper | Speech-to-Text Services |
-| SenseVoice | Speech-to-Text Services |
-| Xiaomi MiMo Omni | Speech-to-Text Services |
-| OpenAI TTS | Text-to-Speech Services |
-| Gemini TTS | Text-to-Speech Services |
-| GPT-Sovits-Inference | Text-to-Speech Services |
-| GPT-Sovits | Text-to-Speech Services |
-| FishAudio | Text-to-Speech Services |
-| Edge TTS | Text-to-Speech Services |
-| Alibaba Cloud Bailian TTS | Text-to-Speech Services |
-| Azure TTS | Text-to-Speech Services |
-| Minimax TTS | Text-to-Speech Services |
-| Xiaomi MiMo TTS | Text-to-Speech Services |
-| Volcano Engine TTS | Text-to-Speech Services |
-
-## ❤️ Contributing
-
-Issues and Pull Requests are always welcome! Feel free to submit your changes to this project :)
-
-### How to Contribute
-
-You can contribute by reviewing issues or helping with pull request reviews. Any issues or PRs are welcome to encourage community participation. Of course, these are just suggestions—you can contribute in any way you like. For adding new features, please discuss through an Issue first.
-
-### Development Environment
-
-AstrBot uses `ruff` for code formatting and linting.
+### Linux
 
 ```bash
-git clone https://github.com/AstrBotDevs/AstrBot
-pip install pre-commit
-pre-commit install
+python3 --version
+pip install uv
+uv tool install astrbot --python 3.12
+astrbot init
+astrbot run
 ```
 
+### macOS
 
-## 🌍 Community
+```bash
+python3 --version
+pip install uv
+uv tool install astrbot --python 3.12
+astrbot init
+astrbot run
+```
 
-### QQ Groups
+## Executar pelo código-fonte
 
-We have 15+ chat groups, please see: [Community](https://docs.astrbot.app/community.html) for details.
+No Windows, dentro da pasta do projeto:
 
-### Discord Server
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python main.py
+```
 
-<a href="https://discord.gg/hAVk6tgV36"><img alt="Discord_community" src="https://img.shields.io/badge/Discord-AstrBot-purple?style=for-the-badge&color=76bad9"></a>
+Se o PowerShell bloquear `Activate.ps1`:
 
-## ❤️ Special Thanks
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
 
-Special thanks to all Contributors and plugin developers for their contributions to AstrBot ❤️
+## Docker
 
-<a href="https://github.com/AstrBotDevs/AstrBot/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=AstrBotDevs/AstrBot&max=300&columns=15" />
-</a>
+```powershell
+docker compose up -d
+docker compose logs -f
+```
 
-Open Source Friends ❤️
+Para encerrar:
 
-- [NapNeko/NapCatQQ](https://github.com/NapNeko/NapCatQQ) - The amazing cat framework
-- [Mai-with-u/MaiBot](https://github.com/Mai-with-u/MaiBot) - The powerful "digital life" in your QQ! 
+```powershell
+docker compose down
+```
 
-## ⭐ Star History
+## Primeiro acesso
 
-> [!TIP]
-> If this project has helped you in your life or work, or if you're interested in its future development, please give the project a Star. It's the driving force behind maintaining this open-source project <3
+1. Inicie o AstrBot.
+2. Abra o endereço informado no terminal.
+3. Configure a conta administrativa.
+4. Escolha o provedor/modelo de IA.
+5. Cadastre sua API key somente no local apropriado da configuração.
+6. Configure uma plataforma de mensagens se desejar.
+7. Revise as permissões de acesso do Agent ao computador antes de habilitá-las.
 
-<div align="center">
+> Nunca publique `.env`, tokens, senhas ou API keys no GitHub.
 
-[![Star History Chart](https://api.star-history.com/svg?repos=astrbotdevs/astrbot&type=Date)](https://star-history.com/#astrbotdevs/astrbot&Date)
+## Recursos principais
 
-</div>
+- conversas com LLMs e multimodalidade;
+- agentes com ferramentas;
+- MCP e Skills;
+- subagentes;
+- compressão automática de contexto;
+- personas;
+- tarefas agendadas;
+- bases de conhecimento;
+- plugins e automações;
+- dashboard WebUI e ChatUI;
+- sistema de internacionalização;
+- idioma `pt-BR` como padrão desta edição brasileira.
 
-<div align="center">
+## Português do Brasil
 
-_Companionship and capability should never be at odds. What we aim to create is a robot that can understand emotions, provide genuine companionship, and reliably accomplish tasks._
+A edição brasileira registra `pt-BR` diretamente no sistema de internacionalização do dashboard e usa esse idioma como padrão quando não existe preferência salva no navegador.
 
-_私は、高性能ですから!_
+Termos técnicos consolidados como API, token, plugin, commit, branch, endpoint, prompt, MCP, Docker e Git permanecem em inglês quando isso melhora a clareza ou preserva compatibilidade.
 
-<img src="https://files.astrbot.app/watashiwa-koseino-desukara.gif" width="100"/>
-</div>
+## Solução de problemas
+
+### `python` não é reconhecido
+
+Instale o Python 3.12+ e marque a opção para adicionar o Python ao `PATH`.
+
+### PowerShell bloqueou `Activate.ps1`
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+### Dashboard aparece em outro idioma
+
+Selecione **Português (Brasil)** no seletor de idioma. Instalações novas desta edição usam `pt-BR` como padrão.
+
+### API de IA não conecta
+
+Confira a API key, a URL do endpoint, o modelo selecionado e as permissões da conta do provedor.
+
+## Perguntas frequentes
+
+**Esta versão é oficial da equipe original do AstrBot?**  
+Não. É uma edição comunitária brasileira adaptada e mantida por @mkbraion.
+
+**Posso usar comercialmente?**  
+A licença principal é AGPL-3.0-or-later. Uso comercial não é proibido pela AGPL, mas as obrigações da licença continuam valendo.
+
+**Posso remover a licença?**  
+Não. Os arquivos e avisos legais aplicáveis devem ser preservados.
+
+## Contribuindo com a edição brasileira
+
+Contribuições são bem-vindas, principalmente para traduções pt-BR, documentação para Windows/PowerShell, acessibilidade, testes de i18n e correção de strings ainda não internacionalizadas.
+
+```powershell
+git checkout -b feat/minha-melhoria
+git add .
+git commit -m "feat(pt-BR): descreva sua melhoria"
+git push -u origin feat/minha-melhoria
+```
+
+## Roadmap brasileiro
+
+- [x] repositório brasileiro independente;
+- [x] README principal em pt-BR;
+- [x] identidade da edição brasileira;
+- [x] registro do locale `pt-BR` no dashboard;
+- [x] idioma brasileiro como padrão da edição;
+- [ ] ampliar a cobertura de todas as telas do dashboard;
+- [ ] ampliar mensagens de backend e CLI em pt-BR;
+- [ ] revisar a documentação técnica completa;
+- [ ] adicionar mais testes automatizados de localização.
+
+## Responsável pela edição brasileira
+
+**mkbraion**  
+GitHub: https://github.com/mkbraion
+
+Responsável nesta distribuição por localização, tradução, documentação brasileira, manutenção do repositório brasileiro e melhorias específicas desta edição.
+
+## Licença e projeto original
+
+Este repositório contém uma versão modificada baseada no software AstrBot. O projeto principal está licenciado sob **GNU Affero General Public License v3 ou posterior (AGPL-3.0-or-later)**. O arquivo `LICENSE` deve permanecer no repositório e os avisos legais aplicáveis devem ser preservados.
+
+A AGPL exige, entre outras condições, que versões modificadas distribuídas permaneçam sob os termos aplicáveis da licença e contempla obrigações de disponibilização do código-fonte correspondente quando o software modificado é usado para interação por rede.
+
+O dashboard também contém componentes de terceiros licenciados separadamente. O arquivo `dashboard/LICENSE` preserva a licença MIT e o respectivo aviso de copyright aplicável.
+
+Arquivos como `EULA.md`, `FIRST_NOTICE*.md`, cabeçalhos de copyright e demais avisos legais existentes devem ser preservados quando exigido pelos termos aplicáveis.
+
+**AstrBot Brasil não é apresentado como uma distribuição oficial administrada pelos mantenedores do projeto original.** A edição brasileira é adaptada e mantida por **@mkbraion**.
