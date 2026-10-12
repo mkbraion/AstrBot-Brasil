@@ -1,0 +1,42 @@
+name: "🎉 Solicitar recurso (pt-BR)"
+title: "[Recurso] "
+description: "Sugira uma melhoria ou novo recurso para o AstrBot Brasil."
+labels: ["enhancement"]
+body:
+  - type: textarea
+    attributes:
+      label: Descrição do recurso
+      description: Explique claramente o recurso que você gostaria de adicionar.
+      placeholder: Descreva a ideia e o resultado esperado.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Caso de uso
+      description: Em qual situação esse recurso seria útil?
+      placeholder: Explique um exemplo real de utilização.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Alternativas consideradas
+      placeholder: Existe alguma forma atual de resolver o problema? O que poderia ser melhorado?
+
+  - type: checkboxes
+    attributes:
+      label: Confirmações
+      options:
+        - label: Pesquisei nas Issues do AstrBot Brasil e não encontrei uma solicitação equivalente.
+          required: true
+        - label: A sugestão é relacionada ao AstrBot Brasil e não exclusivamente a um plugin de terceiros.
+          required: true
+        - label: Revisei a documentação e os avisos do projeto antes de enviar esta sugestão.
+          required: true
+        - label: Posso ajudar a implementar este recurso em um pull request.
+          required: false
+
+  - type: markdown
+    attributes:
+      value: "Obrigado por ajudar a melhorar o AstrBot Brasil 🇧🇷"
