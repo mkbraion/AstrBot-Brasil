@@ -1,0 +1,38 @@
+{
+  "logoTitle": "AstrBot Brasil",
+  "version": { "hasNewVersion": "Há uma nova versão do AstrBot!", "dashboardHasNewVersion": "Há uma nova versão da WebUI!" },
+  "buttons": { "update": "Atualizar", "account": "Conta", "logout": "Sair", "theme": { "title": "Tema", "light": "Claro", "dark": "Escuro", "system": "Seguir o sistema" } },
+  "updateDialog": {
+    "title": "Atualizar AstrBot",
+    "currentVersion": "Versão atual",
+    "status": { "checking": "Verificando atualizações...", "switching": "Trocando versão...", "updating": "Atualizando..." },
+    "tabs": { "release": "😊 Versões" },
+    "advancedSettings": "Configurações avançadas",
+    "releases": "Versões disponíveis",
+    "updateToLatest": "Atualizar para a versão mais recente",
+    "showPreReleases": "Mostrar versões de pré-lançamento",
+    "preRelease": "Pré-lançamento",
+    "preReleaseWarning": { "title": "Aviso sobre pré-lançamento", "description": "Versões de pré-lançamento podem conter falhas e não são recomendadas para produção. Em caso de problema, consulte ", "issueLink": "Issues do GitHub" },
+    "tip": "💡 DICA:",
+    "tipContinue": "Ao trocar de versão, a WebUI correspondente também é baixada. O código da interface fica no diretório dashboard e pode ser compilado separadamente.",
+    "dockerTip": "Em instalações Docker, você também pode atualizar a imagem utilizada pelo container ou usar",
+    "dockerTipLink": "watchtower",
+    "dockerTipContinue": "para acompanhar atualizações automaticamente.",
+    "table": { "tag": "Tag", "publishDate": "Publicada em", "content": "Conteúdo", "sourceUrl": "URL de origem", "actions": "Ações", "view": "Ver", "switch": "Trocar" },
+    "releaseNotes": { "title": "Notas da versão", "latestLabel": "Versão mais recente" },
+    "progress": { "target": "Versão de destino: ", "preparing": "Preparando atualização...", "dashboard": "Baixando WebUI", "core": "Baixando código do projeto", "dependencies": "Atualizando dependências...", "restart": "Preparando reinicialização...", "restarting": "Reiniciando AstrBot", "completed": "Atualização concluída", "successReady": "Atualização realizada com sucesso", "autoReloadIn": "Atualizando a página em {seconds}s", "reloadNow": "Atualizar agora", "failed": "Falha na atualização" },
+    "redirectConfirm": { "title": "Saindo do AstrBot", "message": "Você está prestes a abrir a página de Releases do GitHub. Continuar?", "latestLabel": "Mais recente", "targetVersion": "Versão de destino: ", "currentVersion": "Versão atual: ", "guideTitle": "Depois de abrir:", "guideStep1": "Baixe o instalador correspondente ao seu sistema e arquitetura.", "guideStep2": "Instale e reinicie o AstrBot.", "guideStep3": "Se usar Docker, prefira atualizar a imagem." },
+    "desktopApp": { "title": "Atualizar aplicativo desktop", "message": "Verifique e atualize o aplicativo desktop do AstrBot.", "currentVersion": "Versão atual: ", "latestVersion": "Versão mais recente: ", "checking": "Verificando atualizações...", "hasNewVersion": "Nova versão disponível. Confirme para atualizar.", "isLatest": "Você já está na versão mais recente", "installing": "Baixando e instalando. O aplicativo reiniciará automaticamente...", "downloading": "Baixando atualização...", "verifying": "Download concluído. Verificando...", "applying": "Instalando atualização. O aplicativo reiniciará automaticamente...", "checkFailed": "Falha ao verificar atualizações. Tente novamente mais tarde.", "installFailed": "Falha na atualização. Tente novamente mais tarde." },
+    "dashboardUpdate": { "title": "Atualizar somente o dashboard", "currentVersion": "Versão atual", "hasNewVersion": "Nova versão disponível!", "isLatest": "Já está na versão mais recente.", "fallback": "Use esta opção para baixar novamente a WebUI se a atualização completa falhar.", "downloadAndUpdate": "Baixar e atualizar" }
+  },
+  "accountDialog": {
+    "title": "Alterar conta",
+    "securityWarning": "Recomendação de segurança: altere sua senha para proteger a conta",
+    "securityWarningMd5": "A versão atual possui melhorias de segurança. Altere sua senha.",
+    "securityWarningUpgrade": "Foi detectado armazenamento de senha em MD5. Altere a senha para concluir a atualização de segurança.",
+    "form": { "currentPassword": "Senha atual", "newPassword": "Nova senha", "confirmPassword": "Confirmar nova senha", "newUsername": "Novo usuário (opcional)", "passwordHint": "Use pelo menos 8 caracteres, incluindo maiúsculas, minúsculas e números", "confirmPasswordHint": "Digite a nova senha novamente", "usernameHint": "Deixe em branco para manter o usuário atual", "defaultCredentials": "O usuário padrão é astrbot. Uma senha inicial é gerada na primeira execução e exibida no console." },
+    "validation": { "passwordRequired": "Informe a senha", "passwordMinLength": "A senha deve ter pelo menos 8 caracteres", "passwordUppercase": "A senha deve conter pelo menos uma letra maiúscula", "passwordLowercase": "A senha deve conter pelo menos uma letra minúscula", "passwordDigit": "A senha deve conter pelo menos um número", "passwordMatch": "As senhas não coincidem", "usernameMinLength": "O usuário deve ter pelo menos 3 caracteres" },
+    "actions": { "save": "Salvar alterações", "cancel": "Cancelar" },
+    "messages": { "updateFailed": "Falha ao atualizar. Tente novamente." }
+  }
+}

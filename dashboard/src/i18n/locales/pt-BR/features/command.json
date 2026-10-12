@@ -1,0 +1,15 @@
+{
+  "title": "Gerenciamento de comandos",
+  "summary": { "total": "Comandos exibidos", "disabled": "Desativados", "conflicts": "Conflitos" },
+  "conflictAlert": { "title": "Conflitos de comandos detectados", "description": "Há {count} comandos em conflito. Um conflito pode acionar vários plugins ao mesmo tempo e causar comportamento inesperado.", "hint": "Use Renomear para alterar os comandos conflitantes." },
+  "table": { "headers": { "command": "Comando", "type": "Tipo", "plugin": "Plugin", "description": "Descrição", "permission": "Permissão", "status": "Status", "actions": "Ações" } },
+  "type": { "command": "Comando", "group": "Grupo", "subCommand": "Subcomando" },
+  "status": { "enabled": "Ativado", "disabled": "Desativado", "pluginDisabled": "Plugin desativado", "conflict": "Conflito" },
+  "permission": { "groupAdmin": "Somente administradores em grupos", "groupAdminHint": "Em chats privados qualquer usuário pode usar; em grupos, somente administradores do AstrBot.", "followIsolation": "Seguir isolamento da conversa", "followIsolationHint": "Em conversas de grupo isoladas e chats privados todos podem usar; em grupos compartilhados é necessária permissão administrativa.", "everyone": "Todos", "admin": "Somente administradores", "adminHint": "Somente administradores do AstrBot podem usar este comando, tanto em chats privados quanto em grupos." },
+  "tooltips": { "enable": "Ativar comando", "disable": "Desativar comando", "rename": "Renomear comando", "viewDetails": "Ver detalhes", "pluginInactive": "Ative o plugin primeiro" },
+  "dialogs": { "rename": { "title": "Renomear comando", "newName": "Novo nome", "aliases": "Gerenciar aliases", "addAlias": "Adicionar alias", "cancel": "Cancelar", "confirm": "Confirmar" }, "details": { "title": "Detalhes do comando", "type": "Tipo de comando", "handler": "Handler", "module": "Caminho do módulo", "originalCommand": "Comando original", "effectiveCommand": "Comando efetivo", "parentGroup": "Grupo pai", "subCommands": "Subcomandos", "aliases": "Aliases", "permission": "Permissão", "conflictStatus": "Status do conflito" } },
+  "messages": { "toggleSuccess": "Status do comando atualizado", "toggleFailed": "Falha ao atualizar o status", "renameSuccess": "Comando renomeado", "renameFailed": "Falha ao renomear", "loadFailed": "Falha ao carregar comandos", "updateSuccess": "Atualizado com sucesso", "updateFailed": "Falha ao atualizar" },
+  "search": { "placeholder": "Pesquisar comandos..." },
+  "empty": { "noCommands": "Nenhum comando", "noCommandsDesc": "Nenhum comando encontrado" },
+  "filters": { "all": "Todos", "enabled": "Ativados", "disabled": "Desativados", "conflict": "Conflito", "byPlugin": "Filtrar por plugin", "byType": "Filtrar por tipo", "byPermission": "Filtrar por permissão", "byStatus": "Filtrar por status", "showSystemPlugins": "Mostrar comandos de plugins do sistema", "systemPluginConflictHint": "Foram detectados conflitos em plugins de sistema. Resolva os conflitos para ocultar este aviso." }
+}
