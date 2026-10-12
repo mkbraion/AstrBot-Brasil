@@ -1,0 +1,31 @@
+{
+  "title": "Gerenciamento de conversas",
+  "subtitle": "Gerencie e consulte o histórico de conversas dos usuários",
+  "filters": { "title": "Filtros", "platform": "Plataforma", "type": "Tipo", "search": "Pesquisar", "reset": "Limpar" },
+  "history": { "title": "Histórico de conversas", "refresh": "Atualizar" },
+  "batch": { "deleteSelected": "Excluir selecionadas ({count})", "exportSelected": "Exportar selecionadas ({count})" },
+  "pagination": { "itemsPerPage": "Itens por página", "showingItems": "Mostrando {start}-{end} de {total} itens" },
+  "table": {
+    "headers": { "title": "Título da conversa", "platform": "Plataforma", "type": "Tipo", "cid": "ID da conversa", "umo": "Origem unificada da mensagem", "sessionId": "ID da sessão", "createdAt": "Criada em", "updatedAt": "Atualizada em", "actions": "Ações" },
+    "umoDisplay": { "parsed": "Interpretado", "raw": "UMO" }
+  },
+  "actions": { "view": "Visualizar", "edit": "Editar", "delete": "Excluir" },
+  "messageTypes": { "group": "Chat em grupo", "friend": "Chat privado", "unknown": "Desconhecido" },
+  "status": { "noTitle": "Conversa sem título", "unknown": "Desconhecido", "noData": "Nenhuma conversa encontrada", "emptyContent": "A conversa está vazia", "audioNotSupported": "Seu navegador não oferece suporte à reprodução de áudio." },
+  "dialogs": {
+    "view": { "title": "Detalhes da conversa", "editMode": "Editar conversa", "previewMode": "Pré-visualização", "saveChanges": "Salvar alterações", "close": "Fechar", "confirmClose": "Há alterações não salvas. Deseja fechar mesmo assim?" },
+    "edit": { "title": "Editar informações da conversa", "titleLabel": "Título da conversa", "titlePlaceholder": "Informe o título", "cancel": "Cancelar", "save": "Salvar" },
+    "delete": { "title": "Confirmar exclusão", "message": "Excluir a conversa {title}? Esta ação não pode ser desfeita.", "cancel": "Cancelar", "confirm": "Excluir" },
+    "batchDelete": { "title": "Confirmar exclusão em lote", "message": "Excluir as {count} conversas selecionadas? Esta ação não pode ser desfeita.", "andMore": "e mais {count}", "cancel": "Cancelar", "confirm": "Excluir em lote", "warning": "Atenção: esta ação não pode ser desfeita!" }
+  },
+  "messages": {
+    "fetchError": "Falha ao carregar a lista de conversas", "saveSuccess": "Salvo com sucesso", "saveError": "Falha ao salvar", "deleteSuccess": "Excluído com sucesso", "deleteError": "Falha ao excluir", "historyError": "Falha ao carregar o histórico", "historySaveSuccess": "Histórico salvo com sucesso", "historySaveError": "Falha ao salvar o histórico", "invalidJson": "JSON inválido", "noItemSelected": "Selecione conversas para excluir", "batchDeleteSuccess": "{count} conversas excluídas", "batchDeleteError": "Falha na exclusão em lote", "batchDeletePartial": "Exclusão concluída: {deleted} com sucesso e {failed} com falha", "exportSuccess": "Exportação concluída", "exportError": "Falha na exportação", "noItemSelectedForExport": "Selecione conversas para exportar", "copySuccess": "Copiado", "copyError": "Falha ao copiar"
+  },
+  "workspace": {
+    "legacy": "Voltar para versão antiga", "newVersion": "Usar nova versão",
+    "filters": { "title": "Filtros", "keyword": "Pesquisar", "keywordPlaceholder": "Pesquisar em títulos ou mensagens", "robots": "ID do bot", "robotEmpty": "Nenhum bot configurado possui conversas", "types": "Tipo de conversa", "umo": "UMO", "umoPlaceholder": "Informe um UMO completo ou parcial", "sort": "Ordenar", "reset": "Limpar filtros", "close": "Fechar filtros", "done": "Concluído", "updatedDesc": "Atualizadas recentemente", "createdDesc": "Criadas recentemente", "updatedAsc": "Atualizadas há mais tempo", "createdAsc": "Criadas há mais tempo" },
+    "list": { "title": "Conversas", "total": "{count} no total", "sessionTotal": "{count} sessões", "selected": "{count} selecionadas", "groupBySession": "Agrupar por sessão", "conversationCount": "{count} conversas", "selectPage": "Selecionar esta página", "empty": "Nenhuma conversa", "filteredEmpty": "Nenhuma conversa corresponde aos filtros", "previous": "Anterior", "next": "Próxima", "page": "Página {page} de {total}" },
+    "preview": { "title": "Prévia da conversa", "close": "Fechar prévia", "loading": "Carregando conversa", "empty": "Esta conversa não possui mensagens", "copyUmo": "Copiar UMO", "rawData": "Dados brutos", "copyRawData": "Copiar dados brutos", "messageCount": "{count} mensagens", "markdown": "Renderizar Markdown", "fontSize": "Tamanho do texto", "smallerText": "Diminuir texto", "largerText": "Aumentar texto", "structuredData": "Conteúdo estruturado", "toolCall": "Chamada de ferramenta", "reasoning": "Raciocínio", "image": "Imagem da mensagem", "roles": { "user": "Usuário", "assistant": "Assistente", "system": "Sistema", "developer": "Desenvolvedor", "tool": "Resultado da ferramenta", "function": "Resultado da função" } },
+    "actions": { "editTitle": "Editar título", "export": "Exportar", "delete": "Excluir", "refresh": "Atualizar" }
+  }
+}

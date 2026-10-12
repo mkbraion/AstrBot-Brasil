@@ -14,6 +14,9 @@ import consoleMessages from './features/console.json';
 import settings from './features/settings.json';
 import provider from './features/provider.json';
 import platform from './features/platform.json';
+import config from './features/config.json';
+import chat from './features/chat.json';
+import conversation from './features/conversation.json';
 import errors from './messages/errors.json';
 import success from './messages/success.json';
 import validation from './messages/validation.json';
@@ -36,7 +39,10 @@ export default {
     console: { ...enUS.features.console, ...consoleMessages },
     settings: { ...enUS.features.settings, ...settings },
     provider: { ...enUS.features.provider, ...provider },
-    platform: { ...enUS.features.platform, ...platform }
+    platform: { ...enUS.features.platform, ...platform },
+    config: { ...enUS.features.config, ...config },
+    chat: { ...enUS.features.chat, ...chat },
+    conversation: { ...enUS.features.conversation, ...conversation }
   },
   messages: {
     ...enUS.messages,
