@@ -1,0 +1,27 @@
+{
+  "title": "Regras personalizadas",
+  "subtitle": "Defina regras específicas para sessões. Elas têm prioridade sobre as configurações globais.",
+  "buttons": { "refresh": "Atualizar", "edit": "Editar", "editRule": "Editar regras", "deleteAllRules": "Excluir todas as regras", "addRule": "Adicionar regra", "save": "Salvar", "cancel": "Cancelar", "delete": "Excluir", "clear": "Limpar", "next": "Avançar", "editCustomName": "Editar observação", "batchDelete": "Excluir em lote" },
+  "customRules": { "title": "Regras personalizadas", "rulesCount": "regras", "hasRules": "Configuradas", "noRules": "Nenhuma regra personalizada", "noRulesDesc": "Clique em Adicionar regra para configurar regras específicas para uma sessão", "serviceConfig": "Configuração do serviço", "pluginConfig": "Configuração de plugins", "kbConfig": "Base de conhecimento", "providerConfig": "Configuração do provedor", "configured": "Configurado", "noCustomName": "Sem observação" },
+  "quickEditName": { "title": "Editar observação" },
+  "search": { "placeholder": "Pesquisar sessões..." },
+  "table": { "headers": { "umoInfo": "Origem unificada da mensagem", "rulesOverview": "Resumo das regras", "actions": "Ações" } },
+  "persona": { "none": "Seguir configuração" },
+  "provider": { "followConfig": "Seguir configuração" },
+  "addRule": { "title": "Adicionar regra personalizada", "description": "Selecione uma sessão (UMO) e configure regras que terão prioridade sobre as opções globais.", "selectUmo": "Selecionar sessão", "noUmos": "Nenhuma sessão disponível" },
+  "ruleEditor": {
+    "title": "Editar regras personalizadas",
+    "description": "Configure regras específicas para esta sessão.",
+    "serviceConfig": { "title": "Configuração do serviço", "sessionEnabled": "Ativar sessão", "llmEnabled": "Ativar LLM", "ttsEnabled": "Ativar TTS", "customName": "Nome personalizado" },
+    "providerConfig": { "title": "Configuração do provedor", "chatProvider": "Provedor de chat", "sttProvider": "Provedor STT", "ttsProvider": "Provedor TTS" },
+    "personaConfig": { "title": "Configuração da persona", "selectPersona": "Selecionar persona", "hint": "A persona influencia o estilo e o comportamento do LLM." },
+    "pluginConfig": { "title": "Configuração de plugins", "disabledPlugins": "Plugins desativados", "hint": "Selecione os plugins que devem ficar desativados nesta sessão." },
+    "kbConfig": { "title": "Configuração da base de conhecimento", "selectKbs": "Selecionar bases de conhecimento", "topK": "Resultados Top K", "enableRerank": "Ativar reranking" }
+  },
+  "deleteConfirm": { "title": "Confirmar exclusão", "message": "Excluir todas as regras personalizadas desta sessão? Depois disso, serão usadas as configurações globais." },
+  "batchDeleteConfirm": { "title": "Confirmar exclusão em lote", "message": "Excluir as {count} regras selecionadas? Depois disso, serão usadas as configurações globais." },
+  "batchOperations": { "title": "Operações em lote", "hint": "Altere rapidamente as configurações de várias sessões", "scope": "Aplicar a", "scopeSelected": "Sessões selecionadas", "scopeAll": "Todas as sessões", "scopeGroup": "Todos os grupos", "scopePrivate": "Todos os chats privados", "llmStatus": "Status do LLM", "ttsStatus": "Status do TTS", "chatProvider": "Modelo de chat", "ttsProvider": "Modelo TTS", "apply": "Aplicar alterações" },
+  "groups": { "title": "Gerenciamento de grupos", "count": "{count} grupos", "addToGroup": "Adicionar ao grupo", "create": "Criar grupo", "edit": "Editar grupo", "name": "Nome do grupo", "sessionsCount": "{count} sessões", "empty": "Nenhum grupo. Clique em Criar grupo para adicionar um.", "availableSessions": "Sessões disponíveis ({count})", "selectedSessions": "Sessões selecionadas ({count})", "searchPlaceholder": "Pesquisar...", "noMatch": "Nenhum resultado", "noMembers": "Nenhum membro", "customGroupDivider": "── Grupos personalizados ──", "customGroupOption": "📁 {name} ({count})", "groupOption": "{name} ({count} sessões)", "deleteConfirm": "Excluir o grupo \"{name}\"?" },
+  "status": { "enabled": "Ativado", "disabled": "Desativado" },
+  "messages": { "refreshSuccess": "Dados atualizados", "loadError": "Falha ao carregar os dados", "saveSuccess": "Salvo com sucesso", "saveError": "Falha ao salvar", "clearSuccess": "Limpo com sucesso", "clearError": "Falha ao limpar", "deleteSuccess": "Excluído com sucesso", "deleteError": "Falha ao excluir", "noChanges": "Nenhuma alteração para salvar", "batchDeleteSuccess": "Exclusão em lote concluída", "batchDeleteError": "Falha na exclusão em lote", "selectSessionsFirst": "Selecione as sessões primeiro", "selectAtLeastOneConfig": "Selecione pelo menos uma configuração para alterar", "batchUpdateSuccess": "Atualização em lote concluída", "partialUpdateFailed": "Algumas atualizações falharam", "batchUpdateError": "Falha na atualização em lote", "groupNameRequired": "O nome do grupo não pode ficar vazio", "saveGroupError": "Falha ao salvar o grupo", "deleteGroupError": "Falha ao excluir o grupo", "selectSessionsToAddFirst": "Selecione as sessões que deseja adicionar", "addToGroupSuccess": "{count} sessões adicionadas ao grupo", "addToGroupError": "Falha ao adicionar ao grupo" }
+}
