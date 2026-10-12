@@ -1,0 +1,8 @@
+{
+  "title": "Console",
+  "autoScroll": { "label": "Rolagem automática", "enabled": "Rolagem automática ativada", "disabled": "Rolagem automática desativada" },
+  "hideUserChat": { "label": "Ocultar chat do usuário", "enabled": "Chat do usuário ocultado", "disabled": "Chat do usuário visível" },
+  "search": { "label": "Pesquisar logs", "placeholder": "Filtrar logs por palavra-chave" },
+  "pipInstall": { "button": "Instalar pacote pip", "dialogTitle": "Instalar pacote pip", "packageLabel": "*Nome do pacote, por exemplo: llmtuner", "mirrorLabel": "URL alternativa do repositório PyPI (opcional)", "mirrorHint": "A URL informada aqui tem prioridade sobre a configuração do repositório PyPI", "cancelButton": "Cancelar", "installButton": "Instalar", "installSuccess": "Instalação concluída.", "installFailed": "Falha na instalação.", "requestFailed": "Falha na solicitação." },
+  "debugHint": { "text": "Os logs de debug podem ser ativados em Arquivo de configuração → Sistema → Nível de log do console" }
+}
