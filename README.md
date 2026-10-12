@@ -1,3 +1,19 @@
+<!-- MKBRAION-POLISH:START -->
+<div align="center">
+
+# Astrbot Brasil
+
+**Plataforma de chatbot e automação com IA adaptada para português do Brasil, com foco em comunidade, extensibilidade e experiência brasileira.**
+
+[![Repositório](https://img.shields.io/badge/GitHub-Repositório-181717?logo=github)](https://github.com/mkbraion/AstrBot-Brasil)
+
+</div>
+
+**Stack / tópicos:** ``artificial-intelligence`` · ``automation`` · ``bot`` · ``chatbot`` · ``css`` · ``docker`` · ``ecommerce`` · ``frontend`` · ``html`` · ``javascript`` · ``llm`` · ``open-source``
+
+> Projeto mantido por [@mkbraion](https://github.com/mkbraion).
+<!-- MKBRAION-POLISH:END -->
+
 # AstrBot Brasil 🇧🇷
 
 <p align="center">
