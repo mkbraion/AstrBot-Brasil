@@ -1,0 +1,56 @@
+{
+  "title": "Vamos conversar!",
+  "subtitle": "Converse com seu assistente de IA",
+  "settings": {
+    "general": "Geral", "chat": "Chat", "appearance": "Aparência", "light": "Claro", "dark": "Escuro", "system": "Sistema",
+    "streaming": "Resposta em tempo real", "streamingHint": "Mostra a resposta enquanto ela é gerada. Válido somente para a ChatUI.",
+    "reasoning": "Mostrar raciocínio", "reasoningHint": "Exibe o raciocínio retornado pelo modelo. Válido somente para a ChatUI."
+  },
+  "input": {
+    "placeholder": "Pergunte qualquer coisa...",
+    "projectPlaceholder": "No que vamos trabalhar agora?",
+    "send": "Enviar", "clear": "Limpar", "upload": "Enviar arquivo", "voice": "Entrada por voz",
+    "recordingPrompt": "Gravando, pode falar...", "chatPrompt": "Vamos conversar!", "dropToUpload": "Solte os arquivos aqui para enviar", "stopGenerating": "Parar geração"
+  },
+  "message": {
+    "user": "Usuário", "assistant": "Assistente", "system": "Sistema", "error": "Mensagem de erro", "loading": "Pensando...",
+    "loadingVariants": ["(｡•̀ᴗ-)✧ Pensando...", "(・_・ヾ Analisando...", "(๑•̀ㅂ•́)و Organizando as ideias...", "(｡･ω･｡) Buscando inspiração...", "( •̀ ω •́ )✧ Pensando com cuidado...", "(つ•̀ω•́)つ Escolhendo as palavras...", "(・・。)ゞ Ligando os pontos...", "(ง •_•)ง Trabalhando nisso...", "( ˘ω˘ ) Explorando possibilidades...", "(ﾉ◕ヮ◕)ﾉ Preparando a resposta..."]
+  },
+  "voice": { "start": "Iniciar gravação", "stop": "Parar gravação", "recording": "Nova gravação", "processing": "Processando...", "error": "Falha na gravação", "listening": "Ouvindo...", "speaking": "Falando", "startRecording": "Iniciar entrada por voz", "liveMode": "Modo ao vivo" },
+  "welcome": { "title": "O que você tem em mente hoje?", "subtitle": "Seu assistente inteligente", "quickActions": "Ações rápidas", "examples": "Perguntas de exemplo" },
+  "actions": {
+    "scrollToBottom": "Ir para o final", "copy": "Copiar", "regenerate": "Gerar novamente", "retry": "Tentar novamente", "retryWithModel": "Usar outro modelo", "noAvailableModels": "Nenhum modelo disponível", "like": "Gostei", "dislike": "Não gostei", "share": "Compartilhar", "newChat": "Novo chat", "deleteChat": "Excluir esta conversa", "editTitle": "Editar título", "fullscreen": "Tela cheia", "exitFullscreen": "Sair da tela cheia", "reply": "Responder", "providerConfig": "Configuração do modelo", "toolsUsed": "Ferramenta usada", "toolCallUsed": "Ferramenta {name} usada", "pythonCodeAnalysis": "Análise de código Python usada"
+  },
+  "ipython": { "output": "Saída" },
+  "toolStatus": { "done": "Concluído", "running": "Em execução" },
+  "thread": { "title": "Thread", "askInThread": "Perguntar na thread", "count": "{count} threads", "createFailed": "Falha ao criar thread", "delete": "Excluir thread", "confirmDelete": "Excluir esta thread? Esta ação não pode ser desfeita.", "placeholder": "Pergunte sobre este trecho..." },
+  "conversation": {
+    "loading": "Carregando conversas", "loadFailed": "Não foi possível carregar as conversas", "title": "Conversas", "newConversation": "Nova conversa", "noHistory": "Nenhum histórico de conversa", "systemStatus": "Status do sistema", "llmService": "Serviço LLM", "speechToText": "Fala para texto", "editDisplayName": "Editar nome da sessão", "displayName": "Nome da sessão", "displayNameUpdated": "Nome da sessão atualizado", "displayNameUpdateFailed": "Falha ao atualizar o nome da sessão", "confirmDelete": "Excluir \"{name}\"? Esta ação não pode ser desfeita."
+  },
+  "modes": { "darkMode": "Mudar para tema escuro", "lightMode": "Mudar para tema claro" },
+  "shortcuts": { "help": "Obter ajuda", "voiceRecord": "Gravar voz", "pasteImage": "Colar imagem", "sendKey": { "title": "Atalho de envio", "enterToSend": "Enter para enviar", "shiftEnterToSend": "Shift+Enter para enviar" } },
+  "streaming": { "enabled": "Resposta em tempo real ativada", "disabled": "Resposta em tempo real desativada", "on": "Tempo real", "off": "Normal" },
+  "transport": { "title": "Modo de transporte", "sse": "SSE", "websocket": "WebSocket" },
+  "config": { "title": "Configuração" },
+  "reasoning": { "enabled": "Raciocínio ativado", "disabled": "Raciocínio desativado", "thinking": "Processo de raciocínio", "summarySeparator": ", ", "thinkSummary": "pensou {count} vezes", "toolSummary": "usou {count} ferramentas", "think": "Pensando", "toolUsed": "Usando ferramenta" },
+  "history": { "loadFailed": "Não foi possível carregar as mensagens", "loadEarlierFailed": "Não foi possível carregar mensagens anteriores", "loading": "Carregando mensagens anteriores" },
+  "reply": { "replyTo": "Responder a", "notFound": "Mensagem não encontrada" },
+  "project": {
+    "title": "Projetos", "create": "Criar projeto", "edit": "Editar projeto", "name": "Nome do projeto", "emoji": "Ícone (Emoji)", "description": "Descrição (opcional)", "moreSettings": "Mais configurações",
+    "workspace": { "type": "Workspace", "session": "Workspace por sessão", "project": "Workspace compartilhado do projeto", "custom": "Caminho personalizado", "path": "Caminho do workspace", "selectPath": "Selecionar pasta" },
+    "loadingSessions": "Carregando conversas...", "noSessions": "Nenhuma conversa neste projeto", "noProjects": "Nenhum projeto", "confirmDelete": "Excluir o projeto \"{title}\"? As conversas do projeto não serão excluídas."
+  },
+  "workspaceFiles": {
+    "title": "Arquivos do workspace", "open": "Abrir arquivos do workspace", "close": "Fechar arquivos do workspace", "refresh": "Atualizar árvore de arquivos", "filter": "Filtrar arquivos...", "clearFilter": "Limpar filtro", "empty": "Este workspace está vazio", "noMatches": "Nenhum arquivo encontrado", "loadFailed": "Falha ao carregar arquivos", "previewFailed": "Falha ao ler este arquivo", "tooLarge": "Arquivo grande demais para pré-visualizar", "download": "Baixar arquivo", "downloadFailed": "Falha ao baixar este arquivo", "dialogPreview": "Abrir prévia ampliada", "closePreview": "Fechar prévia", "closeDialogPreview": "Fechar prévia ampliada"
+  },
+  "time": { "today": "Hoje", "yesterday": "Ontem" },
+  "stats": { "tokens": "Tokens", "inputTokens": "Entrada (outros)", "outputTokens": "Tokens de saída", "cachedTokens": "Entrada (cache)", "duration": "Duração", "ttft": "Tempo até o primeiro token" },
+  "tokenUsage": { "tooltip": "{used} / {limit} tokens ({percent}%)" },
+  "refs": { "title": "Referências", "sources": "Fontes" },
+  "connection": {
+    "title": "Aviso de conexão", "message": "O sistema detectou que a conexão do chat precisa ser restabelecida.", "reasons": "Isso pode acontecer por:", "reasonWindowResize": "alteração do tamanho da janela do chat", "reasonMultipleTabs": "chat aberto em outras abas", "reasonNetworkIssue": "interrupção temporária de rede", "notice": "Para garantir a entrega correta das mensagens, o sistema mantém apenas uma conexão de chat ativa por vez. Se o chat estiver aberto em várias abas, mantenha apenas uma.", "understand": "Entendi", "status": { "reconnecting": "Reconectando...", "reconnected": "Conexão do chat restabelecida", "failed": "Falha na conexão. Atualize a página." }
+  },
+  "commandSuggestion": { "navigate": "Navegar", "select": "Selecionar", "close": "Fechar" },
+  "errors": { "sendMessageFailed": "Falha ao enviar a mensagem. Tente novamente.", "createSessionFailed": "Falha ao criar a sessão. Atualize a página." },
+  "batch": { "selected": "{count} selecionadas", "confirmDelete": "Excluir {count} conversa(s)? Esta ação não pode ser desfeita.", "selectAll": "Selecionar tudo", "deselectAll": "Desmarcar tudo", "delete": "Excluir", "exit": "Sair", "partialFailure": "Falha ao excluir {failed} de {total} conversas", "requestFailed": "Falha ao excluir conversas. Tente novamente." }
+}
