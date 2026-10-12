@@ -1,65 +1,57 @@
-name: AstrBot Dashboard CI
+name: Dashboard pt-BR - CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ main ]
+    paths:
+      - 'dashboard/**'
+      - '.github/workflows/dashboard_ci.yml'
   pull_request:
-    branches: [ "master" ]
+    branches: [ main ]
+    paths:
+      - 'dashboard/**'
+      - '.github/workflows/dashboard_ci.yml'
+  workflow_dispatch:
 
 jobs:
   build:
-    if: github.repository == 'AstrBotDevs/AstrBot'
+    name: Verificar i18n e build do Dashboard
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Baixar código
         uses: actions/checkout@v7
 
-      - name: Setup pnpm
+      - name: Configurar pnpm
         uses: pnpm/action-setup@v6.1.0
         with:
           version: 10.28.2
 
-      - name: Setup Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v7
         with:
           node-version: '24.13.0'
-          cache: "pnpm"
+          cache: 'pnpm'
           cache-dependency-path: dashboard/pnpm-lock.yaml
 
-      - name: Check i18n keys
+      - name: Instalar dependências
+        working-directory: dashboard
+        run: pnpm install --frozen-lockfile
+
+      - name: Verificar chaves de internacionalização
         working-directory: dashboard
         run: pnpm run i18n:check
 
-      - name: Install and Build
+      - name: Verificar TypeScript e gerar build
         working-directory: dashboard
-        run: |
-          pnpm install --frozen-lockfile
-          pnpm run build
+        run: pnpm run build
 
-      - name: Inject Commit SHA
-        id: get_sha
+      - name: Registrar SHA do commit no artefato
         run: |
-          echo "COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
           mkdir -p dashboard/dist/assets
-          echo $COMMIT_SHA > dashboard/dist/assets/version
-          cd dashboard
-          zip -r dist.zip dist
+          git rev-parse HEAD > dashboard/dist/assets/version
 
-      - name: Archive production artifacts
+      - name: Salvar build do dashboard
         uses: actions/upload-artifact@v7
         with:
-          name: dist-without-markdown
-          path: |
-            dashboard/dist
-            !dist/**/*.md
-
-      - name: Create GitHub Release
-        if: github.event_name == 'push'
-        uses: ncipollo/release-action@v1.21.0
-        with:
-          tag: release-${{ github.sha }}
-          owner: AstrBotDevs
-          repo: astrbot-release-harbour
-          body: "Automated release from commit ${{ github.sha }}"
-          token: ${{ secrets.ASTRBOT_HARBOUR_TOKEN }}
-          artifacts: "dashboard/dist.zip"
+          name: astrbot-brasil-dashboard
+          path: dashboard/dist
