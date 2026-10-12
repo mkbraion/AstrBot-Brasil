@@ -1,0 +1,117 @@
+{
+  "title": "Configuração",
+  "subtitle": "Gerencie as configurações do sistema",
+  "editor": {
+    "visual": "Editor visual",
+    "code": "Editor de código",
+    "revertCode": "Reverter para o código anterior",
+    "applyConfig": "Aplicar esta configuração",
+    "applyTip": "Aplicar esta configuração prepara os valores no editor visual. Para salvar definitivamente, clique no botão de salvar no canto inferior direito."
+  },
+  "actions": { "save": "Salvar configuração", "delete": "Excluir este item", "add": "Adicionar", "reset": "Restaurar padrão", "export": "Exportar configuração", "import": "Importar configuração", "validate": "Validar configuração" },
+  "help": {
+    "documentation": "Documentação",
+    "support": "Obter ajuda",
+    "helpText": "Não entendeu alguma configuração? Consulte {documentation} ou {support}.",
+    "helpPrefix": "Não entendeu alguma configuração? Consulte",
+    "helpMiddle": "ou",
+    "helpSuffix": "."
+  },
+  "messages": {
+    "configApplied": "Configuração aplicada ao editor visual. Para salvar definitivamente, clique no botão de salvar no canto inferior direito.",
+    "configApplyError": "A configuração não foi aplicada porque o JSON é inválido.",
+    "unsavedChangesNotice": "Há alterações não salvas. Clique no botão no canto inferior direito para salvar.",
+    "saveSuccess": "Configuração salva com sucesso",
+    "saveError": "Falha ao salvar a configuração",
+    "loadError": "Falha ao carregar a configuração",
+    "deleteSuccess": "Excluído com sucesso",
+    "deleteError": "Falha ao excluir",
+    "updateSuccess": "Atualizado com sucesso",
+    "updateError": "Falha ao atualizar"
+  },
+  "sections": { "general": "Configurações gerais", "advanced": "Configurações avançadas", "security": "Segurança", "appearance": "Aparência", "notification": "Notificações", "moreConfig": "Mais configurações" },
+  "aiSettings": {
+    "title": "IA",
+    "enable": "Ativar IA",
+    "more": "Mais ações",
+    "changeRunner": "Alterar modo de execução",
+    "localSettingsTitle": "IA integrada do AstrBot",
+    "settingsSuffix": "Configurações",
+    "tabs": { "model": "Modelo", "persona": "Persona", "capabilities": "Recursos", "advanced": "Avançado" },
+    "groups": {
+      "model": "Modelo",
+      "modelHint": "Escolha os modelos de chat e a política de novas tentativas usada pela IA integrada.",
+      "execution": "Execução",
+      "executionHint": "Configure o ciclo de chamadas de ferramentas e o processo de execução.",
+      "media": "Imagem e voz",
+      "mediaHint": "Configure entendimento de imagem, fala para texto e texto para fala.",
+      "behavior": "Tratamento de mensagens",
+      "behaviorHint": "Estas configurações valem para todos os modos de execução deste perfil."
+    },
+    "common": { "title": "Configurações comuns", "subtitle": "Estas opções permanecem iguais quando o modo de execução é alterado." },
+    "disabled": { "title": "IA desativada", "subtitle": "Ative a IA para processar mensagens que exigem um modelo." },
+    "runnerDialog": {
+      "title": "Alterar modo de execução",
+      "subtitle": "Altere somente ao conectar uma aplicação de IA externa. A IA integrada é indicada para a maioria dos usuários.",
+      "warningPrefix": "Ao trocar, será usada a configuração padrão do novo modo. A configuração atual ",
+      "warningEmphasis": "não será preservada",
+      "warningSuffix": ".",
+      "confirm": "Usar este modo"
+    },
+    "runners": {
+      "local": { "title": "IA integrada", "summary": "Configure modelos, personas, bases de conhecimento e ferramentas do AstrBot.", "description": "Use a IA integrada do AstrBot com modelos, personas, bases de conhecimento e ferramentas." },
+      "dify": { "title": "Dify", "summary": "As conversas de IA são tratadas por uma aplicação Dify.", "description": "Conecte uma aplicação Dify e configure os parâmetros de acesso." },
+      "coze": { "title": "Coze", "summary": "As conversas de IA são tratadas por um Coze Bot.", "description": "Conecte um Coze Bot e configure os parâmetros de acesso." },
+      "dashscope": { "title": "Alibaba Cloud Model Studio", "summary": "As conversas de IA são tratadas por uma aplicação do Model Studio.", "description": "Conecte uma aplicação Alibaba Cloud Model Studio e configure os parâmetros de acesso." },
+      "deerflow": { "title": "DeerFlow", "summary": "As conversas de IA são tratadas pelo DeerFlow.", "description": "Conecte o DeerFlow e configure os parâmetros de execução." }
+    }
+  },
+  "general": { "botName": "Nome do bot", "language": "Idioma da interface", "timezone": "Fuso horário", "autoSave": "Salvar automaticamente", "debugMode": "Modo de debug" },
+  "advanced": { "logLevel": "Nível de log", "maxConnections": "Máximo de conexões", "timeout": "Tempo limite", "retryAttempts": "Tentativas", "cacheSize": "Tamanho do cache" },
+  "security": { "apiKey": "API Key", "allowedHosts": "Hosts permitidos", "rateLimit": "Limite de requisições", "encryption": "Configurações de criptografia" },
+  "configSelection": { "selectConfig": "Selecionar configuração", "defaultConfig": "Configuração padrão", "search": "Pesquisar configurações", "noResults": "Nenhuma configuração encontrada", "normalConfig": "Básico", "systemConfig": "Sistema" },
+  "search": { "placeholder": "Pesquisar itens de configuração (chave/descrição/dica)", "noResult": "Nenhum item encontrado" },
+  "configManagement": {
+    "title": "Gerenciamento de configurações",
+    "description": "O AstrBot permite arquivos de configuração separados para bots diferentes. Quando nenhum é definido, usa-se a configuração padrão.",
+    "newConfig": "Nova configuração",
+    "copyConfig": "Copiar configuração",
+    "editConfig": "Editar configuração",
+    "manageConfigs": "Gerenciar configurações...",
+    "configName": "Nome",
+    "fillConfigName": "Informe o nome da configuração",
+    "confirmDelete": "Excluir a configuração \"{name}\"? Esta ação não pode ser desfeita.",
+    "pleaseEnterName": "Informe um nome para a configuração",
+    "nameExists": "Já existe uma configuração com este nome. Escolha outro.",
+    "createFailed": "Falha ao criar a configuração",
+    "copyFailed": "Falha ao copiar a configuração",
+    "deleteFailed": "Falha ao excluir a configuração",
+    "updateFailed": "Falha ao atualizar a configuração"
+  },
+  "buttons": { "cancel": "Cancelar", "create": "Criar", "update": "Atualizar" },
+  "codeEditor": { "title": "Editar arquivo de configuração" },
+  "fileUpload": {
+    "button": "Gerenciar arquivos",
+    "dialogTitle": "Arquivos enviados",
+    "dropzone": "Enviar novo arquivo",
+    "allowedTypes": "Tipos permitidos: {types}",
+    "empty": "Nenhum arquivo enviado",
+    "statusMissing": "Arquivo ausente",
+    "statusUnconfigured": "Fora da configuração",
+    "uploadSuccess": "{count} arquivos enviados",
+    "uploadFailed": "Falha no envio",
+    "loadFailed": "Falha ao carregar a lista de arquivos",
+    "fileTooLarge": "Arquivo muito grande (máximo {max} MB): {name}",
+    "deleteSuccess": "Arquivo excluído",
+    "deleteFailed": "Falha ao excluir",
+    "addToConfig": "Adicionado à configuração",
+    "fileCount": "Arquivos: {count}",
+    "done": "Concluído"
+  },
+  "unsavedChangesWarning": {
+    "dialogTitle": "Alterações não salvas",
+    "leavePage": "Há alterações não salvas. Deseja salvar antes de sair?",
+    "switchConfig": "Trocar de configuração descartará alterações não salvas. Deseja salvar primeiro?",
+    "options": { "save": "Salvar", "saveAndSwitch": "Salvar e trocar", "discardAndSwitch": "Descartar e trocar", "closeCard": "Fechar janela", "confirm": "confirmar", "cancel": "cancelar" }
+  }
+}
