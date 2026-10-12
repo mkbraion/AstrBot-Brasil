@@ -13,7 +13,7 @@ DASHBOARD_RESET_PASSWORD_ENV = "ASTRBOT_RESET_DASHBOARD_PASSWORD"
 
 
 async def run_astrbot(astrbot_root: Path) -> None:
-    """Run AstrBot"""
+    """Executa o AstrBot Brasil."""
     from astrbot.core import LogBroker, LogManager, db_helper, logger
     from astrbot.core.initial_loader import InitialLoader
 
@@ -28,23 +28,23 @@ async def run_astrbot(astrbot_root: Path) -> None:
     await core_lifecycle.start()
 
 
-@click.option("--reload", "-r", is_flag=True, help="Auto-reload plugins")
-@click.option("--port", "-p", help="AstrBot Dashboard port", required=False, type=str)
+@click.option("--reload", "-r", is_flag=True, help="Recarrega plugins automaticamente durante o desenvolvimento")
+@click.option("--port", "-p", help="Porta do Dashboard do AstrBot", required=False, type=str)
 @click.option(
     "--reset-password",
     is_flag=True,
-    help="Reset dashboard initial password on startup",
+    help="Redefine a senha inicial do dashboard ao iniciar",
 )
 @click.command()
 def run(reload: bool, port: str | None, reset_password: bool) -> None:
-    """Run AstrBot"""
+    """Inicia o AstrBot Brasil."""
     try:
         os.environ["ASTRBOT_CLI"] = "1"
         astrbot_root = get_astrbot_root()
 
         if not check_astrbot_root(astrbot_root):
             raise click.ClickException(
-                f"{astrbot_root} is not a valid AstrBot root directory. Use 'astrbot init' to initialize",
+                f"{astrbot_root} não é um diretório raiz válido do AstrBot. Use 'astrbot init' para inicializar.",
             )
 
         os.environ["ASTRBOT_ROOT"] = str(astrbot_root)
@@ -54,7 +54,7 @@ def run(reload: bool, port: str | None, reset_password: bool) -> None:
             os.environ["DASHBOARD_PORT"] = port
 
         if reload:
-            click.echo("Plugin auto-reload enabled")
+            click.echo("Recarga automática de plugins ativada.")
             os.environ["ASTRBOT_RELOAD"] = "1"
 
         if reset_password:
@@ -65,10 +65,10 @@ def run(reload: bool, port: str | None, reset_password: bool) -> None:
         with lock.acquire():
             asyncio.run(run_astrbot(astrbot_root))
     except KeyboardInterrupt:
-        click.echo("AstrBot has been shut down.")
+        click.echo("AstrBot Brasil encerrado.")
     except Timeout:
         raise click.ClickException(
-            "Cannot acquire lock file. Please check if another instance is running"
+            "Não foi possível obter o arquivo de bloqueio. Verifique se outra instância está em execução."
         )
     except Exception as e:
-        raise click.ClickException(f"Runtime error: {e}\n{traceback.format_exc()}")
+        raise click.ClickException(f"Erro durante a execução: {e}\n{traceback.format_exc()}")
