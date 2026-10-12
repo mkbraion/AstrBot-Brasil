@@ -1,0 +1,23 @@
+{
+  "title": "Dashboard",
+  "subtitle": "Monitoramento e estatísticas em tempo real",
+  "lastUpdate": "Última atualização",
+  "status": {
+    "loading": "Carregando...",
+    "dataError": "Falha ao obter os dados",
+    "noticeError": "Falha ao obter os avisos",
+    "online": "Online",
+    "uptime": "Tempo em execução",
+    "memoryUsage": "Uso de memória"
+  },
+  "stats": {
+    "totalMessage": { "title": "Total de mensagens", "subtitle": "Total de mensagens enviadas por todas as plataformas" },
+    "onlinePlatform": { "title": "Plataformas", "subtitle": "Quantidade de plataformas conectadas" },
+    "runningTime": { "title": "Tempo em execução", "subtitle": "Tempo de atividade do sistema", "format": "{hours}h {minutes}min {seconds}s" },
+    "memoryUsage": { "title": "Uso de memória", "subtitle": "Consumo atual de memória do sistema", "cpuLoad": "Carga da CPU", "status": { "good": "Bom", "normal": "Normal", "high": "Alto" } }
+  },
+  "charts": {
+    "messageTrend": { "title": "Análise de mensagens", "subtitle": "Acompanhe a quantidade de mensagens ao longo do tempo", "totalMessages": "Total de mensagens", "dailyAverage": "Média diária", "growthRate": "Taxa de crescimento", "timeLabel": "Horário", "messageCount": "Quantidade de mensagens", "timeRanges": { "1day": "Último dia", "3days": "Últimos 3 dias", "1week": "Última semana", "1month": "Último mês" } },
+    "platformStat": { "title": "Mensagens por plataforma", "subtitle": "Distribuição da quantidade de mensagens por plataforma", "total": "Total", "noData": "Nenhum dado de plataforma disponível", "messageUnit": "msgs", "platformCount": "Plataformas", "mostActive": "Mais ativa", "totalPercentage": "Percentual total" }
+  }
+}

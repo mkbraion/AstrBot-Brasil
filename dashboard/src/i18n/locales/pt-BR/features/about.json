@@ -1,0 +1,17 @@
+{
+  "hero": {
+    "title": "AstrBot Brasil",
+    "subtitle": "Edição brasileira adaptada e mantida por mkbraion 🇧🇷",
+    "starButton": "Dar uma estrela no projeto 🌟",
+    "issueButton": "Relatar problema"
+  },
+  "contributors": {
+    "title": "Contribuidores",
+    "description": "A edição brasileira valoriza as contribuições da comunidade e preserva os créditos e licenças do código preexistente.",
+    "viewLink": "Ver contribuidores"
+  },
+  "stats": {
+    "title": "AstrBot Brasil",
+    "license": "Código principal licenciado sob AGPL v3 ou posterior"
+  }
+}

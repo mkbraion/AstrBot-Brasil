@@ -1,0 +1,5 @@
+{
+  "operation": { "saved": "Salvo com sucesso", "created": "Criado com sucesso", "updated": "Atualizado com sucesso", "deleted": "Excluído com sucesso", "uploaded": "Arquivo enviado com sucesso", "downloaded": "Download concluído", "imported": "Importação concluída", "exported": "Exportação concluída", "copied": "Copiado com sucesso", "sent": "Enviado com sucesso" },
+  "connection": { "connected": "Conexão realizada com sucesso", "authenticated": "Login realizado com sucesso", "synchronized": "Sincronização concluída" },
+  "validation": { "valid": "Validação concluída", "completed": "Operação concluída" }
+}
