@@ -1,0 +1,48 @@
+name: "🐛 Relatar bug (pt-BR)"
+title: "[Bug] "
+description: "Relate um problema encontrado no AstrBot Brasil."
+labels: ["bug"]
+body:
+  - type: textarea
+    attributes:
+      label: Descrição do problema
+      description: O que aconteceu?
+      placeholder: Descreva claramente o problema encontrado.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. Abra ...
+        2. Clique em ...
+        3. O erro acontece
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Versão do AstrBot Brasil
+      description: Informe a versão exata. Evite usar apenas "latest".
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Sistema operacional
+      options: ["Windows 11", "Windows 10", "Linux", "macOS", "Outro"]
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Logs do erro
+      description: Remova tokens, senhas e outras credenciais antes de enviar.
+      render: text
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Confirmações
+      options:
+        - label: Revisei os logs e removi credenciais privadas.
+          required: true
+        - label: Verifiquei se o problema já foi relatado.
+          required: true
