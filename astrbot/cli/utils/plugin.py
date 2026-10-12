@@ -44,7 +44,7 @@ def _validate_plugin_dir_name(plugin_name: str, source_path: Path) -> str:
         or plugin_path.name != plugin_name
     ):
         raise click.ClickException(
-            f"Local plugin {source_path} metadata.yaml has invalid name: {plugin_name}"
+            f"O metadata.yaml do plugin local {source_path} possui um nome inválido: {plugin_name}"
         )
     return plugin_name
 
@@ -54,16 +54,12 @@ def download_repository(
     target_path: Path,
     proxy: str | None = None,
 ) -> None:
-    """Download repository source without requiring a local Git executable.
+    """Baixa o código-fonte de um repositório sem exigir Git instalado localmente.
 
     Args:
-        url: Supported repository URL.
-        target_path: Directory that will receive the repository source.
-        proxy: Optional URL-prefix mirror for the archive request.
-
-    Raises:
-        ValueError: If the repository URL is unsupported or invalid.
-        httpx.HTTPError: If the repository archive cannot be downloaded.
+        url: URL de repositório compatível.
+        target_path: Pasta que receberá os arquivos do repositório.
+        proxy: Prefixo de proxy opcional para a solicitação do arquivo compactado.
     """
     from astrbot.core.repository import GitHubRepository
 
@@ -73,10 +69,10 @@ def download_repository(
         reference = (
             f"branch {repository.branch}"
             if repository.branch
-            else "default reference HEAD"
+            else "referência padrão HEAD"
         )
         click.echo(
-            f"Downloading {repository.owner}/{repository.name} from GitHub {reference}"
+            f"Baixando {repository.owner}/{repository.name} do GitHub ({reference})..."
         )
         download_url = repository.archive_url
         if proxy:
@@ -99,48 +95,29 @@ def download_repository(
 
 
 def load_yaml_metadata(plugin_dir: Path) -> dict:
-    """Load plugin metadata from metadata.yaml file
-
-    Args:
-        plugin_dir: Plugin directory path
-
-    Returns:
-        dict: Dictionary containing metadata, or empty dict if loading fails
-
-    """
+    """Carrega os metadados do plugin a partir de metadata.yaml."""
     yaml_path = plugin_dir / "metadata.yaml"
     if yaml_path.exists():
         try:
             return yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}
         except Exception as e:
-            click.echo(f"Failed to read {yaml_path}: {e}", err=True)
+            click.echo(f"Falha ao ler {yaml_path}: {e}", err=True)
     return {}
 
 
 def build_plug_list(plugins_dir: Path) -> list:
-    """Build plugin list containing local and online plugin information
-
-    Args:
-        plugins_dir (Path): Plugin directory path
-
-    Returns:
-        list: List of dicts containing plugin information
-
-    """
-    # Get local plugin info
+    """Monta a lista de plugins locais e disponíveis online."""
     result = []
     if plugins_dir.is_dir():
         for plugin_dir in plugins_dir.iterdir():
             if not plugin_dir.is_dir():
                 continue
 
-            # Load metadata from metadata.yaml
             metadata = load_yaml_metadata(plugin_dir)
 
             if "desc" not in metadata and "description" in metadata:
                 metadata["desc"] = metadata["description"]
 
-            # If metadata loaded successfully, add to result list
             if metadata and all(
                 k in metadata for k in ["name", "desc", "version", "author", "repo"]
             ):
@@ -156,7 +133,6 @@ def build_plug_list(plugins_dir: Path) -> list:
                     },
                 )
 
-    # Get online plugin list
     online_plugins_dict = {}
     try:
         with httpx.Client() as client:
@@ -174,13 +150,11 @@ def build_plug_list(plugins_dir: Path) -> list:
                     "local_path": None,
                 }
     except Exception as e:
-        click.echo(f"Failed to get online plugin list: {e}", err=True)
+        click.echo(f"Falha ao carregar a lista de plugins online: {e}", err=True)
 
-    # Compare with online plugins and update status
     for local_plugin in result:
         online_plugin = online_plugins_dict.pop(local_plugin["name"], None)
         if online_plugin is None:
-            # Local plugin is not published online
             local_plugin["status"] = PluginStatus.NOT_PUBLISHED
             continue
 
@@ -193,9 +167,7 @@ def build_plug_list(plugins_dir: Path) -> list:
         ):
             local_plugin["status"] = PluginStatus.NEED_UPDATE
 
-    # Add uninstalled online plugins
     result.extend(online_plugins_dict.values())
-
     return result
 
 
@@ -213,7 +185,7 @@ def _copy_local_plugin(source_path: Path, plugins_dir: Path, target_path: Path) 
         temp_target.rename(target_path)
     except FileExistsError:
         raise click.ClickException(
-            f"Plugin {target_path.name} already exists"
+            f"O plugin {target_path.name} já existe."
         ) from None
     except Exception:
         raise
@@ -227,24 +199,24 @@ def install_local_plugin(
     plugins_dir: Path,
     editable: bool = False,
 ) -> None:
-    """Install a plugin from a local directory."""
+    """Instala um plugin a partir de uma pasta local."""
     source_path = source_path.expanduser().resolve()
     plugins_dir = plugins_dir.resolve()
 
     if not source_path.exists() or not source_path.is_dir():
-        raise click.ClickException(f"Local plugin path does not exist: {source_path}")
+        raise click.ClickException(f"O caminho do plugin local não existe: {source_path}")
 
     metadata = load_yaml_metadata(source_path)
     plugin_name = metadata.get("name")
     if not isinstance(plugin_name, str) or not plugin_name.strip():
         raise click.ClickException(
-            f"Local plugin {source_path} must contain metadata.yaml with a valid name"
+            f"O plugin local {source_path} precisa conter metadata.yaml com um nome válido."
         )
     plugin_name = _validate_plugin_dir_name(plugin_name, source_path)
 
     target_path = plugins_dir / plugin_name
     if target_path.exists():
-        raise click.ClickException(f"Plugin {plugin_name} already exists")
+        raise click.ClickException(f"O plugin {plugin_name} já existe.")
 
     try:
         plugins_dir.mkdir(parents=True, exist_ok=True)
@@ -253,21 +225,21 @@ def install_local_plugin(
                 target_path.symlink_to(source_path, target_is_directory=True)
             except OSError as e:
                 raise click.ClickException(
-                    f"Failed to create symlink for editable install: {e}. "
-                    "On Windows, you may need to run as Administrator or enable Developer Mode."
+                    f"Falha ao criar o link simbólico para a instalação editável: {e}. "
+                    "No Windows, talvez seja necessário executar como Administrador ou ativar o Modo de Desenvolvedor."
                 ) from e
         else:
             _copy_local_plugin(source_path, plugins_dir, target_path)
-        click.echo(f"Plugin {plugin_name} installed successfully from {source_path}")
+        click.echo(f"Plugin {plugin_name} instalado com sucesso a partir de {source_path}.")
     except FileExistsError:
-        raise click.ClickException(f"Plugin {plugin_name} already exists") from None
+        raise click.ClickException(f"O plugin {plugin_name} já existe.") from None
     except click.ClickException:
         raise
     except Exception as e:
         if editable and target_path.is_symlink():
             _cleanup_local_plugin_target(target_path)
         raise click.ClickException(
-            f"Error installing local plugin {plugin_name}: {e}"
+            f"Erro ao instalar o plugin local {plugin_name}: {e}"
         ) from e
 
 
@@ -277,19 +249,10 @@ def manage_plugin(
     is_update: bool = False,
     proxy: str | None = None,
 ) -> None:
-    """Install or update a plugin
-
-    Args:
-        plugin (dict): Plugin info dict
-        plugins_dir (Path): Plugins directory
-        is_update (bool, optional): Whether this is an update operation. Defaults to False
-        proxy (str, optional): Proxy server address
-
-    """
+    """Instala ou atualiza um plugin."""
     plugin_name = plugin["name"]
     repo_url = plugin["repo"]
 
-    # If updating and local path exists, use it directly
     if is_update and plugin.get("local_path"):
         target_path = Path(plugin["local_path"])
     else:
@@ -297,35 +260,31 @@ def manage_plugin(
 
     backup_path = Path(f"{target_path}_backup") if is_update else None
 
-    # Check if plugin exists
     if is_update and not target_path.exists():
         raise click.ClickException(
-            f"Plugin {plugin_name} is not installed and cannot be updated"
+            f"O plugin {plugin_name} não está instalado e não pode ser atualizado."
         )
 
-    # Backup existing plugin
     if is_update and backup_path is not None and backup_path.exists():
         shutil.rmtree(backup_path)
     if is_update and backup_path is not None:
         shutil.copytree(target_path, backup_path)
 
     try:
-        click.echo(
-            f"{'Updating' if is_update else 'Downloading'} plugin {plugin_name} from {repo_url}...",
-        )
+        action = "Atualizando" if is_update else "Baixando"
+        click.echo(f"{action} plugin {plugin_name} de {repo_url}...")
         download_repository(repo_url, target_path, proxy)
 
-        # Update succeeded, delete backup
         if is_update and backup_path is not None and backup_path.exists():
             shutil.rmtree(backup_path)
-        click.echo(
-            f"Plugin {plugin_name} {'updated' if is_update else 'installed'} successfully"
-        )
+        completed = "atualizado" if is_update else "instalado"
+        click.echo(f"Plugin {plugin_name} {completed} com sucesso.")
     except Exception as e:
         if target_path.exists():
             shutil.rmtree(target_path, ignore_errors=True)
         if is_update and backup_path is not None and backup_path.exists():
             shutil.move(backup_path, target_path)
+        action = "atualizar" if is_update else "instalar"
         raise click.ClickException(
-            f"Error {'updating' if is_update else 'installing'} plugin {plugin_name}: {e}",
+            f"Erro ao {action} o plugin {plugin_name}: {e}",
         )
