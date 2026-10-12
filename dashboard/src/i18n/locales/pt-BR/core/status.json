@@ -1,0 +1,22 @@
+{
+  "loading": "Carregando",
+  "success": "Sucesso",
+  "error": "Erro",
+  "warning": "Aviso",
+  "info": "Informação",
+  "pending": "Pendente",
+  "processing": "Processando",
+  "completed": "Concluído",
+  "failed": "Falhou",
+  "cancelled": "Cancelado",
+  "timeout": "Tempo esgotado",
+  "connecting": "Conectando",
+  "connected": "Conectado",
+  "disconnected": "Desconectado",
+  "online": "Online",
+  "offline": "Offline",
+  "active": "Ativo",
+  "inactive": "Inativo",
+  "ready": "Pronto",
+  "busy": "Ocupado"
+}

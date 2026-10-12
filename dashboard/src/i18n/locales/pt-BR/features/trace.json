@@ -1,0 +1,8 @@
+{
+  "title":"Rastreamento",
+  "autoScroll":{"enabled":"Rolagem automática: ativada","disabled":"Rolagem automática: desativada"},
+  "hint":"Atualmente são registrados apenas alguns caminhos de chamadas de modelo do Agent principal. A cobertura será ampliada.",
+  "toggleLabel":"Registrar traces","recording":"Gravando","paused":"Pausado",
+  "table":{"time":"Horário","eventId":"ID do evento","sender":"Remetente","outline":"Conteúdo"},
+  "expand":"Expandir","collapse":"Recolher","showMore":"Mostrar mais","empty":"Ainda não há dados de rastreamento"
+}

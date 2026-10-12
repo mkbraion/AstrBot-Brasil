@@ -1,37 +1,37 @@
-<!--Please describe the motivation for this change: What problem does it solve? (e.g., Fixes XX issue, adds YY feature)-->
-<!--请描述此项更改的动机：它解决了什么问题？（例如：修复了 XX issue，添加了 YY 功能）-->
+## Descrição da alteração
 
-### Modifications / 改动点
+<!-- Explique o que foi alterado e qual problema esta mudança resolve. -->
 
-<!--Please summarize your changes: What core files were modified? What functionality was implemented?-->
-<!--请总结你的改动：哪些核心文件被修改了？实现了什么功能？-->
+## Modificações principais
 
-- [x] This is NOT a breaking change. / 这不是一个破坏性变更。
-<!-- If your changes is a breaking change, please uncheck the checkbox above -->
+<!-- Resuma os arquivos e comportamentos alterados. -->
 
-### Screenshots or Test Results / 运行截图或测试结果
+- [ ] Esta alteração **não** quebra compatibilidade existente.
+- [ ] Esta alteração contém mudança incompatível e isso está explicado abaixo.
 
-<!--Please paste screenshots, GIFs, or test logs here as evidence of executing the "Verification Steps" to prove this change is effective.-->
-<!--请粘贴截图、GIF 或测试日志，作为执行“验证步骤”的证据，证明此改动有效。-->
+## Como verificar
 
----
+<!-- Informe comandos, passos e resultados usados para validar a mudança. -->
 
-### Checklist / 检查清单
+```text
+Cole aqui os comandos ou resultados relevantes.
+```
 
-<!--If merged, your code will serve tens of thousands of users! Please double-check the following items before submitting.-->
-<!--如果分支被合并，您的代码将服务于数万名用户！在提交前，请核查一下几点内容。-->
+## Screenshots ou resultados de teste
 
-- [ ] 😊 If there are new features added in the PR, I have discussed it with the authors through issues/emails, etc. 
-  / 如果 PR 中有新加入的功能，已经通过 Issue / 邮件等方式和作者讨论过。
+<!-- Adicione screenshots, GIFs ou logs quando forem úteis. -->
 
-- [ ] 👀 My changes have been well-tested, **and "Verification Steps" and "Screenshots" have been provided above**.
-  / 我的更改经过了良好的测试，**并已在上方提供了“验证步骤”和“运行截图”**。
+## Checklist — AstrBot Brasil 🇧🇷
 
-- [ ] 📚 I checked the affected WebUI instructions and screenshots in `docs/zh` and `docs/en` against the changed navigation, page structure, and labels, and updated them in this PR (or explained why no documentation update is needed). For renamed, moved, or merged entry points, I included an **old entry → new entry** mapping in the documentation and changelog.
-  / 我已对照变化后的 WebUI 入口、页面结构和术语，核对并在本 PR 中更新 `docs/zh` 和 `docs/en` 的相关操作说明与截图（或说明无需更新文档的原因）。入口改名、移动或合并时，已在文档和 changelog 中补充 **旧入口 → 新入口** 对照。
+- [ ] Testei as alterações relacionadas a este PR.
+- [ ] Revisei textos visíveis ao usuário e usei português brasileiro natural quando aplicável.
+- [ ] Se alterei a WebUI, atualizei os arquivos de `dashboard/src/i18n/locales/pt-BR/` correspondentes.
+- [ ] Não traduzi nomes de APIs, classes, funções, flags, protocolos ou chaves técnicas de forma que quebre compatibilidade.
+- [ ] Não incluí API keys, tokens, senhas, cookies ou outras credenciais privadas.
+- [ ] Se adicionei dependências, atualizei os arquivos de dependências correspondentes.
+- [ ] Preservei `LICENSE`, `EULA.md`, `dashboard/LICENSE` e demais avisos legais aplicáveis.
+- [ ] Não atribuí código preexistente do projeto-base a @mkbraion.
 
-- [ ] 🤓 I have ensured that no new dependencies are introduced, OR if new dependencies are introduced, they have been added to the appropriate locations in `requirements.txt` and `pyproject.toml`.
-  / 我确保没有引入新依赖库，或者引入了新依赖库的同时将其添加到 `requirements.txt` 和 `pyproject.toml` 文件相应位置。
+## Observações adicionais
 
-- [ ] 😮 My changes do not introduce malicious code.
-  / 我的更改没有引入恶意代码。
+<!-- Inclua migrações, limitações, riscos ou informações que os revisores devam conhecer. -->

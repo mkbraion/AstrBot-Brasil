@@ -17,14 +17,14 @@ from ..utils import (
 
 @click.group()
 def plug() -> None:
-    """Plugin management"""
+    """Gerencia plugins do AstrBot Brasil."""
 
 
 def _get_data_path() -> Path:
     base = get_astrbot_root()
     if not check_astrbot_root(base):
         raise click.ClickException(
-            f"{base} is not a valid AstrBot root directory. Use 'astrbot init' to initialize",
+            f"{base} não é um diretório raiz válido do AstrBot. Use 'astrbot init' para inicializar.",
         )
     return (base / "data").resolve()
 
@@ -34,7 +34,7 @@ def display_plugins(plugins, title=None, color=None) -> None:
         click.echo(click.style(title, fg=color, bold=True))
 
     click.echo(
-        f"{'Name':<20} {'Version':<10} {'Status':<10} {'Author':<15} {'Description':<30}"
+        f"{'Nome':<20} {'Versão':<10} {'Status':<10} {'Autor':<15} {'Descrição':<30}"
     )
     click.echo("-" * 85)
 
@@ -49,30 +49,29 @@ def display_plugins(plugins, title=None, color=None) -> None:
 @plug.command()
 @click.argument("name")
 def new(name: str) -> None:
-    """Create a new plugin"""
+    """Cria um novo plugin."""
     base_path = _get_data_path()
     plug_path = base_path / "plugins" / name
 
     if plug_path.exists():
-        raise click.ClickException(f"Plugin {name} already exists")
+        raise click.ClickException(f"O plugin {name} já existe.")
 
-    author = click.prompt("Enter plugin author", type=str)
-    desc = click.prompt("Enter plugin description", type=str)
-    version = click.prompt("Enter plugin version", type=str)
+    author = click.prompt("Autor do plugin", type=str)
+    desc = click.prompt("Descrição do plugin", type=str)
+    version = click.prompt("Versão do plugin", type=str)
     if not re.match(r"^\d+\.\d+(\.\d+)?$", version.lower().lstrip("v")):
-        raise click.ClickException("Version must be in x.y or x.y.z format")
-    repo = click.prompt("Enter plugin repository URL:", type=str)
+        raise click.ClickException("A versão deve usar o formato x.y ou x.y.z.")
+    repo = click.prompt("URL do repositório do plugin", type=str)
     if not repo.startswith("http"):
-        raise click.ClickException("Repository URL must start with http")
+        raise click.ClickException("A URL do repositório deve começar com http ou https.")
 
-    click.echo("Downloading plugin template...")
+    click.echo("Baixando o template do plugin...")
     download_repository(
         "https://github.com/Soulter/helloworld",
         plug_path,
     )
 
-    click.echo("Rewriting plugin metadata...")
-    # Rewrite metadata.yaml
+    click.echo("Atualizando os metadados do plugin...")
     with open(plug_path / "metadata.yaml", "w", encoding="utf-8") as f:
         f.write(
             f"name: {name}\n"
@@ -82,13 +81,11 @@ def new(name: str) -> None:
             f"repo: {repo}\n",
         )
 
-    # Rewrite README.md
     with open(plug_path / "README.md", "w", encoding="utf-8") as f:
         f.write(
-            f"# {name}\n\n{desc}\n\n# Support\n\n[Documentation](https://docs.astrbot.app)\n"
+            f"# {name}\n\n{desc}\n\n# Suporte\n\n[Documentação](https://docs.astrbot.app)\n"
         )
 
-    # Rewrite main.py
     with open(plug_path / "main.py", encoding="utf-8") as f:
         content = f.read()
 
@@ -100,47 +97,43 @@ def new(name: str) -> None:
     with open(plug_path / "main.py", "w", encoding="utf-8") as f:
         f.write(new_content)
 
-    click.echo(f"Plugin {name} created successfully")
+    click.echo(f"Plugin {name} criado com sucesso.")
 
 
 @plug.command()
-@click.option("--all", "-a", is_flag=True, help="List uninstalled plugins")
+@click.option("--all", "-a", is_flag=True, help="Também lista plugins não instalados")
 def list(all: bool) -> None:
-    """List plugins"""
+    """Lista plugins."""
     base_path = _get_data_path()
     plugins = build_plug_list(base_path / "plugins")
 
-    # Unpublished plugins
     not_published_plugins = [
         p for p in plugins if p["status"] == PluginStatus.NOT_PUBLISHED
     ]
     if not_published_plugins:
-        display_plugins(not_published_plugins, "Unpublished Plugins", "red")
+        display_plugins(not_published_plugins, "Plugins não publicados", "red")
 
-    # Plugins needing update
     need_update_plugins = [
         p for p in plugins if p["status"] == PluginStatus.NEED_UPDATE
     ]
     if need_update_plugins:
-        display_plugins(need_update_plugins, "Plugins Needing Update", "yellow")
+        display_plugins(need_update_plugins, "Plugins com atualização disponível", "yellow")
 
-    # Installed plugins
     installed_plugins = [p for p in plugins if p["status"] == PluginStatus.INSTALLED]
     if installed_plugins:
-        display_plugins(installed_plugins, "Installed Plugins", "green")
+        display_plugins(installed_plugins, "Plugins instalados", "green")
 
-    # Uninstalled plugins
     not_installed_plugins = [
         p for p in plugins if p["status"] == PluginStatus.NOT_INSTALLED
     ]
     if not_installed_plugins and all:
-        display_plugins(not_installed_plugins, "Uninstalled Plugins", "blue")
+        display_plugins(not_installed_plugins, "Plugins não instalados", "blue")
 
     if (
         not any([not_published_plugins, need_update_plugins, installed_plugins])
         and not all
     ):
-        click.echo("No plugins installed")
+        click.echo("Nenhum plugin instalado.")
 
 
 @plug.command()
@@ -150,11 +143,11 @@ def list(all: bool) -> None:
     "-e",
     "local_path",
     type=click.Path(exists=True, file_okay=False, path_type=Path),
-    help="Install a plugin from a local directory as a symlink",
+    help="Instala um plugin de uma pasta local usando link simbólico",
 )
-@click.option("--proxy", help="Proxy server address")
+@click.option("--proxy", help="Endereço do servidor proxy")
 def install(name: str | None, local_path: Path | None, proxy: str | None) -> None:
-    """Install a plugin"""
+    """Instala um plugin."""
     base_path = _get_data_path()
     plug_path = base_path / "plugins"
 
@@ -163,7 +156,7 @@ def install(name: str | None, local_path: Path | None, proxy: str | None) -> Non
         return
 
     if name is None:
-        raise click.ClickException("Missing plugin name or local plugin path")
+        raise click.ClickException("Informe o nome do plugin ou o caminho de um plugin local.")
 
     local_name_path = Path(name).expanduser()
     if local_name_path.exists() and local_name_path.is_dir():
@@ -182,7 +175,7 @@ def install(name: str | None, local_path: Path | None, proxy: str | None) -> Non
     )
 
     if not plugin:
-        raise click.ClickException(f"Plugin {name} not found or already installed")
+        raise click.ClickException(f"Plugin {name} não encontrado ou já instalado.")
 
     manage_plugin(plugin, plug_path, is_update=False, proxy=proxy)
 
@@ -190,32 +183,32 @@ def install(name: str | None, local_path: Path | None, proxy: str | None) -> Non
 @plug.command()
 @click.argument("name")
 def remove(name: str) -> None:
-    """Uninstall a plugin"""
+    """Desinstala um plugin."""
     base_path = _get_data_path()
     plugins = build_plug_list(base_path / "plugins")
     plugin = next((p for p in plugins if p["name"] == name), None)
 
     if not plugin or not plugin.get("local_path"):
-        raise click.ClickException(f"Plugin {name} does not exist or is not installed")
+        raise click.ClickException(f"O plugin {name} não existe ou não está instalado.")
 
     plugin_path = plugin["local_path"]
 
     click.confirm(
-        f"Are you sure you want to uninstall plugin {name}?", default=False, abort=True
+        f"Tem certeza de que deseja desinstalar o plugin {name}?", default=False, abort=True
     )
 
     try:
         shutil.rmtree(plugin_path)
-        click.echo(f"Plugin {name} has been uninstalled")
+        click.echo(f"Plugin {name} desinstalado.")
     except Exception as e:
-        raise click.ClickException(f"Failed to uninstall plugin {name}: {e}")
+        raise click.ClickException(f"Falha ao desinstalar o plugin {name}: {e}")
 
 
 @plug.command()
 @click.argument("name", required=False)
-@click.option("--proxy", help="GitHub proxy address")
+@click.option("--proxy", help="Endereço de proxy do GitHub")
 def update(name: str, proxy: str | None) -> None:
-    """Update plugins"""
+    """Atualiza plugins."""
     base_path = _get_data_path()
     plug_path = base_path / "plugins"
     plugins = build_plug_list(base_path / "plugins")
@@ -232,7 +225,7 @@ def update(name: str, proxy: str | None) -> None:
 
         if not plugin:
             raise click.ClickException(
-                f"Plugin {name} does not need updating or cannot be updated"
+                f"O plugin {name} não precisa de atualização ou não pode ser atualizado."
             )
 
         manage_plugin(plugin, plug_path, is_update=True, proxy=proxy)
@@ -242,20 +235,20 @@ def update(name: str, proxy: str | None) -> None:
         ]
 
         if not need_update_plugins:
-            click.echo("No plugins need updating")
+            click.echo("Nenhum plugin precisa de atualização.")
             return
 
-        click.echo(f"Found {len(need_update_plugins)} plugin(s) needing update")
+        click.echo(f"{len(need_update_plugins)} plugin(s) com atualização disponível.")
         for plugin in need_update_plugins:
             plugin_name = plugin["name"]
-            click.echo(f"Updating plugin {plugin_name}...")
+            click.echo(f"Atualizando plugin {plugin_name}...")
             manage_plugin(plugin, plug_path, is_update=True, proxy=proxy)
 
 
 @plug.command()
 @click.argument("query")
 def search(query: str) -> None:
-    """Search for plugins"""
+    """Pesquisa plugins."""
     base_path = _get_data_path()
     plugins = build_plug_list(base_path / "plugins")
 
@@ -268,7 +261,7 @@ def search(query: str) -> None:
     ]
 
     if not matched_plugins:
-        click.echo(f"No plugins matching '{query}' found")
+        click.echo(f"Nenhum plugin correspondente a '{query}' foi encontrado.")
         return
 
-    display_plugins(matched_plugins, f"Search results: '{query}'", "cyan")
+    display_plugins(matched_plugins, f"Resultados da pesquisa: '{query}'", "cyan")

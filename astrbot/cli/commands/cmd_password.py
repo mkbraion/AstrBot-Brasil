@@ -13,16 +13,16 @@ from .cmd_conf import (
 @click.command(name="password")
 @click.option(
     "--username",
-    help="Optional dashboard username to set together with the new password.",
+    help="Usuário opcional do dashboard para alterar junto com a nova senha.",
 )
 def password(username: str | None) -> None:
-    """Change the AstrBot dashboard password."""
+    """Altera a senha do dashboard do AstrBot Brasil."""
     config = _load_config()
 
     new_password = click.prompt(
-        "New dashboard password",
+        "Nova senha do dashboard",
         hide_input=True,
-        confirmation_prompt=True,
+        confirmation_prompt="Repita a nova senha para confirmar",
     )
     validated_password = _validate_dashboard_password(new_password)
 
@@ -33,6 +33,6 @@ def password(username: str | None) -> None:
     _set_dashboard_password(config, validated_password)
     _save_config(config)
 
-    click.echo("Dashboard password updated.")
+    click.echo("Senha do dashboard atualizada.")
     if username is not None:
-        click.echo(f"Dashboard username updated: {validated_username}")
+        click.echo(f"Usuário do dashboard atualizado: {validated_username}")
