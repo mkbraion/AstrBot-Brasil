@@ -1,0 +1,7 @@
+{
+  "title":"Laboratório Alkaid","subtitle":"Explore recursos experimentais e avançados de IA","comingSoon":"Há muito pela frente — vamos explorar em breve!",
+  "page":{"title":"Projeto Alkaid","subtitle":"Projeto experimental do AstrBot","navigation":{"knowledgeBase":"Base de conhecimento (Plugin)","longTermMemory":"Memória de longo prazo","other":"..."}},
+  "features":{"knowledgeBase":"Base de conhecimento","longTermMemory":"Memória de longo prazo","advancedChat":"Chat avançado","multiModal":"Interação multimodal"},
+  "status":{"experimental":"Experimental","beta":"Beta","stable":"Estável","deprecated":"Descontinuado"},
+  "sigma":{"subtitle":"Projeto experimental do AstrBot","visualization":"Visualização","filterUserId":"Filtrar ID do usuário","filter":"Filtrar","resetFilter":"Limpar filtro","refreshGraph":"Atualizar grafo","nodeDetails":"Detalhes do nó","id":"ID","type":"Tipo","name":"Nome","userId":"ID do usuário","timestamp":"Data/hora","graphStats":"Estatísticas do grafo","nodeCount":"Quantidade de nós","edgeCount":"Quantidade de conexões","inDevelopment":"Em desenvolvimento"}
+}
