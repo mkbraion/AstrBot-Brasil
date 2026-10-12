@@ -1,0 +1,174 @@
+{
+  "page": { "title": "Configurações" },
+  "sections": {
+    "general": { "title": "Geral" },
+    "appearance": { "title": "Aparência" },
+    "network": { "title": "Rede" },
+    "security": { "title": "Segurança" },
+    "maintenance": { "title": "Manutenção" },
+    "openapi": { "title": "OpenAPI" },
+    "resources": { "title": "Sobre" }
+  },
+  "resources": {
+    "changelog": { "subtitle": "Consulte as alterações da versão atual e das versões anteriores." },
+    "documentation": { "subtitle": "Abra a documentação do AstrBot Brasil." },
+    "faq": { "subtitle": "Consulte perguntas frequentes e orientações de solução de problemas." },
+    "github": { "subtitle": "Acesse o repositório do AstrBot Brasil no GitHub." }
+  },
+  "systemConfig": {
+    "restartRequired": "Configurações do sistema salvas. Algumas alterações só entram em vigor após reiniciar o AstrBot.",
+    "groups": {
+      "runtime": { "title": "Execução", "subtitle": "Fuso horário e URL de callback acessível externamente." },
+      "network": { "title": "Proxy e fontes de dependências", "subtitle": "Proxy de execução, opções de instalação de dependências Python e fonte PyPI." },
+      "webuiSecurity": { "title": "Segurança da WebUI", "subtitle": "HTTPS, headers de proxy confiáveis, limite de tentativas de login e TOTP." },
+      "logs": { "title": "Logs", "subtitle": "Logs do console, arquivos de log e registro de Trace." },
+      "tempStorage": { "title": "Cache", "subtitle": "Limite para limpeza automática do diretório temporário." }
+    },
+    "timePreview": { "label": "Horário atual do AstrBot" },
+    "messages": { "loadFailed": "Falha ao carregar as configurações do sistema", "saveSuccess": "Configurações do sistema salvas", "saveFailed": "Falha ao salvar as configurações do sistema" }
+  },
+  "network": {
+    "title": "Rede",
+    "githubProxy": {
+      "title": "Endereço de proxy do GitHub",
+      "subtitle": "Define o proxy usado para baixar plugins ou atualizar o AstrBot. Personalize somente se sua rede realmente precisar de um proxy. Endereços públicos podem ficar indisponíveis sem aviso.",
+      "label": "Selecionar endereço de proxy do GitHub"
+    },
+    "proxySelector": { "title": "Proxy do GitHub", "noProxy": "Não usar proxy do GitHub", "useProxy": "Usar proxy do GitHub", "testConnection": "Testar conexão", "available": "Disponível", "unavailable": "Indisponível", "custom": "Personalizado" }
+  },
+  "theme": {
+    "title": "Tema",
+    "subtitle": "Personalize as cores principal e secundária. As alterações são aplicadas imediatamente e armazenadas no navegador.",
+    "customize": { "title": "Cores do tema", "primary": "Cor principal", "secondary": "Cor secundária", "reset": "Restaurar padrão" }
+  },
+  "system": {
+    "title": "Sistema",
+    "restart": { "title": "Reiniciar", "subtitle": "Reiniciar o AstrBot", "confirm": "Reiniciar o AstrBot agora? A WebUI pode ficar temporariamente indisponível.", "button": "Reiniciar" },
+    "backup": { "title": "Backup e restauração", "subtitle": "Exporte ou importe os dados do AstrBot para facilitar migrações", "button": "Gerenciar backups" },
+    "cleanup": {
+      "title": "Limpeza de logs e cache",
+      "subtitle": "Confira o uso de disco de logs e caches e faça a limpeza diretamente pela interface.",
+      "refresh": "Atualizar uso",
+      "clean": "Limpar",
+      "cleanAll": "Limpar tudo",
+      "panel": { "title": "Detalhes da limpeza", "subtitle": "Uso atual: {size}" },
+      "fileCount": "{count} arquivos",
+      "confirm": "Limpar {target} agora?",
+      "targetNames": { "cache": "cache", "logs": "logs", "all": "logs e cache" },
+      "targets": {
+        "cache": { "title": "Cache", "subtitle": "Remove arquivos temporários, cache do marketplace e cache de Skills.", "button": "Limpar cache" },
+        "logs": { "title": "Logs", "subtitle": "Remove logs rotacionados e limpa o conteúdo dos arquivos de log atualmente ativos.", "button": "Limpar logs" }
+      },
+      "messages": { "statusFailed": "Falha ao carregar o uso de armazenamento", "cleanupSuccess": "{count} arquivos removidos e {size} liberados", "cleanupFailed": "Falha na limpeza" }
+    }
+  },
+  "backup": {
+    "dialog": { "title": "Gerenciador de backups" },
+    "tabs": { "export": "Exportar backup", "import": "Importar backup", "list": "Lista de backups" },
+    "export": {
+      "title": "Criar backup",
+      "description": "Exporte os dados para um arquivo ZIP, incluindo banco de dados, base de conhecimento, configurações, anexos e Skills.",
+      "includes": "Inclui: banco principal, bases de conhecimento, arquivos de configuração, anexos e Skills",
+      "button": "Iniciar exportação",
+      "processing": "Exportando...",
+      "wait": "Aguarde enquanto os dados são compactados...",
+      "completed": "Exportação concluída!",
+      "download": "Baixar backup",
+      "another": "Criar novo backup",
+      "failed": "Falha na exportação",
+      "retry": "Tentar novamente"
+    },
+    "import": {
+      "title": "Importar backup",
+      "warning": "⚠️ A importação limpará e substituirá os dados existentes. Faça backup dos dados atuais antes de continuar.",
+      "selectFile": "Selecionar arquivo de backup (.zip)",
+      "uploadAndCheck": "Enviar e verificar",
+      "uploading": "Enviando...",
+      "uploadWait": "Aguarde enquanto o backup é enviado...",
+      "uploadInit": "Inicializando envio...",
+      "uploadingChunks": "Enviando partes do arquivo...",
+      "uploadComplete": "Envio concluído. Mesclando arquivo...",
+      "checking": "Verificando backup...",
+      "invalidBackup": "Arquivo de backup inválido",
+      "backupContents": "Conteúdo do backup",
+      "tables": "tabelas",
+      "knowledgeBases": "Bases de conhecimento",
+      "configFiles": "Arquivos de configuração",
+      "confirmImport": "Confirmar importação",
+      "button": "Iniciar importação",
+      "processing": "Importando...",
+      "wait": "Aguarde enquanto os dados são restaurados...",
+      "completed": "Importação concluída!",
+      "restartRequired": "Os dados foram importados. Reinicie o AstrBot para que todas as alterações entrem em vigor.",
+      "restartNow": "Reiniciar agora",
+      "failed": "Falha na importação",
+      "retry": "Tentar novamente",
+      "resumeUpload": "Retomar envio",
+      "version": {
+        "backupVersion": "Versão do backup",
+        "currentVersion": "Versão atual",
+        "backupTime": "Data do backup",
+        "matchTitle": "✅ Versões compatíveis",
+        "matchMessage": "A importação limpará e substituirá todos os dados existentes, incluindo banco de dados, bases de conhecimento, plugins, configurações e Skills. Esta ação não pode ser desfeita. Deseja continuar?",
+        "minorDiffTitle": "⚠️ Aviso de diferença de versão",
+        "minorDiffMessage": "Diferenças pequenas de versão normalmente são compatíveis, mas pode haver mudanças na estrutura dos dados. A importação substituirá os dados existentes. Deseja continuar?",
+        "majorDiffTitle": "⛔ Não é possível importar",
+        "majorDiffMessage": "As versões principais são diferentes. Importar entre versões principais pode corromper dados. Use a mesma versão principal do AstrBot."
+      }
+    },
+    "list": {
+      "empty": "Nenhum arquivo de backup",
+      "refresh": "Atualizar lista",
+      "confirmDelete": "Excluir este backup? Esta ação não pode ser desfeita.",
+      "uploaded": "Enviado",
+      "restore": "Restaurar este backup",
+      "rename": "Renomear",
+      "renameTitle": "Renomear arquivo de backup",
+      "newName": "Novo nome",
+      "renameHint": "Use apenas letras, números, sublinhado, hífen e ponto",
+      "renameRequired": "Informe um nome de arquivo",
+      "renameInvalidChars": "O nome contém caracteres inválidos",
+      "renameFailed": "Falha ao renomear",
+      "ftpHint": "Para backups grandes, você também pode enviar o arquivo diretamente para data/backups via FTP/SFTP"
+    }
+  },
+  "apiKey": {
+    "title": "API Keys",
+    "manageTitle": "Chaves de acesso para desenvolvedores",
+    "subtitle": "Crie API keys para que aplicações externas usem as APIs HTTP abertas.",
+    "name": "Nome da chave",
+    "expiresInDays": "Expiração",
+    "expiryOptions": { "day1": "1 dia", "day7": "7 dias", "day30": "30 dias", "day90": "90 dias", "permanent": "Permanente" },
+    "permanentWarning": "API keys permanentes apresentam maior risco. Armazene-as com segurança e use apenas quando necessário.",
+    "scopes": "Escopos",
+    "sensitiveSubscope": "Subescopo sensível",
+    "chatAdminWarning": "chat:admin permite usar IDs administrativos configurados e executar ações de administrador. Conceda somente a aplicações totalmente confiáveis.",
+    "createConfirm": "Criar uma API key com os seguintes escopos?\n\n{scopes}",
+    "sensitiveCreateConfirm": "Você está prestes a criar uma API key com escopos de alto risco:\n\n{scopes}\n\nO portador poderá obter recursos administrativos. Continuar?",
+    "scopeDescriptions": {
+      "bot": "Ler e gerenciar configurações de bots e plataformas.",
+      "provider": "Ler e gerenciar provedores de modelos.",
+      "persona": "Ler e gerenciar personas.",
+      "im": "Acessar APIs de mensagens instantâneas.",
+      "config": "Ler e gerenciar configurações do sistema e perfis; inclui bot e provider.",
+      "editAdmin": "Permitir alterações em admins_id, o que pode conceder privilégios administrativos.",
+      "chat": "Criar sessões, enviar mensagens e gerenciar projetos da ChatUI.",
+      "chatAdmin": "Permitir que o usuário use IDs administrativos configurados e herde seus privilégios.",
+      "data": "Acessar estatísticas e dados de execução.",
+      "file": "Enviar e acessar arquivos da API.",
+      "plugin": "Ler e gerenciar plugins.",
+      "mcp": "Ler e gerenciar servidores MCP.",
+      "skill": "Ler e gerenciar Skills."
+    },
+    "create": "Criar API key",
+    "revoke": "Revogar",
+    "delete": "Excluir",
+    "copy": "Copiar",
+    "docsLink": "Abrir documentação",
+    "plaintextHint": "Salve esta chave agora. O valor completo não será exibido novamente.",
+    "empty": "Nenhuma API key",
+    "status": { "active": "Ativa", "inactive": "Inativa" },
+    "table": { "name": "Nome", "prefix": "Prefixo", "scopes": "Escopos", "status": "Status", "lastUsed": "Último uso", "createdAt": "Criada em", "actions": "Ações" },
+    "messages": { "loadFailed": "Falha ao carregar API keys", "scopeRequired": "Selecione pelo menos um escopo", "createSuccess": "API key criada", "createFailed": "Falha ao criar API key", "revokeSuccess": "API key revogada", "revokeFailed": "Falha ao revogar API key", "deleteSuccess": "API key excluída", "deleteFailed": "Falha ao excluir API key", "copySuccess": "API key copiada", "copyFailed": "Falha ao copiar API key" }
+  }
+}
