@@ -1,12 +1,12 @@
 [project]
 name = "AstrBot"
 version = "4.29.0-beta.2"
-description = "Easy-to-use multi-platform LLM chatbot and development framework"
+description = "Plataforma de agentes de IA e chatbot multicanal — Edição Brasileira em pt-BR"
 readme = "README.md"
 license = { text = "AGPL-3.0-or-later" }
 requires-python = ">=3.12"
 
-keywords = ["AstrBot", "Agent", "Chatbot", "IM"]
+keywords = ["AstrBot", "AstrBot Brasil", "Agent", "Chatbot", "LLM", "IA", "pt-BR", "IM"]
 
 dependencies = [
   "aiocqhttp>=1.4.4",
@@ -87,7 +87,7 @@ dev = [
 astrbot = "astrbot.cli.__main__:cli"
 
 [project.urls]
-Repository = "https://github.com/AstrBotDevs/AstrBot"
+Repository = "https://github.com/mkbraion/AstrBot-Brasil"
 
 [tool.ruff]
 exclude = ["astrbot/core/utils/t2i/local_strategy.py", "astrbot/api/all.py", "tests"]
@@ -104,7 +104,7 @@ select = [
   "Q",     # flake8-quotes
   "I",     # import-order
   "UP",    # pyupgrade
-  # "SIM", # flake8-simplify 
+  # "SIM", # flake8-simplify
 ]
 ignore = [
   "F403",
@@ -125,11 +125,11 @@ exclude = ["dashboard", "node_modules", "dist", "data", "tests"]
 [tool.hatch.metadata]
 allow-direct-references = true
 
-# Include bundled dashboard dist even though it is not tracked by VCS.
+# Inclui o build do dashboard empacotado mesmo não sendo versionado diretamente.
 [tool.hatch.build]
 artifacts = ["astrbot/dashboard/dist/**"]
 
-# Custom build hook: builds the Vue dashboard and copies dist into the package.
+# Hook de build: compila o dashboard Vue e copia dist para o pacote.
 [tool.hatch.build.hooks.custom]
 path = "scripts/hatch_build.py"
 
