@@ -1,4 +1,4 @@
-"""AstrBot CLI entry point"""
+"""Ponto de entrada da CLI do AstrBot Brasil."""
 
 import sys
 
@@ -18,34 +18,31 @@ logo_tmpl = r"""
 
 
 @click.group()
-@click.version_option(__version__, prog_name="AstrBot")
+@click.version_option(__version__, prog_name="AstrBot Brasil")
 def cli() -> None:
-    """The AstrBot CLI"""
+    """CLI do AstrBot Brasil."""
     click.echo(logo_tmpl)
-    click.echo("Welcome to AstrBot CLI!")
-    click.echo(f"AstrBot CLI version: {__version__}")
+    click.echo("Bem-vindo à CLI do AstrBot Brasil! 🇧🇷")
+    click.echo(f"Versão da CLI: {__version__}")
 
 
 @click.command()
 @click.argument("command_name", required=False, type=str)
 def help(command_name: str | None) -> None:
-    """Display help information for commands
+    """Exibe ajuda dos comandos.
 
-    If COMMAND_NAME is provided, display detailed help for that command.
-    Otherwise, display general help information.
+    Informe COMMAND_NAME para ver detalhes de um comando específico.
+    Sem argumento, exibe a ajuda geral da CLI.
     """
     ctx = click.get_current_context()
     if command_name:
-        # Find the specified command
         command = cli.get_command(ctx, command_name)
         if command:
-            # Display help for the specific command
             click.echo(command.get_help(ctx))
         else:
-            click.echo(f"Unknown command: {command_name}")
+            click.echo(f"Comando desconhecido: {command_name}")
             sys.exit(1)
     else:
-        # Display general help information
         click.echo(cli.get_help(ctx))
 
 
