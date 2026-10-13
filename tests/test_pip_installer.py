@@ -1,6 +1,7 @@
 import asyncio
 import json
 import ntpath
+import sys
 import threading
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
@@ -34,6 +35,25 @@ def test_streaming_writer_does_not_recapture_live_logs():
     writer.flush()
 
     assert logged == ["first", "second", "third"]
+    assert writer.lines == ["second", "third"]
+
+
+def test_streaming_writer_preserves_redirect_after_live_capture(monkeypatch):
+    original_stdout, original_stderr = sys.stdout, sys.stderr
+
+    def live_log(_line):
+        sys.stdout, sys.stderr = original_stdout, original_stderr
+
+    writer = pip_installer_module._StreamingLogWriter(live_log, max_lines=2)
+    monkeypatch.setattr(sys, "stdout", writer)
+    monkeypatch.setattr(sys, "stderr", writer)
+    print("first")
+    print("second", file=sys.stderr)
+    print("third")
+    writer.flush()
+
+    assert sys.stdout is writer
+    assert sys.stderr is writer
     assert writer.lines == ["second", "third"]
 
 

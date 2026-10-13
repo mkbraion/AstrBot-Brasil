@@ -210,9 +210,16 @@ class _StreamingLogWriter(io.TextIOBase):
     def _emit_line(self, line: str) -> None:
         self._lines.append(line)
         self._emitting_log = True
+        stdout, stderr = sys.stdout, sys.stderr
         try:
             self._log_func(line)
         finally:
+            # Capture managers can replace process streams while emitting a log.
+            # Keep the active pip redirection in place for subsequent lines.
+            if stdout is self:
+                sys.stdout = self
+            if stderr is self:
+                sys.stderr = self
             self._emitting_log = False
 
     def write(self, text: str) -> int:
