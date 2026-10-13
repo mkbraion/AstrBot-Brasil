@@ -22,6 +22,21 @@ EXISTING_WINDOWS_LIB_DIR = ntpath.join(r"C:\toolchain", "lib")
 _ENV_MISSING = object()
 
 
+def test_streaming_writer_does_not_recapture_live_logs():
+    logged = []
+
+    def live_log(line):
+        logged.append(line)
+        writer.write(f"INFO: {line}\n")
+
+    writer = pip_installer_module._StreamingLogWriter(live_log, max_lines=2)
+    writer.write("first\nsecond\nthird")
+    writer.flush()
+
+    assert logged == ["first", "second", "third"]
+    assert writer.lines == ["second", "third"]
+
+
 def _make_run_pip_mock(
     code: int = 0,
     output_lines: list[str] | None = None,

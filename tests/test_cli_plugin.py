@@ -105,7 +105,7 @@ def test_plugin_install_editable_rejects_existing_plugin(
     result = CliRunner().invoke(plug, ["install", "-e", str(source)])
 
     assert result.exit_code != 0
-    assert "already exists" in result.output
+    assert "já existe" in result.output
 
 
 def test_plugin_install_rejects_plugin_name_with_path_separator(
@@ -122,7 +122,7 @@ def test_plugin_install_rejects_plugin_name_with_path_separator(
     result = CliRunner().invoke(plug, ["install", str(source)])
 
     assert result.exit_code != 0
-    assert "invalid name" in result.output
+    assert "nome inválido" in result.output
     assert not (root / "data" / "bad_plugin").exists()
 
 
@@ -145,7 +145,7 @@ def test_plugin_install_copy_does_not_delete_existing_target_on_race(
     result = CliRunner().invoke(plug, ["install", str(source)])
 
     assert result.exit_code != 0
-    assert "already exists" in result.output
+    assert "já existe" in result.output
     assert marker.read_text(encoding="utf-8") == "keep\n"
 
 
@@ -170,7 +170,7 @@ def test_plugin_install_copy_does_not_delete_concurrently_created_target(
 
     monkeypatch.setattr(plugin_utils, "_copy_local_plugin", create_target_then_fail)
 
-    with pytest.raises(ClickException, match="already exists"):
+    with pytest.raises(ClickException, match="já existe"):
         plugin_utils.install_local_plugin(source, plugins_dir)
 
     assert (target / "keep.txt").read_text(encoding="utf-8") == "keep\n"
@@ -188,4 +188,4 @@ def test_plugin_install_requires_name_or_editable_path(
     result = CliRunner().invoke(plug, ["install"])
 
     assert result.exit_code != 0
-    assert "Missing plugin name or local plugin path" in result.output
+    assert "Informe o nome do plugin ou o caminho de um plugin local." in result.output
