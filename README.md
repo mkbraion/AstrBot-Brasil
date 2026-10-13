@@ -47,7 +47,7 @@ A edição brasileira prioriza:
 
 ## Captura de tela
 
-![Dashboard do AstrBot](https://github.com/user-attachments/assets/f17cdb90-52d7-4773-be2e-ff64b566af6b)
+A captura anterior mostrava a interface original em inglês e foi removida para não representar incorretamente esta edição. O painel usa português do Brasil por padrão, mas a tradução ainda é parcial: textos sem tradução usam o catálogo em inglês.
 
 ## Requisitos
 

@@ -1,6 +1,7 @@
 import asyncio
 import json
 import ntpath
+import sys
 import threading
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock
@@ -20,6 +21,40 @@ WINDOWS_RUNTIME_LIBS_DIR = ntpath.join(WINDOWS_RUNTIME_ROOT, "libs")
 EXISTING_WINDOWS_INCLUDE_DIR = ntpath.join(r"C:\toolchain", "include")
 EXISTING_WINDOWS_LIB_DIR = ntpath.join(r"C:\toolchain", "lib")
 _ENV_MISSING = object()
+
+
+def test_streaming_writer_does_not_recapture_live_logs():
+    logged = []
+
+    def live_log(line):
+        logged.append(line)
+        writer.write(f"INFO: {line}\n")
+
+    writer = pip_installer_module._StreamingLogWriter(live_log, max_lines=2)
+    writer.write("first\nsecond\nthird")
+    writer.flush()
+
+    assert logged == ["first", "second", "third"]
+    assert writer.lines == ["second", "third"]
+
+
+def test_streaming_writer_preserves_redirect_after_live_capture(monkeypatch):
+    original_stdout, original_stderr = sys.stdout, sys.stderr
+
+    def live_log(_line):
+        sys.stdout, sys.stderr = original_stdout, original_stderr
+
+    writer = pip_installer_module._StreamingLogWriter(live_log, max_lines=2)
+    monkeypatch.setattr(sys, "stdout", writer)
+    monkeypatch.setattr(sys, "stderr", writer)
+    print("first")
+    print("second", file=sys.stderr)
+    print("third")
+    writer.flush()
+
+    assert sys.stdout is writer
+    assert sys.stderr is writer
+    assert writer.lines == ["second", "third"]
 
 
 def _make_run_pip_mock(

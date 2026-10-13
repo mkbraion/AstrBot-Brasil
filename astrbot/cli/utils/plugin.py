@@ -184,9 +184,7 @@ def _copy_local_plugin(source_path: Path, plugins_dir: Path, target_path: Path) 
         shutil.copytree(source_path, temp_target, ignore=LOCAL_PLUGIN_COPY_IGNORE)
         temp_target.rename(target_path)
     except FileExistsError:
-        raise click.ClickException(
-            f"O plugin {target_path.name} já existe."
-        ) from None
+        raise click.ClickException(f"O plugin {target_path.name} já existe.") from None
     except Exception:
         raise
     finally:
@@ -204,7 +202,9 @@ def install_local_plugin(
     plugins_dir = plugins_dir.resolve()
 
     if not source_path.exists() or not source_path.is_dir():
-        raise click.ClickException(f"O caminho do plugin local não existe: {source_path}")
+        raise click.ClickException(
+            f"O caminho do plugin local não existe: {source_path}"
+        )
 
     metadata = load_yaml_metadata(source_path)
     plugin_name = metadata.get("name")
@@ -230,7 +230,9 @@ def install_local_plugin(
                 ) from e
         else:
             _copy_local_plugin(source_path, plugins_dir, target_path)
-        click.echo(f"Plugin {plugin_name} instalado com sucesso a partir de {source_path}.")
+        click.echo(
+            f"Plugin {plugin_name} instalado com sucesso a partir de {source_path}."
+        )
     except FileExistsError:
         raise click.ClickException(f"O plugin {plugin_name} já existe.") from None
     except click.ClickException:
