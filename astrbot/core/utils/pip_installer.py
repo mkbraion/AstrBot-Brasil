@@ -205,8 +205,28 @@ class _StreamingLogWriter(io.TextIOBase):
         self._log_func = log_func
         self._lines = deque(maxlen=max_lines or _MAX_PIP_OUTPUT_LINES)
         self._buffer = ""
+        self._emitting_log = False
+
+    def _emit_line(self, line: str) -> None:
+        self._lines.append(line)
+        self._emitting_log = True
+        stdout, stderr = sys.stdout, sys.stderr
+        try:
+            self._log_func(line)
+        finally:
+            # Capture managers can replace process streams while emitting a log.
+            # Keep the active pip redirection in place for subsequent lines.
+            if stdout is self:
+                sys.stdout = self
+            if stderr is self:
+                sys.stderr = self
+            self._emitting_log = False
 
     def write(self, text: str) -> int:
+        # Live log handlers may write back to redirected stdout/stderr.
+        # Their formatted output must not become additional pip output.
+        if self._emitting_log:
+            return len(text)
         if not text:
             return 0
 
@@ -214,15 +234,13 @@ class _StreamingLogWriter(io.TextIOBase):
         while "\n" in self._buffer:
             raw_line, self._buffer = self._buffer.split("\n", 1)
             line = raw_line.rstrip("\r\n")
-            self._log_func(line)
-            self._lines.append(line)
+            self._emit_line(line)
         return len(text)
 
     def flush(self) -> None:
         line = self._buffer.rstrip("\r\n")
         if line:
-            self._log_func(line)
-            self._lines.append(line)
+            self._emit_line(line)
         self._buffer = ""
 
     @property

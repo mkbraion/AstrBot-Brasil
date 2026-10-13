@@ -99,7 +99,9 @@ def _load_config() -> dict[str, Any]:
     try:
         return json.loads(config_path.read_text(encoding="utf-8-sig"))
     except json.JSONDecodeError as e:
-        raise click.ClickException(f"Falha ao interpretar o arquivo de configuração: {e!s}")
+        raise click.ClickException(
+            f"Falha ao interpretar o arquivo de configuração: {e!s}"
+        )
 
 
 def _save_config(config: dict[str, Any]) -> None:

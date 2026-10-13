@@ -73,7 +73,7 @@ def test_download_repository_uses_head_without_metadata_lookup(
 
     assert requested_urls == ["https://github.com/example/plugin/archive/HEAD.zip"]
     assert (target_path / "main.py").read_text(encoding="utf-8") == "VALUE = 1\n"
-    assert "default reference HEAD" in capsys.readouterr().out
+    assert "referência padrão HEAD" in capsys.readouterr().out
 
 
 def write_metadata(plugin_dir: Path, name: str, version: str) -> None:
