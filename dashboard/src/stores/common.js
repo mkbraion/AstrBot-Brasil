@@ -39,7 +39,7 @@ export const useCommonStore = defineStore("common", {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error(`SSE connection failed: ${response.status}`);
+            throw new Error(`Falha na conexão SSE: ${response.status}`);
           }
           console.log("SSE stream opened");
           this.sse_connected = true;
@@ -111,7 +111,7 @@ export const useCommonStore = defineStore("common", {
                 }
               } catch (err) {
                 console.warn(
-                  "Failed to parse SSE log line, skipping:",
+                  "Falha ao interpretar a linha de registro SSE; ignorando:",
                   err,
                   logLine,
                 );
@@ -130,7 +130,7 @@ export const useCommonStore = defineStore("common", {
             type: "log",
             level: "ERROR",
             time: Date.now() / 1000,
-            data: "SSE Connection failed, retrying in 5 seconds...",
+            data: "Falha na conexão SSE. Nova tentativa em 5 segundos...",
             uuid: "error-" + Date.now(),
           });
           setTimeout(() => {
@@ -237,7 +237,7 @@ export const useCommonStore = defineStore("common", {
                 author: pluginData.author,
                 repo: pluginData.repo,
                 installed: false,
-                version: pluginData?.version ? pluginData.version : "未知",
+                version: pluginData?.version ? pluginData.version : "Desconhecido",
                 social_link: pluginData?.social_link,
                 tags: pluginData?.tags ? pluginData.tags : [],
                 logo: pluginData?.logo ? pluginData.logo : "",

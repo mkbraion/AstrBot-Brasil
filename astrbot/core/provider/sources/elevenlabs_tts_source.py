@@ -158,7 +158,7 @@ class ProviderElevenLabsTTSAPI(TTSProvider):
         if response.status_code != 200:
             error_text = response.text[:1024]
             raise Exception(
-                f"ElevenLabs TTS API 请求失败: {response.status_code}, {error_text}"
+                f"Falha na requisição à API TTS do ElevenLabs: {response.status_code}, {error_text}"
             )
 
         temp_dir = Path(get_astrbot_temp_path())

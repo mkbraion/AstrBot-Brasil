@@ -54,7 +54,7 @@ function buildPageItem(
   locale: string,
   grouped: boolean,
 ): menu {
-  const displayName = p.display_name || p.name || "Unknown Plugin";
+  const displayName = p.display_name || p.name || "Plugin desconhecido";
   const localeData = p.i18n?.[locale];
   const localizedTitle =
     localeData && typeof localeData === "object"
@@ -83,7 +83,7 @@ function buildPluginGroups(plugins: PluginEntry[], locale: string): menu[] {
   return plugins
     .filter((p) => p.activated && Array.isArray(p.pages) && p.pages.length > 0)
     .map((p) => {
-      const displayName = p.display_name || p.name || "Unknown Plugin";
+      const displayName = p.display_name || p.name || "Plugin desconhecido";
       return {
         value: `plugin:${p.name}`,
         title: displayName,

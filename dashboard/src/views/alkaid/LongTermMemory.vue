@@ -392,7 +392,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error('搜索记忆数据失败:', error);
+          console.error('Falha ao buscar memórias:', error);
           this.$toast.error(this.tm('messages.searchError') + ': ' + (error.response?.data?.message || error.message));
         })
         .finally(() => {
@@ -428,7 +428,7 @@ export default {
           this.$toast.success(this.tm('messages.addSuccess'));
         })
         .catch(error => {
-          console.error('添加记忆数据失败:', error);
+          console.error('Falha ao adicionar memórias:', error);
           this.$toast.error(this.tm('messages.addError') + ': ' + (error.response?.data?.message || error.message));
         })
         .finally(() => {
@@ -560,7 +560,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error('获取记忆详情失败:', error);
+          console.error('Falha ao obter os detalhes da memória:', error);
           this.$toast.error(this.tm('messages.factDetailsError') + ': ' + (error.response?.data?.message || error.message));
         })
         .finally(() => {
@@ -589,7 +589,7 @@ export default {
         
         return { value: String(metadata) };
       } catch (e) {
-        console.error('解析元数据出错:', e);
+        console.error('Erro ao interpretar os metadados:', e);
         return { error: this.tm('messages.metadataParseError') };
       }
     },

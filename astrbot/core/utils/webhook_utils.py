@@ -9,7 +9,7 @@ def _get_callback_api_base() -> str:
     try:
         return astrbot_config.get("callback_api_base", "").rstrip("/")
     except Exception as e:
-        logger.error(f"获取 callback_api_base 失败: {e!s}")
+        logger.error(f"获取 callback_api_base: {e!s}")
         return ""
 
 
@@ -55,14 +55,7 @@ def log_webhook_info(platform_name: str, webhook_uuid: str) -> None:
     webhook_url = f"{callback_base}/api/platform/webhook/{webhook_uuid}"
     scheme = "https" if _is_dashboard_ssl_enabled() else "http"
 
-    display_log = (
-        "\n====================\n"
-        f"🔗 机器人平台 {platform_name} 已启用统一 Webhook 模式\n"
-        f"📍 Webhook 回调地址: \n"
-        f"   ➜  {scheme}://<your-ip>:{_get_dashboard_port()}/api/platform/webhook/{webhook_uuid}\n"
-        f"   ➜  {webhook_url}\n"
-        "====================\n"
-    )
+    display_log = f"\n====================\n🔗 A plataforma do bot {platform_name} está usando o modo de webhook unificado\n📍 Endereço de callback do webhook:\n   ➜  {scheme}://<your-ip>:{_get_dashboard_port()}/api/platform/webhook/{webhook_uuid}\n   ➜  {webhook_url}\n====================\n"
     logger.info(display_log)
 
 

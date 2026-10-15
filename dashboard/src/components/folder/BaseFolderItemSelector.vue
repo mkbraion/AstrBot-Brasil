@@ -3,13 +3,13 @@
     <!-- 触发按钮区域 -->
     <div class="d-flex align-center justify-space-between">
       <span v-if="!modelValue" class="text-medium-emphasis">
-        {{ labels.notSelected || "未选择" }}
+        {{ labels.notSelected || "Nenhum selecionado" }}
       </span>
       <span v-else>
         {{ displayValue }}
       </span>
       <v-btn size="small" color="primary" variant="tonal" @click="openDialog">
-        {{ labels.buttonText || "选择..." }}
+        {{ labels.buttonText || "Selecionar..." }}
       </v-btn>
     </div>
 
@@ -21,7 +21,7 @@
     >
       <v-card class="selector-dialog-card">
         <v-card-title class="selector-dialog-title text-h3">
-          {{ labels.dialogTitle || "选择项目" }}
+          {{ labels.dialogTitle || "Selecionar item" }}
         </v-card-title>
 
         <v-card-text class="pa-0 selector-content">
@@ -31,7 +31,7 @@
               <div
                 class="sidebar-header d-flex align-center justify-space-between"
               >
-                <span>文件夹</span>
+                <span>Pasta</span>
               </div>
               <div class="tree-list">
                 <!-- 根目录 -->
@@ -43,7 +43,7 @@
                   }"
                   @click="navigateToFolder(null)"
                 >
-                  <span>{{ labels.rootFolder || "根目录" }}</span>
+                  <span>{{ labels.rootFolder || "Diretório raiz" }}</span>
                 </button>
 
                 <!-- 文件夹树 -->
@@ -84,7 +84,7 @@
                   prepend-icon="mdi-home-outline"
                   @click="navigateToFolder(null)"
                 >
-                  {{ labels.rootFolder || "根目录" }}
+                  {{ labels.rootFolder || "Diretório raiz" }}
                 </v-btn>
                 <span
                   class="text-caption text-medium-emphasis text-truncate mobile-folder-label"
@@ -137,7 +137,7 @@
                     <div
                       class="section-label text-caption text-medium-emphasis mb-2 px-2"
                     >
-                      子文件夹
+                      Subpasta
                     </div>
                     <v-list-item
                       v-for="folder in currentSubFolders"
@@ -168,7 +168,7 @@
                       class="section-label text-caption text-medium-emphasis mb-2 px-2"
                       :class="{ 'mt-4': currentSubFolders.length > 0 }"
                     >
-                      可选项目
+                      Itens disponíveis
                     </div>
                     <v-list-item
                       v-for="item in currentItems"
@@ -223,7 +223,7 @@
                     >
                     <p class="text-grey mt-4 text-body-2">
                       {{
-                        labels.emptyFolder || labels.noItems || "此文件夹为空"
+                        labels.emptyFolder || labels.noItems || "Esta pasta está vazia"
                       }}
                     </p>
                   </div>
@@ -240,18 +240,18 @@
             prepend-icon="mdi-plus"
             @click="$emit('create')"
           >
-            {{ labels.createButton || "新建" }}
+            {{ labels.createButton || "Novo" }}
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn variant="text" @click="cancelSelection">{{
-            labels.cancelButton || "取消"
+            labels.cancelButton || "Cancelar"
           }}</v-btn>
           <v-btn
             variant="tonal"
             @click="confirmSelection"
             :disabled="!selectedItemId"
           >
-            {{ labels.confirmButton || "确认" }}
+            {{ labels.confirmButton || "Confirmar" }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -356,10 +356,10 @@ export default defineComponent({
 
     currentFolderLabel(): string {
       if (this.currentFolderId === null) {
-        return this.labels.rootFolder || "根目录";
+        return this.labels.rootFolder || "Diretório raiz";
       }
       const currentFolder = this.breadcrumbPath[this.breadcrumbPath.length - 1];
-      return currentFolder?.name || this.labels.rootFolder || "根目录";
+      return currentFolder?.name || this.labels.rootFolder || "Diretório raiz";
     },
 
     displayValue(): string {
@@ -406,7 +406,7 @@ export default defineComponent({
     breadcrumbItems(): any[] {
       const items: any[] = [
         {
-          title: this.labels.rootFolder || "根目录",
+          title: this.labels.rootFolder || "Diretório raiz",
           folderId: null,
           disabled: this.currentFolderId === null,
           isRoot: true,

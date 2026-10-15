@@ -41,8 +41,107 @@
   "imagePreview": "Prévia da imagem",
   "autoDetect": "Detectar automaticamente",
   "restoreDefault": "Restaurar padrão",
-  "dialog": { "confirmTitle": "Confirmar ação", "confirmMessage": "Tem certeza de que deseja realizar esta ação?", "confirmButton": "Confirmar", "cancelButton": "Cancelar" },
-  "restart": { "waiting": "Aguardando o AstrBot reiniciar...", "maxRetriesReached": "Número máximo de tentativas atingido. Verifique manualmente." },
+  "dialog": {
+    "confirmTitle": "Confirmar ação",
+    "confirmMessage": "Tem certeza de que deseja realizar esta ação?",
+    "confirmButton": "Confirmar",
+    "cancelButton": "Cancelar"
+  },
+  "restart": {
+    "waiting": "Aguardando o AstrBot reiniciar...",
+    "maxRetriesReached": "Número máximo de tentativas atingido. Verifique manualmente."
+  },
   "unauthorized": "Acesso não autorizado. Faça login novamente.",
-  "firstNotice": { "title": "Aviso inicial", "loading": "Carregando aviso inicial...", "empty": { "title": "Nenhum aviso inicial disponível", "subtitle": "FIRST_NOTICE.md não foi encontrado ou está vazio." } }
+  "firstNotice": {
+    "title": "Aviso inicial",
+    "loading": "Carregando aviso inicial...",
+    "empty": {
+      "title": "Nenhum aviso inicial disponível",
+      "subtitle": "FIRST_NOTICE.md não foi encontrado ou está vazio."
+    }
+  },
+  "upgradeRecovery": {
+    "title": "A atualização exige reinicialização",
+    "description": "A interface web foi atualizada para {dashboardVersion}, mas o núcleo do AstrBot ainda está na versão {coreVersion}. Isso geralmente ocorre quando a página é recarregada durante a atualização e interrompe a reinicialização. Se reiniciar não resolver, exclua a pasta data/dist do diretório de execução do AstrBot e reinicie o AstrBot.",
+    "hint": "Reinicie o backend para concluir a atualização. Esta página será recarregada automaticamente quando o AstrBot voltar.",
+    "restartButton": "Reiniciar backend",
+    "laterButton": "Mais tarde",
+    "restarting": "Solicitando reinicialização do backend...",
+    "waiting": "Reinicialização solicitada. Aguardando o backend voltar...",
+    "failed": "Não foi possível solicitar a reinicialização. Reinicie o AstrBot manualmente."
+  },
+  "readme": {
+    "title": "Documentação da extensão",
+    "buttons": {
+      "viewOnGithub": "Ver repositório no GitHub",
+      "refresh": "Atualizar documentação"
+    },
+    "loading": "Carregando documentação do README...",
+    "errors": {
+      "fetchFailed": "Não foi possível obter o README",
+      "fetchError": "Ocorreu um erro ao obter o README"
+    },
+    "empty": {
+      "title": "Esta extensão não fornece um link de documentação nem um endereço de repositório no GitHub.",
+      "subtitle": "Consulte o catálogo de extensões ou entre em contato com o autor para obter mais informações."
+    }
+  },
+  "changelog": {
+    "title": "Histórico de alterações",
+    "loading": "Carregando histórico de alterações...",
+    "empty": {
+      "title": "Nenhum histórico de alterações disponível para este plugin",
+      "subtitle": "Desenvolvedores podem adicionar um arquivo CHANGELOG.md ao diretório do plugin para fornecer o histórico de alterações"
+    }
+  },
+  "editor": {
+    "fullscreen": "Editar em tela cheia",
+    "editingTitle": "Editando conteúdo"
+  },
+  "templateList": {
+    "addEntry": "Adicionar entrada",
+    "empty": "Nenhuma entrada ainda. Selecione um modelo para adicionar",
+    "missingTemplate": "Modelo não encontrado. Remova e adicione novamente.",
+    "unknownTemplate": "Modelo não especificado"
+  },
+  "list": {
+    "addItemPlaceholder": "Adicione um item e pressione Enter para confirmar",
+    "addButton": "Adicionar",
+    "addMore": "Adicionar mais",
+    "batchImport": "Importar em lote",
+    "batchImportTitle": "Importar em lote",
+    "batchImportLabel": "Um item por linha",
+    "batchImportPlaceholder": "Exemplo:\nItem 1\nItem 2\nItem 3\nItem 4",
+    "batchImportHint": "Cada linha será tratada como um item separado. Linhas vazias serão ignoradas",
+    "batchImportButton": "Importar {count} itens",
+    "noItems": "Nenhum item",
+    "noItemsHint": "Nenhum item ainda. Digite no campo acima e pressione Enter para adicionar",
+    "inputPlaceholder": "Digite e pressione Enter para adicionar",
+    "editTitle": "Editar itens da lista",
+    "modifyButton": "Alterar"
+  },
+  "itemCard": {
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "copy": "Copiar",
+    "noData": "Nenhum dado disponível"
+  },
+  "objectEditor": {
+    "dialogTitle": "Editar pares de chave e valor",
+    "noItems": "Nenhum item",
+    "noParams": "Nenhum parâmetro",
+    "presets": "Predefinições",
+    "newKeyLabel": "Nova chave",
+    "valueTypeLabel": "Tipo do valor",
+    "keyExists": "A chave já existe",
+    "invalidJson": "Formato JSON inválido",
+    "placeholders": {
+      "keyName": "Chave",
+      "stringValue": "Valor de texto",
+      "numberValue": "Valor numérico",
+      "jsonValue": "JSON"
+    }
+  }
 }

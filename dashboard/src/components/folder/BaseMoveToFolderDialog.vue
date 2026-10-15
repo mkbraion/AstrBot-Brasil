@@ -64,11 +64,11 @@ interface DefaultLabels {
 }
 
 const defaultLabels: DefaultLabels = {
-    title: '移动到文件夹',
-    description: '选择目标文件夹',
-    rootFolder: '根目录',
-    cancelButton: '取消',
-    moveButton: '移动'
+    title: 'Mover para pasta',
+    description: 'Selecionar pasta de destino',
+    rootFolder: 'Diretório raiz',
+    cancelButton: 'Cancelar',
+    moveButton: 'Mover'
 };
 
 export default defineComponent({

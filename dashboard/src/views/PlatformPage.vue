@@ -420,7 +420,7 @@ async function getPlatformStats() {
       ]),
     );
   } catch (error) {
-    console.warn("Failed to load bot runtime status:", error);
+    console.warn("Falha ao carregar o estado de execução do bot:", error);
   }
 }
 

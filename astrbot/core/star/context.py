@@ -507,7 +507,7 @@ class Context:
             return None
         if not isinstance(prov, Provider):
             raise ValueError(
-                f"该会话来源的对话模型（提供商）的类型不正确: {type(prov)}"
+                f"O modelo de conversa desta sessão tem um tipo de provedor inválido: {type(prov)}"
             )
         return prov
 
@@ -560,7 +560,7 @@ class Context:
             umo=umo,
         )
         if prov and not isinstance(prov, TTSProvider):
-            raise ValueError("返回的 Provider 不是 TTSProvider 类型")
+            raise ValueError("O provedor retornado não é do tipo TTSProvider")
         return prov
 
     async def get_using_tts_provider_async(
@@ -583,7 +583,7 @@ class Context:
             umo=umo,
         )
         if prov and not isinstance(prov, TTSProvider):
-            raise ValueError("返回的 Provider 不是 TTSProvider 类型")
+            raise ValueError("O provedor retornado não é do tipo TTSProvider")
         return prov
 
     @deprecated(reason="Use get_using_stt_provider_async() instead.")
@@ -604,7 +604,7 @@ class Context:
             umo=umo,
         )
         if prov and not isinstance(prov, STTProvider):
-            raise ValueError("返回的 Provider 不是 STTProvider 类型")
+            raise ValueError("O provedor retornado não é do tipo STTProvider")
         return prov
 
     async def get_using_stt_provider_async(
@@ -627,7 +627,7 @@ class Context:
             umo=umo,
         )
         if prov and not isinstance(prov, STTProvider):
-            raise ValueError("返回的 Provider 不是 STTProvider 类型")
+            raise ValueError("O provedor retornado não é do tipo STTProvider")
         return prov
 
     def get_config(self, umo: str | None = None) -> AstrBotConfig:
@@ -672,7 +672,7 @@ class Context:
             try:
                 session = MessageSesion.from_str(session)
             except BaseException as e:
-                raise ValueError("不合法的 session 字符串: " + str(e))
+                raise ValueError("String de sessão inválida: " + str(e))
 
         for platform in self.platform_manager.platform_insts:
             if platform.meta().id == session.platform_name:

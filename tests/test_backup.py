@@ -274,7 +274,7 @@ class TestAstrBotImporter:
 
         # 使用一个明显不同的主版本
         manifest = {"astrbot_version": "0.0.1"}
-        with pytest.raises(ValueError, match="主版本不兼容"):
+        with pytest.raises(ValueError, match="Versão principal incompatível"):
             importer._validate_version(manifest)
 
     def test_validate_version_minor_diff_allowed(self):
@@ -294,7 +294,9 @@ class TestAstrBotImporter:
         importer = AstrBotImporter(main_db=MagicMock())
 
         manifest = {}
-        with pytest.raises(ValueError, match="缺少版本信息"):
+        with pytest.raises(
+            ValueError, match="O backup não contém informações de versão"
+        ):
             importer._validate_version(manifest)
 
     def test_convert_datetime_fields(self):
@@ -616,7 +618,7 @@ class TestAstrBotImporter:
         result = await importer.import_all(str(tmp_path / "nonexistent.zip"))
 
         assert result.success is False
-        assert any("不存在" in err for err in result.errors)
+        assert any("Arquivo de backup não encontrado" in err for err in result.errors)
 
     @pytest.mark.asyncio
     async def test_import_invalid_zip(self, mock_main_db, tmp_path):
@@ -663,7 +665,7 @@ class TestAstrBotImporter:
         result = await importer.import_all(str(zip_path))
 
         assert result.success is False
-        assert any("主版本不兼容" in err for err in result.errors)
+        assert any("Versão principal incompatível" in err for err in result.errors)
 
     @pytest.mark.asyncio
     async def test_import_replace_fails_when_clear_main_db_fails(
@@ -690,7 +692,9 @@ class TestAstrBotImporter:
         result = await importer.import_all(str(zip_path), mode="replace")
 
         assert result.success is False
-        assert any("清空主数据库失败" in err for err in result.errors)
+        assert any(
+            "Falha ao limpar o banco de dados principal" in err for err in result.errors
+        )
         assert any("清空表 platform_stats 失败" in err for err in result.errors)
         importer._import_main_database.assert_not_awaited()
 
@@ -871,7 +875,7 @@ class TestPreCheck:
         result = importer.pre_check("/nonexistent/file.zip")
 
         assert result.valid is False
-        assert "不存在" in result.error
+        assert "Arquivo de backup não encontrado" in result.error
 
     def test_pre_check_invalid_zip(self, mock_main_db, tmp_path):
         """测试预检查无效的 ZIP 文件"""
@@ -1209,18 +1213,24 @@ class TestBackupUploadLimits:
             {"filename": "b.zip", "total_size": 100}, owner="alice"
         )
 
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             await backup_service.upload_chunk(
                 upload_id=session["upload_id"],
                 chunk_index_str="0",
                 chunk_file=_StubUploadFile(b"x" * 100),
                 owner="mallory",
             )
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             await backup_service.upload_complete(
                 {"upload_id": session["upload_id"]}, owner="mallory"
             )
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             await backup_service.upload_abort(
                 {"upload_id": session["upload_id"]}, owner="mallory"
             )
@@ -1266,11 +1276,15 @@ class TestBackupUploadLimits:
             {"filename": "b.zip", "total_size": 100}, owner="alice"
         )
 
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             backup_service.upload_status(
                 {"upload_id": session["upload_id"]}, owner="mallory"
             )
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             backup_service.upload_status({"upload_id": "no-such-id"}, owner="alice")
 
     def test_upload_status_does_not_extend_lifetime(self, backup_service):
@@ -1372,9 +1386,13 @@ class TestBackupUploadLimits:
         inner = backup_service.chunked_uploads.get_session(upload_id, owner="alice")
         inner.last_activity -= 7200  # 闲置两小时，已过 1 小时过期线
 
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             backup_service.upload_status({"upload_id": upload_id}, owner="alice")
-        with pytest.raises(BackupServiceError, match="not found or expired"):
+        with pytest.raises(
+            BackupServiceError, match="Sessão de envio não encontrada ou expirada"
+        ):
             await backup_service.upload_chunk(
                 upload_id=upload_id,
                 chunk_index_str="0",

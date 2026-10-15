@@ -319,7 +319,7 @@ const loadKnowledgeBases = async (refreshStats = false) => {
       showSnackbar(response.data.message || t('messages.loadError'), 'error')
     }
   } catch (error) {
-    console.error('Failed to load knowledge bases:', error)
+    console.error("Falha ao carregar as bases de conhecimento:", error)
     loadError.value = true
     showSnackbar(t('messages.loadError'), 'error')
   } finally {
@@ -340,7 +340,7 @@ const loadProviders = async () => {
       )
     }
   } catch (error) {
-    console.error('Failed to load providers:', error)
+    console.error("Falha ao carregar os provedores:", error)
   }
 }
 
@@ -383,7 +383,7 @@ const deleteKB = async () => {
   try {
     const response = await knowledgeApi.delete(deleteTarget.value.kb_id)
 
-    console.log('Delete response:', response.data) // 调试日志
+    console.log("Resposta da exclusão:", response.data) // 调试日志
 
     if (response.data.status === 'ok') {
       showSnackbar(t('messages.deleteSuccess'))
@@ -397,7 +397,7 @@ const deleteKB = async () => {
       showSnackbar(response.data.message || t('messages.deleteFailed'), 'error')
     }
   } catch (error) {
-    console.error('Failed to delete knowledge base:', error)
+    console.error("Falha ao excluir a base de conhecimento:", error)
     showSnackbar(t('messages.deleteFailed'), 'error')
   } finally {
     deleting.value = false
@@ -437,7 +437,7 @@ const submitForm = async () => {
       showSnackbar(response.data.message || (editingKB.value ? t('messages.updateFailed') : t('messages.createFailed')), 'error')
     }
   } catch (error) {
-    console.error('Failed to save knowledge base:', error)
+    console.error("Falha ao salvar a base de conhecimento:", error)
     showSnackbar(editingKB.value ? t('messages.updateFailed') : t('messages.createFailed'), 'error')
   } finally {
     saving.value = false

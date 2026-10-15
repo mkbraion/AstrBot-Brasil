@@ -105,7 +105,7 @@ class CommandFilter(HandlerFilter):
                 # GreedyStr 必须是最后一个参数
                 if i != len(param_items) - 1:
                     raise ValueError(
-                        f"参数 '{param_name}' (GreedyStr) 必须是最后一个参数。",
+                        f"O parâmetro '{param_name}' (GreedyStr) deve ser o último parâmetro.",
                     )
 
                 # 将剩余的所有部分合并成一个字符串
@@ -121,7 +121,7 @@ class CommandFilter(HandlerFilter):
                 ):
                     # 是类型
                     raise ValueError(
-                        f"必要参数缺失。该指令完整参数: {self.print_types()}",
+                        f"Parâmetros obrigatórios ausentes. Parâmetros completos do comando: {self.print_types()}",
                     )
                 # 是默认值
                 result[param_name] = param_type_or_default_val
@@ -145,7 +145,7 @@ class CommandFilter(HandlerFilter):
                             result[param_name] = False
                         else:
                             raise ValueError(
-                                f"参数 {param_name} 必须是布尔值（true/false, yes/no, 1/0）。",
+                                f"O parâmetro {param_name} deve ser booleano (true/false, yes/no, 1/0).",
                             )
                     elif isinstance(param_type_or_default_val, int):
                         result[param_name] = int(params[i])
@@ -168,7 +168,7 @@ class CommandFilter(HandlerFilter):
                             result[param_name] = param_type_or_default_val(params[i])
                 except ValueError:
                     raise ValueError(
-                        f"参数 {param_name} 类型错误。完整参数: {self.print_types()}",
+                        f"O parâmetro {param_name} tem tipo inválido. Parâmetros completos: {self.print_types()}",
                     )
         return result
 

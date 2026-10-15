@@ -329,7 +329,7 @@ async function fetchFilterOptions() {
       availableBots.value = response.data.data?.bots || [];
     }
   } catch (error) {
-    console.error("Failed to load conversation filter options:", error);
+    console.error("Falha ao carregar os filtros de conversas:", error);
   }
 }
 

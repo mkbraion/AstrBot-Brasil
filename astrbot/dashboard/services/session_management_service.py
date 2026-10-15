@@ -90,10 +90,10 @@ class SessionManagementService:
     ) -> list[str]:
         if scope == "custom_group":
             if not group_id:
-                raise SessionManagementServiceError("请指定分组 ID")
+                raise SessionManagementServiceError("Informe o ID do grupo")
             groups = await self.get_groups()
             if group_id not in groups:
-                raise SessionManagementServiceError(f"分组 '{group_id}' 不存在")
+                raise SessionManagementServiceError(f"O grupo '{group_id}' não existe")
             return groups[group_id].get("umos", [])
 
         all_umos = await self.list_known_umos()
@@ -219,7 +219,7 @@ class SessionManagementService:
                     for kb in kbs
                 ]
             except Exception as exc:
-                logger.warning(f"获取知识库列表失败: {exc!s}")
+                logger.warning(f"Falha ao obter as bases de conhecimento: {exc!s}")
 
         return {
             "rules": rules_list,
@@ -248,17 +248,21 @@ class SessionManagementService:
         rule_value = payload.get("rule_value")
 
         if not umo:
-            raise SessionManagementServiceError("缺少必要参数: umo")
+            raise SessionManagementServiceError("Parâmetro obrigatório ausente: umo")
         if not rule_key:
-            raise SessionManagementServiceError("缺少必要参数: rule_key")
+            raise SessionManagementServiceError(
+                "Parâmetro obrigatório ausente: rule_key"
+            )
         if rule_key not in AVAILABLE_SESSION_RULE_KEYS:
-            raise SessionManagementServiceError(f"不支持的规则键: {rule_key}")
+            raise SessionManagementServiceError(
+                f"Chave de regra incompatível: {rule_key}"
+            )
 
         if rule_key == "session_plugin_config":
             rule_value = {umo: rule_value}
 
         await sp.session_put(umo, rule_key, rule_value)
-        return {"message": f"规则 {rule_key} 已更新", "umo": umo}
+        return {"message": f"A regra {rule_key} foi atualizada", "umo": umo}
 
     async def delete_session_rule(self, data: object) -> dict:
         payload = self._payload(data)
@@ -266,16 +270,18 @@ class SessionManagementService:
         rule_key = payload.get("rule_key")
 
         if not umo:
-            raise SessionManagementServiceError("缺少必要参数: umo")
+            raise SessionManagementServiceError("Parâmetro obrigatório ausente: umo")
 
         if rule_key:
             if rule_key not in AVAILABLE_SESSION_RULE_KEYS:
-                raise SessionManagementServiceError(f"不支持的规则键: {rule_key}")
+                raise SessionManagementServiceError(
+                    f"Chave de regra incompatível: {rule_key}"
+                )
             await sp.session_remove(umo, rule_key)
-            return {"message": f"规则 {rule_key} 已删除", "umo": umo}
+            return {"message": f"A regra {rule_key} foi excluído", "umo": umo}
 
         await sp.clear_async("umo", umo)
-        return {"message": "所有规则已删除", "umo": umo}
+        return {"message": "Todas as regras foram excluídas", "umo": umo}
 
     async def delete_session_rules(self, data: object) -> dict:
         payload = self._payload(data)
@@ -294,11 +300,15 @@ class SessionManagementService:
             umos = await self.get_umos_by_scope(scope, group_id)
 
         if not umos:
-            raise SessionManagementServiceError("缺少必要参数: umos 或有效的 scope")
+            raise SessionManagementServiceError(
+                "Parâmetros obrigatórios ausentes: umos ou scope válido"
+            )
         if not isinstance(umos, list):
-            raise SessionManagementServiceError("参数 umos 必须是数组")
+            raise SessionManagementServiceError("O parâmetro umos deve ser um array")
         if rule_key and rule_key not in AVAILABLE_SESSION_RULE_KEYS:
-            raise SessionManagementServiceError(f"不支持的规则键: {rule_key}")
+            raise SessionManagementServiceError(
+                f"Chave de regra incompatível: {rule_key}"
+            )
 
         success_count = 0
         failed_umos = []
@@ -313,9 +323,9 @@ class SessionManagementService:
                 logger.error(f"删除 umo {umo} 的规则失败: {exc!s}")
                 failed_umos.append(umo)
 
-        message = f"已删除 {success_count} 条规则"
+        message = f"Excluídas {success_count} regras"
         if rule_key:
-            message = f"已删除 {success_count} 条 {rule_key} 规则"
+            message = f"Excluídas {success_count} itens de {rule_key} regras"
 
         result = {
             "message": message,
@@ -324,7 +334,7 @@ class SessionManagementService:
         if failed_umos:
             result.update(
                 {
-                    "message": f"{message}，{len(failed_umos)} 条删除失败",
+                    "message": f"{message}，{len(failed_umos)} exclusões falharam",
                     "failed_umos": failed_umos,
                 }
             )
@@ -444,13 +454,17 @@ class SessionManagementService:
         session_enabled = payload.get("session_enabled")
 
         if llm_enabled is None and tts_enabled is None and session_enabled is None:
-            raise SessionManagementServiceError("至少需要指定一个要修改的状态")
+            raise SessionManagementServiceError(
+                "Informe pelo menos um estado para alterar"
+            )
 
         if scope and not umos:
             umos = await self.get_umos_by_scope(scope, group_id)
 
         if not umos:
-            raise SessionManagementServiceError("没有找到符合条件的会话")
+            raise SessionManagementServiceError(
+                "Nenhuma sessão correspondente encontrada"
+            )
 
         success_count = 0
         failed_umos = []
@@ -480,14 +494,16 @@ class SessionManagementService:
 
         status_changes = []
         if llm_enabled is not None:
-            status_changes.append(f"LLM={'启用' if llm_enabled else '禁用'}")
+            status_changes.append(f"LLM={'Ativar' if llm_enabled else 'Desativar'}")
         if tts_enabled is not None:
-            status_changes.append(f"TTS={'启用' if tts_enabled else '禁用'}")
+            status_changes.append(f"TTS={'Ativar' if tts_enabled else 'Desativar'}")
         if session_enabled is not None:
-            status_changes.append(f"会话={'启用' if session_enabled else '禁用'}")
+            status_changes.append(
+                f"sessão={'Ativar' if session_enabled else 'Desativar'}"
+            )
 
         return {
-            "message": f"已更新 {success_count} 个会话 ({', '.join(status_changes)})",
+            "message": f"Atualizadas {success_count} sessões ({', '.join(status_changes)})",
             "success_count": success_count,
             "failed_count": len(failed_umos),
             "failed_umos": failed_umos,
@@ -502,7 +518,7 @@ class SessionManagementService:
 
         if not provider_type or not provider_id:
             raise SessionManagementServiceError(
-                "缺少必要参数: provider_type, provider_id"
+                "Parâmetros obrigatórios ausentes: provider_type, provider_id"
             )
 
         provider_type_map = {
@@ -512,7 +528,7 @@ class SessionManagementService:
         }
         if provider_type not in provider_type_map:
             raise SessionManagementServiceError(
-                f"不支持的 provider_type: {provider_type}"
+                f"provider_type incompatível: {provider_type}"
             )
 
         group_id = payload.get("group_id", "")
@@ -520,7 +536,9 @@ class SessionManagementService:
             umos = await self.get_umos_by_scope(scope, group_id)
 
         if not umos:
-            raise SessionManagementServiceError("没有找到符合条件的会话")
+            raise SessionManagementServiceError(
+                "Nenhuma sessão correspondente encontrada"
+            )
 
         success_count = 0
         failed_umos = []
@@ -539,7 +557,7 @@ class SessionManagementService:
                 failed_umos.append(umo)
 
         return {
-            "message": f"已更新 {success_count} 个会话的 {provider_type} 为 {provider_id}",
+            "message": f"Atualizadas {success_count} sessões: {provider_type} para {provider_id}",
             "success_count": success_count,
             "failed_count": len(failed_umos),
             "failed_umos": failed_umos,
@@ -577,7 +595,7 @@ class SessionManagementService:
         umos = payload.get("umos", [])
 
         if not name:
-            raise SessionManagementServiceError("分组名称不能为空")
+            raise SessionManagementServiceError("O nome do grupo não pode ficar vazio")
 
         groups = await self.get_groups()
         group_id = str(uuid.uuid4())[:8]
@@ -588,7 +606,7 @@ class SessionManagementService:
         await self.save_groups(groups)
 
         return {
-            "message": f"分组 '{name}' 创建成功",
+            "message": f"O grupo '{name}' foi criado",
             "group": {
                 "id": group_id,
                 "name": name,
@@ -606,11 +624,11 @@ class SessionManagementService:
         remove_umos = payload.get("remove_umos", [])
 
         if not group_id:
-            raise SessionManagementServiceError("分组 ID 不能为空")
+            raise SessionManagementServiceError("O ID do grupo não pode ficar vazio")
 
         groups = await self.get_groups()
         if group_id not in groups:
-            raise SessionManagementServiceError(f"分组 '{group_id}' 不存在")
+            raise SessionManagementServiceError(f"O grupo '{group_id}' não existe")
 
         group = groups[group_id]
         if name is not None:
@@ -629,7 +647,7 @@ class SessionManagementService:
         await self.save_groups(groups)
 
         return {
-            "message": f"分组 '{group['name']}' 更新成功",
+            "message": f"O grupo '{group['name']}' foi atualizado",
             "group": {
                 "id": group_id,
                 "name": group["name"],
@@ -643,16 +661,16 @@ class SessionManagementService:
         group_id = payload.get("id") or payload.get("group_id")
 
         if not group_id:
-            raise SessionManagementServiceError("分组 ID 不能为空")
+            raise SessionManagementServiceError("O ID do grupo não pode ficar vazio")
 
         groups = await self.get_groups()
         if group_id not in groups:
-            raise SessionManagementServiceError(f"分组 '{group_id}' 不存在")
+            raise SessionManagementServiceError(f"O grupo '{group_id}' não existe")
 
         group_name = groups[group_id].get("name", group_id)
         del groups[group_id]
         await self.save_groups(groups)
-        return {"message": f"分组 '{group_name}' 已删除"}
+        return {"message": f"O grupo '{group_name}' foi excluído"}
 
     @staticmethod
     def _normalize_page(

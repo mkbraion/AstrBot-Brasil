@@ -94,7 +94,7 @@ async def list_sessions(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("获取会话状态列表失败", exc)
+        return _unexpected_error("Falha ao obter os estados das sessões", exc)
 
 
 @router.get("/sessions/active-umos")
@@ -107,7 +107,7 @@ async def list_active_umos(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("获取 UMO 列表失败", exc)
+        return _unexpected_error("Falha ao obter a lista de UMO", exc)
 
 
 @router.get("/sessions/rules")
@@ -129,7 +129,7 @@ async def list_session_rules(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("获取规则列表失败", exc)
+        return _unexpected_error("Falha ao obter as regras", exc)
 
 
 @router.post("/sessions/rules")
@@ -145,7 +145,7 @@ async def update_session_rule(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("更新会话规则失败", exc)
+        return _unexpected_error("Falha ao atualizar as regras da sessão", exc)
 
 
 @router.post("/sessions/rules/delete")
@@ -161,7 +161,7 @@ async def delete_session_rule(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("删除会话规则失败", exc)
+        return _unexpected_error("Falha ao excluir as regras da sessão", exc)
 
 
 @router.patch("/sessions/provider")
@@ -177,7 +177,7 @@ async def update_session_provider(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("批量更新 Provider 失败", exc)
+        return _unexpected_error("Falha ao atualizar provedores em lote", exc)
 
 
 @router.patch("/sessions/service")
@@ -193,7 +193,9 @@ async def update_session_service(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("批量更新服务状态失败", exc)
+        return _unexpected_error(
+            "Falha ao atualizar os estados dos serviços em lote", exc
+        )
 
 
 @router.get("/session-groups")
@@ -206,7 +208,7 @@ async def list_session_groups(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("获取分组列表失败", exc)
+        return _unexpected_error("Falha ao obter os grupos", exc)
 
 
 @router.post("/session-groups")
@@ -220,7 +222,7 @@ async def create_session_group(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("创建分组失败", exc)
+        return _unexpected_error("Falha ao criar o grupo", exc)
 
 
 @router.put("/session-groups/{group_id}")
@@ -236,7 +238,7 @@ async def update_session_group(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("更新分组失败", exc)
+        return _unexpected_error("Falha ao atualizar o grupo", exc)
 
 
 @router.delete("/session-groups/{group_id}")
@@ -250,7 +252,7 @@ async def delete_session_group(
     except SessionManagementServiceError as exc:
         return _service_error(exc)
     except Exception as exc:
-        return _unexpected_error("删除分组失败", exc)
+        return _unexpected_error("Falha ao excluir o grupo", exc)
 
 
 @legacy_router.get("/list-rule")
@@ -267,7 +269,7 @@ async def list_dashboard_session_rules(
             page_size=page_size,
             search=search.strip(),
         ),
-        label="获取规则列表失败",
+        label="Falha ao obter as regras",
     )
 
 
@@ -280,7 +282,7 @@ async def update_dashboard_session_rule(
     return await _run_dashboard_json(
         request,
         service.update_session_rule,
-        label="更新会话规则失败",
+        label="Falha ao atualizar as regras da sessão",
     )
 
 
@@ -293,7 +295,7 @@ async def delete_dashboard_session_rule(
     return await _run_dashboard_json(
         request,
         service.delete_session_rule,
-        label="删除会话规则失败",
+        label="Falha ao excluir as regras da sessão",
     )
 
 
@@ -306,7 +308,7 @@ async def batch_delete_dashboard_session_rule(
     return await _run_dashboard_json(
         request,
         service.batch_delete_session_rule,
-        label="批量删除会话规则失败",
+        label="Falha ao excluir as regras das sessões em lote",
     )
 
 
@@ -315,7 +317,7 @@ async def list_dashboard_active_umos(
     _username: str = Depends(require_dashboard_user),
     service: SessionManagementService = Depends(get_service),
 ):
-    return await _run(service.list_active_umos, label="获取 UMO 列表失败")
+    return await _run(service.list_active_umos, label="Falha ao obter a lista de UMO")
 
 
 @legacy_router.get("/list-all-with-status")
@@ -336,7 +338,7 @@ async def list_dashboard_umos_with_status(
             message_type=message_type,
             platform=platform,
         ),
-        label="获取会话状态列表失败",
+        label="Falha ao obter os estados das sessões",
     )
 
 
@@ -349,7 +351,7 @@ async def batch_update_dashboard_session_service(
     return await _run_dashboard_json(
         request,
         service.batch_update_service,
-        label="批量更新服务状态失败",
+        label="Falha ao atualizar os estados dos serviços em lote",
     )
 
 
@@ -362,7 +364,7 @@ async def batch_update_dashboard_session_provider(
     return await _run_dashboard_json(
         request,
         service.batch_update_provider,
-        label="批量更新 Provider 失败",
+        label="Falha ao atualizar provedores em lote",
     )
 
 
@@ -371,7 +373,7 @@ async def list_dashboard_session_groups(
     _username: str = Depends(require_dashboard_user),
     service: SessionManagementService = Depends(get_service),
 ):
-    return await _run(service.list_groups, label="获取分组列表失败")
+    return await _run(service.list_groups, label="Falha ao obter os grupos")
 
 
 @legacy_router.post("/group/create")
@@ -383,7 +385,7 @@ async def create_dashboard_session_group(
     return await _run_dashboard_json(
         request,
         service.create_group,
-        label="创建分组失败",
+        label="Falha ao criar o grupo",
     )
 
 
@@ -396,7 +398,7 @@ async def update_dashboard_session_group(
     return await _run_dashboard_json(
         request,
         service.update_group,
-        label="更新分组失败",
+        label="Falha ao atualizar o grupo",
     )
 
 
@@ -409,5 +411,5 @@ async def delete_dashboard_session_group(
     return await _run_dashboard_json(
         request,
         service.delete_group,
-        label="删除分组失败",
+        label="Falha ao excluir o grupo",
     )

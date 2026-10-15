@@ -45,7 +45,7 @@ function ensureVADScriptsLoaded(): Promise<void> {
                     const script = document.createElement('script');
                     script.src = src;
                     script.onload = () => resolve();
-                    script.onerror = () => reject(new Error(`Failed to load VAD dependency: ${src}`));
+                    script.onerror = () => reject(new Error(`Falha ao carregar a dependência de detecção de voz: ${src}`));
                     document.head.appendChild(script);
                 });
             }
@@ -89,7 +89,7 @@ export function useVADRecording() {
         try {
             await ensureVADScriptsLoaded();
         } catch (error) {
-            console.error('Failed to load VAD library:', error);
+            console.error("Falha ao carregar a biblioteca de detecção de voz:", error);
             return;
         }
 
@@ -148,9 +148,9 @@ export function useVADRecording() {
             });
 
             isInitialized.value = true;
-            console.log('VAD initialized successfully');
+            console.log("Detecção de voz inicializada");
         } catch (error) {
-            console.error('Failed to initialize VAD:', error);
+            console.error("Falha ao inicializar a detecção de voz:", error);
             isInitialized.value = false;
         }
     }

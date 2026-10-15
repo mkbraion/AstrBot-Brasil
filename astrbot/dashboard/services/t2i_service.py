@@ -48,13 +48,13 @@ class T2iService:
         try:
             return {"name": name, "content": self.manager.get_template(name)}
         except FileNotFoundError as exc:
-            raise T2iServiceError("Template not found", 404) from exc
+            raise T2iServiceError("Modelo não encontrado", 404) from exc
         except Exception as exc:
             raise T2iServiceError(str(exc)) from exc
 
     def create_template(self, name: str | None, content: str | None) -> dict:
         if not name or not content:
-            raise T2iServiceError("Name and content are required.", 400)
+            raise T2iServiceError("Nome e conteúdo são obrigatórios.", 400)
 
         name = name.strip()
         try:
@@ -74,16 +74,16 @@ class T2iService:
     async def update_template(self, name: str, content: str | None) -> tuple[dict, str]:
         name = name.strip()
         if content is None:
-            raise T2iServiceError("Content is required.", 400)
+            raise T2iServiceError("O conteúdo é obrigatório.", 400)
 
         try:
             self.manager.update_template(name, content)
             active_template = self.config.get("t2i_active_template", "base")
             if name == active_template:
                 await self.reload_all_pipeline_schedulers()
-                message = f"模板 '{name}' 已更新并重新加载。"
+                message = f"O modelo '{name}' foi atualizado e recarregado."
             else:
-                message = f"模板 '{name}' 已更新。"
+                message = f"O modelo '{name}' foi atualizado."
         except ValueError as exc:
             raise T2iServiceError(str(exc), 400) from exc
         except Exception as exc:
@@ -96,7 +96,7 @@ class T2iService:
         try:
             self.manager.delete_template(name)
         except FileNotFoundError as exc:
-            raise T2iServiceError("Template not found.", 404) from exc
+            raise T2iServiceError("Modelo não encontrado.", 404) from exc
         except ValueError as exc:
             raise T2iServiceError(str(exc), 400) from exc
         except Exception as exc:
@@ -104,18 +104,20 @@ class T2iService:
 
     async def set_active_template(self, name: str | None) -> str:
         if not name:
-            raise T2iServiceError("模板名称(name)不能为空。", 400)
+            raise T2iServiceError("O nome do modelo (name) não pode ficar vazio.", 400)
 
         try:
             self.manager.get_template(name)
             await self.sync_active_template_to_all_configs(name)
         except FileNotFoundError as exc:
-            raise T2iServiceError(f"模板 '{name}' 不存在，无法应用。", 404) from exc
+            raise T2iServiceError(
+                f"O modelo '{name}' não existe; não é possível aplicar.", 404
+            ) from exc
         except Exception as exc:
             logger.error("Error in set_active_template", exc_info=True)
             raise T2iServiceError(str(exc)) from exc
 
-        return f"模板 '{name}' 已成功应用。"
+        return f"O modelo '{name}' foi aplicado."
 
     async def reset_default_template(self) -> str:
         try:

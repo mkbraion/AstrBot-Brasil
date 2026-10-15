@@ -47,7 +47,7 @@ from .request_retry import retry_provider_request
 
 @register_provider_adapter(
     "openai_chat_completion",
-    "OpenAI API Chat Completion 提供商适配器",
+    "Adaptador de provedor de geração de respostas da API OpenAI",
 )
 class ProviderOpenAIOfficial(Provider):
     _ERROR_TEXT_CANDIDATE_MAX_CHARS = 4096
@@ -447,7 +447,7 @@ class ProviderOpenAIOfficial(Provider):
                 models_str.append(model.id)
             return models_str
         except NotFoundError as e:
-            raise Exception(f"获取模型列表失败：{e}")
+            raise Exception(f"Falha ao obter a lista de modelos: {e}")
 
     @staticmethod
     def _sanitize_assistant_messages(payloads: dict) -> None:
@@ -580,7 +580,7 @@ class ProviderOpenAIOfficial(Provider):
 
         if not isinstance(completion, ChatCompletion):
             raise Exception(
-                f"API 返回的 completion 类型错误：{type(completion)}: {completion}。",
+                f"Tipo de resposta da API inválido: {type(completion)}: {completion}。",
             )
 
         logger.debug(f"completion: {completion}")
@@ -897,7 +897,7 @@ class ProviderOpenAIOfficial(Provider):
                 if tools is None:
                     # 工具集未提供
                     # Should be unreachable
-                    raise Exception("工具集未提供")
+                    raise Exception("Conjunto de ferramentas não fornecido")
 
                 if tool_call.type == "function":
                     # workaround for #1454
@@ -929,7 +929,7 @@ class ProviderOpenAIOfficial(Provider):
         # specially handle finish reason
         if choice.finish_reason == "content_filter":
             raise Exception(
-                "API 返回的 completion 由于内容安全过滤被拒绝(非 AstrBot)。",
+                "A resposta da API foi recusada pelo filtro de segurança de conteúdo do provedor, externo ao AstrBot.",
             )
         has_text_output = bool((llm_response.completion_text or "").strip())
         has_reasoning_output = bool((llm_response.reasoning_content or "").strip())
@@ -1268,7 +1268,7 @@ class ProviderOpenAIOfficial(Provider):
         if retry_cnt == max_retries - 1 or llm_response is None:
             logger.error(f"API 调用失败，重试 {max_retries} 次仍然失败。")
             if last_exception is None:
-                raise Exception("未知错误")
+                raise Exception("Erro desconhecido")
             raise last_exception
         return llm_response
 
@@ -1350,7 +1350,7 @@ class ProviderOpenAIOfficial(Provider):
         if retry_cnt == max_retries - 1:
             logger.error(f"API 调用失败，重试 {max_retries} 次仍然失败。")
             if last_exception is None:
-                raise Exception("未知错误")
+                raise Exception("Erro desconhecido")
             raise last_exception
 
     async def _remove_image_from_context(self, contexts: list):
@@ -1367,7 +1367,7 @@ class ProviderOpenAIOfficial(Provider):
                     new_content.append(item)
                 if not new_content:
                     # 用户只发了图片
-                    new_content = [{"type": "text", "text": "[图片]"}]
+                    new_content = [{"type": "text", "text": "[Imagem]"}]
                 context["content"] = new_content
             new_contexts.append(context)
         return new_contexts
@@ -1421,7 +1421,9 @@ class ProviderOpenAIOfficial(Provider):
                     if audio_part:
                         content_blocks.append(audio_part)
                 else:
-                    raise ValueError(f"不支持的额外内容块类型: {type(part)}")
+                    raise ValueError(
+                        f"Tipo de bloco de conteúdo extra incompatível: {type(part)}"
+                    )
 
         # 3. 图片内容
         if image_urls:

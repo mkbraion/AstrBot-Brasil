@@ -240,7 +240,7 @@ export default defineComponent({
         // 通过事件通知父组件显示成功消息
         this.$emit("export", this.tm("messages.exportSuccess"));
       } catch (error: any) {
-        console.error("导出人格失败:", error);
+        console.error("Falha ao exportar a persona:", error);
         // 通过事件通知父组件显示错误消息
         this.$emit(
           "export",

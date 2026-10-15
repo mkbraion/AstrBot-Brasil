@@ -89,7 +89,7 @@ class BackupService:
         if not filename:
             raise BackupServiceError(missing)
         if ".." in filename or "/" in filename or "\\" in filename:
-            raise BackupServiceError("无效的文件名")
+            raise BackupServiceError("Nome de arquivo inválido")
         return filename
 
     def _init_task(self, task_id: str, task_type: str, status: str = "pending") -> None:
@@ -195,7 +195,7 @@ class BackupService:
 
             manifest = self.get_backup_manifest(file_path)
             if manifest is None:
-                logger.debug(f"跳过无效备份文件: {filename}")
+                logger.debug(f"跳过Nenhum效备份文件: {filename}")
                 continue
 
             stat = os.stat(file_path)
@@ -205,7 +205,7 @@ class BackupService:
                     "size": stat.st_size,
                     "created_at": stat.st_mtime,
                     "type": manifest.get("origin", "exported"),
-                    "astrbot_version": manifest.get("astrbot_version", "未知"),
+                    "astrbot_version": manifest.get("astrbot_version", "Desconhecido"),
                     "exported_at": manifest.get("exported_at"),
                 }
             )
@@ -232,7 +232,9 @@ class BackupService:
 
     async def background_export_task(self, task_id: str) -> None:
         try:
-            self._update_progress(task_id, status="processing", message="正在初始化...")
+            self._update_progress(
+                task_id, status="processing", message="Inicializando..."
+            )
             kb_manager = getattr(self.core_lifecycle, "kb_manager", None)
             exporter = AstrBotExporter(
                 main_db=self.db,
@@ -259,9 +261,9 @@ class BackupService:
 
     async def upload_backup(self, file: Any | None) -> dict:
         if not file:
-            raise BackupServiceError("缺少备份文件")
+            raise BackupServiceError("Arquivo de backup ausente")
         if not file.filename or not file.filename.endswith(".zip"):
-            raise BackupServiceError("请上传 ZIP 格式的备份文件")
+            raise BackupServiceError("Envie um backup no formato ZIP")
 
         safe_filename = secure_filename(file.filename)
         unique_filename = generate_unique_filename(safe_filename)
@@ -291,11 +293,11 @@ class BackupService:
         total_size = payload.get("total_size", 0)
 
         if not filename:
-            raise BackupServiceError("缺少 filename 参数")
+            raise BackupServiceError("Parâmetro filename ausente")
         if not filename.endswith(".zip"):
-            raise BackupServiceError("请上传 ZIP 格式的备份文件")
+            raise BackupServiceError("Envie um backup no formato ZIP")
         if total_size <= 0:
-            raise BackupServiceError("无效的文件大小")
+            raise BackupServiceError("Tamanho de arquivo inválido")
         if total_size > MAX_BACKUP_TOTAL_BYTES:
             raise BackupServiceError(
                 f"Backup file exceeds the size limit ({MAX_BACKUP_TOTAL_BYTES // (1024**3)} GB). "
@@ -332,15 +334,15 @@ class BackupService:
         owner: str = "",
     ) -> dict:
         if not upload_id or chunk_index_str is None:
-            raise BackupServiceError("缺少必要参数")
+            raise BackupServiceError("Parâmetros obrigatórios ausentes")
 
         try:
             chunk_index = int(chunk_index_str)
         except ValueError as exc:
-            raise BackupServiceError("无效的分片索引") from exc
+            raise BackupServiceError("Índice de parte inválido") from exc
 
         if not chunk_file:
-            raise BackupServiceError("缺少分片数据")
+            raise BackupServiceError("Dados da parte ausentes")
 
         try:
             return await self.chunked_uploads.save_chunk(
@@ -372,7 +374,7 @@ class BackupService:
         upload_id = payload.get("upload_id")
 
         if not upload_id:
-            raise BackupServiceError("缺少 upload_id 参数")
+            raise BackupServiceError("Parâmetro upload_id ausente")
 
         try:
             session = self.chunked_uploads.get_session(upload_id, owner=owner)
@@ -402,7 +404,7 @@ class BackupService:
         payload = self._payload(data)
         upload_id = payload.get("upload_id")
         if not upload_id:
-            raise BackupServiceError("缺少 upload_id 参数")
+            raise BackupServiceError("Parâmetro upload_id ausente")
 
         try:
             if await self.chunked_uploads.abort(upload_id, owner=owner):
@@ -410,13 +412,13 @@ class BackupService:
         except ChunkedUploadError as exc:
             raise BackupServiceError(str(exc)) from exc
 
-        return None, "上传已取消"
+        return None, "Envio cancelado"
 
     def upload_status(self, data: object, *, owner: str = "") -> dict:
         payload = self._payload(data)
         upload_id = payload.get("upload_id")
         if not upload_id:
-            raise BackupServiceError("缺少 upload_id 参数")
+            raise BackupServiceError("Parâmetro upload_id ausente")
 
         try:
             return self.chunked_uploads.session_status(upload_id, owner=owner)
@@ -427,11 +429,11 @@ class BackupService:
         payload = self._payload(data)
         filename = self._validate_backup_filename(
             payload.get("filename"),
-            missing="缺少 filename 参数",
+            missing="Parâmetro filename ausente",
         )
         zip_path = os.path.join(self.backup_dir, filename)
         if not os.path.exists(zip_path):
-            raise BackupServiceError(f"备份文件不存在: {filename}")
+            raise BackupServiceError(f"Arquivo de backup não encontrado: {filename}")
 
         kb_manager = getattr(self.core_lifecycle, "kb_manager", None)
         importer = AstrBotImporter(
@@ -445,17 +447,17 @@ class BackupService:
         payload = self._payload(data)
         filename = self._validate_backup_filename(
             payload.get("filename"),
-            missing="缺少 filename 参数",
+            missing="Parâmetro filename ausente",
         )
         confirmed = payload.get("confirmed", False)
         if not confirmed:
             raise BackupServiceError(
-                "请先确认导入。导入将会清空并覆盖现有数据，此操作不可撤销。"
+                "Confirme a importação primeiro. A importação limpa e substitui os dados existentes. Esta operação não pode ser desfeita."
             )
 
         zip_path = os.path.join(self.backup_dir, filename)
         if not os.path.exists(zip_path):
-            raise BackupServiceError(f"备份文件不存在: {filename}")
+            raise BackupServiceError(f"Arquivo de backup não encontrado: {filename}")
 
         task_id = str(uuid.uuid4())
         self._init_task(task_id, "import", "pending")
@@ -468,7 +470,9 @@ class BackupService:
 
     async def background_import_task(self, task_id: str, zip_path: str) -> None:
         try:
-            self._update_progress(task_id, status="processing", message="正在初始化...")
+            self._update_progress(
+                task_id, status="processing", message="Inicializando..."
+            )
             kb_manager = getattr(self.core_lifecycle, "kb_manager", None)
             importer = AstrBotImporter(
                 main_db=self.db,
@@ -496,9 +500,9 @@ class BackupService:
 
     def get_progress(self, task_id: str | None) -> dict:
         if not task_id:
-            raise BackupServiceError("缺少参数 task_id")
+            raise BackupServiceError("Parâmetro task_id ausente")
         if task_id not in self.backup_tasks:
-            raise BackupServiceError("找不到该任务")
+            raise BackupServiceError("Tarefa não encontrada")
 
         task_info = self.backup_tasks[task_id]
         status = task_info["status"]
@@ -525,11 +529,11 @@ class BackupService:
         jwt_secret: str | None,
     ) -> BackupDownload:
         if not filename:
-            raise BackupServiceError("缺少参数 filename")
+            raise BackupServiceError("Parâmetro filename ausente")
         if not token:
-            raise BackupServiceError("缺少参数 token")
+            raise BackupServiceError("Parâmetro token ausente")
         if not jwt_secret:
-            raise BackupServiceError("服务器配置错误")
+            raise BackupServiceError("Erro de configuração do servidor")
 
         try:
             jwt.decode(
@@ -543,53 +547,57 @@ class BackupService:
                 },
             )
         except jwt.ExpiredSignatureError as exc:
-            raise BackupServiceError("Token 已过期，请刷新页面后重试") from exc
+            raise BackupServiceError(
+                "Token expirado. Recarregue a página e tente novamente"
+            ) from exc
         except jwt.InvalidTokenError as exc:
-            raise BackupServiceError("Token 无效") from exc
+            raise BackupServiceError("Token inválido") from exc
 
-        filename = self._validate_backup_filename(filename, missing="缺少参数 filename")
+        filename = self._validate_backup_filename(
+            filename, missing="Parâmetro filename ausente"
+        )
         file_path = os.path.join(self.backup_dir, filename)
         if not os.path.exists(file_path):
-            raise BackupServiceError("备份文件不存在")
+            raise BackupServiceError("Arquivo de backup não encontrado")
         return BackupDownload(path=file_path, filename=filename)
 
     def delete_backup(self, data: object) -> tuple[dict | None, str | None]:
         payload = self._payload(data)
         filename = self._validate_backup_filename(
             payload.get("filename"),
-            missing="缺少参数 filename",
+            missing="Parâmetro filename ausente",
         )
         file_path = os.path.join(self.backup_dir, filename)
         if not os.path.exists(file_path):
-            raise BackupServiceError("备份文件不存在")
+            raise BackupServiceError("Arquivo de backup não encontrado")
 
         os.remove(file_path)
-        return None, "删除备份成功"
+        return None, "Backup excluído"
 
     def rename_backup(self, data: object) -> dict:
         payload = self._payload(data)
         filename = self._validate_backup_filename(
             payload.get("filename"),
-            missing="缺少参数 filename",
+            missing="Parâmetro filename ausente",
         )
         new_name = payload.get("new_name")
         if not new_name:
-            raise BackupServiceError("缺少参数 new_name")
+            raise BackupServiceError("Parâmetro new_name ausente")
 
         new_name = secure_filename(new_name)
         if new_name.endswith(".zip"):
             new_name = new_name[:-4]
         if not new_name or new_name.replace("_", "") == "":
-            raise BackupServiceError("新文件名无效")
+            raise BackupServiceError("Novo nome de arquivo inválido")
 
         new_filename = f"{new_name}.zip"
         old_path = os.path.join(self.backup_dir, filename)
         if not os.path.exists(old_path):
-            raise BackupServiceError("备份文件不存在")
+            raise BackupServiceError("Arquivo de backup não encontrado")
 
         new_path = os.path.join(self.backup_dir, new_filename)
         if os.path.exists(new_path):
-            raise BackupServiceError(f"文件名 '{new_filename}' 已存在")
+            raise BackupServiceError(f"O arquivo '{new_filename}' já existe")
 
         os.rename(old_path, new_path)
         logger.info(f"备份文件重命名: {filename} -> {new_filename}")

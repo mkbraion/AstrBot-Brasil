@@ -25,7 +25,7 @@ export function useProjects() {
                 
             }
         } catch (error) {
-            console.error('Failed to fetch projects:', error);
+            console.error("Falha ao obter os projetos:", error);
         }
     }
 
@@ -48,10 +48,10 @@ export function useProjects() {
                 await getProjects();
                 return res.data.data;
             }
-            throw new Error(res.data.message || 'Failed to create project');
+            throw new Error(res.data.message || "Falha ao criar o projeto");
         } catch (error) {
-            console.error('Failed to create project:', error);
-            throw new Error(projectErrorMessage(error, 'Failed to create project'));
+            console.error("Falha ao criar o projeto:", error);
+            throw new Error(projectErrorMessage(error, "Falha ao criar o projeto"));
         }
     }
 
@@ -75,10 +75,10 @@ export function useProjects() {
                 await getProjects();
                 return;
             }
-            throw new Error(res.data.message || 'Failed to update project');
+            throw new Error(res.data.message || "Falha ao atualizar o projeto");
         } catch (error) {
-            console.error('Failed to update project:', error);
-            throw new Error(projectErrorMessage(error, 'Failed to update project'));
+            console.error("Falha ao atualizar o projeto:", error);
+            throw new Error(projectErrorMessage(error, "Falha ao atualizar o projeto"));
         }
     }
 
@@ -92,7 +92,7 @@ export function useProjects() {
                 }
             }
         } catch (error) {
-            console.error('Failed to delete project:', error);
+            console.error("Falha ao excluir o projeto:", error);
         }
     }
 
@@ -101,7 +101,7 @@ export function useProjects() {
             const res = await chatApi.addProjectSession(projectId, sessionId);
             return res.data.status === 'ok';
         } catch (error) {
-            console.error('Failed to add session to project:', error);
+            console.error("Falha ao adicionar a sessão ao projeto:", error);
             return false;
         }
     }
@@ -111,7 +111,7 @@ export function useProjects() {
             const res = await chatApi.removeProjectSession(sessionId);
             return res.data.status === 'ok';
         } catch (error) {
-            console.error('Failed to remove session from project:', error);
+            console.error("Falha ao remover a sessão do projeto:", error);
             return false;
         }
     }
@@ -124,7 +124,7 @@ export function useProjects() {
             }
             return [];
         } catch (error) {
-            console.error('Failed to fetch project sessions:', error);
+            console.error("Falha ao obter as sessões do projeto:", error);
             return [];
         }
     }

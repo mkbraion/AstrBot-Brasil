@@ -400,7 +400,7 @@ class AstrBotCoreLifecycle:
             except Exception as e:
                 logger.warning(traceback.format_exc())
                 logger.warning(
-                    f"插件 {plugin.name} 未被正常终止 {e!s}, 可能会导致资源泄露等问题。",
+                    f"O plugin {plugin.name} 未被正常终止 {e!s}, 可能会导致资源泄露等问题。",
                 )
 
         await self.provider_manager.terminate()
@@ -478,7 +478,7 @@ class AstrBotCoreLifecycle:
         """
         ab_config = self.astrbot_config_mgr.confs.get(conf_id)
         if not ab_config:
-            raise ValueError(f"配置文件 {conf_id} 不存在")
+            raise ValueError(f"A configuração {conf_id} não existe")
         scheduler = PipelineScheduler(
             PipelineContext(ab_config, self.plugin_manager, conf_id, self.db),
         )

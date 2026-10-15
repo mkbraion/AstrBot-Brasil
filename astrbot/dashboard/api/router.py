@@ -80,7 +80,7 @@ def build_api_router() -> APIRouter:
                 **(route.openapi_extra or {}),
                 "x-astrbot-scope": required_scope,
             }
-            scope_description = f"**Required scope:** `{required_scope}`"
+            scope_description = f"**Escopo obrigatório:** `{required_scope}`"
             sensitive_scopes = route.openapi_extra.get("x-astrbot-sensitive-scopes", [])
             if sensitive_scopes:
                 formatted_scopes = ", ".join(f"`{scope}`" for scope in sensitive_scopes)

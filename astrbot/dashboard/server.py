@@ -114,7 +114,7 @@ def _check_body_limit(
             parse_options_header(content_type)[0] if parse_options_header else b""
         )
         if media_type == b"multipart/form-data":
-            return 411, "Content-Length header is required for uploads"
+            return 411, "O cabeçalho Content-Length é obrigatório para envios"
         return None
     limit = default_limit
     for prefix, route_limit in _BODY_LIMIT_OVERRIDES:
@@ -364,7 +364,7 @@ class AstrBotDashboard:
         if asset_token and asset_token != dashboard_token:
             token_candidates.append(asset_token)
         if not token_candidates:
-            r = JSONResponse(error("未授权"))
+            r = JSONResponse(error("Não autorizado"))
             r.status_code = 401
             return r
 
@@ -379,9 +379,9 @@ class AstrBotDashboard:
             token_errors.append(token_error)
 
         error_message = (
-            "Token 过期"
-            if token_errors and all(item == "Token 过期" for item in token_errors)
-            else "Token 无效"
+            "Token expirado"
+            if token_errors and all(item == "Token expirado" for item in token_errors)
+            else "Token inválido"
         )
         r = JSONResponse(error(error_message))
         r.status_code = 401
@@ -405,19 +405,19 @@ class AstrBotDashboard:
         try:
             payload = jwt.decode(token, self._jwt_secret, algorithms=["HS256"])
         except jwt.ExpiredSignatureError:
-            return None, "Token 过期"
+            return None, "Token expirado"
         except jwt.InvalidTokenError:
-            return None, "Token 无效"
+            return None, "Token inválido"
 
         if PluginPageAuth.is_asset_token(payload) and not PluginPageAuth.is_scope_valid(
             payload,
             path,
         ):
-            return None, "Token 无效"
+            return None, "Token inválido"
 
         username = payload.get("username")
         if not isinstance(username, str) or not username.strip():
-            return None, "Token 无效"
+            return None, "Token inválido"
 
         return payload, ""
 
@@ -446,7 +446,9 @@ class AstrBotDashboard:
                 )
                 if not await limiter.acquire():
                     r = JSONResponse(
-                        error("验证尝试过于频繁，系统可能正在遭受暴力破解")
+                        error(
+                            "Tentativas de verificação muito frequentes. O sistema pode estar sofrendo um ataque de força bruta"
+                        )
                     )
                     r.status_code = 429
                     return r
@@ -514,7 +516,7 @@ class AstrBotDashboard:
             # result 为 0 表示端口被占用
             return result == 0
         except Exception as e:
-            logger.warning(f"检查端口 {port} 时发生错误: {e!s}")
+            logger.warning(f"检查A porta {port} 时发生错误: {e!s}")
             # 如果出现异常，保守起见认为端口可能被占用
             return True
 
@@ -527,18 +529,18 @@ class AstrBotDashboard:
                         process = psutil.Process(conn.pid)
                         # 获取详细信息
                         proc_info = [
-                            f"进程名: {process.name()}",
+                            f"Nome do processo: {process.name()}",
                             f"PID: {process.pid}",
-                            f"执行路径: {process.exe()}",
-                            f"工作目录: {process.cwd()}",
-                            f"启动命令: {' '.join(process.cmdline())}",
+                            f"Caminho do executável: {process.exe()}",
+                            f"Diretório de trabalho: {process.cwd()}",
+                            f"Comando de inicialização: {' '.join(process.cmdline())}",
                         ]
                         return "\n           ".join(proc_info)
                     except (psutil.NoSuchProcess, psutil.AccessDenied) as e:
-                        return f"无法获取进程详细信息(可能需要管理员权限): {e!s}"
-            return "未找到占用进程"
+                        return f"Não foi possível obter os detalhes do processo (talvez sejam necessárias permissões de administrador): {e!s}"
+            return "Processo responsável não encontrado"
         except Exception as e:
-            return f"获取进程信息失败: {e!s}"
+            return f"Falha ao obter informações do processo: {e!s}"
 
     def _init_jwt_secret(self) -> None:
         if not self.config.get("dashboard", {}).get("jwt_secret", None):
@@ -676,22 +678,20 @@ class AstrBotDashboard:
         if self.check_port_in_use(port):
             process_info = self.get_process_using_port(port)
             logger.error(
-                f"错误：端口 {port} 已被占用\n"
+                f"错误：A porta {port} já está em uso\n"
                 f"占用信息: \n           {process_info}\n"
                 f"请确保：\n"
                 f"1. 没有其他 AstrBot 实例正在运行\n"
-                f"2. 端口 {port} 没有被其他程序占用\n"
+                f"2. A porta {port} 没有被其他程序占用\n"
                 f"3. 如需使用其他端口，请修改配置文件",
             )
 
-            raise Exception(f"端口 {port} 已被占用")
+            raise Exception(f"A porta {port} já está em uso")
 
         if self.data_path and (Path(self.data_path) / "index.html").is_file():
             webui_status = "WebUI is ready"
         else:
-            webui_status = (
-                f"WebUI is NOT ready: static files are missing at {self.data_path}"
-            )
+            webui_status = f"A interface web não está pronta: arquivos estáticos ausentes em {self.data_path}"
         parts = [f"\n ✨✨✨\n  AstrBot v{VERSION} {webui_status}\n\n"]
         parts.append(f"   ➜  Local: {scheme}://localhost:{port}\n")
         for ip in ip_addr:

@@ -69,7 +69,7 @@ class OpenApiService:
         raw_username: str | None,
     ) -> tuple[str | None, str | None]:
         if raw_username is None:
-            return None, "Missing key: username"
+            return None, "Chave ausente: username"
         username = str(raw_username).strip()
         if not username:
             return None, "username is empty"
@@ -110,7 +110,7 @@ class OpenApiService:
 
         if config_id:
             if config_id not in conf_map:
-                return None, f"config_id not found: {config_id}"
+                return None, f"config_id não encontrado: {config_id}"
             return config_id, None
 
         if not config_name:
@@ -118,11 +118,11 @@ class OpenApiService:
 
         matched = [item for item in conf_list if item["name"] == config_name]
         if not matched:
-            return None, f"config_name not found: {config_name}"
+            return None, f"config_name não encontrado: {config_name}"
         if len(matched) > 1:
             return (
                 None,
-                f"config_name is ambiguous, please use config_id: {config_name}",
+                f"config_name é ambíguo. Use config_id: {config_name}",
             )
 
         return matched[0]["id"], None
@@ -153,7 +153,7 @@ class OpenApiService:
         if username_err:
             raise OpenApiServiceError(username_err)
         if not effective_username:
-            raise OpenApiServiceError("Invalid username")
+            raise OpenApiServiceError("Nome de usuário inválido")
         for config in self.core_lifecycle.astrbot_config_mgr.confs.values():
             if not isinstance(config, dict):
                 continue
@@ -209,7 +209,7 @@ class OpenApiService:
             if existing and existing.creator == username:
                 return None
             logger.error("Failed to create chat session %s: %s", session_id, exc)
-            return f"Failed to create session: {exc}"
+            return f"Falha ao criar a sessão: {exc}"
 
         return None
 
@@ -226,12 +226,12 @@ class OpenApiService:
             a public authentication error.
         """
         if not raw_key:
-            return None, "Missing API key"
+            return None, "Chave de API ausente"
 
         key_hash = ApiKeyService.hash_key(raw_key)
         api_key = await self.db.get_active_api_key_by_hash(key_hash)
         if not api_key:
-            return None, "Invalid API key"
+            return None, "Chave de API inválida"
 
         if isinstance(api_key.scopes, list):
             scopes = api_key.scopes
@@ -283,7 +283,7 @@ class OpenApiService:
                 message = await receive_json()
                 if not isinstance(message, dict):
                     await send_error(
-                        "message must be an object",
+                        "message deve ser um objeto",
                         "INVALID_MESSAGE",
                     )
                     continue
@@ -294,7 +294,7 @@ class OpenApiService:
                     continue
                 if msg_type != "send":
                     await send_error(
-                        f"Unsupported message type: {msg_type}",
+                        f"Tipo de mensagem incompatível: {msg_type}",
                         "INVALID_MESSAGE",
                     )
                     continue
@@ -336,7 +336,7 @@ class OpenApiService:
                 exc,
                 exc_info=True,
             )
-            return f"Failed to update chat config route: {exc}"
+            return f"Falha ao atualizar a rota de configuração da conversa: {exc}"
         return None
 
     async def insert_webchat_user_message(
@@ -358,7 +358,7 @@ class OpenApiService:
 
     @staticmethod
     def get_chat_send_error_code(message: str) -> str:
-        if message in ("Missing key: username", "username is empty"):
+        if message in ("Chave ausente: username", "username is empty"):
             return "BAD_USER"
         if message.startswith("config_"):
             return "CONFIG_ERROR"
@@ -378,7 +378,7 @@ class OpenApiService:
     ) -> None:
         message = post_data.get("message")
         if message is None:
-            await send_error("Missing key: message", "INVALID_MESSAGE")
+            await send_error("Chave ausente: message", "INVALID_MESSAGE")
             return
 
         try:
@@ -554,7 +554,9 @@ class OpenApiService:
                     break
         except Exception as exc:
             logger.exception(f"Open API WS chat failed: {exc}", exc_info=True)
-            await send_error(f"Failed to process message: {exc}", "PROCESSING_ERROR")
+            await send_error(
+                f"Falha ao processar a mensagem: {exc}", "PROCESSING_ERROR"
+            )
         finally:
             webchat_queue_mgr.remove_back_queue(message_id)
 
@@ -570,7 +572,7 @@ class OpenApiService:
             page = int(page_raw)
             page_size = int(page_size_raw)
         except ValueError as exc:
-            raise OpenApiServiceError("page and page_size must be integers") from exc
+            raise OpenApiServiceError("page e page_size devem ser inteiros") from exc
 
         if page < 1:
             page = 1
@@ -624,7 +626,7 @@ class OpenApiService:
         if username_err:
             raise OpenApiServiceError(username_err)
         if not resolved_username:
-            raise OpenApiServiceError("Invalid username")
+            raise OpenApiServiceError("Nome de usuário inválido")
 
         return await self.get_chat_sessions(
             username=resolved_username,
@@ -649,14 +651,14 @@ class OpenApiService:
         umo = payload.get("umo")
 
         if message_payload is None:
-            raise OpenApiServiceError("Missing key: message")
+            raise OpenApiServiceError("Chave ausente: message")
         if not umo:
-            raise OpenApiServiceError("Missing key: umo")
+            raise OpenApiServiceError("Chave ausente: umo")
 
         try:
             session = MessageSesion.from_str(str(umo))
         except Exception as exc:
-            raise OpenApiServiceError(f"Invalid umo: {exc}") from exc
+            raise OpenApiServiceError(f"umo inválido: {exc}") from exc
 
         platform_id = session.platform_name
         platform_inst = next(
@@ -669,7 +671,7 @@ class OpenApiService:
         )
         if not platform_inst:
             raise OpenApiServiceError(
-                f"Bot not found or not running for platform: {platform_id}"
+                f"Bot não encontrado ou parado para a plataforma: {platform_id}"
             )
 
         try:
@@ -681,7 +683,7 @@ class OpenApiService:
             raise OpenApiServiceError(str(exc)) from exc
         except Exception as exc:
             logger.error(f"Open API send_message failed: {exc}", exc_info=True)
-            raise OpenApiServiceError(f"Failed to send message: {exc}") from exc
+            raise OpenApiServiceError(f"Falha ao enviar a mensagem: {exc}") from exc
 
     def get_bots(self) -> dict:
         bot_ids = []

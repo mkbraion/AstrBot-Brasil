@@ -38,7 +38,7 @@
             v-if="isSidebarCollapsed"
             class="chat-sidebar-brand-toggle chat-sidebar-rail-btn"
             type="button"
-            aria-label="Toggle sidebar"
+            aria-label="Alternar barra lateral"
             @click.stop="toggleChatSidebar"
           >
             <span class="chat-sidebar-rail-icon-stack">
@@ -1270,7 +1270,7 @@ async function loadTokenProviders() {
       ).filter((provider) => provider.enable !== false);
     }
   } catch (error) {
-    console.error("Failed to load provider context metadata:", error);
+    console.error("Falha ao carregar os metadados de contexto do provedor:", error);
   }
 }
 
@@ -1476,7 +1476,7 @@ async function saveProject(formData: ProjectFormData, projectId?: string) {
     editingProject.value = null;
   } catch (error) {
     projectDialogError.value =
-      error instanceof Error ? error.message : "Failed to save project";
+      error instanceof Error ? error.message : "Falha ao salvar o projeto";
   } finally {
     savingProject.value = false;
   }
@@ -1576,7 +1576,7 @@ async function sendCurrentMessage() {
       botRecord,
     });
   } catch (error) {
-    console.error("Failed to send message:", error);
+    console.error("Falha ao enviar a mensagem:", error);
   } finally {
     sending.value = false;
     await focusChatInput();
@@ -1721,7 +1721,7 @@ async function saveMessageEdit() {
       }
     }
   } catch (error) {
-    console.error("Failed to edit message:", error);
+    console.error("Falha ao editar a mensagem:", error);
   } finally {
     savingMessageEdit.value = false;
   }
@@ -1807,7 +1807,7 @@ async function createThreadFromSelection() {
         ? error.response?.data?.message || error.message
         : tm("thread.createFailed"),
     );
-    console.error("Failed to create thread:", error);
+    console.error("Falha ao criar a conversa paralela:", error);
   } finally {
     threadSelection.visible = false;
   }
@@ -1906,7 +1906,7 @@ async function deleteThread(thread: ChatThread) {
       activeThread.value = null;
     }
   } catch (error) {
-    console.error("Failed to delete thread:", error);
+    console.error("Falha ao excluir a conversa paralela:", error);
   } finally {
     deletingThread.value = false;
   }
@@ -1936,7 +1936,7 @@ async function startRecording() {
   try {
     await startRecorder();
   } catch (error) {
-    console.error("Failed to start recording:", error);
+    console.error("Falha ao iniciar a gravação:", error);
     toast.error(tm("voice.error"));
   }
 }
@@ -1949,7 +1949,7 @@ async function stopRecording() {
       toast.error(tm("voice.error"));
     }
   } catch (error) {
-    console.error("Failed to stop recording:", error);
+    console.error("Falha ao parar a gravação:", error);
     toast.error(tm("voice.error"));
   }
 }
@@ -2114,7 +2114,7 @@ async function stopCurrentSession() {
   try {
     await stopSession(currSessionId.value);
   } catch (error) {
-    console.error("Failed to stop session:", error);
+    console.error("Falha ao parar a sessão:", error);
   }
 }
 </script>

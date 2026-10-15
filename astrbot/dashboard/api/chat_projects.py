@@ -202,7 +202,9 @@ async def download_chat_project_workspace_file(
     if download_path != workspace_root_path and not download_path.startswith(
         workspace_root_prefix
     ):
-        raise HTTPException(status_code=400, detail="Invalid workspace path")
+        raise HTTPException(
+            status_code=400, detail="Caminho da área de trabalho inválido"
+        )
     return FileResponse(download_path, filename=os.path.basename(download_path))
 
 

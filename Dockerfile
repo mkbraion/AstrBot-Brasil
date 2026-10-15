@@ -1,3 +1,12 @@
+FROM node:24-slim AS dashboard-build
+WORKDIR /dashboard
+RUN npm install --global pnpm@10.32.1
+COPY dashboard/package.json dashboard/pnpm-lock.yaml dashboard/pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY dashboard/ ./
+COPY astrbot/core/utils/t2i/template/shiki_runtime.iife.js /astrbot/core/utils/t2i/template/shiki_runtime.iife.js
+RUN pnpm run i18n:check && pnpm run i18n:check:ptbr && pnpm run build
+
 FROM python:3.12-slim
 WORKDIR /AstrBot
 
@@ -22,6 +31,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY . /AstrBot/
+COPY --from=dashboard-build /dashboard/dist /AstrBot/astrbot/dashboard/dist
+RUN python -c "from pathlib import Path; from astrbot import __version__; Path('astrbot/dashboard/dist/assets/version').write_text('v' + __version__, encoding='utf-8')"
 
 RUN python -m pip install uv \
     && echo "3.12" > .python-version \
@@ -34,4 +45,4 @@ RUN python -m pip install uv \
 
 EXPOSE 6185
 
-CMD ["python", "main.py"]
+CMD ["python", "main.py", "--webui-dir", "/AstrBot/astrbot/dashboard/dist"]

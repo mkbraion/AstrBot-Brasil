@@ -29,14 +29,14 @@ LINE_CONFIG_METADATA = {
     "channel_access_token": {
         "description": "LINE Channel Access Token",
         "type": "string",
-        "hint": "LINE Messaging API 的 channel access token。",
+        "hint": "Token de acesso ao canal da API de mensagens do LINE.",
         "secret": True,
         "show_key": True,
     },
     "channel_secret": {
         "description": "LINE Channel Secret",
         "type": "string",
-        "hint": "用于校验 LINE Webhook 签名。",
+        "hint": "Usado para verificar a assinatura do webhook do LINE.",
         "secret": True,
         "show_key": True,
     },
@@ -46,11 +46,11 @@ LINE_I18N_RESOURCES = {
     "zh-CN": {
         "channel_access_token": {
             "description": "LINE Channel Access Token",
-            "hint": "LINE Messaging API 的 channel access token。",
+            "hint": "Token de acesso ao canal da API de mensagens do LINE.",
         },
         "channel_secret": {
             "description": "LINE Channel Secret",
-            "hint": "用于校验 LINE Webhook 签名。",
+            "hint": "Usado para verificar a assinatura do webhook do LINE.",
         },
     },
     "en-US": {
@@ -78,7 +78,7 @@ LINE_I18N_RESOURCES = {
 
 @register_platform_adapter(
     "line",
-    "LINE Messaging API 适配器",
+    "Adaptador da API de mensagens do LINE",
     support_streaming_message=False,
     config_metadata=LINE_CONFIG_METADATA,
     i18n_resources=LINE_I18N_RESOURCES,
@@ -101,7 +101,7 @@ class LinePlatformAdapter(Platform):
         channel_secret = str(platform_config.get("channel_secret", ""))
         if not channel_access_token or not channel_secret:
             raise ValueError(
-                "LINE 适配器需要 channel_access_token 和 channel_secret。",
+                "O adaptador LINE exige channel_access_token e channel_secret.",
             )
 
         self.line_api = LineAPIClient(
@@ -122,7 +122,7 @@ class LinePlatformAdapter(Platform):
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             name="line",
-            description="LINE Messaging API 适配器",
+            description="Adaptador da API de mensagens do LINE",
             id=cast(str, self.config.get("id", "line")),
             support_streaming_message=False,
         )

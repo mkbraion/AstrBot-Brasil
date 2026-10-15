@@ -552,7 +552,7 @@ export default defineComponent({
     },
     currentFolderName(): string | null {
       if (!this.currentFolderId) {
-        return null; // 根目录，PersonaForm 会使用 tm('form.rootFolder')
+        return null; // Diretório raiz，PersonaForm 会使用 tm('form.rootFolder')
       }
       // 递归查找文件夹名称
       const findName = (nodes: FolderTreeNode[], id: string): string | null => {
@@ -830,7 +830,7 @@ export default defineComponent({
           this.showSuccess(this.tm("messages.importSuccess"));
         }
       } catch (error: any) {
-        console.error("导入人格失败:", error);
+        console.error("Falha ao importar a persona:", error);
         this.showError(
           this.tm("messages.importError", {
             error: error.message || String(error),

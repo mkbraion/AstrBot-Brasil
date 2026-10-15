@@ -40,7 +40,7 @@
                 <template v-slot:label>
                   <span class="text-caption">
                     <v-icon size="small" class="mr-1">mdi-bug</v-icon>
-                    Debug (t-SNE)
+                    Depuração (t-SNE)
                   </span>
                 </template>
               </v-switch>
@@ -180,7 +180,7 @@ const performRetrieval = async () => {
       showSnackbar(response.data.message || t('retrieval.searchFailed'), 'error')
     }
   } catch (error) {
-    console.error('Retrieval failed:', error)
+    console.error("Falha na busca:", error)
     showSnackbar(t('retrieval.searchFailed'), 'error')
   } finally {
     loading.value = false

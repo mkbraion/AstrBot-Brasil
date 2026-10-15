@@ -12,7 +12,9 @@ XIAOMI_TOKEN_PLAN_MODELS = [
 ]
 
 
-@register_provider_adapter("xiaomi_token_plan", "Xiaomi Token Plan 提供商适配器")
+@register_provider_adapter(
+    "xiaomi_token_plan", "Adaptador de provedor Xiaomi Token Plan"
+)
 class ProviderXiaomiTokenPlan(ProviderAnthropic):
     """Xiaomi Token Plan provider.
 

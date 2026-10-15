@@ -507,5 +507,7 @@ def plan_missing_requirements_install(
 def find_missing_requirements_or_raise(requirements_path: str) -> set[str]:
     missing = find_missing_requirements(requirements_path)
     if missing is None:
-        raise RequirementsPrecheckFailed(f"预检查失败: {requirements_path}")
+        raise RequirementsPrecheckFailed(
+            f"Falha na verificação prévia: {requirements_path}"
+        )
     return missing

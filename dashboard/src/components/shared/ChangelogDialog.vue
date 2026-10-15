@@ -43,7 +43,7 @@ async function getCurrentVersion() {
     selectedVersion.value = version;
     return version;
   } catch (err) {
-    console.error('Failed to get version:', err);
+    console.error("Falha ao obter a versão:", err);
     return '';
   }
 }
@@ -70,7 +70,7 @@ async function loadChangelog(version) {
       changelogError.value = res.data.message || t('core.navigation.changelogDialog.error');
     }
   } catch (err) {
-    console.error('Failed to load changelog:', err);
+    console.error("Falha ao carregar o histórico de alterações:", err);
     if (err.response?.status === 404 || err.response?.data?.message?.includes('not found')) {
       changelogError.value = t('core.navigation.changelogDialog.notFound');
     } else {
@@ -90,7 +90,7 @@ async function loadAvailableVersions() {
       availableVersions.value = res.data.data.versions || [];
     }
   } catch (err) {
-    console.error('Failed to load versions:', err);
+    console.error("Falha ao carregar as versões:", err);
   } finally {
     loadingVersions.value = false;
   }

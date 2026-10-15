@@ -84,22 +84,8 @@ DASHBOARD_JWT_COOKIE_MAX_AGE = 7 * 24 * 60 * 60
 SKIP_DEFAULT_PASSWORD_AUTH_ENV = "ASTRBOT_DASHBOARD_SKIP_DEFAULT_PASSWORD_AUTH"
 SKIP_DEFAULT_PASSWORD_AUTH_ENV_OLD = "DASHBOARD_SKIP_DEFAULT_PASSWORD_AUTH"
 LOCAL_DASHBOARD_HOSTS = {"127.0.0.1", "localhost", "::1"}
-DEFAULT_PASSWORD_LOGIN_FAILURE_MESSAGE = (
-    "Login failed. If this is your first time using AstrBot, the old default "
-    "astrbot password has been replaced by a random strong password printed in "
-    "the startup logs. Check the initial password in the logs and try again. "
-    "Learn more: https://docs.astrbot.app/en/faq.html\n\n"
-    "登录失败。如果您是初次使用，旧版默认 astrbot 密码已改为启动日志中输出的"
-    "随机强密码。请使用日志中提供的的初始密码来登录。了解更多："
-    "https://docs.astrbot.app/faq.html"
-)
-MD5_PASSWORD_LOGIN_FAILURE_MESSAGE = (
-    "Incorrect username or password. If you cannot log in after upgrading "
-    "AstrBot even though the password is correct, see "
-    "https://docs.astrbot.app/en/faq.html\n\n"
-    "用户名或密码错误。如果你在升级 AstrBot 后遇到了密码正确但无法登录的情况，"
-    "请参考 https://docs.astrbot.app/faq.html"
-)
+DEFAULT_PASSWORD_LOGIN_FAILURE_MESSAGE = "Falha ao entrar. Na primeira execução do AstrBot, use a senha forte aleatória exibida nos registros de inicialização. A antiga senha padrão astrbot não é mais usada. Consulte docs/faq-pt-BR.md."
+MD5_PASSWORD_LOGIN_FAILURE_MESSAGE = "Nome de usuário ou senha incorretos. Se não conseguir entrar após uma atualização mesmo com a senha correta, consulte docs/faq-pt-BR.md."
 TOTP_TRUSTED_DEVICE_COOKIE_NAME = _TOTP_TRUSTED_DEVICE_COOKIE_NAME
 TOTP_TRUSTED_DEVICE_MAX_AGE = _TOTP_TRUSTED_DEVICE_MAX_AGE
 
@@ -154,9 +140,9 @@ class AuthService:
         if not is_desktop_session_auth_enabled() or not is_loopback_client_host(
             client_host
         ):
-            return self.error("Not found", status_code=404)
+            return self.error("Não encontrado", status_code=404)
         if not verify_desktop_session_secret(provided_secret, client_host):
-            return self.error("Invalid desktop session", status_code=401)
+            return self.error("Sessão do aplicativo inválida", status_code=401)
 
         username = self.config["dashboard"]["username"]
         token = self.generate_jwt(username, auth_source="desktop")
@@ -176,15 +162,15 @@ class AuthService:
             secret = post_data["secret"]
             code = post_data.get("code")
             if not isinstance(secret, str) or not secret.strip():
-                return self.error("Invalid request payload")
+                return self.error("Dados da requisição inválidos")
 
             if not isinstance(code, str) or not code.strip():
-                return self.error("TOTP 验证码是必需的")
+                return self.error("O código TOTP é obrigatório")
             if not await consume_totp_code(secret, code):
-                return self.error("TOTP 验证码无效")
+                return self.error("Código TOTP inválido")
 
             if is_totp_enabled(self.config) and not consume_rotation_verified():
-                return self.error("需要先验证当前 TOTP")
+                return self.error("Verifique primeiro o TOTP atual")
 
             set_pending_totp_secret(secret)
             recovery_code, recovery_code_hash = generate_recovery_code()
@@ -198,7 +184,7 @@ class AuthService:
 
         if is_totp_enabled(self.config):
             if not isinstance(post_data, dict):
-                return self.error("Invalid request payload")
+                return self.error("Dados da requisição inválidos")
 
             set_rotation_verified(False)
 
@@ -207,9 +193,9 @@ class AuthService:
                 if await consume_configured_totp_code(self.config, code):
                     set_rotation_verified(True)
                     return AuthServiceResult(data={"secret": pyotp.random_base32()})
-                return self.error("当前 TOTP 验证码无效")
+                return self.error("Código TOTP atual inválido")
 
-            return self.error("需要提供 TOTP 验证码或新密钥")
+            return self.error("Informe um código TOTP ou uma nova chave")
 
         return AuthServiceResult(data={"secret": pyotp.random_base32()})
 
@@ -224,9 +210,9 @@ class AuthService:
 
     async def setup(self, post_data: object) -> AuthServiceResult:
         if not self.can_skip_default_password_auth():
-            return self.error("Setup without password is not enabled")
+            return self.error("A configuração sem senha não está ativada")
         if not await self.is_setup_required():
-            return self.error("Setup is not required")
+            return self.error("A configuração inicial não é necessária")
 
         return await self.complete_setup(post_data)
 
@@ -236,25 +222,25 @@ class AuthService:
         authenticated_username,
     ) -> AuthServiceResult:
         if not await self.is_setup_required():
-            return self.error("Setup is not required")
+            return self.error("A configuração inicial não é necessária")
         if not isinstance(authenticated_username, str):
-            return self.error("未授权")
+            return self.error("Não autorizado")
 
         return await self.complete_setup(post_data)
 
     async def complete_setup(self, post_data: object) -> AuthServiceResult:
         if not isinstance(post_data, dict):
-            return self.error("Invalid request payload")
+            return self.error("Dados da requisição inválidos")
 
         new_username = post_data.get("username")
         new_password = post_data.get("password")
         confirm_password = post_data.get("confirm_password")
         if not isinstance(new_username, str) or len(new_username.strip()) < 3:
-            return self.error("用户名长度至少3位")
+            return self.error("O nome de usuário deve ter pelo menos 3 caracteres")
         if not isinstance(new_password, str):
-            return self.error("新密码无效")
+            return self.error("Nova senha inválida")
         if not isinstance(confirm_password, str) or confirm_password != new_password:
-            return self.error("两次输入的新密码不一致")
+            return self.error("As novas senhas informadas não coincidem")
 
         try:
             validate_dashboard_password(new_password)
@@ -304,7 +290,7 @@ class AuthService:
             else False
         )
         if not isinstance(req_username, str) or not isinstance(req_password, str):
-            return self.error("Invalid request payload")
+            return self.error("Dados da requisição inválidos")
 
         login_verified = req_username == username and verify_dashboard_password(
             password,
@@ -317,7 +303,7 @@ class AuthService:
                 return self.error(DEFAULT_PASSWORD_LOGIN_FAILURE_MESSAGE)
             if is_md5_dashboard_password(password):
                 return self.error(MD5_PASSWORD_LOGIN_FAILURE_MESSAGE)
-            return self.error("用户名或密码错误", status_code=401)
+            return self.error("Nome de usuário ou senha incorretos", status_code=401)
 
         totp_verified = False
 
@@ -329,7 +315,7 @@ class AuthService:
             ):
                 if not isinstance(totp_code, str) or not totp_code.strip():
                     return self.error(
-                        "需要 TOTP 验证",
+                        "Verificação TOTP necessária",
                         data={"totp_required": True},
                         status_code=401,
                     )
@@ -349,9 +335,9 @@ class AuthService:
                     await revoke_user_trusted_devices(self.db)
                     self.config.save_config()
                 elif len(totp_code) == 6 and totp_code.isdigit():
-                    return self.error("TOTP 验证码无效", status_code=401)
+                    return self.error("Código TOTP inválido", status_code=401)
                 else:
-                    return self.error("恢复码无效", status_code=401)
+                    return self.error("Código de recuperação inválido", status_code=401)
 
         change_pwd_hint = False
         md5_pwd_hint = is_md5_dashboard_password(password)
@@ -396,14 +382,14 @@ class AuthService:
         storage_upgraded = await is_password_storage_upgraded(self.db, self.config)
         password = get_dashboard_password_hash(self.config, upgraded=storage_upgraded)
         if not isinstance(post_data, dict):
-            return self.error("Invalid request payload")
+            return self.error("Dados da requisição inválidos")
 
         req_password = post_data.get("password")
         if not isinstance(req_password, str):
-            return self.error("Invalid request payload")
+            return self.error("Dados da requisição inválidos")
 
         if not verify_dashboard_password(password, req_password):
-            return self.error("原密码错误")
+            return self.error("Senha atual incorreta")
 
         new_pwd = post_data.get("new_password", None)
         new_username = post_data.get("new_username", None)
@@ -412,22 +398,26 @@ class AuthService:
             self.config,
         )
         if (not storage_upgraded or password_change_required) and not new_pwd:
-            return self.error("请设置新密码以完成安全升级")
+            return self.error(
+                "Defina uma nova senha para concluir a atualização de segurança"
+            )
         if not new_pwd and not new_username:
-            return self.error("新用户名和新密码不能同时为空")
+            return self.error(
+                "O novo nome de usuário e a nova senha não podem ficar vazios ao mesmo tempo"
+            )
 
         username_to_save = None
         if new_username is not None and new_username != "":
             if not isinstance(new_username, str) or len(new_username.strip()) < 3:
-                return self.error("用户名长度至少3位")
+                return self.error("O nome de usuário deve ter pelo menos 3 caracteres")
             username_to_save = new_username.strip()
 
         if new_pwd:
             if not isinstance(new_pwd, str):
-                return self.error("新密码无效")
+                return self.error("Nova senha inválida")
             confirm_pwd = post_data.get("confirm_password", None)
             if not isinstance(confirm_pwd, str) or confirm_pwd != new_pwd:
-                return self.error("两次输入的新密码不一致")
+                return self.error("As novas senhas informadas não coincidem")
             try:
                 validate_dashboard_password(new_pwd)
             except ValueError as exc:

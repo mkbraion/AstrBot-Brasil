@@ -49,9 +49,11 @@ def _ok_result(result):
 
 def _safe_backup_filename(filename: str | None) -> str:
     if not filename:
-        raise BackupServiceError("缺少参数 filename")
+        raise BackupServiceError("Parâmetro filename ausente")
     if ".." in filename or "/" in filename or "\\" in filename:
-        raise BackupServiceError("文件名包含非法路径字符")
+        raise BackupServiceError(
+            "O nome do arquivo contém caracteres de caminho inválidos"
+        )
     return filename
 
 
@@ -101,7 +103,7 @@ def _download_backup(
         return error(str(exc))
     except Exception as exc:
         logger.error("下载备份失败: %s", exc, exc_info=True)
-        return error(f"下载备份失败: {exc!s}")
+        return error(f"Falha ao baixar o backup: {exc!s}")
 
 
 @router.get("/backups")
@@ -113,7 +115,7 @@ async def list_backups(
 ):
     return await _run(
         lambda: service.list_backups(page=page, page_size=page_size),
-        prefix="获取备份列表失败",
+        prefix="Falha ao obter a lista de backups",
     )
 
 
@@ -126,7 +128,7 @@ async def list_dashboard_backups(
 ):
     return await _run(
         lambda: service.list_backups(page=page, page_size=page_size),
-        prefix="获取备份列表失败",
+        prefix="Falha ao obter a lista de backups",
     )
 
 
@@ -135,7 +137,7 @@ async def create_backup(
     _auth: AuthContext = Depends(require_system_scope),
     service: BackupService = Depends(get_service),
 ):
-    return await _run(service.export_backup, prefix="创建备份失败")
+    return await _run(service.export_backup, prefix="Falha ao criar o backup")
 
 
 @legacy_router.post("/export")
@@ -143,7 +145,7 @@ async def export_dashboard_backup(
     _username: str = Depends(require_dashboard_user),
     service: BackupService = Depends(get_service),
 ):
-    return await _run(service.export_backup, prefix="创建备份失败")
+    return await _run(service.export_backup, prefix="Falha ao criar o backup")
 
 
 @router.post("/backups/upload")
@@ -154,7 +156,7 @@ async def upload_backup(
 ):
     return await _run(
         lambda: service.upload_backup(UploadFileAdapter(file)),
-        prefix="上传备份文件失败",
+        prefix="Falha ao enviar o arquivo de backup",
     )
 
 
@@ -166,7 +168,7 @@ async def upload_dashboard_backup(
 ):
     return await _run(
         lambda: service.upload_backup(UploadFileAdapter(file)),
-        prefix="上传备份文件失败",
+        prefix="Falha ao enviar o arquivo de backup",
     )
 
 
@@ -178,7 +180,7 @@ async def init_backup_upload(
 ):
     return await _run(
         lambda: service.upload_init(_model_dict(payload), owner=auth.username),
-        prefix="初始化分片上传失败",
+        prefix="Falha ao iniciar o envio em partes",
     )
 
 
@@ -190,7 +192,7 @@ async def init_dashboard_backup_upload(
 ):
     return await _run(
         lambda: service.upload_init(_model_dict(payload), owner=username),
-        prefix="初始化分片上传失败",
+        prefix="Falha ao iniciar o envio em partes",
     )
 
 
@@ -209,7 +211,7 @@ async def upload_backup_chunk(
             chunk_file=UploadFileAdapter(chunk),
             owner=auth.username,
         ),
-        prefix="上传分片失败",
+        prefix="Falha ao enviar a parte",
     )
 
 
@@ -228,7 +230,7 @@ async def upload_dashboard_backup_chunk(
             chunk_file=UploadFileAdapter(chunk),
             owner=username,
         ),
-        prefix="上传分片失败",
+        prefix="Falha ao enviar a parte",
     )
 
 
@@ -240,7 +242,7 @@ async def complete_backup_upload(
 ):
     return await _run(
         lambda: service.upload_complete(_model_dict(payload), owner=auth.username),
-        prefix="完成分片上传失败",
+        prefix="Falha ao concluir o envio em partes",
     )
 
 
@@ -252,7 +254,7 @@ async def complete_dashboard_backup_upload(
 ):
     return await _run(
         lambda: service.upload_complete(_model_dict(payload), owner=username),
-        prefix="完成分片上传失败",
+        prefix="Falha ao concluir o envio em partes",
     )
 
 
@@ -264,7 +266,7 @@ async def abort_backup_upload(
 ):
     return await _run(
         lambda: service.upload_abort(_model_dict(payload), owner=auth.username),
-        prefix="取消上传失败",
+        prefix="Falha ao cancelar o envio",
     )
 
 
@@ -276,7 +278,7 @@ async def abort_dashboard_backup_upload(
 ):
     return await _run(
         lambda: service.upload_abort(_model_dict(payload), owner=username),
-        prefix="取消上传失败",
+        prefix="Falha ao cancelar o envio",
     )
 
 
@@ -288,7 +290,7 @@ async def status_backup_upload(
 ):
     return await _run(
         lambda: service.upload_status(_model_dict(payload), owner=auth.username),
-        prefix="查询上传状态失败",
+        prefix="Falha ao consultar o estado do envio",
     )
 
 
@@ -300,7 +302,7 @@ async def status_dashboard_backup_upload(
 ):
     return await _run(
         lambda: service.upload_status(_model_dict(payload), owner=username),
-        prefix="查询上传状态失败",
+        prefix="Falha ao consultar o estado do envio",
     )
 
 
@@ -310,7 +312,10 @@ async def get_backup_progress(
     _auth: AuthContext = Depends(require_system_scope),
     service: BackupService = Depends(get_service),
 ):
-    return await _run(lambda: service.get_progress(task_id), prefix="获取任务进度失败")
+    return await _run(
+        lambda: service.get_progress(task_id),
+        prefix="Falha ao obter o progresso da tarefa",
+    )
 
 
 @legacy_router.get("/progress")
@@ -321,7 +326,7 @@ async def get_dashboard_backup_progress(
 ):
     return await _run(
         lambda: service.get_progress(task_id),
-        prefix="获取任务进度失败",
+        prefix="Falha ao obter o progresso da tarefa",
     )
 
 
@@ -360,7 +365,7 @@ async def rename_backup(
         lambda: service.rename_backup(
             {"filename": _safe_backup_filename(filename), **_model_dict(payload)}
         ),
-        prefix="重命名备份失败",
+        prefix="Falha ao renomear o backup",
     )
 
 
@@ -373,7 +378,7 @@ async def rename_dashboard_backup(
 ):
     return await _run(
         lambda: service.rename_backup({"filename": filename, **_model_dict(payload)}),
-        prefix="重命名备份失败",
+        prefix="Falha ao renomear o backup",
     )
 
 
@@ -385,7 +390,7 @@ async def delete_backup(
 ):
     return await _run(
         lambda: service.delete_backup({"filename": _safe_backup_filename(filename)}),
-        prefix="删除备份失败",
+        prefix="Falha ao excluir o backup",
     )
 
 
@@ -399,7 +404,7 @@ async def delete_dashboard_backup(
     body = await _json_or_empty(request)
     return await _run(
         lambda: service.delete_backup({"filename": filename, **body}),
-        prefix="删除备份失败",
+        prefix="Falha ao excluir o backup",
     )
 
 
@@ -411,7 +416,7 @@ async def check_backup(
 ):
     return await _run(
         lambda: service.check_backup({"filename": _safe_backup_filename(filename)}),
-        prefix="预检查备份文件失败",
+        prefix="Falha na verificação prévia do backup",
     )
 
 
@@ -425,7 +430,7 @@ async def check_dashboard_backup(
     body = await _json_or_empty(request)
     return await _run(
         lambda: service.check_backup({"filename": filename, **body}),
-        prefix="预检查备份文件失败",
+        prefix="Falha na verificação prévia do backup",
     )
 
 
@@ -440,7 +445,7 @@ async def import_backup(
         lambda: service.import_backup(
             {"filename": _safe_backup_filename(filename), **_model_dict(payload)}
         ),
-        prefix="导入备份失败",
+        prefix="Falha ao importar o backup",
     )
 
 
@@ -454,5 +459,5 @@ async def import_dashboard_backup(
     body = await _json_or_empty(request)
     return await _run(
         lambda: service.import_backup({"filename": filename, **body}),
-        prefix="导入备份失败",
+        prefix="Falha ao importar o backup",
     )

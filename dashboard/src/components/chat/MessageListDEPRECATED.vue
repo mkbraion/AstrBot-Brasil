@@ -165,7 +165,7 @@
             <v-btn size="large" rounded="xl" @click="handleQuoteSelected" class="quote-btn"
                 :class="{ 'dark-mode': isDark }">
                 <v-icon left small>mdi-reply</v-icon>
-                引用
+                Citar
             </v-btn>
         </div>
     </div>
@@ -328,7 +328,7 @@ export default {
                                 });
                             }
                         } catch (e) {
-                            console.error('Failed to parse web search result:', e);
+                            console.error("Falha ao interpretar o resultado da busca na web:", e);
                         }
                     });
                 });
@@ -440,7 +440,7 @@ export default {
             if (content.length > 50) {
                 content = content.substring(0, 50) + '...';
             }
-            return content || '[媒体内容]';
+            return content || '[Conteúdo de mídia]';
         },
 
         // 滚动到指定消息
@@ -498,7 +498,7 @@ export default {
                 document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(url), 100);
             } catch (err) {
-                console.error('Download file failed:', err);
+                console.error("Falha ao baixar o arquivo:", err);
             } finally {
                 this.downloadingFiles.delete(file.attachment_id);
                 this.downloadingFiles = new Set(this.downloadingFiles);
@@ -581,13 +581,13 @@ export default {
             const imageCount = messageParts.filter(part => part?.type === 'image' && part.embedded_url).length;
             if (imageCount > 0) {
                 if (textToCopy) textToCopy += '\n\n';
-                textToCopy += `[包含 ${imageCount} 张图片]`;
+                textToCopy += `[Contém ${imageCount} imagens]`;
             }
 
             const hasAudio = messageParts.some(part => part?.type === 'record' && part.embedded_url);
             if (hasAudio) {
                 if (textToCopy) textToCopy += '\n\n';
-                textToCopy += '[包含音频内容]';
+                textToCopy += '[Contém áudio]';
             }
 
             return String(textToCopy || '').trim();
@@ -602,7 +602,7 @@ export default {
         // 复制bot消息到剪贴板
         async copyBotMessage(messageParts, messageIndex) {
             let textToCopy = this.buildCopyTextFromParts(messageParts);
-            if (!textToCopy) textToCopy = '[媒体内容]';
+            if (!textToCopy) textToCopy = '[Conteúdo de mídia]';
             await this.copyWithFeedback(textToCopy, messageIndex);
         },
 

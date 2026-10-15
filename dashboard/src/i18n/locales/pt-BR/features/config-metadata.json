@@ -1,26 +1,2099 @@
 {
   "ai_group": {
     "name": "IA",
-    "agent_runner": { "description": "Modo de execução do Agent", "hint": "Escolha como as conversas de IA serão executadas. Ao trocar o modo, a configuração passa a usar os padrões do novo tipo.", "provider_settings": { "enable": { "description": "Ativar", "hint": "Chave principal das conversas com IA" } }, "agent_runner": { "runner_type": { "description": "Modo de execução", "labels": ["Agent integrado", "Dify", "Coze", "Aplicação Alibaba Cloud Bailian", "DeerFlow"] } } },
-    "dify_runner": { "description": "Configuração do Dify", "agent_runner": { "config": { "dify_api_type": {"description":"Tipo de aplicação"}, "dify_api_key":{"description":"API Key"}, "dify_api_base":{"description":"URL base da API"}, "dify_workflow_output_key":{"description":"Variável de saída do workflow"}, "dify_query_input_key":{"description":"Variável de entrada do prompt"}, "variables":{"description":"Variáveis"}, "timeout":{"description":"Tempo limite (segundos)"}, "proxy":{"description":"URL do proxy"} } } },
-    "coze_runner": { "description": "Configuração do Coze", "agent_runner": { "config": { "coze_api_key":{"description":"API Key"}, "bot_id":{"description":"ID do bot"}, "coze_api_base":{"description":"URL base da API"}, "auto_save_history":{"description":"Deixar o Coze gerenciar o histórico"}, "timeout":{"description":"Tempo limite (segundos)"}, "proxy":{"description":"URL do proxy"} } } },
-    "dashscope_runner": { "description": "Configuração do Alibaba Cloud Bailian", "agent_runner": { "config": { "dashscope_app_type":{"description":"Tipo de aplicação"}, "dashscope_api_key":{"description":"API Key"}, "dashscope_app_id":{"description":"ID da aplicação"}, "rag_options":{"pipeline_ids":{"description":"IDs dos pipelines da base de conhecimento"},"file_ids":{"description":"IDs dos arquivos"},"output_reference":{"description":"Incluir referências"}}, "variables":{"description":"Variáveis"}, "timeout":{"description":"Tempo limite (segundos)"}, "proxy":{"description":"URL do proxy"} } } },
-    "deerflow_runner": { "description": "Configuração do DeerFlow", "agent_runner": { "config": { "deerflow_api_base":{"description":"URL base da API"},"deerflow_api_key":{"description":"API Key"},"deerflow_auth_header":{"description":"Header de autorização"},"deerflow_assistant_id":{"description":"ID do assistente"},"deerflow_model_name":{"description":"Sobrescrever nome do modelo"},"deerflow_thinking_enabled":{"description":"Ativar modo de raciocínio"},"deerflow_plan_mode":{"description":"Ativar modo de planejamento"},"deerflow_subagent_enabled":{"description":"Ativar subagentes"},"deerflow_max_concurrent_subagents":{"description":"Máximo de subagentes simultâneos"},"deerflow_recursion_limit":{"description":"Limite de recursão"},"timeout":{"description":"Tempo limite (segundos)"},"proxy":{"description":"URL do proxy"} } } },
-    "ai": { "description":"Modelo", "hint":"Configure os modelos de chat do Agent integrado e os modelos compartilhados de imagem e voz.", "agent_runner":{"config":{"model":{"provider_id":{"description":"Modelo de chat","hint":"Usa o primeiro modelo quando vazio"},"fallback_provider_ids":{"description":"Modelos alternativos","hint":"Tenta estes modelos em ordem quando o principal falhar."},"request_max_retries":{"description":"Tentativas em caso de erro","hint":"Máximo de tentativas para uma solicitação do modelo quando o erro permitir nova tentativa."}}}}, "provider_settings":{"default_image_caption_provider_id":{"description":"Modelo para descrição de imagens","hint":"Deixe vazio para desativar; útil quando o modelo principal não é multimodal"},"image_caption_prompt":{"description":"Prompt para descrição de imagem"}}, "provider_stt_settings":{"enable":{"description":"Reconhecimento de voz","hint":"Transcreve mensagens de voz para texto."},"provider_id":{"description":"Modelo padrão de fala para texto","hint":"Também é possível escolher um modelo STT específico por sessão usando /provider."}}, "provider_tts_settings":{"enable":{"description":"Respostas por voz","hint":"Converte respostas de texto em voz."},"provider_id":{"description":"Modelo padrão de texto para fala"},"trigger_probability":{"description":"Probabilidade de acionar TTS"}} },
-    "persona": { "description":"Persona", "hint":"Defina a persona padrão das conversas com IA.", "agent_runner":{"config":{"persona":{"persona_id":{"description":"Persona padrão"},"safety_mode":{"description":"Modo de segurança","hint":"Orienta o modelo para conteúdo seguro e reduz respostas sobre tópicos nocivos ou sensíveis."},"safety_mode_strategy":{"description":"Estratégia do modo de segurança","hint":"Escolha como o modo de segurança será aplicado."}}}} },
-    "knowledgebase": { "description":"Base de conhecimento", "hint":"Funciona como um cérebro externo do AstrBot.", "kb_names":{"description":"Lista de bases de conhecimento","hint":"Permite múltiplas seleções"}, "kb_fusion_top_k":{"description":"Quantidade de resultados após fusão","hint":"Número de resultados retornados após combinar buscas em várias bases"}, "kb_final_top_k":{"description":"Quantidade final de resultados","hint":"Quantidade de resultados enviados ao modelo. Valores maiores trazem mais contexto, mas podem introduzir ruído."}, "kb_agentic_mode":{"description":"Recuperação agentic da base","hint":"Transforma a consulta à base em uma ferramenta do LLM, permitindo que o modelo decida quando pesquisar. Exige suporte a function calling."} },
-    "websearch": { "description":"Pesquisa na web", "hint":"Permite que o AstrBot acesse a internet para obter informações atuais.", "provider_settings":{"web_search":{"description":"Ativar pesquisa na web"},"websearch_provider":{"description":"Provedor de pesquisa"},"websearch_tavily_key":{"description":"Tavily API Key","hint":"É possível adicionar várias chaves para rotação."},"websearch_bocha_key":{"description":"BoCha API Key","hint":"É possível adicionar várias chaves para rotação."},"websearch_brave_key":{"description":"Brave Search API Key","hint":"É possível adicionar várias chaves para rotação."},"websearch_firecrawl_key":{"description":"Firecrawl API Key","hint":"É possível adicionar várias chaves para rotação."},"web_search_link":{"description":"Exibir citações das fontes"},"websearch_exa_key":{"description":"Exa API Key","hint":"Permite várias chaves para rotação."},"websearch_anysearch_key":{"description":"AnySearch API Key","hint":"Deixe vazio para usar o modo anônimo quando disponível."}} },
-    "file_extract": { "description":"Extração de arquivos", "provider_settings":{"file_extract":{"enable":{"description":"Ativar extração de arquivos"},"provider":{"description":"Provedor de extração"},"moonshotai_api_key":{"description":"Moonshot AI API Key"}}} },
-    "agent_computer_use": { "description":"Acesso do Agent ao computador", "hint":"Permite que o AstrBot use o computador local ou um ambiente Sandbox para tarefas mais complexas.", "provider_settings":{"computer_use_runtime":{"description":"Runtime do Computer Use","hint":"Ambiente ao qual o Agent poderá ter acesso.","labels":["Nenhum ambiente","Máquina local","Sandbox de terceiros"]},"computer_use_local_permissions":{"description":"Políticas de permissão local"},"computer_use_require_admin":{"description":"Exigir administrador para Sandbox","hint":"Quando ativado, somente administradores do AstrBot podem usar recursos de Sandbox remoto."},"sandbox":{"booter":{"description":"Driver do ambiente Sandbox"},"shipyard_neo_endpoint":{"description":"Endpoint da API Shipyard Neo"},"shipyard_neo_access_token":{"description":"Access token do Shipyard Neo"},"shipyard_neo_profile":{"description":"Perfil do Shipyard Neo"},"shipyard_neo_ttl":{"description":"TTL do Sandbox Shipyard Neo"},"cua_image":{"description":"Imagem CUA"},"cua_os_type":{"description":"Sistema operacional CUA"},"cua_idle_timeout":{"description":"Tempo limite de inatividade CUA"},"cua_telemetry_enabled":{"description":"Telemetria CUA"},"cua_local":{"description":"Sandbox CUA local"},"cua_api_key":{"description":"CUA API Key"},"shipyard_endpoint":{"description":"Endpoint da API Shipyard"},"shipyard_access_token":{"description":"Access token do Shipyard"},"shipyard_ttl":{"description":"TTL da sessão Shipyard"},"shipyard_max_sessions":{"description":"Máximo de sessões Shipyard"}}}, "local_permissions":{"role":"Função","execution":"Permitir execução de código","network":"Permitir acesso à rede durante execução","filesystem":"Escopo de acesso a arquivos","scopes":{"workspace":"Workspace","host":"Ambiente inteiro"},"roles":{"member":"Membro","admin":"Administrador"},"modes":{"none":"Desativado"},"runtimeUnknown":"Informações do runtime indisponíveis.","memberWarning":"Membros possuem acesso à rede ou a arquivos em todo o ambiente."} },
-    "proactive_capability": { "description":"Agent proativo", "hint":"O AstrBot pode acordar, executar tarefas agendadas e entregar o resultado.", "provider_settings":{"proactive_capability":{"add_cron_tools":{"description":"Ativar","hint":"Disponibiliza ao Agent as ferramentas necessárias para criar e executar tarefas futuras."}}} },
-    "truncate_and_compress": { "description":"Estratégia de gerenciamento de contexto", "hint":"Gerencie truncamento e compressão de histórico.", "agent_runner":{"config":{"compression":{"max_turns":{"description":"Máximo de turnos antes da compressão"},"trim_turns":{"description":"Turnos descartados ao exceder o limite"},"overflow_strategy":{"description":"Tratamento do limite do histórico ou da janela de contexto","labels":["Truncar por turnos","Comprimir com LLM"]},"instruction":{"description":"Instrução de compressão do contexto"},"keep_recent_ratio":{"description":"Proporção de contexto recente preservada"},"provider_id":{"description":"Modelo usado para compressão"},"fallback_max_tokens":{"description":"Tamanho alternativo da janela de contexto"}}}} },
-    "others": { "description":"Outras configurações", "agent_runner":{"config":{"misc":{"max_steps":{"description":"Máximo de rodadas de chamadas de ferramentas"},"tool_schema_mode":{"description":"Modo do schema de ferramentas","labels":["Estilo Skills (duas etapas)","Schema completo"]},"tool_call_timeout":{"description":"Tempo limite da ferramenta (segundos)"},"sanitize_context_by_modalities":{"description":"Sanitizar histórico conforme modalidades"}}}}, "provider_settings":{"display_reasoning_text":{"description":"Exibir conteúdo de raciocínio"},"identifier":{"description":"Identificação do usuário","hint":"Inclui o ID do usuário no prompt."},"group_name_display":{"description":"Exibir nome do grupo"},"datetime_system_prompt":{"description":"Consciência de data e hora reais"},"show_tool_use_status":{"description":"Exibir informações das chamadas de ferramentas"},"show_tool_call_result":{"description":"Exibir resultado das ferramentas"},"buffer_intermediate_messages":{"description":"Agrupar mensagens intermediárias do Agent"},"streaming_response":{"description":"Resposta em tempo real"},"unsupported_streaming_strategy":{"description":"Plataformas sem suporte a streaming","labels":["Resposta segmentada em tempo real","Desativar streaming"]},"wake_prefix":{"description":"Prefixo adicional de ativação"},"prompt_prefix":{"description":"Prompt do usuário"},"reachability_check":{"description":"Verificar disponibilidade dos provedores"}},"provider_tts_settings":{"dual_output":{"description":"Enviar voz e texto quando TTS estiver ativo"}} }
+    "agent_runner": {
+      "description": "Modo de execução do Agent",
+      "hint": "Escolha como as conversas de IA serão executadas. Ao trocar o modo, a configuração passa a usar os padrões do novo tipo.",
+      "provider_settings": {
+        "enable": {
+          "description": "Ativar",
+          "hint": "Chave principal das conversas com IA"
+        }
+      },
+      "agent_runner": {
+        "runner_type": {
+          "description": "Modo de execução",
+          "labels": [
+            "Agent integrado",
+            "Dify",
+            "Coze",
+            "Aplicação Alibaba Cloud Bailian",
+            "DeerFlow"
+          ]
+        }
+      }
+    },
+    "dify_runner": {
+      "description": "Configuração do Dify",
+      "agent_runner": {
+        "config": {
+          "dify_api_type": {
+            "description": "Tipo de aplicação"
+          },
+          "dify_api_key": {
+            "description": "Chave de API"
+          },
+          "dify_api_base": {
+            "description": "URL base da API"
+          },
+          "dify_workflow_output_key": {
+            "description": "Variável de saída do workflow"
+          },
+          "dify_query_input_key": {
+            "description": "Variável de entrada do prompt"
+          },
+          "variables": {
+            "description": "Variáveis"
+          },
+          "timeout": {
+            "description": "Tempo limite (segundos)"
+          },
+          "proxy": {
+            "description": "URL do proxy"
+          }
+        }
+      }
+    },
+    "coze_runner": {
+      "description": "Configuração do Coze",
+      "agent_runner": {
+        "config": {
+          "coze_api_key": {
+            "description": "Chave de API"
+          },
+          "bot_id": {
+            "description": "ID do bot"
+          },
+          "coze_api_base": {
+            "description": "URL base da API"
+          },
+          "auto_save_history": {
+            "description": "Deixar o Coze gerenciar o histórico"
+          },
+          "timeout": {
+            "description": "Tempo limite (segundos)"
+          },
+          "proxy": {
+            "description": "URL do proxy"
+          }
+        }
+      }
+    },
+    "dashscope_runner": {
+      "description": "Configuração do Alibaba Cloud Bailian",
+      "agent_runner": {
+        "config": {
+          "dashscope_app_type": {
+            "description": "Tipo de aplicação"
+          },
+          "dashscope_api_key": {
+            "description": "Chave de API"
+          },
+          "dashscope_app_id": {
+            "description": "ID da aplicação"
+          },
+          "rag_options": {
+            "pipeline_ids": {
+              "description": "IDs dos pipelines da base de conhecimento"
+            },
+            "file_ids": {
+              "description": "IDs dos arquivos"
+            },
+            "output_reference": {
+              "description": "Incluir referências"
+            }
+          },
+          "variables": {
+            "description": "Variáveis"
+          },
+          "timeout": {
+            "description": "Tempo limite (segundos)"
+          },
+          "proxy": {
+            "description": "URL do proxy"
+          }
+        }
+      }
+    },
+    "deerflow_runner": {
+      "description": "Configuração do DeerFlow",
+      "agent_runner": {
+        "config": {
+          "deerflow_api_base": {
+            "description": "URL base da API"
+          },
+          "deerflow_api_key": {
+            "description": "Chave de API"
+          },
+          "deerflow_auth_header": {
+            "description": "Header de autorização"
+          },
+          "deerflow_assistant_id": {
+            "description": "ID do assistente"
+          },
+          "deerflow_model_name": {
+            "description": "Sobrescrever nome do modelo"
+          },
+          "deerflow_thinking_enabled": {
+            "description": "Ativar modo de raciocínio"
+          },
+          "deerflow_plan_mode": {
+            "description": "Ativar modo de planejamento"
+          },
+          "deerflow_subagent_enabled": {
+            "description": "Ativar subagentes"
+          },
+          "deerflow_max_concurrent_subagents": {
+            "description": "Máximo de subagentes simultâneos"
+          },
+          "deerflow_recursion_limit": {
+            "description": "Limite de recursão"
+          },
+          "timeout": {
+            "description": "Tempo limite (segundos)"
+          },
+          "proxy": {
+            "description": "URL do proxy"
+          }
+        }
+      }
+    },
+    "ai": {
+      "description": "Modelo",
+      "hint": "Configure os modelos de chat do Agent integrado e os modelos compartilhados de imagem e voz.",
+      "agent_runner": {
+        "config": {
+          "model": {
+            "provider_id": {
+              "description": "Modelo de chat",
+              "hint": "Usa o primeiro modelo quando vazio"
+            },
+            "fallback_provider_ids": {
+              "description": "Modelos alternativos",
+              "hint": "Tenta estes modelos em ordem quando o principal falhar."
+            },
+            "request_max_retries": {
+              "description": "Tentativas em caso de erro",
+              "hint": "Máximo de tentativas para uma solicitação do modelo quando o erro permitir nova tentativa."
+            }
+          }
+        }
+      },
+      "provider_settings": {
+        "default_image_caption_provider_id": {
+          "description": "Modelo para descrição de imagens",
+          "hint": "Deixe vazio para desativar; útil quando o modelo principal não é multimodal"
+        },
+        "image_caption_prompt": {
+          "description": "Prompt para descrição de imagem"
+        }
+      },
+      "provider_stt_settings": {
+        "enable": {
+          "description": "Reconhecimento de voz",
+          "hint": "Transcreve mensagens de voz para texto."
+        },
+        "provider_id": {
+          "description": "Modelo padrão de fala para texto",
+          "hint": "Também é possível escolher um modelo STT específico por sessão usando /provider."
+        }
+      },
+      "provider_tts_settings": {
+        "enable": {
+          "description": "Respostas por voz",
+          "hint": "Converte respostas de texto em voz."
+        },
+        "provider_id": {
+          "description": "Modelo padrão de texto para fala"
+        },
+        "trigger_probability": {
+          "description": "Probabilidade de acionar TTS"
+        }
+      }
+    },
+    "persona": {
+      "description": "Persona",
+      "hint": "Defina a persona padrão das conversas com IA.",
+      "agent_runner": {
+        "config": {
+          "persona": {
+            "persona_id": {
+              "description": "Persona padrão"
+            },
+            "safety_mode": {
+              "description": "Modo de segurança",
+              "hint": "Orienta o modelo para conteúdo seguro e reduz respostas sobre tópicos nocivos ou sensíveis."
+            },
+            "safety_mode_strategy": {
+              "description": "Estratégia do modo de segurança",
+              "hint": "Escolha como o modo de segurança será aplicado."
+            }
+          }
+        }
+      }
+    },
+    "knowledgebase": {
+      "description": "Base de conhecimento",
+      "hint": "Funciona como um cérebro externo do AstrBot.",
+      "kb_names": {
+        "description": "Lista de bases de conhecimento",
+        "hint": "Permite múltiplas seleções"
+      },
+      "kb_fusion_top_k": {
+        "description": "Quantidade de resultados após fusão",
+        "hint": "Número de resultados retornados após combinar buscas em várias bases"
+      },
+      "kb_final_top_k": {
+        "description": "Quantidade final de resultados",
+        "hint": "Quantidade de resultados enviados ao modelo. Valores maiores trazem mais contexto, mas podem introduzir ruído."
+      },
+      "kb_agentic_mode": {
+        "description": "Recuperação agentic da base",
+        "hint": "Transforma a consulta à base em uma ferramenta do LLM, permitindo que o modelo decida quando pesquisar. Exige suporte a function calling."
+      }
+    },
+    "websearch": {
+      "description": "Pesquisa na web",
+      "hint": "Permite que o AstrBot acesse a internet para obter informações atuais.",
+      "provider_settings": {
+        "web_search": {
+          "description": "Ativar pesquisa na web"
+        },
+        "websearch_provider": {
+          "description": "Provedor de pesquisa"
+        },
+        "websearch_tavily_key": {
+          "description": "Chave de API do Tavily",
+          "hint": "É possível adicionar várias chaves para rotação."
+        },
+        "websearch_bocha_key": {
+          "description": "Chave de API do BoCha",
+          "hint": "É possível adicionar várias chaves para rotação."
+        },
+        "websearch_brave_key": {
+          "description": "Chave de API do Brave Search",
+          "hint": "É possível adicionar várias chaves para rotação."
+        },
+        "websearch_firecrawl_key": {
+          "description": "Chave de API do Firecrawl",
+          "hint": "É possível adicionar várias chaves para rotação."
+        },
+        "web_search_link": {
+          "description": "Exibir citações das fontes"
+        },
+        "websearch_exa_key": {
+          "description": "Chave de API do Exa",
+          "hint": "Permite várias chaves para rotação."
+        },
+        "websearch_anysearch_key": {
+          "description": "Chave de API do AnySearch",
+          "hint": "Deixe vazio para usar o modo anônimo quando disponível."
+        },
+        "websearch_baidu_app_builder_key": {
+          "description": "Chave de API do Baidu Qianfan Smart Cloud APP Builder",
+          "hint": "Referência: [https://console.bce.baidu.com/iam/#/iam/apikey/list](https://console.bce.baidu.com/iam/#/iam/apikey/list)"
+        }
+      }
+    },
+    "file_extract": {
+      "description": "Extração de arquivos",
+      "provider_settings": {
+        "file_extract": {
+          "enable": {
+            "description": "Ativar extração de arquivos"
+          },
+          "provider": {
+            "description": "Provedor de extração"
+          },
+          "moonshotai_api_key": {
+            "description": "Chave de API do Moonshot AI"
+          }
+        }
+      }
+    },
+    "agent_computer_use": {
+      "description": "Acesso do Agent ao computador",
+      "hint": "Permite que o AstrBot use o computador local ou um ambiente Sandbox para tarefas mais complexas.",
+      "provider_settings": {
+        "computer_use_runtime": {
+          "description": "Runtime do Computer Use",
+          "hint": "Ambiente ao qual o Agent poderá ter acesso.",
+          "labels": [
+            "Nenhum ambiente",
+            "Máquina local",
+            "Sandbox de terceiros"
+          ]
+        },
+        "computer_use_local_permissions": {
+          "description": "Políticas de permissão local"
+        },
+        "computer_use_require_admin": {
+          "description": "Exigir administrador para Sandbox",
+          "hint": "Quando ativado, somente administradores do AstrBot podem usar recursos de Sandbox remoto."
+        },
+        "sandbox": {
+          "booter": {
+            "description": "Driver do ambiente Sandbox"
+          },
+          "shipyard_neo_endpoint": {
+            "description": "Endpoint da API Shipyard Neo",
+            "hint": "Endereço da API do Bay. Padrão: http://127.0.0.1:8114."
+          },
+          "shipyard_neo_access_token": {
+            "description": "Access token do Shipyard Neo",
+            "hint": "Chave de API do Bay (sk-bay-...). Deixe vazio para descobrir automaticamente em credentials.json."
+          },
+          "shipyard_neo_profile": {
+            "description": "Perfil do Shipyard Neo",
+            "hint": "Perfil do ambiente isolado do Shipyard Neo, por exemplo, python-default. Deixe vazio para selecionar automaticamente o perfil mais completo."
+          },
+          "shipyard_neo_ttl": {
+            "description": "TTL do Sandbox Shipyard Neo",
+            "hint": "Tempo de vida do ambiente isolado, em segundos."
+          },
+          "cua_image": {
+            "description": "Imagem CUA",
+            "hint": "Imagem ou tipo de sistema operacional do ambiente isolado CUA. Padrão: linux. Os valores aceitos dependem do SDK CUA instalado."
+          },
+          "cua_os_type": {
+            "description": "Sistema operacional CUA",
+            "hint": "Tipo de sistema operacional do ambiente isolado CUA. Padrão: linux."
+          },
+          "cua_idle_timeout": {
+            "description": "Tempo limite de inatividade CUA",
+            "hint": "Tempo limite de inatividade das sessões CUA, em segundos. Quando maior que 0, o AstrBot encerra o ambiente isolado após esse período de inatividade; 0 desativa o limite."
+          },
+          "cua_telemetry_enabled": {
+            "description": "Telemetria CUA",
+            "hint": "Permitir que o SDK CUA envie dados de telemetria. Desativado por padrão."
+          },
+          "cua_local": {
+            "description": "Sandbox CUA local",
+            "hint": "Preferir um ambiente isolado CUA local. Ativado por padrão para dispensar CUA_API_KEY para ambientes na nuvem. Desative para usar os ambientes CUA na nuvem."
+          },
+          "cua_api_key": {
+            "description": "Chave de API do CUA",
+            "hint": "Chave de API dos ambientes CUA na nuvem. Necessária apenas quando o ambiente local está desativado. Também pode ser informada pela variável de ambiente CUA_API_KEY."
+          },
+          "shipyard_endpoint": {
+            "description": "Endpoint da API Shipyard",
+            "hint": "Endereço de acesso à API do serviço Shipyard."
+          },
+          "shipyard_access_token": {
+            "description": "Access token do Shipyard",
+            "hint": "Token de acesso ao serviço Shipyard."
+          },
+          "shipyard_ttl": {
+            "description": "TTL da sessão Shipyard",
+            "hint": "Tempo de vida da sessão, em segundos."
+          },
+          "shipyard_max_sessions": {
+            "description": "Máximo de sessões Shipyard",
+            "hint": "Número máximo de sessões Shipyard que uma instância pode gerenciar."
+          }
+        }
+      },
+      "local_permissions": {
+        "role": "Função",
+        "execution": "Permitir execução de código",
+        "network": "Permitir acesso à rede durante execução",
+        "filesystem": "Escopo de acesso a arquivos",
+        "scopes": {
+          "workspace": "Área de trabalho",
+          "host": "Ambiente inteiro"
+        },
+        "roles": {
+          "member": "Membro",
+          "admin": "Administrador"
+        },
+        "modes": {
+          "none": "Desativado"
+        },
+        "runtimeUnknown": "Informações do runtime indisponíveis.",
+        "memberWarning": "Membros possuem acesso à rede ou a arquivos em todo o ambiente.",
+        "scopeHints": {
+          "none": "Acesso a arquivos não permitido",
+          "workspace": "Área de trabalho restrita, diretórios temporários e arquivos de habilidades.",
+          "workspaceUnsupported": "O acesso restrito aos arquivos da área de trabalho não está disponível nesta plataforma.",
+          "host": "Todos os arquivos do ambiente em que o AstrBot é executado."
+        },
+        "scopeDetails": {
+          "account": "1. O acesso se limita aos arquivos permitidos para a conta que executa o AstrBot.",
+          "docker": "2. Na implantação com Docker, apenas os arquivos do contêiner e os arquivos montados ficam acessíveis, e não todos os arquivos do host Docker."
+        },
+        "runtime": {
+          "os": "Sistema operacional",
+          "arch": "Arquitetura",
+          "sandbox": "Isolamento local",
+          "unavailableHint": "Falha ao iniciar o ambiente isolado, afetando a execução restrita de Shell/Python e a busca de arquivos na área de trabalho. Use o erro abaixo para verificar as políticas de segurança do sistema (como AppArmor e restrições de namespaces de usuário no Linux) ou as restrições do contêiner. Depois, reinicie o AstrBot para verificar novamente.",
+          "dialog": {
+            "intro": "Com Seatbelt no macOS ou bubblewrap (bwrap) no Linux, o AstrBot isola a execução do agente, restringindo o acesso a arquivos e à rede para os diferentes usuários do agente e aumentando a segurança.",
+            "startupError": "Ver erro de inicialização",
+            "documentation": "Ver documentação detalhada de configuração"
+          },
+          "close": "Fechar",
+          "setupHint": {
+            "missing": "Instale {dependency} para ativar todos os recursos de isolamento local.",
+            "unavailable": "Configure {backend} para ativar todos os recursos de isolamento local.",
+            "unsupported": "Saiba mais sobre o suporte a isolamento local."
+          },
+          "executionUnavailable": {
+            "missing": "{dependency} ausente; não é possível ativar a execução de código quando o escopo de acesso a arquivos é Área de trabalho.",
+            "unavailable": "Não foi possível iniciar {backend}; não é possível ativar a execução de código quando o escopo de acesso a arquivos é Área de trabalho.",
+            "unsupported": "Esta plataforma não oferece isolamento local; não é possível ativar a execução de código quando o escopo de acesso a arquivos é Área de trabalho."
+          },
+          "status": {
+            "detected": "{backend}",
+            "missing": "{dependency} ausente",
+            "unavailable": "{backend} — instalado, mas não foi possível iniciar",
+            "unsupported": "Não compatível"
+          }
+        }
+      }
+    },
+    "proactive_capability": {
+      "description": "Agent proativo",
+      "hint": "O AstrBot pode acordar, executar tarefas agendadas e entregar o resultado.",
+      "provider_settings": {
+        "proactive_capability": {
+          "add_cron_tools": {
+            "description": "Ativar",
+            "hint": "Disponibiliza ao Agent as ferramentas necessárias para criar e executar tarefas futuras."
+          }
+        }
+      }
+    },
+    "truncate_and_compress": {
+      "description": "Estratégia de gerenciamento de contexto",
+      "hint": "Gerencie truncamento e compressão de histórico.",
+      "agent_runner": {
+        "config": {
+          "compression": {
+            "max_turns": {
+              "description": "Máximo de turnos antes da compressão",
+              "hint": "O histórico persistente da conversa só é truncado ou comprimido pelo modelo conforme a estratégia abaixo após ultrapassar este número de turnos. Os contextos das requisições também são limitados por este valor antes do envio. -1 significa sem limite por turnos."
+            },
+            "trim_turns": {
+              "description": "Turnos descartados ao exceder o limite",
+              "hint": "Quando o histórico ultrapassa o limite de turnos antes da compressão e a compressão pelo modelo não está disponível, descarta este número de turnos mais antigos de uma vez. O truncamento das requisições também usa este valor."
+            },
+            "overflow_strategy": {
+              "description": "Tratamento do limite do histórico ou da janela de contexto",
+              "labels": [
+                "Truncar por turnos",
+                "Comprimir com LLM"
+              ],
+              "hint": "O histórico persistente usa esta estratégia somente após ultrapassar o limite de turnos antes da compressão. Antes de cada requisição, a mesma estratégia pode proteger o contexto em andamento quando o número de tokens se aproxima da janela do modelo."
+            },
+            "instruction": {
+              "description": "Instrução de compressão do contexto",
+              "hint": "Se ficar vazio, será usado o prompt padrão."
+            },
+            "keep_recent_ratio": {
+              "description": "Proporção de contexto recente preservada",
+              "hint": "Preserva o contexto recente exato conforme a proporção de tokens do contexto atual, de 0 a 0.3. O valor 0.15 preserva 15%; valores acima de 0 preservam pelo menos a rodada mais recente."
+            },
+            "provider_id": {
+              "description": "Modelo usado para compressão",
+              "hint": "Se ficar vazio, o modelo de conversa atual será usado para a compressão. Se ele estiver indisponível ou a compressão falhar, o AstrBot usará a estratégia de truncamento por turnos."
+            },
+            "fallback_max_tokens": {
+              "description": "Tamanho alternativo da janela de contexto",
+              "hint": "Quando max_context_tokens é 0 e o modelo não está nos metadados internos, usa este valor como tamanho da janela de contexto. Padrão: 128000."
+            }
+          }
+        }
+      }
+    },
+    "others": {
+      "description": "Outras configurações",
+      "agent_runner": {
+        "config": {
+          "misc": {
+            "max_steps": {
+              "description": "Máximo de rodadas de chamadas de ferramentas"
+            },
+            "tool_schema_mode": {
+              "description": "Modo do schema de ferramentas",
+              "labels": [
+                "Estilo Skills (duas etapas)",
+                "Schema completo"
+              ],
+              "hint": "O modo semelhante a Skills envia primeiro o nome e a descrição e consulta os parâmetros depois; o modo completo envia todo o esquema de uma vez."
+            },
+            "tool_call_timeout": {
+              "description": "Tempo limite da ferramenta (segundos)"
+            },
+            "sanitize_context_by_modalities": {
+              "description": "Sanitizar histórico conforme modalidades",
+              "hint": "Quando ativado, limpa os contextos antes de cada requisição ao modelo, removendo blocos de imagem e estruturas de chamadas de ferramentas incompatíveis com as modalidades do provedor atual (isso altera o que o modelo recebe)."
+            }
+          }
+        }
+      },
+      "provider_settings": {
+        "display_reasoning_text": {
+          "description": "Exibir conteúdo de raciocínio"
+        },
+        "identifier": {
+          "description": "Identificação do usuário",
+          "hint": "Inclui o ID do usuário no prompt."
+        },
+        "group_name_display": {
+          "description": "Exibir nome do grupo",
+          "hint": "Quando ativado, inclui o nome do grupo no prompt nas plataformas compatíveis (OneBot v11)."
+        },
+        "datetime_system_prompt": {
+          "description": "Consciência de data e hora reais",
+          "hint": "Quando ativado, acrescenta a hora atual ao prompt de sistema."
+        },
+        "show_tool_use_status": {
+          "description": "Exibir informações das chamadas de ferramentas"
+        },
+        "show_tool_call_result": {
+          "description": "Exibir resultado das ferramentas",
+          "hint": "Só funciona quando a exibição das informações das chamadas de ferramentas está ativada e mostra no máximo 70 caracteres."
+        },
+        "buffer_intermediate_messages": {
+          "description": "Agrupar mensagens intermediárias do Agent",
+          "hint": "Quando ativado, armazena o texto intermediário gerado por chamadas de ferramentas em várias etapas no modo sem streaming e o envia como uma resposta única quando o agente termina."
+        },
+        "streaming_response": {
+          "description": "Resposta em tempo real"
+        },
+        "unsupported_streaming_strategy": {
+          "description": "Plataformas sem suporte a streaming",
+          "labels": [
+            "Resposta segmentada em tempo real",
+            "Desativar streaming"
+          ],
+          "hint": "Selecione como lidar com plataformas que não oferecem respostas em streaming. A resposta segmentada em tempo real envia o conteúdo assim que o sistema detecta pontos de divisão, como pontuação, durante o recebimento."
+        },
+        "wake_prefix": {
+          "description": "Prefixo adicional de ativação",
+          "hint": "Se o prefixo de ativação for / e o prefixo adicional de conversa for chat, será necessário usar /chat para acionar requisições ao modelo."
+        },
+        "prompt_prefix": {
+          "description": "Prompt do usuário",
+          "hint": "Use {{prompt}} como marcador da entrada do usuário. Sem esse marcador, o texto será adicionado antes da entrada do usuário."
+        },
+        "reachability_check": {
+          "description": "Verificar disponibilidade dos provedores",
+          "hint": "Ao executar o comando /provider, testa a conectividade dos provedores em paralelo. Isso consulta os modelos ativamente e pode consumir tokens adicionais."
+        },
+        "max_quoted_fallback_images": {
+          "description": "Limite de imagens encaminhadas",
+          "hint": "Número máximo de imagens inseridas pela análise de mensagens encaminhadas; imagens excedentes são descartadas."
+        },
+        "quoted_message_parser": {
+          "max_component_chain_depth": {
+            "description": "Profundidade de análise de texto formatado encaminhado",
+            "hint": "Profundidade máxima de recursão ao analisar cadeias de componentes de texto formatado em mensagens encaminhadas."
+          },
+          "max_forward_node_depth": {
+            "description": "Profundidade de análise de encaminhamentos aninhados",
+            "hint": "Profundidade máxima de recursão ao analisar nós de encaminhamento aninhados."
+          },
+          "max_forward_fetch": {
+            "description": "Limite de busca recursiva de encaminhamentos",
+            "hint": "Número máximo de operações recursivas get_forward_msg."
+          },
+          "warn_on_action_failure": {
+            "description": "Avisar sobre falha na análise de encaminhamentos",
+            "hint": "Quando ativado, registra avisos quando todas as tentativas de get_msg/get_forward_msg falham."
+          }
+        },
+        "image_compress_options": {
+          "description": "Configurações das imagens enviadas ao modelo",
+          "hint": "As imagens são sempre preparadas em JPEG/PNG com menos de 512 KiB. Os anexos originais são preservados.",
+          "max_size": {
+            "description": "Comprimento máximo da borda da imagem de entrada",
+            "hint": "Maior borda enviada ao modelo, em pixels. As imagens podem ser reduzidas ainda mais para ficar abaixo de 512 KiB; os caminhos dos anexos originais são preservados."
+          }
+        }
+      },
+      "provider_tts_settings": {
+        "dual_output": {
+          "description": "Enviar voz e texto quando TTS estiver ativo"
+        }
+      }
+    }
   },
-  "platform_group": { "name":"Plataformas e mensagens", "platform":{"description":"Adaptadores de plataformas","app_id":{"description":"ID da aplicação"},"app_secret":{"description":"Secret da aplicação","hint":"Mantenha esta credencial protegida."},"domain":{"description":"URL da API da plataforma"},"corpid":{"description":"ID da empresa"},"token":{"description":"Token de callback"},"encoding_aes_key":{"description":"Chave de criptografia das mensagens"},"api_base_url":{"description":"URL base da API"},"client_id":{"description":"Client ID"},"client_secret":{"description":"Client secret","hint":"Mantenha esta credencial protegida."},"start_message":{"description":"Resposta ao comando /start"},"telegram_api_base_url":{"description":"URL da API"},"telegram_file_base_url":{"description":"URL da API de arquivos"},"bot_token":{"description":"Slack Bot Token"},"app_token":{"description":"Slack App Token"},"signing_secret":{"description":"Slack Signing Secret"},"channel_access_token":{"description":"LINE Channel Access Token"},"channel_secret":{"description":"LINE Channel Secret"},"active_send_mode":{"description":"Usar API de envio proativo"},"appid":{"description":"App ID"},"callback_server_host":{"description":"Host do servidor de callback"},"card_template_id":{"description":"ID do template de cartão"},"discord_activity_name":{"description":"Nome da atividade no Discord"},"discord_allow_bot_messages":{"description":"Permitir mensagens de outros bots"},"discord_command_register":{"description":"Registrar slash commands no Discord"},"discord_proxy":{"description":"URL de proxy do Discord"},"discord_token":{"description":"Discord Bot Token"},"enable":{"description":"Ativar","hint":"Adaptadores desativados não recebem mensagens."},"id":{"description":"Nome do bot"},"is_sandbox":{"description":"Modo Sandbox"},"port":{"description":"Porta do servidor de callback"},"type":{"description":"Tipo de adaptador"},"unified_webhook_mode":{"description":"Modo Webhook unificado"},"use_markdown":{"description":"Usar Markdown em mensagens proativas"},"webhook_uuid":{"description":"UUID do Webhook"},"ws_reverse_host":{"description":"Host do WebSocket reverso"},"ws_reverse_port":{"description":"Porta do WebSocket reverso"},"ws_reverse_token":{"description":"Token do WebSocket reverso"},"telegram_token":{"description":"Bot Token"},"telegram_command_register":{"description":"Registrar comandos do Telegram"},"telegram_command_auto_refresh":{"description":"Atualizar comandos automaticamente"},"mattermost_url":{"description":"URL do Mattermost"},"mattermost_bot_token":{"description":"Mattermost Bot Token"},"wecom_ai_bot_name":{"description":"Nome do bot de IA do WeCom"},"msg_push_webhook_url":{"description":"URL do Webhook de envio de mensagens do WeCom"}}, "general":{"description":"Geral","platform_settings":{"unique_session":{"description":"Isolar conversa","hint":"Cada membro do grupo recebe um contexto separado quando a plataforma oferece suporte."},"friend_message_needs_wake_prefix":{"description":"Mensagens privadas exigem palavra de ativação"},"reply_prefix":{"description":"Prefixo das respostas"},"reply_with_mention":{"description":"Mencionar remetente na resposta"},"reply_with_quote":{"description":"Citar mensagem do remetente"},"forward_threshold":{"description":"Limite de tamanho para encaminhamento"},"empty_mention_waiting":{"description":"Aguardar após mensagem contendo apenas menção"}},"wake_prefix":{"description":"Palavra de ativação"},"disable_builtin_commands":{"description":"Desativar comandos internos"}}, "rate_limit":{"description":"Limite de requisições"}, "content_safety":{"description":"Segurança de conteúdo"}, "others":{"description":"Outras configurações"} },
-  "access_group": { "name":"Controle de acesso", "admins":{"description":"Administradores","admins_id":{"description":"IDs dos administradores","hint":"Envie /sid ao bot para descobrir o ID."}}, "whitelist":{"description":"Lista de permissões","platform_settings":{"enable_id_white_list":{"description":"Ativar lista de permissões","hint":"Quando ativada, apenas sessões cadastradas recebem resposta."},"id_whitelist":{"description":"IDs permitidos","hint":"Use /sid para obter o ID. Lista vazia desativa a restrição."},"id_whitelist_log":{"description":"Registrar mensagens bloqueadas"},"wl_ignore_admin_on_group":{"description":"Administradores ignoram a lista em grupos"},"wl_ignore_admin_on_friend":{"description":"Administradores ignoram a lista em chats privados"}}} },
-  "plugin_group": { "name":"Plugins", "plugin":{"description":"Plugins","plugin_set":{"description":"Plugins disponíveis","hint":"Todos os plugins não desativados ficam disponíveis por padrão."}} },
-  "ext_group": { "name":"Extras", "segmented_reply":{"description":"Resposta segmentada","platform_settings":{"segmented_reply":{"enable":{"description":"Ativar resposta segmentada"},"only_llm_result":{"description":"Segmentar apenas resultados do LLM"},"interval_method":{"description":"Método do intervalo"},"interval":{"description":"Intervalo aleatório"},"log_base":{"description":"Base logarítmica"},"words_count_threshold":{"description":"Limite de palavras para segmentação"},"split_mode":{"description":"Modo de divisão","labels":["Regex","Lista de palavras"]},"regex":{"description":"Expressão regular de segmentação"},"split_words":{"description":"Lista de palavras de divisão"},"content_cleanup_rule":{"description":"Regex para limpeza de conteúdo"}}}}, "ltm":{"description":"Contexto de chat em grupo","provider_ltm_settings":{"group_icl_enable":{"description":"Injetar mensagens do grupo no contexto"},"group_message_max_cnt":{"description":"Máximo de mensagens injetadas"},"image_caption":{"description":"Entender imagens automaticamente"},"image_caption_provider_id":{"description":"Modelo de descrição de imagens do grupo"},"group_message_history_enable":{"description":"Persistir mensagens do grupo"},"group_message_history_max_cnt":{"description":"Máximo de mensagens persistidas"},"active_reply":{"enable":{"description":"Resposta ativa"},"method":{"description":"Método de resposta ativa"},"possibility_reply":{"description":"Probabilidade de resposta"},"whitelist":{"description":"Lista permitida para resposta ativa"}}}}, "t2i":{"description":"Texto para imagem","t2i":{"description":"Saída texto para imagem"},"t2i_word_threshold":{"description":"Limite de palavras para texto para imagem"},"t2i_strategy":{"description":"Estratégia de texto para imagem"},"t2i_endpoint":{"description":"Endpoint da API de texto para imagem"},"t2i_template":{"description":"Template personalizado"},"t2i_active_template":{"description":"Template ativo"}} },
-  "system_group": { "name":"Sistema", "system":{"description":"Configurações do sistema","log_level":{"description":"Nível de log do console"},"log_file_enable":{"description":"Ativar log em arquivo"},"log_file_path":{"description":"Caminho do arquivo de log"},"log_file_max_mb":{"description":"Tamanho máximo do log (MB)"},"temp_dir_max_size":{"description":"Limite do diretório temporário (MB)"},"trace_log_enable":{"description":"Ativar arquivo de Trace"},"trace_log_path":{"description":"Caminho do arquivo de Trace"},"trace_log_max_mb":{"description":"Tamanho máximo do Trace (MB)"},"pip_install_arg":{"description":"Argumentos adicionais do pip"},"pypi_index_url":{"description":"URL do repositório PyPI"},"callback_api_base":{"description":"Endereço externo da API de callback"},"disable_metrics":{"description":"Desativar estatísticas anônimas","hint":"Quando ativado, o AstrBot não envia métricas anônimas de uso."},"timezone":{"description":"Fuso horário","hint":"Use um nome IANA, como America/Sao_Paulo. Se vazio, usa o fuso do sistema."},"http_proxy":{"description":"Proxy HTTP"},"no_proxy":{"description":"Endereços com conexão direta"},"dashboard":{"trust_proxy_headers":{"description":"Confiar em headers de proxy para o IP do cliente"},"auth_rate_limit":{"enable":{"description":"Ativar limite de tentativas de login"},"average_interval":{"description":"Intervalo médio entre tentativas (segundos)"},"max_burst":{"description":"Máximo de tentativas em sequência"}},"ssl":{"enable":{"description":"Ativar HTTPS na WebUI"},"cert_file":{"description":"Caminho do certificado SSL"},"key_file":{"description":"Caminho da chave privada SSL"},"ca_certs":{"description":"Caminho do certificado da CA"}},"totp":{"enable":{"description":"Ativar TOTP na WebUI"},"manage":"Gerenciar","configuration":"TOTP","statusPending":"Configuração necessária","statusEnabled":"Ativado","setupRequiredHint":"O TOTP está ativo, mas ainda precisa ser configurado.","setupTitle":"Configurar TOTP","setupSubtitle":"Escaneie o QR Code no autenticador e informe um código.","setupConfirm":"Verificar e continuar","rotateTitle":"Trocar segredo TOTP","rotate":"Trocar","rotateRecovery":"Gerar novo código de recuperação","rotateConfirm":"Confirmar troca","rotateCancel":"Cancelar","rotateCode":"Código de verificação","recoveryTitle":"Códigos de recuperação","recoveryWarning":"Guarde os códigos com segurança.","recoveryClose":"Concluir","disableTitle":"Desativar TOTP","disableCode":"Código de verificação","disableRecoveryCode":"Código de recuperação","disableConfirm":"Desativar","disableCancel":"Cancelar"}}} },
-  "provider_group": { "provider":{"api_key":{"description":"API Key"},"key":{"description":"API Key"},"id":{"description":"ID"},"type":{"description":"Categoria do provedor"},"provider_type":{"description":"Tipo de capacidade do provedor"},"enable":{"description":"Ativar"},"api_base":{"description":"URL base da API"},"proxy":{"description":"Endereço de proxy","hint":"Proxy HTTP/HTTPS aplicado apenas às solicitações deste provedor."},"model":{"description":"ID do modelo","hint":"Nome do modelo, por exemplo gpt-4o-mini ou deepseek-chat."},"max_context_tokens":{"description":"Tamanho da janela de contexto","hint":"Máximo de tokens de contexto. Use 0 para tentar detectar automaticamente pelos metadados do modelo."},"modalities":{"description":"Recursos do modelo","hint":"Modalidades suportadas pelo modelo.","labels":["Texto","Imagem","Áudio","Uso de ferramentas"]},"custom_headers":{"description":"Headers personalizados"},"custom_extra_body":{"description":"Parâmetros personalizados do corpo da requisição"},"embedding_dimensions":{"description":"Dimensões do embedding"},"embedding_model":{"description":"Modelo de embedding"},"embedding_api_key":{"description":"API Key"},"embedding_api_base":{"description":"URL base da API"},"rerank_api_base":{"description":"URL base da API do modelo de rerank"},"rerank_api_key":{"description":"API Key"},"rerank_model":{"description":"Nome do modelo de rerank"},"timeout":{"description":"Tempo limite","hint":"Tempo limite em segundos."},"variables":{"description":"Variáveis fixas do workflow"},"openai-tts-voice":{"description":"Voz"},"elevenlabs-tts-voice-id":{"description":"ID da voz"},"mimo-tts-voice":{"description":"Voz"},"mimo-tts-format":{"description":"Formato de saída"},"whisper_device":{"description":"Dispositivo de inferência"},"dify_api_key":{"description":"API Key"},"dify_api_base":{"description":"URL base da API"},"dify_api_type":{"description":"Tipo de aplicação Dify"},"coze_api_key":{"description":"Coze API Key"},"bot_id":{"description":"ID do bot"},"coze_api_base":{"description":"URL base da API"},"deerflow_api_base":{"description":"URL base da API"},"deerflow_api_key":{"description":"DeerFlow API Key"},"deerflow_auth_header":{"description":"Header de autorização"},"deerflow_assistant_id":{"description":"ID do assistente"},"auto_save_history":{"description":"Histórico gerenciado pelo Coze"}} },
-  "help": { "documentation":"Documentação", "support":"Suporte", "helpText":"Não entendeu alguma configuração? Consulte {documentation} ou {support}.", "helpPrefix":"Não entendeu alguma configuração? Consulte", "helpMiddle":"ou", "helpSuffix":"." }
+  "platform_group": {
+    "name": "Plataformas e mensagens",
+    "platform": {
+      "description": "Adaptadores de plataformas",
+      "app_id": {
+        "description": "ID da aplicação",
+        "hint": "ID do aplicativo no console de desenvolvedor da plataforma de mensagens."
+      },
+      "app_secret": {
+        "description": "Secret da aplicação",
+        "hint": "Mantenha esta credencial protegida."
+      },
+      "domain": {
+        "description": "URL da API da plataforma",
+        "hint": "URL base da API da plataforma aberta. Normalmente não é necessário alterar o padrão."
+      },
+      "corpid": {
+        "description": "ID da empresa",
+        "hint": "ID da empresa (CorpID) no console de administração do WeCom."
+      },
+      "token": {
+        "description": "Token de callback",
+        "hint": "Token usado para verificar requisições nas configurações de callback da plataforma de mensagens."
+      },
+      "encoding_aes_key": {
+        "description": "Chave de criptografia das mensagens",
+        "hint": "EncodingAESKey das configurações de callback, usada para criptografar e descriptografar mensagens."
+      },
+      "api_base_url": {
+        "description": "URL base da API",
+        "hint": "URL base da API da plataforma de mensagens. Normalmente não é necessário alterar o padrão."
+      },
+      "client_id": {
+        "description": "ID do cliente",
+        "hint": "ID do cliente no console de desenvolvedor da plataforma de mensagens."
+      },
+      "client_secret": {
+        "description": "Segredo do cliente",
+        "hint": "Mantenha esta credencial protegida."
+      },
+      "start_message": {
+        "description": "Resposta ao comando /start",
+        "hint": "Mensagem enviada quando o usuário usa o comando /start no bot do Telegram."
+      },
+      "telegram_api_base_url": {
+        "description": "URL da API",
+        "hint": "URL base da API de bots do Telegram. Normalmente não é necessário alterar o padrão oficial."
+      },
+      "telegram_file_base_url": {
+        "description": "URL da API de arquivos",
+        "hint": "URL base para baixar arquivos pela API de bots do Telegram. Normalmente não é necessário alterar o padrão oficial."
+      },
+      "bot_token": {
+        "description": "Token do bot do Slack",
+        "hint": "Bot User OAuth Token do aplicativo Slack, geralmente iniciado por xoxb-."
+      },
+      "app_token": {
+        "description": "Token do aplicativo Slack",
+        "hint": "Token de aplicativo usado pelo Socket Mode do Slack, geralmente iniciado por xapp-."
+      },
+      "signing_secret": {
+        "description": "Segredo de assinatura do Slack",
+        "hint": "Segredo de assinatura do aplicativo Slack, usado para verificar requisições de webhook."
+      },
+      "channel_access_token": {
+        "description": "Token de acesso ao canal do LINE",
+        "hint": "Token de acesso do canal da API de mensagens do LINE."
+      },
+      "channel_secret": {
+        "description": "Segredo do canal do LINE",
+        "hint": "Segredo do canal da API de mensagens do LINE."
+      },
+      "active_send_mode": {
+        "description": "Usar API de envio proativo"
+      },
+      "appid": {
+        "description": "ID do aplicativo",
+        "hint": "Obrigatório. ID do aplicativo da plataforma de mensagens atual. Consulte a documentação de integração para saber como obtê-lo."
+      },
+      "callback_server_host": {
+        "description": "Host do servidor de callback",
+        "hint": "Host do servidor de callback. Deixe vazio para desativar o servidor."
+      },
+      "card_template_id": {
+        "description": "ID do template de cartão",
+        "hint": "Opcional. ID do modelo de cartão interativo do DingTalk. Quando ativado, as respostas em streaming usam cartões interativos."
+      },
+      "discord_activity_name": {
+        "description": "Nome da atividade no Discord",
+        "hint": "Nome opcional da atividade no Discord. Deixe vazio para desativar."
+      },
+      "discord_allow_bot_messages": {
+        "description": "Permitir mensagens de outros bots",
+        "hint": "Quando ativado, o AstrBot recebe mensagens de outros bots do Discord. Útil para comunicação entre bots, como encaminhamento de mensagens. Desativado por padrão."
+      },
+      "discord_command_register": {
+        "description": "Registrar slash commands no Discord",
+        "hint": "Quando ativado, o AstrBot registra automaticamente os comandos dos plugins como comandos de barra do Discord."
+      },
+      "discord_proxy": {
+        "description": "URL de proxy do Discord",
+        "hint": "URL de proxy opcional: http://ip:port"
+      },
+      "discord_token": {
+        "description": "Token do bot do Discord",
+        "hint": "Informe aqui o token do seu bot do Discord."
+      },
+      "enable": {
+        "description": "Ativar",
+        "hint": "Adaptadores desativados não recebem mensagens."
+      },
+      "id": {
+        "description": "Nome do bot",
+        "hint": "Nome do bot"
+      },
+      "is_sandbox": {
+        "description": "Modo Sandbox"
+      },
+      "port": {
+        "description": "Porta do servidor de callback",
+        "hint": "Porta do servidor de callback. Deixe vazio para desativar o servidor."
+      },
+      "type": {
+        "description": "Tipo de adaptador"
+      },
+      "unified_webhook_mode": {
+        "description": "Modo Webhook unificado",
+        "hint": "Quando ativado, usa a entrada unificada de webhook do AstrBot sem abrir uma porta separada. URL de callback: /api/v1/webhooks/platforms/{webhook_uuid}."
+      },
+      "use_markdown": {
+        "description": "Usar Markdown em mensagens proativas",
+        "hint": "Quando ativado, as mensagens proativas são enviadas em Markdown por padrão; uma chamada explícita de use_markdown() de um plugin tem prioridade sobre esta opção."
+      },
+      "webhook_uuid": {
+        "description": "UUID do Webhook",
+        "hint": "Identificador exclusivo do modo de webhook unificado, gerado ao criar a plataforma."
+      },
+      "ws_reverse_host": {
+        "description": "Host do WebSocket reverso",
+        "hint": "O AstrBot atua como servidor."
+      },
+      "ws_reverse_port": {
+        "description": "Porta do WebSocket reverso"
+      },
+      "ws_reverse_token": {
+        "description": "Token do WebSocket reverso",
+        "hint": "Token do WebSocket reverso. Se não for definido, a verificação de token será desativada."
+      },
+      "telegram_token": {
+        "description": "Token do bot",
+        "hint": "Se estiver na China continental, configure um proxy ou altere api_base em Outras configurações."
+      },
+      "telegram_command_register": {
+        "description": "Registrar comandos do Telegram",
+        "hint": "Quando ativado, o AstrBot registra automaticamente os comandos do Telegram."
+      },
+      "telegram_command_auto_refresh": {
+        "description": "Atualizar comandos automaticamente",
+        "hint": "Quando ativado, o AstrBot atualiza automaticamente os comandos do Telegram durante a execução. Esta opção sozinha não produz efeito."
+      },
+      "mattermost_url": {
+        "description": "URL do Mattermost",
+        "hint": "URL do serviço Mattermost, por exemplo, https://chat.example.com."
+      },
+      "mattermost_bot_token": {
+        "description": "Token do bot do Mattermost",
+        "hint": "Token de acesso gerado após criar uma conta de bot no Mattermost."
+      },
+      "wecom_ai_bot_name": {
+        "description": "Nome do bot de IA do WeCom",
+        "hint": "Deve estar correto; caso contrário, alguns comandos não funcionarão."
+      },
+      "msg_push_webhook_url": {
+        "description": "URL do Webhook de envio de mensagens do WeCom",
+        "hint": "Usado para envio proativo de mensagens. A configuração é altamente recomendada para melhorar a experiência de envio."
+      },
+      "enable_group_c2c": {
+        "description": "Ativar conversas privadas da lista de mensagens",
+        "hint": "Quando ativado, o bot recebe conversas privadas da lista de mensagens do QQ. Talvez seja necessário adicionar o bot como amigo lendo um código QR na plataforma de bots do QQ. Consulte a documentação."
+      },
+      "enable_guild_direct_message": {
+        "description": "Ativar mensagens diretas do servidor",
+        "hint": "Quando ativado, o bot recebe mensagens diretas do servidor."
+      },
+      "kf_name": {
+        "description": "Nome da conta de atendimento do WeChat",
+        "hint": "Opcional. Nome da conta de atendimento (não o ID). Obtenha em https://kf.weixin.qq.com/kf/frame#/accounts"
+      },
+      "lark_connection_mode": {
+        "description": "Modo de assinatura",
+        "labels": [
+          "Conexão persistente",
+          "Servidor de webhook"
+        ]
+      },
+      "lark_encrypt_key": {
+        "description": "Chave de criptografia",
+        "hint": "Chave de criptografia para descriptografar dados de callback do Lark."
+      },
+      "lark_verification_token": {
+        "description": "Token de verificação",
+        "hint": "Token para verificar requisições de callback do Lark."
+      },
+      "misskey_allow_insecure_downloads": {
+        "description": "Permitir downloads inseguros (desativar verificação SSL)",
+        "hint": "Se os servidores remotos tiverem problemas de certificado, a verificação SSL será desativada como alternativa. Use apenas quando necessário devido aos riscos de segurança."
+      },
+      "misskey_default_visibility": {
+        "description": "Visibilidade padrão das publicações",
+        "hint": "Visibilidade padrão das publicações do bot. public: pública; home: linha do tempo inicial; followers: apenas seguidores."
+      },
+      "misskey_download_chunk_size": {
+        "description": "Tamanho dos blocos de download em streaming (bytes)",
+        "hint": "Bytes lidos por bloco durante o download em streaming e o cálculo de MD5. Valores muito baixos aumentam o custo de processamento; valores muito altos usam mais memória."
+      },
+      "misskey_download_timeout": {
+        "description": "Tempo limite de download remoto (segundos)",
+        "hint": "Tempo limite para baixar arquivos remotos, em segundos, usado na alternativa de envio local."
+      },
+      "misskey_enable_chat": {
+        "description": "Ativar respostas às mensagens de conversa",
+        "hint": "Quando ativado, o bot recebe e responde a mensagens de conversas privadas."
+      },
+      "misskey_enable_file_upload": {
+        "description": "Ativar envio de arquivos ao Misskey",
+        "hint": "Quando ativado, o adaptador envia os arquivos das cadeias de mensagens ao Misskey. Para arquivos por URL, tenta primeiro o envio pelo servidor; se o envio assíncrono falhar, baixa e envia o arquivo localmente."
+      },
+      "misskey_instance_url": {
+        "description": "URL da instância Misskey",
+        "hint": "Por exemplo, https://misskey.example. Instância Misskey que hospeda a conta do bot."
+      },
+      "misskey_local_only": {
+        "description": "Somente local (sem federação)",
+        "hint": "Quando ativado, as publicações do bot ficam visíveis apenas nesta instância e não são federadas."
+      },
+      "misskey_max_download_bytes": {
+        "description": "Tamanho máximo de download (bytes)",
+        "hint": "Defina o máximo de bytes para limitar o download e evitar falta de memória. Vazio ou null significa sem limite."
+      },
+      "misskey_token": {
+        "description": "Token de acesso ao Misskey",
+        "hint": "Token de acesso à API gerado nas configurações do serviço de conexão."
+      },
+      "misskey_upload_concurrency": {
+        "description": "Limite de envios simultâneos",
+        "hint": "Número máximo de tarefas de envio simultâneas (inteiro; padrão: 3)."
+      },
+      "misskey_upload_folder": {
+        "description": "ID da pasta de destino no Drive",
+        "hint": "Opcional: ID da pasta de destino no Drive do Misskey. Deixe vazio para usar a pasta raiz."
+      },
+      "satori_api_base_url": {
+        "description": "Endpoint da API do Satori",
+        "hint": "URL base da API do Satori."
+      },
+      "satori_auto_reconnect": {
+        "description": "Ativar reconexão automática",
+        "hint": "Reconecta automaticamente o WebSocket quando a conexão é perdida."
+      },
+      "satori_endpoint": {
+        "description": "Endpoint WebSocket do Satori",
+        "hint": "Endpoint WebSocket para eventos do Satori."
+      },
+      "satori_heartbeat_interval": {
+        "description": "Intervalo de verificação da conexão do Satori",
+        "hint": "Intervalo entre mensagens de verificação da conexão, em segundos."
+      },
+      "satori_reconnect_delay": {
+        "description": "Espera para reconexão do Satori",
+        "hint": "Espera antes de tentar reconectar, em segundos."
+      },
+      "satori_token": {
+        "description": "Token do Satori",
+        "hint": "Token de autenticação na API do Satori."
+      },
+      "secret": {
+        "description": "Segredo",
+        "hint": "Obrigatório."
+      },
+      "slack_connection_mode": {
+        "description": "Modo de conexão do Slack",
+        "hint": "Modo de conexão do Slack. `webhook` usa um servidor de webhook; `socket` usa o Socket Mode do Slack."
+      },
+      "slack_webhook_host": {
+        "description": "Host do webhook do Slack",
+        "hint": "Válido apenas quando o modo de conexão do Slack é `webhook`."
+      },
+      "slack_webhook_path": {
+        "description": "Caminho do webhook do Slack",
+        "hint": "Válido apenas quando o modo de conexão do Slack é `webhook`."
+      },
+      "slack_webhook_port": {
+        "description": "Porta do webhook do Slack",
+        "hint": "Válido apenas quando o modo de conexão do Slack é `webhook`."
+      },
+      "telegram_command_register_interval": {
+        "description": "Intervalo de atualização automática dos comandos",
+        "hint": "Intervalo de atualização automática dos comandos do Telegram, em segundos."
+      },
+      "telegram_polling_restart_delay": {
+        "description": "Espera para reiniciar a consulta de mensagens",
+        "hint": "Espera, em segundos, para reiniciar o ciclo de consulta após um encerramento inesperado. Padrão: 5 segundos."
+      },
+      "mattermost_reconnect_delay": {
+        "description": "Espera para reconexão do Mattermost",
+        "hint": "Espera, em segundos, antes de reconectar após a desconexão do WebSocket. Padrão: 5 segundos."
+      },
+      "wecom_ai_bot_connection_mode": {
+        "description": "Modo de conexão do bot de IA do WeCom",
+        "hint": "O modo webhook exige Token/EncodingAESKey; o modo long_connection exige BotID/Secret."
+      },
+      "wecomaibot_friend_message_welcome_text": {
+        "description": "Mensagem de boas-vindas em conversa privada do bot de IA do WeCom",
+        "hint": "Envia uma mensagem de boas-vindas quando um usuário entra em uma conversa privada naquele dia. Deixe vazio para desativar."
+      },
+      "wecomaibot_init_respond_text": {
+        "description": "Texto da resposta inicial do bot de IA do WeCom",
+        "hint": "Primeira resposta quando o bot recebe uma mensagem. Deixe vazio para desativar."
+      },
+      "wecomaibot_token": {
+        "description": "Token do bot de IA do WeCom",
+        "hint": "Usado para autenticação no modo de callback por webhook."
+      },
+      "wecomaibot_encoding_aes_key": {
+        "description": "EncodingAESKey do bot de IA do WeCom",
+        "hint": "Usada para criptografar e descriptografar mensagens no modo de callback por webhook."
+      },
+      "wecomaibot_ws_bot_id": {
+        "description": "BotID da conexão persistente",
+        "hint": "Credencial BotID do modo de conexão persistente do bot de IA do WeCom."
+      },
+      "wecomaibot_ws_secret": {
+        "description": "Segredo da conexão persistente",
+        "hint": "Credencial Secret do modo de conexão persistente do bot de IA do WeCom."
+      },
+      "wecomaibot_ws_url": {
+        "description": "URL WebSocket da conexão persistente",
+        "hint": "O padrão é wss://openws.work.weixin.qq.com e normalmente não precisa ser alterado."
+      },
+      "wecomaibot_heartbeat_interval": {
+        "description": "Intervalo de verificação da conexão persistente",
+        "hint": "Intervalo de verificação da conexão, em segundos, no modo persistente. Recomendado: 30 segundos."
+      },
+      "wpp_active_message_poll": {
+        "description": "Ativar consulta proativa de mensagens",
+        "hint": "Ative apenas se as mensagens do WeChat não estiverem sendo sincronizadas com o AstrBot a tempo. Desativado por padrão."
+      },
+      "wpp_active_message_poll_interval": {
+        "description": "Intervalo de consulta proativa de mensagens",
+        "hint": "Intervalo em segundos. Padrão: 3. Não deve ultrapassar 60, pois as mensagens podem ser consideradas antigas."
+      },
+      "only_use_webhook_url_to_send": {
+        "description": "Enviar respostas somente por webhook",
+        "hint": "Quando ativado, todas as respostas do bot de IA do WeCom são enviadas por msg_push_webhook_url. Esse webhook aceita mais tipos de mensagem, como imagens e arquivos. Se você não precisa do efeito de digitação, esta opção é altamente recomendada."
+      },
+      "weixin_oc_base_url": {
+        "description": "URL base da API",
+        "hint": "Padrão: https://ilinkai.weixin.qq.com"
+      },
+      "weixin_oc_bot_type": {
+        "description": "bot_type (parâmetro de login por QR)",
+        "hint": "Padrão: 3"
+      },
+      "weixin_oc_qr_poll_interval": {
+        "description": "Intervalo de consulta do status do QR (segundos)",
+        "hint": "Intervalo de consulta do status do código QR, em segundos."
+      },
+      "weixin_oc_long_poll_timeout_ms": {
+        "description": "Tempo limite da consulta longa de getUpdates (ms)",
+        "hint": "Parâmetro de tempo limite da consulta de mensagens."
+      },
+      "weixin_oc_api_timeout_ms": {
+        "description": "Tempo limite de HTTP (ms)",
+        "hint": "Tempo limite geral das requisições à API."
+      },
+      "weixin_oc_token": {
+        "description": "Token após o login (opcional)",
+        "hint": "Preenchido automaticamente após o login por QR; pode ser informado manualmente em cenários avançados."
+      },
+      "kook_bot_token": {
+        "description": "Token do bot",
+        "type": "string",
+        "hint": "Obrigatório. Token do bot obtido na plataforma de desenvolvedores do KOOK."
+      },
+      "kook_reconnect_delay": {
+        "description": "Espera para reconexão",
+        "type": "int",
+        "hint": "Espera para reconectar, em segundos, usando uma estratégia de espera exponencial."
+      },
+      "kook_max_reconnect_delay": {
+        "description": "Espera máxima para reconexão",
+        "type": "int",
+        "hint": "Valor máximo da espera para reconectar, em segundos."
+      },
+      "kook_max_retry_delay": {
+        "description": "Espera máxima entre tentativas",
+        "type": "int",
+        "hint": "Espera máxima entre tentativas, em segundos."
+      },
+      "kook_heartbeat_interval": {
+        "description": "Intervalo de verificação da conexão",
+        "type": "int",
+        "hint": "Intervalo entre verificações da conexão, em segundos."
+      },
+      "kook_heartbeat_timeout": {
+        "description": "Tempo limite de verificação da conexão",
+        "type": "int",
+        "hint": "Tempo limite da verificação da conexão, em segundos."
+      },
+      "kook_max_heartbeat_failures": {
+        "description": "Máximo de falhas na verificação da conexão",
+        "type": "int",
+        "hint": "Número máximo de falhas permitidas na verificação da conexão; a conexão será encerrada se for ultrapassado."
+      },
+      "kook_max_consecutive_failures": {
+        "description": "Máximo de falhas consecutivas",
+        "type": "int",
+        "hint": "Número máximo de falhas consecutivas permitidas; as tentativas serão interrompidas se for ultrapassado."
+      }
+    },
+    "general": {
+      "description": "Geral",
+      "platform_settings": {
+        "unique_session": {
+          "description": "Isolar conversa",
+          "hint": "Cada membro do grupo recebe um contexto separado quando a plataforma oferece suporte."
+        },
+        "friend_message_needs_wake_prefix": {
+          "description": "Mensagens privadas exigem palavra de ativação"
+        },
+        "reply_prefix": {
+          "description": "Prefixo das respostas"
+        },
+        "reply_with_mention": {
+          "description": "Mencionar remetente na resposta"
+        },
+        "reply_with_quote": {
+          "description": "Citar mensagem do remetente"
+        },
+        "forward_threshold": {
+          "description": "Limite de tamanho para encaminhamento"
+        },
+        "empty_mention_waiting": {
+          "description": "Aguardar após mensagem contendo apenas menção"
+        }
+      },
+      "wake_prefix": {
+        "description": "Palavra de ativação"
+      },
+      "disable_builtin_commands": {
+        "description": "Desativar comandos internos",
+        "hint": "Desativa todos os comandos internos do AstrBot, como help, sid, new e outros."
+      }
+    },
+    "rate_limit": {
+      "description": "Limite de requisições",
+      "platform_settings": {
+        "rate_limit": {
+          "time": {
+            "description": "Janela do limite de mensagens (segundos)"
+          },
+          "count": {
+            "description": "Quantidade limite de mensagens"
+          },
+          "strategy": {
+            "description": "Estratégia de limitação de mensagens"
+          }
+        }
+      }
+    },
+    "content_safety": {
+      "description": "Segurança de conteúdo",
+      "content_safety": {
+        "also_use_in_response": {
+          "description": "Verificar também o conteúdo das respostas do modelo"
+        },
+        "baidu_aip": {
+          "enable": {
+            "description": "Usar moderação de conteúdo do Baidu",
+            "hint": "É necessário instalar manualmente a biblioteca baidu-aip."
+          },
+          "app_id": {
+            "description": "ID do aplicativo"
+          },
+          "api_key": {
+            "description": "Chave de API"
+          },
+          "secret_key": {
+            "description": "Chave secreta"
+          }
+        },
+        "internal_keywords": {
+          "enable": {
+            "description": "Verificação de palavras-chave"
+          },
+          "extra_keywords": {
+            "description": "Palavras-chave adicionais",
+            "hint": "Lista adicional de palavras-chave bloqueadas. Aceita expressões regulares."
+          }
+        }
+      }
+    },
+    "others": {
+      "description": "Outras configurações",
+      "platform_settings": {
+        "ignore_bot_self_message": {
+          "description": "Ignorar mensagens do próprio bot"
+        },
+        "ignore_at_all": {
+          "description": "Ignorar eventos de menção a todos"
+        },
+        "no_permission_reply": {
+          "description": "Responder quando o usuário não tiver permissões suficientes"
+        }
+      },
+      "platform_specific": {
+        "lark": {
+          "pre_ack_emoji": {
+            "enable": {
+              "description": "[Lark] Ativar emoji de confirmação de recebimento"
+            },
+            "emojis": {
+              "description": "Lista de emojis (nomes enumerados do Lark)",
+              "hint": "Referência dos nomes enumerados de emojis: [https://open.feishu.cn/document/server-docs/im-v1/message-reaction/emojis-introduce](https://open.feishu.cn/document/server-docs/im-v1/message-reaction/emojis-introduce)"
+            }
+          }
+        },
+        "telegram": {
+          "pre_ack_emoji": {
+            "enable": {
+              "description": "[Telegram] Ativar emoji de confirmação de recebimento"
+            },
+            "emojis": {
+              "description": "Lista de emojis (Unicode)",
+              "hint": "O Telegram aceita apenas um conjunto fixo de reações. Referência: [https://gist.github.com/Soulter/3f22c8e5f9c7e152e967e8bc28c97fc9](https://gist.github.com/Soulter/3f22c8e5f9c7e152e967e8bc28c97fc9)"
+            }
+          }
+        },
+        "discord": {
+          "pre_ack_emoji": {
+            "enable": {
+              "description": "[Discord] Ativar emoji de confirmação de recebimento"
+            },
+            "emojis": {
+              "description": "Lista de emojis (Unicode ou nome de emoji personalizado)",
+              "hint": "Informe símbolos de emoji Unicode, por exemplo, 👍, 🤔, ⏳"
+            }
+          }
+        }
+      }
+    }
+  },
+  "access_group": {
+    "name": "Controle de acesso",
+    "admins": {
+      "description": "Administradores",
+      "admins_id": {
+        "description": "IDs dos administradores",
+        "hint": "Envie /sid ao bot para descobrir o ID."
+      }
+    },
+    "whitelist": {
+      "description": "Lista de permissões",
+      "platform_settings": {
+        "enable_id_white_list": {
+          "description": "Ativar lista de permissões",
+          "hint": "Quando ativada, apenas sessões cadastradas recebem resposta."
+        },
+        "id_whitelist": {
+          "description": "IDs permitidos",
+          "hint": "Use /sid para obter o ID. Lista vazia desativa a restrição."
+        },
+        "id_whitelist_log": {
+          "description": "Registrar mensagens bloqueadas",
+          "hint": "Registra mensagens que não passam pela verificação da lista de permissões."
+        },
+        "wl_ignore_admin_on_group": {
+          "description": "Administradores ignoram a lista em grupos"
+        },
+        "wl_ignore_admin_on_friend": {
+          "description": "Administradores ignoram a lista em chats privados"
+        }
+      }
+    }
+  },
+  "plugin_group": {
+    "name": "Plugins",
+    "plugin": {
+      "description": "Plugins",
+      "plugin_set": {
+        "description": "Plugins disponíveis",
+        "hint": "Todos os plugins não desativados ficam disponíveis por padrão."
+      }
+    }
+  },
+  "ext_group": {
+    "name": "Extras",
+    "segmented_reply": {
+      "description": "Resposta segmentada",
+      "platform_settings": {
+        "segmented_reply": {
+          "enable": {
+            "description": "Ativar resposta segmentada"
+          },
+          "only_llm_result": {
+            "description": "Segmentar apenas resultados do LLM"
+          },
+          "interval_method": {
+            "description": "Método do intervalo",
+            "hint": "O modo random usa uma espera aleatória. O modo log calcula a espera pelo tamanho da mensagem: $y=log_{log\\_base}(x)$, em que x é a quantidade de palavras e y é o tempo em segundos."
+          },
+          "interval": {
+            "description": "Intervalo aleatório",
+            "hint": "Formato: mínimo,máximo (por exemplo, 1.5,3.5)"
+          },
+          "log_base": {
+            "description": "Base logarítmica",
+            "hint": "Base dos intervalos logarítmicos. Padrão: 2.6. Faixa de valores: 1.0 a 10.0."
+          },
+          "words_count_threshold": {
+            "description": "Limite de palavras para segmentação",
+            "hint": "Limite de palavras para respostas segmentadas. Apenas mensagens com menos palavras que este limite serão segmentadas; mensagens maiores serão enviadas diretamente, sem divisão."
+          },
+          "split_mode": {
+            "description": "Modo de divisão",
+            "labels": [
+              "Regex",
+              "Lista de palavras"
+            ],
+            "hint": "Usado para segmentar mensagens. Por padrão, separa pela pontuação, como ponto final e interrogação. Por exemplo, `[。？！]` remove esses sinais. re.findall(r'<regex>', text)"
+          },
+          "regex": {
+            "description": "Expressão regular de segmentação",
+            "hint": "Usado para identificar pontos de divisão com uma expressão regular. Prefira padrões que correspondam a separadores."
+          },
+          "split_words": {
+            "description": "Lista de palavras de divisão",
+            "hint": "Divide ao detectar qualquer palavra da lista"
+          },
+          "content_cleanup_rule": {
+            "description": "Regex para limpeza de conteúdo",
+            "hint": "Remove o conteúdo especificado dos segmentos. Por exemplo, `[。?!]` remove todos esses sinais de pontuação."
+          }
+        }
+      }
+    },
+    "ltm": {
+      "description": "Contexto de chat em grupo",
+      "provider_ltm_settings": {
+        "group_icl_enable": {
+          "description": "Injetar mensagens do grupo no contexto"
+        },
+        "group_message_max_cnt": {
+          "description": "Máximo de mensagens injetadas"
+        },
+        "image_caption": {
+          "description": "Entender imagens automaticamente",
+          "hint": "Exige configurar um modelo de descrição de imagens para conversas em grupo."
+        },
+        "image_caption_provider_id": {
+          "description": "Modelo de descrição de imagens do grupo",
+          "hint": "Usado para compreender imagens inseridas dos registros de conversas em grupo, configurado separadamente do modelo padrão de descrição de imagens."
+        },
+        "group_message_history_enable": {
+          "description": "Persistir mensagens do grupo",
+          "hint": "Salva as mensagens do grupo e fornece ao modelo uma ferramenta para consultar o histórico do grupo atual. O conteúdo de mídia ainda não é persistido; mensagens de mídia são armazenadas como marcadores, como [Imagem]."
+        },
+        "group_message_history_max_cnt": {
+          "description": "Máximo de mensagens persistidas"
+        },
+        "active_reply": {
+          "enable": {
+            "description": "Resposta ativa"
+          },
+          "method": {
+            "description": "Método de resposta ativa"
+          },
+          "possibility_reply": {
+            "description": "Probabilidade de resposta",
+            "hint": "Valor entre 0.0 e 1.0"
+          },
+          "whitelist": {
+            "description": "Lista permitida para resposta ativa",
+            "hint": "A filtragem pela lista de permissões fica desativada quando ela está vazia. Use /sid para obter os IDs."
+          }
+        }
+      }
+    },
+    "t2i": {
+      "description": "Texto para imagem",
+      "t2i": {
+        "description": "Saída texto para imagem"
+      },
+      "t2i_word_threshold": {
+        "description": "Limite de palavras para texto para imagem"
+      },
+      "t2i_strategy": {
+        "description": "Estratégia de texto para imagem",
+        "hint": "Estratégia de conversão de texto em imagem. `remote` usa um serviço remoto de renderização HTML; `local` usa PIL para renderização local. No modo local, coloque uma fonte TTF chamada 'font.ttf' no diretório data/ para personalizar a fonte."
+      },
+      "t2i_endpoint": {
+        "description": "Endpoint da API de texto para imagem",
+        "hint": "Usa o serviço de API do AstrBot quando vazio"
+      },
+      "t2i_template": {
+        "description": "Template personalizado",
+        "hint": "Quando ativado, permite personalizar modelos HTML para converter texto em imagem."
+      },
+      "t2i_active_template": {
+        "description": "Template ativo",
+        "hint": "Este valor é mantido pela página de gerenciamento de modelos de texto em imagem."
+      }
+    }
+  },
+  "system_group": {
+    "name": "Sistema",
+    "system": {
+      "description": "Configurações do sistema",
+      "log_level": {
+        "description": "Nível de log do console",
+        "hint": "Nível de registro exibido no console."
+      },
+      "log_file_enable": {
+        "description": "Ativar log em arquivo",
+        "hint": "Grava os registros em um arquivo além de exibi-los no console."
+      },
+      "log_file_path": {
+        "description": "Caminho do arquivo de log",
+        "hint": "Caminhos relativos são resolvidos a partir do diretório data, por exemplo, logs/astrbot.log. Caminhos absolutos são aceitos."
+      },
+      "log_file_max_mb": {
+        "description": "Tamanho máximo do log (MB)",
+        "hint": "Rotaciona o arquivo quando ultrapassa este tamanho. Padrão: 20 MB."
+      },
+      "temp_dir_max_size": {
+        "description": "Limite do diretório temporário (MB)",
+        "hint": "Limita o tamanho total de data/temp, em MB. O sistema verifica a cada 10 minutos e, quando o limite é ultrapassado, exclui os arquivos mais antigos para liberar cerca de 30% do tamanho atual."
+      },
+      "trace_log_enable": {
+        "description": "Ativar arquivo de Trace",
+        "hint": "Grava eventos de rastreamento em um arquivo separado, sem alterar a saída do console."
+      },
+      "trace_log_path": {
+        "description": "Caminho do arquivo de Trace",
+        "hint": "Caminhos relativos são resolvidos a partir do diretório data, por exemplo, logs/astrbot.trace.log. Caminhos absolutos são aceitos."
+      },
+      "trace_log_max_mb": {
+        "description": "Tamanho máximo do Trace (MB)",
+        "hint": "Rotaciona o arquivo quando ultrapassa este tamanho. Padrão: 20 MB."
+      },
+      "pip_install_arg": {
+        "description": "Argumentos adicionais do pip",
+        "hint": "As dependências dos plugins são instaladas com o pip do Python. Informe argumentos adicionais aqui, como `--break-system-package`."
+      },
+      "pypi_index_url": {
+        "description": "URL do repositório PyPI",
+        "hint": "URL do repositório PyPI para instalar dependências Python. Padrão: [https://mirrors.aliyun.com/pypi/simple/](https://mirrors.aliyun.com/pypi/simple/)"
+      },
+      "callback_api_base": {
+        "description": "Endereço externo da API de callback",
+        "hint": "Serviços externos podem acessar o backend do AstrBot pelos links de callback que ele gera, como links de download. Como o AstrBot não consegue determinar automaticamente o endereço acessível externamente no ambiente de implantação, esta configuração informa como os serviços externos devem acessá-lo. Exemplos: [http://localhost:6185](http://localhost:6185), [https://example.com](https://example.com)."
+      },
+      "disable_metrics": {
+        "description": "Desativar estatísticas anônimas",
+        "hint": "Quando ativado, o AstrBot não envia métricas anônimas de uso."
+      },
+      "timezone": {
+        "description": "Fuso horário",
+        "hint": "Use um nome IANA, como America/Sao_Paulo. Se vazio, usa o fuso do sistema."
+      },
+      "http_proxy": {
+        "description": "Proxy HTTP",
+        "hint": "Quando ativado, o proxy será configurado por variáveis de ambiente. Formato: `http://ip:port`"
+      },
+      "no_proxy": {
+        "description": "Endereços com conexão direta"
+      },
+      "dashboard": {
+        "trust_proxy_headers": {
+          "description": "Confiar em headers de proxy para o IP do cliente",
+          "hint": "Quando desativado, ignora X-Forwarded-For/X-Real-IP e usa apenas o endereço da conexão."
+        },
+        "auth_rate_limit": {
+          "enable": {
+            "description": "Ativar limite de tentativas de login",
+            "hint": "Quando desativado, os endpoints de autenticação, como login e TOTP, não terão limite de requisições."
+          },
+          "average_interval": {
+            "description": "Intervalo médio entre tentativas (segundos)",
+            "hint": "Intervalo médio mínimo entre requisições de autenticação. Por exemplo, 1.0 permite no máximo uma requisição por segundo."
+          },
+          "max_burst": {
+            "description": "Máximo de tentativas em sequência",
+            "hint": "Número máximo de requisições consecutivas em uma rajada. Por exemplo, 3 permite até três requisições em uma sequência curta."
+          }
+        },
+        "ssl": {
+          "enable": {
+            "description": "Ativar HTTPS na WebUI",
+            "hint": "Quando ativado, a interface web é servida diretamente por HTTPS."
+          },
+          "cert_file": {
+            "description": "Caminho do certificado SSL",
+            "hint": "Caminho do certificado (PEM). Aceita caminhos absolutos e relativos ao diretório de trabalho atual."
+          },
+          "key_file": {
+            "description": "Caminho da chave privada SSL",
+            "hint": "Caminho da chave privada (PEM). Aceita caminhos absolutos e relativos ao diretório de trabalho atual."
+          },
+          "ca_certs": {
+            "description": "Caminho do certificado da CA",
+            "hint": "Opcional. Caminho do arquivo de certificados da autoridade certificadora (CA)."
+          }
+        },
+        "totp": {
+          "enable": {
+            "description": "Ativar TOTP na WebUI",
+            "hint": "Quando ativado, exige um código TOTP para entrar no painel."
+          },
+          "manage": "Gerenciar",
+          "configuration": "TOTP",
+          "statusPending": "Configuração necessária",
+          "statusEnabled": "Ativado",
+          "setupRequiredHint": "O TOTP está ativo, mas ainda precisa ser configurado.",
+          "setupTitle": "Configurar TOTP",
+          "setupSubtitle": "Escaneie o QR Code no autenticador e informe um código.",
+          "setupConfirm": "Verificar e continuar",
+          "rotateTitle": "Trocar segredo TOTP",
+          "rotate": "Trocar",
+          "rotateRecovery": "Gerar novo código de recuperação",
+          "rotateConfirm": "Confirmar troca",
+          "rotateCancel": "Cancelar",
+          "rotateCode": "Código de verificação",
+          "recoveryTitle": "Códigos de recuperação",
+          "recoveryWarning": "Guarde os códigos com segurança.",
+          "recoveryClose": "Concluir",
+          "disableTitle": "Desativar TOTP",
+          "disableCode": "Código de verificação",
+          "disableRecoveryCode": "Código de recuperação",
+          "disableConfirm": "Desativar",
+          "disableCancel": "Cancelar",
+          "activeSubtitle": "Use este código QR ou segredo para adicionar outro dispositivo autenticador.",
+          "rotateSubtitle": "Gere um novo segredo e informe um código do autenticador para confirmar a substituição.",
+          "rotateCodeHint": "Informe o código do aplicativo autenticador para confirmar a nova chave.",
+          "rotateError": "Código inválido. Tente novamente.",
+          "recoverySubtitle": "Este código de recuperação é exibido uma única vez. Salve-o antes de continuar.",
+          "recoveryAcknowledge": "Salvei meus códigos de recuperação",
+          "disableSubtitle": "Informe um código de verificação para desativar a autenticação de dois fatores.",
+          "disableRecoverySubtitle": "Informe um código de recuperação para desativar a autenticação de dois fatores.",
+          "disableError": "Falha na verificação. Tente novamente.",
+          "disableUseRecovery": "Não consegue usar o TOTP?",
+          "disableUseCode": "Usar código de verificação",
+          "configSaveTitle": "Verificação de dois fatores",
+          "configSaveSubtitle": "Informe um código de verificação para alterar configurações protegidas.",
+          "configSaveRotationHint": "Ao trocar as chaves TOTP, os códigos de verificação antigos e novos são aceitos, uma vez por operação de troca.",
+          "configSaveCode": "Código de verificação",
+          "configSaveConfirm": "Continuar",
+          "configSaveCancel": "Cancelar",
+          "configSaveError": "Falha na verificação. Tente novamente."
+        }
+      }
+    }
+  },
+  "provider_group": {
+    "provider": {
+      "api_key": {
+        "description": "Chave de API"
+      },
+      "key": {
+        "description": "Chave de API"
+      },
+      "id": {
+        "description": "ID"
+      },
+      "type": {
+        "description": "Categoria do provedor"
+      },
+      "provider_type": {
+        "description": "Tipo de capacidade do provedor"
+      },
+      "enable": {
+        "description": "Ativar"
+      },
+      "api_base": {
+        "description": "URL base da API"
+      },
+      "proxy": {
+        "description": "Endereço de proxy",
+        "hint": "Proxy HTTP/HTTPS aplicado apenas às solicitações deste provedor."
+      },
+      "model": {
+        "description": "ID do modelo",
+        "hint": "Nome do modelo, por exemplo gpt-4o-mini ou deepseek-chat."
+      },
+      "max_context_tokens": {
+        "description": "Tamanho da janela de contexto",
+        "hint": "Máximo de tokens de contexto. Use 0 para tentar detectar automaticamente pelos metadados do modelo."
+      },
+      "modalities": {
+        "description": "Recursos do modelo",
+        "hint": "Modalidades suportadas pelo modelo.",
+        "labels": [
+          "Texto",
+          "Imagem",
+          "Áudio",
+          "Uso de ferramentas"
+        ]
+      },
+      "custom_headers": {
+        "description": "Headers personalizados",
+        "hint": "Os pares de chave e valor adicionados aqui são mesclados em default_headers do SDK OpenAI para personalizar os cabeçalhos HTTP. Os valores devem ser textos."
+      },
+      "custom_extra_body": {
+        "description": "Parâmetros personalizados do corpo da requisição",
+        "hint": "Adicione parâmetros extras às requisições, como temperature, top_p e max_tokens.",
+        "template_schema": {
+          "temperature": {
+            "description": "Temperatura",
+            "hint": "Controla a aleatoriedade, geralmente de 0 a 2. Quanto maior, mais aleatório.",
+            "name": "Temperatura"
+          },
+          "top_p": {
+            "description": "Amostragem top-p",
+            "hint": "Parâmetro de amostragem por núcleo, geralmente de 0 a 1. Controla a massa de probabilidade considerada.",
+            "name": "Top-p"
+          },
+          "max_tokens": {
+            "description": "Máximo de tokens",
+            "hint": "Número máximo de tokens gerados.",
+            "name": "Máximo de tokens"
+          },
+          "reasoning_effort": {
+            "description": "Esforço de raciocínio",
+            "hint": "Controla o esforço dos modelos de raciocínio. Os valores aceitos dependem do modelo.",
+            "name": "Esforço de raciocínio"
+          }
+        }
+      },
+      "embedding_dimensions": {
+        "description": "Dimensões do embedding",
+        "hint": "Dimensões dos vetores de embeddings. Talvez seja necessário ajustar para cada modelo; consulte sua documentação. O valor precisa estar correto para o banco de dados vetorial funcionar."
+      },
+      "embedding_model": {
+        "description": "Modelo de embedding",
+        "hint": "Nome do modelo de embeddings."
+      },
+      "embedding_api_key": {
+        "description": "Chave de API"
+      },
+      "embedding_api_base": {
+        "description": "URL base da API"
+      },
+      "rerank_api_base": {
+        "description": "URL base da API do modelo de rerank",
+        "hint": "A URL completa da requisição combina a URL base com um sufixo de caminho (padrão: /v1/rerank)."
+      },
+      "rerank_api_key": {
+        "description": "Chave de API",
+        "hint": "Deixe vazio se nenhuma chave de API for necessária."
+      },
+      "rerank_model": {
+        "description": "Nome do modelo de rerank"
+      },
+      "timeout": {
+        "description": "Tempo limite",
+        "hint": "Tempo limite em segundos."
+      },
+      "variables": {
+        "description": "Variáveis fixas do workflow",
+        "hint": "Opcional. Variáveis fixas de entrada do fluxo de trabalho. Você também pode definir variáveis dinamicamente com /set durante a conversa. Em caso de conflito, as configurações dinâmicas têm prioridade."
+      },
+      "openai-tts-voice": {
+        "description": "Voz",
+        "hint": "Voz do OpenAI TTS. Padrões da OpenAI: 'alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'."
+      },
+      "elevenlabs-tts-voice-id": {
+        "description": "ID da voz",
+        "hint": "ID da voz do ElevenLabs. Consulte e copie os IDs em https://elevenlabs.io/app/voice-library. Padrão: 'JBFqnCBsd6RMkjVDRZzb' (George)."
+      },
+      "mimo-tts-voice": {
+        "description": "Voz",
+        "hint": "Nome da voz do MiMo TTS. Valores aceitos incluem 'mimo_default', 'default_en' e 'default_zh'."
+      },
+      "mimo-tts-format": {
+        "description": "Formato de saída",
+        "hint": "Formato de áudio gerado pelo MiMo TTS. Valores aceitos: 'wav', 'mp3' e 'pcm'."
+      },
+      "whisper_device": {
+        "description": "Dispositivo de inferência",
+        "hint": "Dispositivo de inferência do Whisper. Apple Silicon pode usar mps; outros ambientes devem usar cpu. Se mps estiver selecionado, mas indisponível, o AstrBot usará cpu."
+      },
+      "dify_api_key": {
+        "description": "Chave de API",
+        "hint": "Chave de API do Dify. Campo obrigatório."
+      },
+      "dify_api_base": {
+        "description": "URL base da API",
+        "hint": "URL base da API do Dify. Padrão: https://api.dify.ai/v1"
+      },
+      "dify_api_type": {
+        "description": "Tipo de aplicação Dify",
+        "hint": "Tipo de API do Dify. Conforme sua documentação, os tipos aceitos são chat, chatflow, agent e workflow."
+      },
+      "coze_api_key": {
+        "description": "Chave de API do Coze",
+        "hint": "Chave de API do Coze para acessar seus serviços."
+      },
+      "bot_id": {
+        "description": "ID do bot",
+        "hint": "ID do bot do Coze, obtido após criar um bot na plataforma Coze."
+      },
+      "coze_api_base": {
+        "description": "URL base da API",
+        "hint": "URL base da API do Coze. Padrão: https://api.coze.cn"
+      },
+      "deerflow_api_base": {
+        "description": "URL base da API",
+        "hint": "URL do gateway de API do DeerFlow. Padrão: http://127.0.0.1:2026"
+      },
+      "deerflow_api_key": {
+        "description": "Chave de API do DeerFlow",
+        "hint": "Opcional. Preencha se o gateway do DeerFlow estiver protegido por autenticação Bearer."
+      },
+      "deerflow_auth_header": {
+        "description": "Header de autorização",
+        "hint": "Opcional. Valor personalizado do cabeçalho Authorization; tem prioridade sobre a chave de API do DeerFlow."
+      },
+      "deerflow_assistant_id": {
+        "description": "ID do assistente",
+        "hint": "assistant_id do LangGraph. Padrão: lead_agent."
+      },
+      "auto_save_history": {
+        "description": "Histórico gerenciado pelo Coze",
+        "hint": "Quando ativado, o Coze gerencia o histórico de conversas. O contexto salvo localmente pelo AstrBot fica somente para leitura e suas operações não são aplicadas. Quando desativado, o AstrBot gerencia o contexto."
+      },
+      "dashscope_api_key": {
+        "description": "Chave de API do DashScope"
+      },
+      "gemini_tts_api_key": {
+        "description": "Chave de API do Gemini"
+      },
+      "genie_onnx_model_dir": {
+        "description": "Diretório do modelo ONNX",
+        "hint": "Caminho do diretório que contém os arquivos do modelo ONNX"
+      },
+      "genie_language": {
+        "description": "Idioma"
+      },
+      "xai_native_search": {
+        "description": "Ativar busca nativa",
+        "hint": "Quando ativado, usa a busca nativa Live Search do xAI Chat Completions para consultas na web, cobrada conforme o uso. Válido apenas para provedores xAI."
+      },
+      "rerank_api_suffix": {
+        "description": "Sufixo do caminho da URL da API",
+        "hint": "Caminho acrescentado a base_url, por exemplo, /v1/rerank. Deixe vazio para desativar a inclusão automática."
+      },
+      "return_documents": {
+        "description": "Retornar documentos de origem nos resultados de reclassificação",
+        "hint": "Desativado por padrão para reduzir o tráfego de rede."
+      },
+      "instruct": {
+        "description": "Descrição personalizada da tarefa de reclassificação",
+        "hint": "Válido apenas para modelos qwen3-rerank. Recomenda-se escrever em inglês."
+      },
+      "nvidia_rerank_api_base": {
+        "description": "URL base da API"
+      },
+      "nvidia_rerank_api_key": {
+        "description": "Chave de API"
+      },
+      "nvidia_rerank_model": {
+        "description": "Nome do modelo de reclassificação",
+        "hint": "Consulte a documentação da NVIDIA para obter o nome do modelo."
+      },
+      "nvidia_rerank_model_endpoint": {
+        "description": "Endpoint personalizado do modelo",
+        "hint": "Sufixo personalizado do endpoint. Padrão: /reranking."
+      },
+      "nvidia_rerank_truncate": {
+        "description": "Estratégia de truncamento de texto",
+        "hint": "Define se a entrada será truncada para caber no contexto máximo do modelo quando o texto for muito longo."
+      },
+      "tei_rerank_truncate": {
+        "description": "Truncar textos longos",
+        "hint": "Trunca automaticamente a entrada quando ela ultrapassa o contexto máximo do modelo. Quando ativado, exige definir a direção do truncamento."
+      },
+      "tei_rerank_truncation_direction": {
+        "description": "Direção do truncamento",
+        "hint": "Escolha truncar a partir da esquerda ou da direita do texto. Só funciona quando o truncamento de textos longos está ativado."
+      },
+      "tei_rerank_raw_scores": {
+        "description": "Retornar pontuações brutas",
+        "hint": "Quando ativado, retorna os logits brutos do modelo, que podem ser negativos, sem normalização sigmoide. Desativado por padrão."
+      },
+      "tei_rerank_return_text": {
+        "description": "Retornar o texto dos documentos nos resultados",
+        "hint": "Quando ativado, cada resultado inclui o texto original do documento. Desativado por padrão para reduzir o tráfego de rede."
+      },
+      "launch_model_if_not_running": {
+        "description": "Iniciar automaticamente o modelo se estiver parado",
+        "hint": "Se o modelo não estiver em execução no Xinference, tenta iniciá-lo automaticamente. Recomenda-se desativar em produção."
+      },
+      "ollama_disable_thinking": {
+        "description": "Desativar modo de raciocínio",
+        "hint": "Desativa o modo de raciocínio do Ollama."
+      },
+      "gpt_weights_path": {
+        "description": "Caminho do arquivo do modelo GPT",
+        "hint": "Arquivo .ckpt. Use um caminho absoluto sem aspas. Deixe vazio para usar o modelo SoVITS interno do GPT_SoVITS (recomenda-se alterar os padrões no GPT_SoVITS)."
+      },
+      "sovits_weights_path": {
+        "description": "Caminho do arquivo do modelo SoVITS",
+        "hint": "Arquivo .pth. Use um caminho absoluto sem aspas. Deixe vazio para usar o modelo SoVITS interno do GPT_SoVITS (recomenda-se alterar os padrões no GPT_SoVITS)."
+      },
+      "gsv_default_parms": {
+        "description": "Parâmetros padrão do GPT_SoVITS",
+        "hint": "O caminho do áudio de referência e seu texto são obrigatórios; os outros parâmetros são opcionais.",
+        "gsv_ref_audio_path": {
+          "description": "Caminho do áudio de referência",
+          "hint": "Obrigatório! Use um caminho absoluto sem aspas."
+        },
+        "gsv_prompt_text": {
+          "description": "Texto do áudio de referência",
+          "hint": "Obrigatório! Informe a transcrição do áudio de referência."
+        },
+        "gsv_prompt_lang": {
+          "description": "Idioma do texto do áudio de referência",
+          "hint": "Idioma do texto do áudio de referência. O padrão é chinês."
+        },
+        "gsv_aux_ref_audio_paths": {
+          "description": "Caminhos dos áudios de referência auxiliares",
+          "hint": "Arquivos de áudio de referência auxiliares; opcionais."
+        },
+        "gsv_text_lang": {
+          "description": "Idioma do texto",
+          "hint": "O padrão é chinês."
+        },
+        "gsv_top_k": {
+          "description": "Diversidade da fala",
+          "hint": ""
+        },
+        "gsv_top_p": {
+          "description": "Limiar de amostragem por núcleo",
+          "hint": ""
+        },
+        "gsv_temperature": {
+          "description": "Aleatoriedade da fala",
+          "hint": ""
+        },
+        "gsv_text_split_method": {
+          "description": "Método de divisão do texto",
+          "hint": "Opções: `cut0` sem divisão; `cut1` a cada 4 frases; `cut2` a cada 50 caracteres; `cut3` por ponto final chinês; `cut4` por ponto final ocidental; `cut5` pela pontuação."
+        },
+        "gsv_batch_size": {
+          "description": "Tamanho do lote",
+          "hint": ""
+        },
+        "gsv_batch_threshold": {
+          "description": "Limiar do lote",
+          "hint": ""
+        },
+        "gsv_split_bucket": {
+          "description": "Dividir texto em grupos para processamento paralelo",
+          "hint": ""
+        },
+        "gsv_speed_factor": {
+          "description": "Velocidade de reprodução da fala",
+          "hint": "1 é a velocidade original."
+        },
+        "gsv_fragment_interval": {
+          "description": "Intervalo entre segmentos de fala",
+          "hint": ""
+        },
+        "gsv_streaming_mode": {
+          "description": "Ativar modo de streaming",
+          "hint": ""
+        },
+        "gsv_seed": {
+          "description": "Semente aleatória",
+          "hint": "Para resultados reproduzíveis."
+        },
+        "gsv_parallel_infer": {
+          "description": "Executar inferência em paralelo",
+          "hint": ""
+        },
+        "gsv_repetition_penalty": {
+          "description": "Penalidade por repetição",
+          "hint": ""
+        },
+        "gsv_media_type": {
+          "description": "Tipo de mídia de saída",
+          "hint": "Recomendado: wav"
+        }
+      },
+      "embedding_dimensions_mode": {
+        "description": "Modo das dimensões dos embeddings",
+        "hint": "Controla o envio do parâmetro dimensions nas requisições de embeddings compatíveis com OpenAI. auto envia apenas para modelos oficiais OpenAI embedding-3; use always quando a API compatível aceitar o parâmetro, ou never quando ela o rejeitar."
+      },
+      "openai_embedding": {
+        "hint": "Se o teste falhar, tente adicionar /v1 ao final em algumas versões da API OpenAI."
+      },
+      "gemini_embedding": {
+        "hint": "Gemini Embedding dispensa adicionar /v1beta manualmente."
+      },
+      "dashscope_embedding": {
+        "hint": "Embeddings do Aliyun DashScope. URL base padrão: https://dashscope.aliyuncs.com/api/v1."
+      },
+      "volcengine_cluster": {
+        "description": "Cluster do Volcengine",
+        "hint": "Para modelos de clonagem de voz, escolha volcano_icl ou volcano_icl_concurr; o padrão é volcano_tts."
+      },
+      "volcengine_voice_type": {
+        "description": "Voz do Volcengine",
+        "hint": "Informe o ID da voz (Voice_type)."
+      },
+      "volcengine_speed_ratio": {
+        "description": "Velocidade da fala",
+        "hint": "Velocidade da fala, de 0.2 a 3.0. Padrão: 1.0."
+      },
+      "volcengine_volume_ratio": {
+        "description": "Volume",
+        "hint": "Volume, de 0.0 a 2.0. Padrão: 1.0."
+      },
+      "azure_tts_voice": {
+        "description": "Estilo da voz",
+        "hint": "Nome da voz na API"
+      },
+      "azure_tts_style": {
+        "description": "Estilo",
+        "hint": "Estilo de fala específico da voz. Pode expressar emoções como alegria, empatia e calma."
+      },
+      "azure_tts_role": {
+        "description": "Papel (opcional)",
+        "hint": "Interpretação de um papel na fala. A voz pode simular diferentes idades e gêneros sem mudar seu nome. Por exemplo, uma voz masculina pode elevar o tom para simular uma voz feminina. Se o papel estiver ausente ou não for compatível, este atributo será ignorado."
+      },
+      "azure_tts_rate": {
+        "description": "Velocidade da fala",
+        "hint": "Controla a velocidade da fala por palavra ou frase. Deve ficar entre 0.5 e 2 vezes a velocidade do áudio original."
+      },
+      "azure_tts_volume": {
+        "description": "Volume da fala",
+        "hint": "Controla o volume por frase. Use de 0.0 a 100.0 (do mais baixo ao mais alto, por exemplo, 75). Padrão: 100.0."
+      },
+      "azure_tts_region": {
+        "description": "Região da API",
+        "hint": "Região onde o Azure TTS processa os dados. Consulte https://learn.microsoft.com/zh-cn/azure/ai-services/speech-service/regions"
+      },
+      "azure_tts_subscription_key": {
+        "description": "Chave de assinatura do serviço",
+        "hint": "Chave de assinatura do Azure TTS, não um token."
+      },
+      "dashscope_tts_voice": {
+        "description": "Voz"
+      },
+      "gm_resp_image_modal": {
+        "description": "Ativar modalidade de imagem",
+        "hint": "Quando ativado, as respostas podem incluir imagens. O modelo precisa oferecer suporte ou ocorrerá um erro. Consulte os modelos compatíveis no site do Google Gemini. Dica: para gerar imagens, desative o reconhecimento de membros para obter melhores resultados."
+      },
+      "gm_native_search": {
+        "description": "Ativar busca nativa",
+        "hint": "Quando ativado, desativa todas as ferramentas de função. Consulte a documentação oficial para os limites da cota gratuita."
+      },
+      "gm_native_coderunner": {
+        "description": "Ativar execução nativa de código",
+        "hint": "Quando ativado, desativa todas as ferramentas de função."
+      },
+      "gm_url_context": {
+        "description": "Ativar contexto de URLs",
+        "hint": "Quando ativado, desativa todas as ferramentas de função."
+      },
+      "gm_safety_settings": {
+        "description": "Filtros de segurança",
+        "hint": "Define o nível de filtragem de segurança da entrada do modelo. Níveis: NONE (sem bloqueio), HIGH (bloquear alto risco), MEDIUM_AND_ABOVE (bloquear risco médio ou superior), LOW_AND_ABOVE (bloquear risco baixo ou superior). Consulte a documentação da API Gemini.",
+        "harassment": {
+          "description": "Assédio",
+          "hint": "Comentários negativos ou prejudiciais"
+        },
+        "hate_speech": {
+          "description": "Discurso de ódio",
+          "hint": "Conteúdo grosseiro, desrespeitoso ou profano"
+        },
+        "sexually_explicit": {
+          "description": "Conteúdo sexualmente explícito",
+          "hint": "Referências a atos sexuais ou outros conteúdos obscenos"
+        },
+        "dangerous_content": {
+          "description": "Conteúdo perigoso",
+          "hint": "Conteúdo que promove, incentiva ou auxilia comportamentos prejudiciais"
+        }
+      },
+      "gm_thinking_config": {
+        "description": "Configurações de raciocínio",
+        "budget": {
+          "description": "Orçamento de raciocínio",
+          "hint": "Orienta o modelo sobre o número de tokens de raciocínio a usar. Consulte https://ai.google.dev/gemini-api/docs/thinking#set-budget"
+        },
+        "level": {
+          "description": "Nível de raciocínio",
+          "hint": "Recomendado para modelos Gemini 3 e posteriores; permite controlar o comportamento de raciocínio. Consulte https://ai.google.dev/gemini-api/docs/thinking#thinking-levels"
+        }
+      },
+      "anth_thinking_config": {
+        "description": "Configurações de raciocínio",
+        "type": {
+          "description": "Tipo de raciocínio",
+          "hint": "Use 'adaptive' para Opus 4.6+ / Sonnet 4.6+ (recomendado). Deixe vazio para usar orçamento manual. Consulte https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking"
+        },
+        "budget": {
+          "description": "Orçamento de raciocínio",
+          "hint": "Parâmetro thinking.budget_tokens da Anthropic. Deve ser maior ou igual a 1024. Usado apenas quando type está vazio. Obsoleto no Opus 4.6 / Sonnet 4.6. Consulte https://platform.claude.com/docs/en/build-with-claude/extended-thinking"
+        },
+        "effort": {
+          "description": "Nível de esforço",
+          "hint": "Controla a profundidade do raciocínio quando type é 'adaptive'. 'high' é o padrão. 'max' só funciona no Opus 4.6. Consulte https://platform.claude.com/docs/en/build-with-claude/effort"
+        }
+      },
+      "minimax-group-id": {
+        "description": "Grupo de usuários",
+        "hint": "Disponível em Gerenciamento da conta -> Informações básicas."
+      },
+      "minimax-langboost": {
+        "description": "Idioma ou dialeto de destino",
+        "hint": "Melhora o reconhecimento dos idiomas ou dialetos especificados e o desempenho da fala nesses cenários."
+      },
+      "minimax-voice-speed": {
+        "description": "Velocidade da fala",
+        "hint": "Velocidade da fala sintetizada, de 0.5 a 2. Padrão: 1.0. Valores maiores aumentam a velocidade."
+      },
+      "minimax-voice-vol": {
+        "description": "Volume",
+        "hint": "Volume da síntese, maior que 0 e até 10. Padrão: 1.0. Valores maiores aumentam o volume."
+      },
+      "minimax-voice-pitch": {
+        "description": "Tom",
+        "hint": "Tom da síntese, de -12 a 12. Padrão: 0."
+      },
+      "minimax-is-timber-weight": {
+        "description": "Ativar mistura de vozes",
+        "hint": "Permite misturar até quatro vozes com pesos personalizados. Quando ativado, as configurações de voz única são ignoradas."
+      },
+      "minimax-timber-weight": {
+        "description": "Vozes misturadas",
+        "hint": "Vozes misturadas e seus pesos. Até quatro vozes, com pesos inteiros de 1 a 100. Obtenha predefinições e modelos no console oficial de testes da API TTS. Deve ser uma string JSON; confirme a interpretação no console. Consulte os padrões e a prévia oficial de código para a estrutura."
+      },
+      "minimax-voice-id": {
+        "description": "Voz única",
+        "hint": "ID da voz única; consulte a documentação oficial."
+      },
+      "minimax-voice-emotion": {
+        "description": "Emoção",
+        "hint": "Controla a emoção da fala sintetizada. Em auto, seleciona a emoção conforme o texto."
+      },
+      "minimax-voice-latex": {
+        "description": "Ler fórmulas LaTeX",
+        "hint": "Lê fórmulas LaTeX. O texto de entrada deve seguir o formato exigido pela documentação oficial."
+      },
+      "minimax-voice-english-normalization": {
+        "description": "Normalização de texto em inglês",
+        "hint": "Melhora a leitura de números, mas aumenta um pouco a latência."
+      },
+      "rag_options": {
+        "description": "Opções de RAG",
+        "hint": "Configurações opcionais de busca na base de conhecimento. Disponíveis apenas para aplicativos de agentes, incluindo RAG. Nos aplicativos Bailian, ativar esta opção desativa conversas de vários turnos.",
+        "pipeline_ids": {
+          "description": "Lista de IDs de bases de conhecimento",
+          "hint": "Busca todos os documentos nas bases de conhecimento especificadas. Acesse https://bailian.console.aliyun.com/ e vá a Aplicativos de dados -> Índice de conhecimento para criar e obter os IDs."
+        },
+        "file_ids": {
+          "description": "IDs de documentos não estruturados",
+          "hint": "Busca os documentos não estruturados especificados. Acesse https://bailian.console.aliyun.com/ e vá a Gerenciamento de dados para criar e obter os IDs."
+        },
+        "output_reference": {
+          "description": "Exibir referências de bases de conhecimento e documentos",
+          "hint": "Acrescenta as fontes de referência ao final de cada resposta. Desativado por padrão."
+        }
+      },
+      "sensevoice_hint": {
+        "description": "Implantar SenseVoice",
+        "hint": "Antes de ativar, instale funasr, funasr_onnx, torchaudio, torch, modelscope e jieba (CPU por padrão; download de cerca de 1 GB), além do ffmpeg. Sem isso, o reconhecimento de fala não funcionará."
+      },
+      "is_emotion": {
+        "description": "Reconhecimento de emoções",
+        "hint": "Ativa o reconhecimento de emoções: alegria, tristeza, raiva, neutralidade, medo, repulsa, surpresa ou desconhecida."
+      },
+      "stt_model": {
+        "description": "Nome do modelo",
+        "hint": "Nome do modelo no ModelScope. Padrão: iic/SenseVoiceSmall."
+      },
+      "dashscope_app_type": {
+        "description": "Tipo de aplicativo",
+        "hint": "Tipo de aplicativo do Bailian."
+      },
+      "elevenlabs-tts-output-format": {
+        "description": "Formato de saída",
+        "hint": "Formato do áudio de saída, como 'mp3_44100_128', 'mp3_22050_32', 'wav_44100' ou 'opus_48000_128'. Formatos brutos PCM/u-law/a-law não são aceitos. Padrão: 'mp3_44100_128'."
+      },
+      "elevenlabs-tts-stability": {
+        "description": "Estabilidade",
+        "hint": "Estabilidade da voz, de 0 a 1. Valores maiores geram mais consistência; menores, mais expressividade. Deixe vazio para usar o padrão do servidor."
+      },
+      "elevenlabs-tts-similarity-boost": {
+        "description": "Reforço de semelhança",
+        "hint": "Proximidade da saída com a voz original, de 0 a 1. Deixe vazio para usar o padrão do servidor."
+      },
+      "elevenlabs-tts-style": {
+        "description": "Intensidade do estilo",
+        "hint": "Intensidade do estilo da voz, de 0 a 1. Valores maiores aumentam a latência. Deixe vazio para usar o padrão do servidor."
+      },
+      "elevenlabs-tts-use-speaker-boost": {
+        "description": "Reforço do locutor",
+        "hint": "Aumenta a semelhança com o locutor original. Pode elevar um pouco a latência."
+      },
+      "mimo-tts-style-prompt": {
+        "description": "Prompt de estilo",
+        "hint": "Adicionado antes do texto a sintetizar em uma tag <style>...</style> para controlar velocidade, emoção, personagem ou estilo, como alegre, mais rápido, Sun Wukong ou sussurrando. Opcional."
+      },
+      "mimo-tts-dialect": {
+        "description": "Dialeto",
+        "hint": "Combinado com o prompt de estilo na tag inicial <style>...</style>, por exemplo, mandarim do nordeste, dialeto de Sichuan, dialeto de Henan ou cantonês. Opcional."
+      },
+      "mimo-tts-seed-text": {
+        "description": "Texto inicial de referência",
+        "hint": "Enviado como uma mensagem opcional do usuário para orientar o tom e o estilo de fala. Não é acrescentado ao texto a sintetizar."
+      },
+      "fishaudio-tts-character": {
+        "description": "Personagem",
+        "hint": "Personagem do Fish Audio TTS. O padrão é Klee. Mais opções: https://fish.audio/zh-CN/discovery"
+      },
+      "fishaudio-tts-reference-id": {
+        "description": "ID de referência",
+        "hint": "ID opcional do modelo de referência do Fish Audio TTS. Se definido, o ID é usado diretamente em vez de buscar pelo nome do personagem. Exemplo: 626bb6d3f3364c9cbc3aa6a67300a664. Mais modelos: https://fish.audio/zh-CN/discovery; abra a página de um modelo para copiar seu ID."
+      },
+      "whisper_hint": {
+        "description": "Notas sobre a implantação local do Whisper",
+        "hint": "Antes de ativar, instale a biblioteca openai-whisper (usuários NVIDIA baixam cerca de 2 GB, principalmente torch e CUDA; usuários de CPU, cerca de 1 GB), além do ffmpeg. Sem isso, o reconhecimento de fala não funcionará."
+      },
+      "dify_workflow_output_key": {
+        "description": "Nome da variável de saída do fluxo do Dify",
+        "hint": "Nome da variável de saída do fluxo do Dify. Usado apenas quando o tipo de aplicativo é workflow. Padrão: astrbot_wf_output."
+      },
+      "dify_query_input_key": {
+        "description": "Nome da variável de entrada do prompt",
+        "hint": "Nome da variável de entrada para o texto da mensagem. Padrão: astrbot_text_query."
+      },
+      "deerflow_model_name": {
+        "description": "Substituir nome do modelo",
+        "hint": "Opcional. Substitui o modelo padrão do DeerFlow (corresponde a model_name no contexto de execução)."
+      },
+      "deerflow_thinking_enabled": {
+        "description": "Ativar modo de raciocínio"
+      },
+      "deerflow_plan_mode": {
+        "description": "Ativar modo de planejamento",
+        "hint": "Corresponde a is_plan_mode do DeerFlow."
+      },
+      "deerflow_subagent_enabled": {
+        "description": "Ativar subagente",
+        "hint": "Corresponde a subagent_enabled do DeerFlow."
+      },
+      "deerflow_max_concurrent_subagents": {
+        "description": "Máximo de subagentes simultâneos",
+        "hint": "Corresponde a max_concurrent_subagents do DeerFlow. Só funciona quando o subagente está ativado. Padrão: 3."
+      },
+      "deerflow_recursion_limit": {
+        "description": "Limite de recursão",
+        "hint": "Corresponde a recursion_limit do LangGraph."
+      }
+    }
+  },
+  "help": {
+    "documentation": "Documentação",
+    "support": "Suporte",
+    "helpText": "Não entendeu alguma configuração? Consulte {documentation} ou {support}.",
+    "helpPrefix": "Não entendeu alguma configuração? Consulte",
+    "helpMiddle": "ou",
+    "helpSuffix": "."
+  }
 }

@@ -50,7 +50,7 @@ async def _json_or_empty(request: Request) -> dict[str, Any]:
 def _required_text(value: object, name: str) -> str:
     text = str(value or "").strip()
     if not text:
-        raise ValueError(f"Missing key: {name}")
+        raise ValueError(f"Chave ausente: {name}")
     return text
 
 
@@ -99,7 +99,7 @@ async def _download_skill(service: SkillsService, name: str):
         logger.error(str(exc), exc_info=True)
         raise HTTPException(
             status_code=500,
-            detail="Failed to prepare skill archive",
+            detail="Falha ao preparar o pacote da habilidade",
         ) from exc
 
 

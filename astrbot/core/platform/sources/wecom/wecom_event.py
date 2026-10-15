@@ -117,9 +117,13 @@ class WecomPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("image", f)
                         except Exception as e:
-                            logger.error(f"微信客服上传图片失败: {e}")
+                            logger.error(
+                                f"Falha ao enviar imagem ao atendimento do WeChat: {e}"
+                            )
                             await self.send(
-                                MessageChain().message(f"微信客服上传图片失败: {e}"),
+                                MessageChain().message(
+                                    f"Falha ao enviar imagem ao atendimento do WeChat: {e}"
+                                ),
                             )
                             return
                         logger.debug(f"微信客服上传图片返回: {response}")
@@ -137,10 +141,12 @@ class WecomPlatformEvent(AstrMessageEvent):
                             try:
                                 response = self.client.media.upload("voice", f)
                             except Exception as e:
-                                logger.error(f"微信客服上传语音失败: {e}")
+                                logger.error(
+                                    f"Falha ao enviar áudio ao atendimento do WeChat: {e}"
+                                )
                                 await self.send(
                                     MessageChain().message(
-                                        f"微信客服上传语音失败: {e}"
+                                        f"Falha ao enviar áudio ao atendimento do WeChat: {e}"
                                     ),
                                 )
                                 return
@@ -165,9 +171,13 @@ class WecomPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("file", f)
                         except Exception as e:
-                            logger.error(f"微信客服上传文件失败: {e}")
+                            logger.error(
+                                f"Falha ao enviar arquivo ao atendimento do WeChat: {e}"
+                            )
                             await self.send(
-                                MessageChain().message(f"微信客服上传文件失败: {e}"),
+                                MessageChain().message(
+                                    f"Falha ao enviar arquivo ao atendimento do WeChat: {e}"
+                                ),
                             )
                             return
                         logger.debug(f"微信客服上传文件返回: {response}")
@@ -183,9 +193,13 @@ class WecomPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("video", f)
                         except Exception as e:
-                            logger.error(f"微信客服上传视频失败: {e}")
+                            logger.error(
+                                f"Falha ao enviar vídeo ao atendimento do WeChat: {e}"
+                            )
                             await self.send(
-                                MessageChain().message(f"微信客服上传视频失败: {e}"),
+                                MessageChain().message(
+                                    f"Falha ao enviar vídeo ao atendimento do WeChat: {e}"
+                                ),
                             )
                             return
                         logger.debug(f"微信客服上传视频返回: {response}")
@@ -216,9 +230,11 @@ class WecomPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("image", f)
                         except Exception as e:
-                            logger.error(f"企业微信上传图片失败: {e}")
+                            logger.error(f"Falha ao enviar imagem ao WeCom: {e}")
                             await self.send(
-                                MessageChain().message(f"企业微信上传图片失败: {e}"),
+                                MessageChain().message(
+                                    f"Falha ao enviar imagem ao WeCom: {e}"
+                                ),
                             )
                             return
                         logger.debug(f"企业微信上传图片返回: {response}")
@@ -236,10 +252,10 @@ class WecomPlatformEvent(AstrMessageEvent):
                             try:
                                 response = self.client.media.upload("voice", f)
                             except Exception as e:
-                                logger.error(f"企业微信上传语音失败: {e}")
+                                logger.error(f"Falha ao enviar áudio ao WeCom: {e}")
                                 await self.send(
                                     MessageChain().message(
-                                        f"企业微信上传语音失败: {e}"
+                                        f"Falha ao enviar áudio ao WeCom: {e}"
                                     ),
                                 )
                                 return
@@ -264,9 +280,11 @@ class WecomPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("file", f)
                         except Exception as e:
-                            logger.error(f"企业微信上传文件失败: {e}")
+                            logger.error(f"Falha ao enviar arquivo ao WeCom: {e}")
                             await self.send(
-                                MessageChain().message(f"企业微信上传文件失败: {e}"),
+                                MessageChain().message(
+                                    f"Falha ao enviar arquivo ao WeCom: {e}"
+                                ),
                             )
                             return
                         logger.debug(f"企业微信上传文件返回: {response}")
@@ -282,9 +300,11 @@ class WecomPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("video", f)
                         except Exception as e:
-                            logger.error(f"企业微信上传视频失败: {e}")
+                            logger.error(f"Falha ao enviar vídeo ao WeCom: {e}")
                             await self.send(
-                                MessageChain().message(f"企业微信上传视频失败: {e}"),
+                                MessageChain().message(
+                                    f"Falha ao enviar vídeo ao WeCom: {e}"
+                                ),
                             )
                             return
                         logger.debug(f"企业微信上传视频返回: {response}")

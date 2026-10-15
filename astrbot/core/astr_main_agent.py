@@ -316,7 +316,7 @@ async def _get_session_conv(
         cid = await conv_mgr.new_conversation(umo, event.get_platform_id())
         conversation = await conv_mgr.get_conversation(umo, cid)
     if not conversation:
-        raise RuntimeError("无法创建新的对话。")
+        raise RuntimeError("Não foi possível criar uma conversa.")
     return conversation
 
 
@@ -373,7 +373,7 @@ async def _apply_file_extract(
     if not file_paths:
         return
     if not req.prompt:
-        req.prompt = "总结一下文件里面讲了什么？"
+        req.prompt = "Resuma o conteúdo deste arquivo."
     if config.file_extract_prov == "moonshotai":
         if not config.file_extract_msh_api_key:
             logger.error("Moonshot AI API key for file extract is not set")
@@ -1469,7 +1469,7 @@ async def collect_initial_request(
         if event.get_extra("provider_request"):
             req = event.get_extra("provider_request")
             assert isinstance(req, ProviderRequest), (
-                "provider_request 必须是 ProviderRequest 类型。"
+                "provider_request deve ser do tipo ProviderRequest."
             )
             req = copy.copy(req)
             req.image_urls = list(req.image_urls or [])

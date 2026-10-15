@@ -469,7 +469,7 @@ async function refreshStats(): Promise<void> {
     errorMessage.value = ''
     await Promise.all([fetchBaseStats(), fetchProviderStats()])
   } catch (error) {
-    console.error('Failed to load stats page data:', error)
+    console.error("Falha ao carregar as estatísticas:", error)
     errorMessage.value = t('errors.loadFailed')
   } finally {
     loading.value = false
@@ -707,7 +707,7 @@ watch(selectedRange, async () => {
   try {
     await Promise.all([fetchBaseStats(), fetchProviderStats()])
   } catch (error) {
-    console.error('Failed to refresh stats range:', error)
+    console.error("Falha ao atualizar o período das estatísticas:", error)
     errorMessage.value = t('errors.rangeFailed')
   }
 })

@@ -369,40 +369,40 @@
     <v-dialog v-model="showSyncMcpServerDialog" max-width="500px" persistent>
       <v-card>
         <v-card-title class="text-h3 pa-4 pb-0 pl-6">
-          <span>同步外部平台 MCP 服务器</span>
+          <span>Sincronizar servidores MCP de outra plataforma</span>
         </v-card-title>
 
         <v-card-text class="py-4">
           <v-select v-model="selectedMcpServerProvider" :items="mcpServerProviderList"
-            label="选择平台" variant="outlined" required></v-select>
+            label="Selecionar plataforma" variant="outlined" required></v-select>
           <div v-if="selectedMcpServerProvider === 'modelscope'">
             <v-timeline align="start" side="end">
               <v-timeline-item icon="mdi-numeric-1" icon-color="rgb(var(--v-theme-background))">
                 <div>
-                  <div class="text-h4">发现 MCP 服务器</div>
+                  <div class="text-h4">Descobrir servidores MCP</div>
                   <p class="mt-2">
-                    访问 <a href="https://www.modelscope.cn/mcp" target="_blank">ModelScope 平台</a> 浏览需要的 MCP 服务器。
+                    Acessar <a href="https://www.modelscope.cn/mcp" target="_blank">plataforma ModelScope</a> Procure os servidores MCP desejados.
                   </p>
                 </div>
               </v-timeline-item>
 
               <v-timeline-item icon="mdi-numeric-2" icon-color="rgb(var(--v-theme-background))">
                 <div>
-                  <div class="text-h4">获取访问令牌</div>
+                  <div class="text-h4">Obter token de acesso</div>
                   <p class="mt-2">
-                    从<a href="https://modelscope.cn/my/myaccesstoken" target="_blank">账户设置</a>中获取个人访问令牌。
+                    Em<a href="https://modelscope.cn/my/myaccesstoken" target="_blank">configurações da conta</a>obtenha seu token de acesso pessoal。
                   </p>
                 </div>
               </v-timeline-item>
 
               <v-timeline-item icon="mdi-numeric-3" icon-color="rgb(var(--v-theme-background))">
                 <div>
-                  <div class="text-h4">输入您的访问令牌</div>
+                  <div class="text-h4">Informe seu token de acesso</div>
                   <p class="mt-2">
-                    输入您的访问令牌以同步 MCP 服务器。
+                    Informe seu token de acesso para sincronizar servidores MCP.
                   </p>
                   <v-text-field v-model="mcpProviderToken" type="password" variant="outlined"
-                    label="访问令牌" class="mt-2" hide-details/>
+                    label="Token de acesso" class="mt-2" hide-details/>
                 </div>
               </v-timeline-item>
             </v-timeline>
@@ -565,7 +565,7 @@ export default {
       return mcpApi.list()
         .then(response => {
           if (response.data.status === 'error') {
-            this.showError(response.data.message || this.tm('messages.getServersError', { error: 'Unknown error' }));
+            this.showError(response.data.message || this.tm('messages.getServersError', { error: "Erro desconhecido" }));
             return;
           }
           this.mcpServers = response.data.data || [];
@@ -648,7 +648,7 @@ export default {
           .then(response => {
             this.loading = false;
             if (response.data.status === 'error') {
-              this.showError(response.data.message || this.tm('messages.saveError', { error: 'Unknown error' }));
+              this.showError(response.data.message || this.tm('messages.saveError', { error: "Erro desconhecido" }));
               return;
             }
             this.showMcpServerDialog = false;
@@ -859,11 +859,11 @@ export default {
           this.mcpProviderToken = '';
           this.getServers();
         } else {
-          this.showError(response.data.message || this.tm('syncProvider.messages.syncError', { error: 'Unknown error' }));
+          this.showError(response.data.message || this.tm('syncProvider.messages.syncError', { error: "Erro desconhecido" }));
         }
       } catch (error) {
         this.showError(this.tm('syncProvider.messages.syncError', {
-          error: error.response?.data?.message || error.message || '网络连接或访问令牌问题'
+          error: error.response?.data?.message || error.message || 'Problema de conexão de rede ou de token de acesso'
         }));
       } finally {
         this.loading = false;

@@ -14,7 +14,8 @@
     "generate:docs:openapi": "uv run python ../docs/scripts/update_openapi_json.py",
     "typecheck": "vue-tsc --noEmit",
     "i18n:check": "node scripts/check-i18n-keys.mjs",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "i18n:check:ptbr": "node scripts/check-ptbr.mjs"
   },
   "dependencies": {
     "@guolao/vue-monaco-editor": "^1.5.4",

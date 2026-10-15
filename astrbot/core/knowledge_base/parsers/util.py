@@ -14,4 +14,4 @@ async def select_parser(ext: str) -> BaseParser:
         from .pdf_parser import PDFParser
 
         return PDFParser()
-    raise ValueError(f"暂时不支持的文件格式: {ext}")
+    raise ValueError(f"Formato de arquivo ainda incompatível: {ext}")

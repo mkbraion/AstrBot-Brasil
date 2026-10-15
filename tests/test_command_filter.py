@@ -35,5 +35,5 @@ def test_command_filter_rejects_missing_postponed_required_param():
         handler_md=SimpleNamespace(handler=postponed_annotations_handler),
     )
 
-    with pytest.raises(ValueError, match="必要参数缺失"):
+    with pytest.raises(ValueError, match="Parâmetros obrigatórios ausentes"):
         command_filter.validate_and_convert_params([], command_filter.handler_params)

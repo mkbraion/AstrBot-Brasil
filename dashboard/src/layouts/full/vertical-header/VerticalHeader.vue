@@ -931,12 +931,12 @@ onMounted(() => {
       const sessionId = parts[2];
       if (sessionId) {
         sessionStorage.setItem(LAST_CHAT_ROUTE_KEY, sessionId);
-        console.log("Initial save chat ID:", sessionId);
+        console.log("ID inicial da conversa salva:", sessionId);
       }
     } else {
       // 保存 bot 路由（非 chat 頁面）
       sessionStorage.setItem(LAST_BOT_ROUTE_KEY, route.fullPath);
-      console.log("Initial save bot route:", route.fullPath);
+      console.log("Rota inicial do bot:", route.fullPath);
     }
   }
 });
@@ -977,7 +977,7 @@ watch(
         }
       }
     } catch (e) {
-      console.error("Failed to save route:", e);
+      console.error("Falha ao salvar a rota:", e);
     }
   },
 );
@@ -1008,7 +1008,7 @@ const currentMode = computed({
       }
     } catch (e) {
       // 在受限隱私模式等環境中，sessionStorage 操作可能會拋出 SecurityError
-      console.warn("Failed to access sessionStorage in currentMode setter:", e);
+      console.warn("Falha ao acessar sessionStorage ao definir currentMode:", e);
     }
   },
 });

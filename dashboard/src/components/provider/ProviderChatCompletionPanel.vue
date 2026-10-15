@@ -141,8 +141,8 @@
         </v-card-text>
         <v-card-actions class="pa-4">
           <v-spacer></v-spacer>
-          <v-btn variant="text" @click="showManualModelDialog = false">取消</v-btn>
-          <v-btn color="primary" variant="tonal" @click="confirmManualModel">添加</v-btn>
+          <v-btn variant="text" @click="showManualModelDialog = false">Cancelar</v-btn>
+          <v-btn color="primary" variant="tonal" @click="confirmManualModel">Adicionar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

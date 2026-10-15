@@ -820,7 +820,7 @@ async function fetchCommands() {
     }
   } catch (err) {
     // 静默失败，不影响聊天功能
-    console.warn("Failed to fetch commands for suggestion:", err);
+    console.warn("Falha ao obter sugestões de comandos:", err);
   } finally {
     commandSuggestionLoading.value = false;
   }

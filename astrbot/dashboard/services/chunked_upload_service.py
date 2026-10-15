@@ -94,7 +94,7 @@ class ChunkedUploadService:
             ChunkedUploadError: The declared size is not positive.
         """
         if total_size <= 0:
-            raise ChunkedUploadError("Invalid file size")
+            raise ChunkedUploadError("Tamanho de arquivo inválido")
 
         upload_id = str(uuid.uuid4())
         chunk_dir = self.chunks_root / upload_id
@@ -138,7 +138,7 @@ class ChunkedUploadService:
             or (owner is not None and session.owner != owner)
             or time.time() - session.last_activity > self.expire_seconds
         ):
-            raise ChunkedUploadError("Upload session not found or expired")
+            raise ChunkedUploadError("Sessão de envio não encontrada ou expirada")
         return session
 
     async def save_chunk(
@@ -244,7 +244,7 @@ class ChunkedUploadService:
         session = self.get_session(upload_id, owner=owner)
         if len(session.received_chunks) != session.total_chunks:
             missing = sorted(set(range(session.total_chunks)) - session.received_chunks)
-            raise ChunkedUploadError(f"Chunks incomplete, missing: {missing[:10]}...")
+            raise ChunkedUploadError(f"Partes incompletas; ausentes: {missing[:10]}...")
 
         dest_path = Path(dest)
         try:
@@ -281,7 +281,7 @@ class ChunkedUploadService:
         if session is None:
             return False
         if owner is not None and session.owner != owner:
-            raise ChunkedUploadError("Upload session not found or expired")
+            raise ChunkedUploadError("Sessão de envio não encontrada ou expirada")
         await self.cleanup_session(upload_id)
         return True
 

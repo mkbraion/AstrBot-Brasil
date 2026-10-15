@@ -110,7 +110,7 @@ async def require_dashboard_user(request: Request) -> str:
 
     token = _extract_dashboard_jwt(request)
     if not token:
-        raise ApiError("未授权", status_code=401)
+        raise ApiError("Não autorizado", status_code=401)
 
     try:
         payload = jwt.decode(
@@ -119,13 +119,13 @@ async def require_dashboard_user(request: Request) -> str:
             algorithms=["HS256"],
         )
     except jwt.ExpiredSignatureError as exc:
-        raise ApiError("Token 过期", status_code=401) from exc
+        raise ApiError("Token expirado", status_code=401) from exc
     except jwt.InvalidTokenError as exc:
-        raise ApiError("Token 无效", status_code=401) from exc
+        raise ApiError("Token inválido", status_code=401) from exc
 
     username = payload.get("username")
     if not isinstance(username, str) or not username.strip():
-        raise ApiError("Token 无效", status_code=401)
+        raise ApiError("Token inválido", status_code=401)
     return username
 
 
@@ -140,7 +140,7 @@ async def _require_api_key_scope(
     key_hash = ApiKeyService.hash_key(raw_key)
     api_key = await request.app.state.db.get_active_api_key_by_hash(key_hash)
     if not api_key:
-        raise ApiError("Invalid API key", status_code=401)
+        raise ApiError("Chave de API inválida", status_code=401)
     scopes = (
         [str(scope) for scope in api_key.scopes]
         if isinstance(api_key.scopes, list)
@@ -171,7 +171,7 @@ async def require_scope(request: Request, scope: str) -> AuthContext:
 
     token = _extract_dashboard_jwt(request)
     if not token:
-        raise ApiError("Missing API key", status_code=401)
+        raise ApiError("Chave de API ausente", status_code=401)
     try:
         payload = jwt.decode(
             token,
@@ -187,11 +187,11 @@ async def require_scope(request: Request, scope: str) -> AuthContext:
                 return await _require_api_key_scope(request, token, scope)
             except ApiError as api_key_exc:
                 raise api_key_exc from exc
-        raise ApiError("Invalid token", status_code=401) from exc
+        raise ApiError("Token inválido", status_code=401) from exc
 
     username = payload.get("username")
     if not isinstance(username, str) or not username.strip():
-        raise ApiError("Invalid token", status_code=401)
+        raise ApiError("Token inválido", status_code=401)
     return AuthContext(username=username, scopes=["*"], via="jwt")
 
 
@@ -415,7 +415,7 @@ async def dashboard_login(
 @router.post("/auth/logout")
 async def logout(request: Request):
     response = JSONResponse(
-        {"status": "ok", "message": "已退出登录", "data": {}},
+        {"status": "ok", "message": "Você saiu da conta", "data": {}},
         status_code=200,
     )
     _clear_dashboard_jwt_cookie(request, response)

@@ -187,7 +187,7 @@ class AstrBotUpdater(_RepoZipUpdater):
             await emit_progress(
                 "dashboard",
                 "running",
-                "正在下载 WebUI...",
+                "Baixando a interface web...",
                 int(float(payload.get("percent") or 0) * 45),
                 payload,
             )
@@ -196,7 +196,7 @@ class AstrBotUpdater(_RepoZipUpdater):
             await emit_progress(
                 "core",
                 "running",
-                "正在下载 AstrBot 项目代码...",
+                "Baixando o código do AstrBot...",
                 45 + int(float(payload.get("percent") or 0) * 45),
                 payload,
             )
@@ -243,7 +243,7 @@ class AstrBotUpdater(_RepoZipUpdater):
             await emit_progress(
                 "dashboard",
                 "running",
-                "正在下载 WebUI...",
+                "Baixando a interface web...",
                 0,
             )
             await _download_package(
@@ -257,14 +257,14 @@ class AstrBotUpdater(_RepoZipUpdater):
             await emit_progress(
                 "dashboard",
                 "done",
-                "WebUI 下载完成。",
+                "Download da interface web concluído.",
                 45,
             )
 
             await emit_progress(
                 "core",
                 "running",
-                "正在下载 AstrBot 项目代码...",
+                "Baixando o código do AstrBot...",
                 45,
             )
             await self._download_core_package(
@@ -278,14 +278,14 @@ class AstrBotUpdater(_RepoZipUpdater):
             await emit_progress(
                 "core",
                 "done",
-                "项目代码下载完成。",
+                "Download do código concluído.",
                 90,
             )
 
             await emit_progress(
                 "verify",
                 "running",
-                "下载完成，正在校验更新包...",
+                "Download concluído. Verificando o pacote de atualização...",
                 90,
             )
 
@@ -294,20 +294,22 @@ class AstrBotUpdater(_RepoZipUpdater):
                     with zipfile.ZipFile(zip_path, "r") as archive:
                         corrupt_member = archive.testzip()
                     if corrupt_member:
-                        raise ValueError(f"更新包校验失败: {corrupt_member}")
+                        raise ValueError(
+                            f"Falha ao verificar o pacote de atualização: {corrupt_member}"
+                        )
 
             await asyncio.to_thread(verify_packages)
             await emit_progress(
                 "verify",
                 "done",
-                "更新包校验完成。",
+                "Pacote de atualização verificado.",
                 91,
             )
 
             await emit_progress(
                 "apply",
                 "running",
-                "下载完成，正在应用更新...",
+                "Download concluído. Aplicando atualização...",
                 91,
             )
             await asyncio.to_thread(self._apply_core_package, core_zip_path)
@@ -320,7 +322,7 @@ class AstrBotUpdater(_RepoZipUpdater):
             await emit_progress(
                 "apply",
                 "done",
-                "更新文件应用完成。",
+                "Arquivos da atualização aplicados.",
                 92,
             )
 

@@ -218,15 +218,15 @@ class PluginPageService:
         locale: str,
     ) -> dict:
         if not plugin_name:
-            raise PluginPageServiceError("缺少插件名")
+            raise PluginPageServiceError("Nome do plugin ausente")
         if not view_name:
-            raise PluginPageServiceError("缺少 View 名称")
+            raise PluginPageServiceError("Nome da visualização ausente")
 
         plugin = self.get_plugin_metadata_by_name(plugin_name)
         if not plugin:
-            raise PluginPageServiceError("插件不存在")
+            raise PluginPageServiceError("Plugin não encontrado")
         if not plugin.activated:
-            raise PluginPageServiceError("插件未启用")
+            raise PluginPageServiceError("Plugin desativado")
 
         page = await self.serialize_plugin_page_for_request(
             plugin,
@@ -237,7 +237,7 @@ class PluginPageService:
             locale=locale,
         )
         if not page:
-            raise PluginPageServiceError("插件 View 不存在")
+            raise PluginPageServiceError("Visualização do plugin não encontrada")
         return page
 
     async def serialize_plugin_page_for_request(
@@ -313,7 +313,7 @@ class PluginPageService:
     ) -> PluginPageContentPayload:
         if not self.bridge_file.is_file():
             raise PluginPageServiceError(
-                "Plugin view bridge SDK not found",
+                "SDK da ponte da visualização do plugin não encontrado",
                 status_code=404,
             )
         bridge_js = await self.read_plugin_page_text(self.bridge_file)
@@ -347,7 +347,7 @@ class PluginPageService:
     ) -> PluginPageContentPayload:
         plugin = self.get_plugin_metadata_by_name(plugin_name)
         if not plugin:
-            raise PluginPageServiceError("Plugin not found", status_code=404)
+            raise PluginPageServiceError("Plugin não encontrado", status_code=404)
         if not plugin.activated:
             raise PluginPageServiceError("Plugin is disabled", status_code=403)
 
@@ -360,7 +360,7 @@ class PluginPageService:
             )
         except (FileNotFoundError, ValueError) as exc:
             raise PluginPageServiceError(
-                "Plugin view asset not found",
+                "Recurso da visualização do plugin não encontrado",
                 status_code=404,
             ) from exc
 
@@ -422,20 +422,20 @@ class PluginPageService:
         if normalized in {"", "."}:
             if allow_empty:
                 return ""
-            raise ValueError("Invalid plugin view asset path")
+            raise ValueError("Caminho de recurso da visualização do plugin inválido")
         if (
             normalized.startswith("../")
             or normalized == ".."
             or normalized.startswith("/")
         ):
-            raise ValueError("Invalid plugin view asset path")
+            raise ValueError("Caminho de recurso da visualização do plugin inválido")
         return normalized
 
     @staticmethod
     def normalize_plugin_page_name(raw_name: str) -> str:
         view_name = raw_name.strip()
         if not view_name:
-            raise ValueError("Invalid plugin view name")
+            raise ValueError("Nome da visualização do plugin inválido")
         normalized = posixpath.normpath(view_name.replace("\\", "/"))
         if (
             normalized != view_name
@@ -444,12 +444,12 @@ class PluginPageService:
             or "/" in view_name
             or "\\" in view_name
         ):
-            raise ValueError("Invalid plugin view name")
+            raise ValueError("Nome da visualização do plugin inválido")
         return view_name
 
     def get_plugin_root_dir(self, plugin: StarMetadata) -> Path:
         if not plugin.root_dir_name:
-            raise FileNotFoundError("Plugin directory metadata is missing")
+            raise FileNotFoundError("Metadados do diretório do plugin ausentes")
 
         base_dir = Path(
             self.plugin_manager.reserved_plugin_path
@@ -469,7 +469,9 @@ class PluginPageService:
                 continue
             if await aio_ospath.isdir(str(pages_root)):
                 return pages_root
-        raise FileNotFoundError("Plugin views root directory does not exist")
+        raise FileNotFoundError(
+            "O diretório raiz das visualizações do plugin não existe"
+        )
 
     async def discover_plugin_pages(self, plugin: StarMetadata) -> list[PluginPage]:
         try:
@@ -512,7 +514,7 @@ class PluginPageService:
         for page in await self.discover_plugin_pages(plugin):
             if page.name == normalized_name:
                 return page
-        raise FileNotFoundError("Plugin view entry not found")
+        raise FileNotFoundError("Entrada da visualização do plugin não encontrada")
 
     async def resolve_plugin_page_root(
         self,
@@ -524,7 +526,9 @@ class PluginPageService:
         page_root = (pages_root / normalized_name).resolve(strict=False)
         page_root.relative_to(pages_root)
         if not await aio_ospath.isdir(str(page_root)):
-            raise FileNotFoundError("Plugin view root directory does not exist")
+            raise FileNotFoundError(
+                "O diretório raiz da visualização do plugin não existe"
+            )
         return page_root
 
     async def resolve_plugin_page_file(
@@ -542,7 +546,7 @@ class PluginPageService:
         target_path = (page_root / target_name).resolve(strict=False)
         target_path.relative_to(page_root)
         if not await aio_ospath.isfile(str(target_path)):
-            raise FileNotFoundError("Plugin view asset not found")
+            raise FileNotFoundError("Recurso da visualização do plugin não encontrado")
         return target_path
 
     @staticmethod

@@ -5,7 +5,7 @@
       <v-btn prepend-icon="mdi-upload" color="primary" variant="outlined" @click="showUploadDialog = true">
         {{ t('documents.upload') }}
       </v-btn>
-      <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" :placeholder="'搜索文档...'" variant="outlined"
+      <v-text-field v-model="searchQuery" prepend-inner-icon="mdi-magnify" :placeholder="'Buscar documentos...'" variant="outlined"
         density="compact" hide-details clearable style="max-width: 300px" />
     </div>
 
@@ -93,8 +93,8 @@
 
               <div v-if="selectedFiles.length > 0" class="mt-4">
                 <div class="d-flex align-center justify-space-between mb-2">
-                  <span class="text-subtitle-2">已选择 {{ selectedFiles.length }} 个文件</span>
-                  <v-btn variant="text" size="small" @click="selectedFiles = []">清空</v-btn>
+                  <span class="text-subtitle-2">Selecionados {{ selectedFiles.length }} arquivos</span>
+                  <v-btn variant="text" size="small" @click="selectedFiles = []">Limpar</v-btn>
                 </div>
                 <div class="files-list">
                   <div v-for="(file, index) in selectedFiles" :key="index"
@@ -121,10 +121,10 @@
                 <v-alert :type="tavilyConfigStatus === 'error' ? 'error' : 'info'" variant="tonal" density="compact">
                   <div class="d-flex align-center justify-space-between">
                     <span>
-                      {{ tavilyConfigStatus === 'error' ? '检查网页搜索配置失败' : '使用此功能需要配置 Tavily Key' }}
+                      {{ tavilyConfigStatus === 'error' ? 'Falha ao verificar a configuração da busca na web' : 'Para usar este recurso, configure Tavily Key' }}
                     </span>
                     <v-btn size="small" variant="tonal" @click="showTavilyDialog = true">
-                      配置
+                      Configuração
                     </v-btn>
                   </div>
                 </v-alert>
@@ -175,16 +175,16 @@
             <h3 class="text-h6 mb-4">{{ t('upload.batchSettings') }}</h3>
             <v-row>
               <v-col cols="12" sm="4">
-                <v-text-field v-model.number="uploadSettings.batch_size" :label="t('upload.batchSize')" hint="每批处理的文本数量"
+                <v-text-field v-model.number="uploadSettings.batch_size" :label="t('upload.batchSize')" hint="Quantidade de textos processados por lote"
                   persistent-hint type="number" variant="outlined" density="compact" />
               </v-col>
               <v-col cols="12" sm="4">
                 <v-text-field v-model.number="uploadSettings.tasks_limit" :label="t('upload.tasksLimit')"
-                  hint="并发任务数量限制" persistent-hint type="number" variant="outlined" density="compact" />
+                  hint="Limite de tarefas simultâneas" persistent-hint type="number" variant="outlined" density="compact" />
               </v-col>
               <v-col cols="12" sm="4">
                 <v-text-field v-model.number="uploadSettings.max_retries" :label="t('upload.maxRetries')"
-                  hint="失败时的最大重试次数" persistent-hint type="number" variant="outlined" density="compact" />
+                  hint="Número máximo de tentativas em caso de falha" persistent-hint type="number" variant="outlined" density="compact" />
               </v-col>
             </v-row>
           </div>
@@ -218,9 +218,9 @@
         </v-card-text>
         <v-card-actions class="pa-4">
           <v-spacer />
-          <v-btn variant="text" @click="showDeleteDialog = false">取消</v-btn>
+          <v-btn variant="text" @click="showDeleteDialog = false">Cancelar</v-btn>
           <v-btn color="error" variant="tonal" @click="deleteDocument" :loading="deleting">
-            删除
+            Excluir
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -361,8 +361,8 @@ const loadDocuments = async () => {
     }
   } catch (error) {
     if (requestId !== documentsRequestId) return
-    console.error('Failed to load documents:', error)
-    showSnackbar('加载文档列表失败', 'error')
+    console.error("Falha ao carregar os documentos:", error)
+    showSnackbar('Falha ao carregar os documentos', 'error')
   } finally {
     if (requestId === documentsRequestId) {
       loading.value = false
@@ -454,7 +454,7 @@ const uploadFiles = async () => {
       const result = response.data.data
       const taskId = result.task_id
 
-      showSnackbar(`正在后台上传 ${result.file_count} 个文件...`, 'info')
+      showSnackbar(`Enviando em segundo plano ${result.file_count} arquivos...`, 'info')
 
       // 为每个文件添加占位条目到文档列表
       const uploadingDocs = selectedFiles.value.map((file, index) => ({
@@ -487,7 +487,7 @@ const uploadFiles = async () => {
       showSnackbar(response.data.message || t('documents.uploadFailed'), 'error')
     }
   } catch (error) {
-    console.error('Failed to upload document:', error)
+    console.error("Falha ao enviar o documento:", error)
     showSnackbar(t('documents.uploadFailed'), 'error')
   } finally {
     uploading.value = false
@@ -531,7 +531,7 @@ const uploadFromUrl = async () => {
       const result = response.data.data
       const taskId = result.task_id
 
-      showSnackbar(`正在从 URL 后台提取内容...`, 'info')
+      showSnackbar(`Extraindo de URL em segundo plano...`, 'info')
 
       // 添加占位条目
       const uploadingDoc = {
@@ -560,7 +560,7 @@ const uploadFromUrl = async () => {
       showSnackbar(response.data.message || t('documents.uploadFailed'), 'error')
     }
   } catch (error: any) {
-    console.error('Failed to upload from URL:', error)
+    console.error("Falha ao enviar por URL:", error)
     const message = error.response?.data?.message || t('documents.uploadFailed')
     showSnackbar(message, 'error')
   } finally {
@@ -621,9 +621,9 @@ const startProgressPolling = (taskId: string) => {
           emit('refresh')
 
           if (failedCount === 0) {
-            showSnackbar(`成功上传 ${successCount} 个文档`)
+            showSnackbar(`Enviados ${successCount} documentos`)
           } else {
-            showSnackbar(`上传完成: ${successCount} 个成功, ${failedCount} 个失败`, 'warning')
+            showSnackbar(`Envio concluído: ${successCount} com sucesso, ${failedCount} com falha`, 'warning')
           }
         } else if (status === 'failed') {
           // 任务失败
@@ -632,7 +632,7 @@ const startProgressPolling = (taskId: string) => {
           // 移除上传中的占位文档
           documents.value = documents.value.filter(doc => doc.taskId !== taskId)
 
-          showSnackbar(`上传失败: ${data.error || '未知错误'}`, 'error')
+          showSnackbar(`Falha no envio: ${data.error || 'Erro desconhecido'}`, 'error')
         }
       } else {
         // 任务不存在，停止轮询
@@ -640,7 +640,7 @@ const startProgressPolling = (taskId: string) => {
         documents.value = documents.value.filter(doc => doc.taskId !== taskId)
       }
     } catch (error) {
-      console.error('Failed to fetch progress:', error)
+      console.error("Falha ao obter o progresso:", error)
       // 不立即停止，允许重试
     }
   }, 500) // 每500ms轮询一次
@@ -665,12 +665,12 @@ const getUploadPercentage = (item: any) => {
 // 获取阶段文本
 const getStageText = (stage: string) => {
   const stageMap: Record<string, string> = {
-    'waiting': '等待中...',
-    'extracting': '提取内容...',
-    'cleaning': '清洗内容...',
-    'parsing': '解析文档...',
-    'chunking': '文本分块...',
-    'embedding': '生成向量...'
+    'waiting': 'Aguardando...',
+    'extracting': 'Extraindo conteúdo...',
+    'cleaning': 'Limpando conteúdo...',
+    'parsing': 'Interpretando documento...',
+    'chunking': 'Dividindo texto em blocos...',
+    'embedding': 'Gerando vetores...'
   }
   return stageMap[stage] || stage
 }
@@ -719,7 +719,7 @@ const deleteDocument = async () => {
       showSnackbar(response.data.message || t('documents.deleteFailed'), 'error')
     }
   } catch (error) {
-    console.error('Failed to delete document:', error)
+    console.error("Falha ao excluir o documento:", error)
     showSnackbar(t('documents.deleteFailed'), 'error')
   } finally {
     deleting.value = false
@@ -780,7 +780,7 @@ const loadLlmProviders = async () => {
       llmProviders.value = response.data.data
     }
   } catch (error) {
-    console.error('Failed to load LLM providers:', error)
+    console.error("Falha ao carregar os provedores de modelos:", error)
   }
 }
 
@@ -801,13 +801,13 @@ const checkTavilyConfig = async () => {
       tavilyConfigStatus.value = 'error'
     }
   } catch (error) {
-    console.warn('Failed to check Tavily key config:', error)
+    console.warn("Falha ao verificar a configuração da chave do Tavily:", error)
     tavilyConfigStatus.value = 'error'
   }
 }
 
 const onTavilyKeySet = () => {
-  showSnackbar('Tavily API Key 配置成功', 'success')
+  showSnackbar('Tavily API Key Configurado', 'success')
   checkTavilyConfig()
 }
 

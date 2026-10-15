@@ -56,7 +56,7 @@ async function submitAccountStage() {
       return;
     }
   } catch (err) {
-    apiError.value = String(err || '') || 'Login failed';
+    apiError.value = String(err || '') || "Falha ao entrar";
   } finally {
     loading.value = false;
   }
@@ -76,7 +76,7 @@ async function submitTotpStage() {
       trustTotpDevice.value,
     );
   } catch (err) {
-    apiError.value = String(err || '') || 'Verification failed';
+    apiError.value = String(err || '') || "Falha na verificação";
   } finally {
     loading.value = false;
   }
@@ -93,7 +93,7 @@ async function submitRecoveryStage() {
   try {
     await authStore.login(username.value, password.value, recoveryCode.value);
   } catch (err) {
-    apiError.value = String(err || '') || 'Recovery login failed';
+    apiError.value = String(err || '') || "Falha ao entrar com código de recuperação";
   } finally {
     loading.value = false;
   }

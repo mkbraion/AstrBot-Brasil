@@ -23,7 +23,7 @@
         <v-dialog v-model="dialog" max-width="480">
             <v-card>
                 <v-card-title class="text-h3 pa-4 pb-0 pl-6 d-flex align-center justify-space-between">
-                    <span>选择配置文件</span>
+                    <span>Selecionar arquivo de configuração</span>
                     <v-btn icon variant="text" @click="closeDialog">
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -51,13 +51,13 @@
                             </template>
                         </v-list-item>
                         <div v-if="configOptions.length === 0" class="text-center text-body-2 text-medium-emphasis">
-                            暂无可选配置，请先在配置页创建。
+                            Nenhuma configuração disponível. Crie uma na página de configurações.
                         </div>
                     </v-list>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn variant="text" @click="closeDialog">取消</v-btn>
+                    <v-btn variant="text" @click="closeDialog">Cancelar</v-btn>
                     <v-btn
                         color="primary"
                         variant="tonal"
@@ -65,7 +65,7 @@
                         :disabled="!tempSelectedConfig"
                         :loading="saving"
                     >
-                        应用
+                        Aplicar
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -180,7 +180,7 @@ async function fetchConfigList() {
             name: String(item.name || item.id || 'default')
         }));
     } catch (error) {
-        console.error('加载配置文件列表失败', error);
+        console.error('Falha ao carregar a lista de configurações', error);
         configOptions.value = [];
     } finally {
         loadingConfigs.value = false;
@@ -196,7 +196,7 @@ async function fetchRoutingEntries() {
             confId: confId as string
         }));
     } catch (error) {
-        console.error('获取配置路由失败', error);
+        console.error('Falha ao obter as rotas de configuração', error);
         routingEntries.value = [];
     }
 }
@@ -233,7 +233,7 @@ async function getAgentRunnerType(confId: string): Promise<string> {
         configCache.value[confId] = type;
         return type;
     } catch (error) {
-        console.error('获取配置文件详情失败', error);
+        console.error('Falha ao obter os detalhes da configuração', error);
         return 'local';
     }
 }
@@ -265,8 +265,8 @@ async function applySelectionToBackend(confId: string): Promise<boolean> {
         return true;
     } catch (error) {
         const err = error as any;
-        console.error('更新配置文件失败', err);
-        toast.error(err?.response?.data?.message || '配置文件应用失败');
+        console.error('Falha ao atualizar a configuração', err);
+        toast.error(err?.response?.data?.message || 'Falha ao aplicar a configuração');
         return false;
     } finally {
         saving.value = false;

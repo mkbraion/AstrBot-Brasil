@@ -94,7 +94,9 @@ class botClient(Client):
         self.platform.commit_event(self.platform.create_event(abm))
 
 
-@register_platform_adapter("qq_official_webhook", "QQ 机器人官方 API 适配器(Webhook)")
+@register_platform_adapter(
+    "qq_official_webhook", "Adaptador da API oficial de bots do QQ (webhook)"
+)
 class QQOfficialWebhookPlatformAdapter(Platform):
     def __init__(
         self,
@@ -160,7 +162,7 @@ class QQOfficialWebhookPlatformAdapter(Platform):
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             name="qq_official_webhook",
-            description="QQ 机器人官方 API 适配器",
+            description="Adaptador da API oficial de bots do QQ",
             id=cast(str, self.config.get("id")),
             support_proactive_message=True,
         )
@@ -199,7 +201,9 @@ class QQOfficialWebhookPlatformAdapter(Platform):
         # 如果启用统一 webhook 模式，则不启动独立服务器
         webhook_uuid = self.config.get("webhook_uuid")
         if self.unified_webhook_mode and webhook_uuid:
-            log_webhook_info(f"{self.meta().id}(QQ 官方机器人 Webhook)", webhook_uuid)
+            log_webhook_info(
+                f"{self.meta().id}(Webhook oficial de bots do QQ)", webhook_uuid
+            )
             # 保持运行状态，等待 shutdown
             await self.webhook_helper.shutdown_event.wait()
         else:

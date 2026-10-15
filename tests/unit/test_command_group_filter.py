@@ -44,7 +44,7 @@ def test_nested_group_without_subcommand_shows_help(message):
     group = CommandGroupFilter("config", parent_group=parent)
     event = SimpleNamespace(is_at_or_wake_command=True, message_str=message)
 
-    with pytest.raises(ValueError, match="参数不足"):
+    with pytest.raises(ValueError, match="Parâmetros insuficientes"):
         group.filter(event, {})
 
 

@@ -109,25 +109,25 @@ class ProviderEdgeTTS(TTSProvider):
             os.remove(mp3_path)
             if os.path.exists(wav_path) and os.path.getsize(wav_path) > 0:
                 return wav_path
-            logger.error("生成的WAV文件不存在或为空")
-            raise RuntimeError("生成的WAV文件不存在或为空")
+            logger.error("O arquivo WAV gerado não existe ou está vazio")
+            raise RuntimeError("O arquivo WAV gerado não existe ou está vazio")
 
         except subprocess.CalledProcessError as e:
             logger.error(
-                f"FFmpeg 转换失败: {e.stderr.decode() if e.stderr else str(e)}",
+                f"Falha na conversão pelo FFmpeg: {e.stderr.decode() if e.stderr else str(e)}",
             )
             try:
                 if os.path.exists(mp3_path):
                     os.remove(mp3_path)
             except Exception:
                 pass
-            raise RuntimeError(f"FFmpeg 转换失败: {e!s}")
+            raise RuntimeError(f"Falha na conversão pelo FFmpeg: {e!s}")
 
         except Exception as e:
-            logger.error(f"音频生成失败: {e!s}")
+            logger.error(f"Falha ao gerar o áudio: {e!s}")
             try:
                 if os.path.exists(mp3_path):
                     os.remove(mp3_path)
             except Exception:
                 pass
-            raise RuntimeError(f"音频生成失败: {e!s}")
+            raise RuntimeError(f"Falha ao gerar o áudio: {e!s}")

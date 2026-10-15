@@ -15,7 +15,8 @@ env/
 venv*/
 ENV/
 .conda/
-dashboard/
+dashboard/node_modules/
+dashboard/dist/
 !astrbot/dashboard/
 !astrbot/dashboard/dist/
 !astrbot/dashboard/dist/**

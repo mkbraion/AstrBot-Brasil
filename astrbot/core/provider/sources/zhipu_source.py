@@ -6,7 +6,9 @@ from ..register import register_provider_adapter
 from .openai_source import ProviderOpenAIOfficial
 
 
-@register_provider_adapter("zhipu_chat_completion", "智谱 Chat Completion 提供商适配器")
+@register_provider_adapter(
+    "zhipu_chat_completion", "Adaptador de provedor de geração de respostas Zhipu"
+)
 class ProviderZhipu(ProviderOpenAIOfficial):
     def __init__(
         self,

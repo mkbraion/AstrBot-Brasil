@@ -203,7 +203,7 @@ const loadDirectoryFiles = async () => {
       toast.warning(response.data.message || tm('fileUpload.loadFailed'))
     }
   } catch (error) {
-    console.error('Load file list failed:', error)
+    console.error("Falha ao carregar os arquivos:", error)
     toast.warning(tm('fileUpload.loadFailed'))
   } finally {
     loadingFiles.value = false
@@ -287,7 +287,7 @@ const uploadFiles = async (files) => {
       toast.error(response.data.message || tm('fileUpload.uploadFailed'))
     }
   } catch (error) {
-    console.error('File upload failed:', error)
+    console.error("Falha ao enviar o arquivo:", error)
     toast.error(tm('fileUpload.uploadFailed'))
   } finally {
     uploading.value = false
@@ -309,7 +309,7 @@ const deleteFile = (filePath) => {
     pluginApi
       .deleteConfigFile(props.pluginName, { path: filePath })
       .catch((error) => {
-        console.warn('Staged file delete failed:', error)
+        console.warn("Falha ao excluir o arquivo preparado:", error)
         toast.warning(tm('fileUpload.deleteFailed'))
       })
   }
@@ -324,7 +324,7 @@ const deletePhysicalFile = (filePath) => {
     pluginApi
       .deleteConfigFile(props.pluginName, { path: filePath })
       .catch((error) => {
-        console.warn('File delete failed:', error)
+        console.warn("Falha ao excluir o arquivo:", error)
         toast.warning(tm('fileUpload.deleteFailed'))
       })
   }

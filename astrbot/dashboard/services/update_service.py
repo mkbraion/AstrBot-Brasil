@@ -64,12 +64,12 @@ class UpdateService:
 
     def get_update_progress(self, progress_id: str) -> UpdateServiceResult:
         if not progress_id:
-            raise UpdateServiceError("缺少参数 id。")
+            raise UpdateServiceError("Parâmetro id ausente.")
         progress = self.update_progress.get(progress_id)
         if not progress:
             return UpdateServiceResult(
                 data={"id": progress_id, "status": "idle"},
-                message="没有正在进行的更新。",
+                message="Nenhuma atualização em andamento.",
             )
         return UpdateServiceResult(data=progress)
 
@@ -90,7 +90,7 @@ class UpdateService:
                 status="success",
                 message=str(update_result)
                 if update_result is not None
-                else "已经是最新版本了。",
+                else "A versão já está atualizada.",
                 data={
                     "version": f"v{VERSION}",
                     "has_new_version": update_result is not None,
@@ -143,7 +143,7 @@ class UpdateService:
         if existing_task and not existing_task.done():
             return UpdateServiceResult(
                 data={"id": progress_id, "status": "running"},
-                message="更新任务正在进行中。",
+                message="Uma atualização já está em andamento.",
                 headers=self.clear_site_data_headers,
             )
 
@@ -155,7 +155,7 @@ class UpdateService:
         task.add_done_callback(lambda _task: self._update_tasks.pop(progress_id, None))
         return UpdateServiceResult(
             data={"id": progress_id, "status": "running"},
-            message="更新任务已开始。",
+            message="Tarefa de atualização iniciada.",
             headers=self.clear_site_data_headers,
         )
 
@@ -212,7 +212,7 @@ class UpdateService:
                 progress_id,
                 "dependencies",
                 "running",
-                "正在更新依赖...",
+                "Atualizando dependências...",
                 92,
             )
             logger.info("Updating dependencies...")
@@ -224,7 +224,7 @@ class UpdateService:
                 progress_id,
                 "dependencies",
                 "done",
-                "依赖更新完成。",
+                "Dependências atualizadas.",
                 96,
             )
 
@@ -233,13 +233,13 @@ class UpdateService:
                     progress_id,
                     "restart",
                     "running",
-                    "更新成功，正在准备重启...",
+                    "Atualizado. Preparando reinicialização...",
                     98,
                 )
                 await self.core_lifecycle.restart()
-                message = "更新成功，AstrBot 将在 2 秒内全量重启以应用新的代码。"
+                message = "Atualizado. O AstrBot será reiniciado por completo em 2 segundos para aplicar o novo código."
             else:
-                message = "更新成功，AstrBot 将在下次启动时应用新的代码。"
+                message = "Atualizado. O AstrBot aplicará o novo código na próxima inicialização."
 
             self.update_progress[progress_id].update(
                 {
@@ -254,7 +254,7 @@ class UpdateService:
             self.update_progress[progress_id].update(
                 {
                     "status": "error",
-                    "message": "更新任务已取消。",
+                    "message": "Tarefa de atualização cancelada.",
                 },
             )
             logger.warning(f"Update task was cancelled: {progress_id}")
@@ -263,7 +263,7 @@ class UpdateService:
             self.update_progress[progress_id].update(
                 {
                     "status": "error",
-                    "message": "更新失败，请查看服务端日志。",
+                    "message": "Falha na atualização. Consulte os registros do servidor.",
                 },
             )
             logger.error(f"/api/update_project: {traceback.format_exc()}")
@@ -275,9 +275,9 @@ class UpdateService:
                 await self._updater.ensure_dashboard()
             except Exception as exc:
                 logger.error(f"Failed to ensure Dashboard assets: {exc}")
-                raise UpdateServiceError(f"管理面板修复失败: {exc}") from exc
+                raise UpdateServiceError(f"Falha ao reparar o painel: {exc}") from exc
             return UpdateServiceResult(
-                message="管理面板已与当前 AstrBot 版本同步。",
+                message="O painel foi sincronizado com a versão atual do AstrBot.",
                 headers=self.clear_site_data_headers,
             )
         except UpdateServiceError:
@@ -296,10 +296,10 @@ class UpdateService:
         package = payload.get("package", "")
         mirror = payload.get("mirror", None)
         if not package:
-            raise UpdateServiceError("缺少参数 package 或不合法。")
+            raise UpdateServiceError("Parâmetro package ausente ou inválido.")
         try:
             await self.pip_install(package, mirror=mirror)
-            return UpdateServiceResult(message="安装成功。")
+            return UpdateServiceResult(message="Instalado.")
         except Exception as exc:
             logger.error(f"/api/update_pip: {traceback.format_exc()}")
             raise UpdateServiceError(exc.__str__()) from exc
@@ -310,7 +310,7 @@ class UpdateService:
             "status": "running",
             "stage": "preparing",
             "version": version or "latest",
-            "message": "正在准备更新...",
+            "message": "Preparando atualização...",
             "overall_percent": 0,
             "stages": {
                 "dashboard": self._empty_stage("pending"),

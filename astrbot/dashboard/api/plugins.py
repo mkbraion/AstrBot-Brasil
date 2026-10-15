@@ -87,18 +87,18 @@ async def require_plugin_view_token(request: Request) -> str:
             algorithms=["HS256"],
         )
     except jwt.InvalidTokenError as exc:
-        raise ApiError("Token 无效", status_code=401) from exc
+        raise ApiError("Token inválido", status_code=401) from exc
 
     if (
         payload.get("token_type") != PLUGIN_PAGE_ASSET_TOKEN_TYPE
         or payload.get("plugin_name") != request.path_params.get("plugin_id")
         or payload.get("page_name") != request.path_params.get("view_name")
     ):
-        raise ApiError("Token 无效", status_code=401)
+        raise ApiError("Token inválido", status_code=401)
 
     username = payload.get("username")
     if not isinstance(username, str) or not username.strip():
-        raise ApiError("Token 无效", status_code=401)
+        raise ApiError("Token inválido", status_code=401)
     return username
 
 
@@ -129,7 +129,7 @@ async def _json_or_empty(request: Request) -> dict[str, Any]:
 def _required_text(value: object, name: str) -> str:
     text = str(value or "").strip()
     if not text:
-        raise ValueError(f"Missing key: {name}")
+        raise ValueError(f"Chave ausente: {name}")
     return text
 
 
@@ -244,7 +244,7 @@ async def _call_plugin_extension(
         request.method,
     )
     if not matched_api:
-        return {"status": "error", "message": "未找到该路由", "data": {}}
+        return {"status": "error", "message": "Rota não encontrada", "data": {}}
 
     view_handler, path_values = matched_api
     plugin_name = plugin_path.strip("/").split("/", 1)[0].strip() or None
@@ -386,7 +386,7 @@ async def _install_plugin_upload(
         form, files = await multipart_parts(request)
         upload_file = files.get("file")
         if upload_file is None:
-            raise PluginServiceError("缺少插件文件")
+            raise PluginServiceError("Arquivo do plugin ausente")
         return await service.install_plugin_upload_from_dashboard_form(
             upload_file=upload_file,
             ignore_version_check=form.get("ignore_version_check", "false"),
@@ -642,7 +642,7 @@ async def create_plugin_source(
 ):
     return ok(
         {"sources": await service.create_custom_source(_model_dict(payload))},
-        message="保存成功",
+        message="Salvo",
     )
 
 
@@ -654,7 +654,7 @@ async def replace_plugin_sources(
 ):
     return ok(
         {"sources": await service.replace_custom_sources(_model_dict(payload))},
-        message="保存成功",
+        message="Salvo",
     )
 
 
@@ -666,7 +666,7 @@ async def delete_plugin_source_by_id(
 ):
     return ok(
         {"sources": await service.delete_custom_source(source_id)},
-        message="保存成功",
+        message="Salvo",
     )
 
 
@@ -678,7 +678,7 @@ async def delete_plugin_source(
 ):
     return ok(
         {"sources": await service.delete_custom_source(source_id)},
-        message="保存成功",
+        message="Salvo",
     )
 
 

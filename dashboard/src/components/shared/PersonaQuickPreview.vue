@@ -157,7 +157,7 @@ async function loadToolsMeta() {
     availableTools.value =
       response.data?.status === "ok" ? response.data?.data || [] : [];
   } catch (error) {
-    console.error("Failed to load tools metadata:", error);
+    console.error("Falha ao carregar os metadados das ferramentas:", error);
     availableTools.value = [];
   }
 }
@@ -173,7 +173,7 @@ async function loadSkillsMeta() {
       availableSkills.value = [];
     }
   } catch (error) {
-    console.error("Failed to load skills metadata:", error);
+    console.error("Falha ao carregar os metadados das habilidades:", error);
     availableSkills.value = [];
   }
 }
@@ -194,7 +194,7 @@ async function loadPersonaPreview(personaId) {
         response.data?.status === "ok" ? response.data?.data || null : null;
     }
   } catch (error) {
-    console.error("Failed to load persona preview:", error);
+    console.error("Falha ao carregar a prévia da persona:", error);
     if (loadVersion === personaLoadVersion) {
       personaData.value = null;
     }

@@ -27,7 +27,7 @@ from .mattermost_event import MattermostMessageEvent
 
 @register_platform_adapter(
     "mattermost",
-    "Mattermost 平台适配器",
+    "Adaptador da plataforma Mattermost",
     support_streaming_message=False,
 )
 class MattermostPlatformAdapter(Platform):
@@ -46,14 +46,14 @@ class MattermostPlatformAdapter(Platform):
         )
 
         if not self.base_url:
-            raise ValueError("Mattermost URL 是必需的")
+            raise ValueError("A URL do Mattermost é obrigatória")
         if not self.bot_token:
-            raise ValueError("Mattermost bot token 是必需的")
+            raise ValueError("O token do bot do Mattermost é obrigatório")
 
         self.client = MattermostClient(self.base_url, self.bot_token)
         self.metadata = PlatformMetadata(
             name="mattermost",
-            description="Mattermost 平台适配器",
+            description="Adaptador da plataforma Mattermost",
             id=cast(str, self.config.get("id", "mattermost")),
             support_streaming_message=False,
         )

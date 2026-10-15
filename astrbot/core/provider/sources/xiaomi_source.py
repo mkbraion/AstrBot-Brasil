@@ -13,7 +13,8 @@ XIAOMI_MODELS = [
 
 
 @register_provider_adapter(
-    "xiaomi_chat_completion", "Xiaomi API 提供商适配器 (OpenAI 兼容)"
+    "xiaomi_chat_completion",
+    "Adaptador de provedor da API Xiaomi (compatível com OpenAI)",
 )
 class ProviderXiaomi(ProviderOpenAIOfficial):
     """Xiaomi provider using OpenAI-compatible API.

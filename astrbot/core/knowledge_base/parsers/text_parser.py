@@ -36,7 +36,7 @@ class TextParser(BaseParser):
             except UnicodeDecodeError:
                 continue
         else:
-            raise ValueError(f"无法解码文件: {file_name}")
+            raise ValueError(f"Não foi possível decodificar o arquivo: {file_name}")
 
         # 文本文件无多媒体资源
         return ParseResult(text=text, media=[])

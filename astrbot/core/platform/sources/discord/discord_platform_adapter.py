@@ -37,7 +37,9 @@ else:
 
 # 注册平台适配器
 @register_platform_adapter(
-    "discord", "Discord 适配器 (基于 Pycord)", support_streaming_message=False
+    "discord",
+    "Adaptador do Discord (baseado em Pycord)",
+    support_streaming_message=False,
 )
 class DiscordPlatformAdapter(Platform):
     def __init__(
@@ -490,7 +492,7 @@ class DiscordPlatformAdapter(Platform):
                 options = [
                     discord.Option(
                         name="params",
-                        description="指令的所有参数",
+                        description="Todos os parâmetros do comando",
                         type=discord.SlashCommandOptionType.string,
                         required=False,
                     ),

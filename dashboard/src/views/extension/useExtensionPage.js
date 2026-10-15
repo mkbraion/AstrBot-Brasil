@@ -60,7 +60,7 @@ export const useExtensionPage = (initialTab = "installed") => {
         }
       }
     } catch (err) {
-      console.debug("Failed to check command conflicts:", err);
+      console.debug("Falha ao verificar conflitos de comandos:", err);
     }
   };
   const handleConflictConfirm = () => {
@@ -540,7 +540,7 @@ export const useExtensionPage = (initialTab = "installed") => {
   const handleReloadAllFailed = async () => {
     const dirNames = Object.keys(failedPluginsDict.value);
     if (dirNames.length === 0) {
-      toast("没有需要重载的失败插件", "info");
+      toast("Nenhum plugin com falha para recarregar", "info");
       return;
     }
 
@@ -549,7 +549,7 @@ export const useExtensionPage = (initialTab = "installed") => {
       const promises = dirNames.map((dir) => pluginApi.reloadFailed(dir));
       await Promise.all(promises);
 
-      toast("已尝试重载所有失败插件", "success");
+      toast("Tentativa de recarregar todos os plugins com falha concluída", "success");
 
       // 清空 message 关闭对话框
       extension_data.message = "";
@@ -557,8 +557,8 @@ export const useExtensionPage = (initialTab = "installed") => {
       // 刷新列表
       await getExtensions();
     } catch (e) {
-      console.error("重载失败:", e);
-      toast("批量重载过程中出现错误", "error");
+      console.error("Falha ao recarregar:", e);
+      toast("Erro ao recarregar em lote", "error");
     } finally {
       loading_.value = false;
     }
@@ -811,7 +811,7 @@ export const useExtensionPage = (initialTab = "installed") => {
                   registryUrl || null,
                 );
         } catch (error) {
-          console.warn("Failed to load plugin source for update check:", error);
+          console.warn("Falha ao carregar a fonte de plugins para verificar atualizações:", error);
           return;
         }
 
@@ -1395,7 +1395,7 @@ export const useExtensionPage = (initialTab = "installed") => {
         toast(res.data.message, "error");
       }
     } catch (e) {
-      console.warn("Failed to load custom sources:", e);
+      console.warn("Falha ao carregar as fontes personalizadas:", e);
       customSources.value = [];
     }
 
@@ -1528,7 +1528,7 @@ export const useExtensionPage = (initialTab = "installed") => {
           source.url || null,
         );
       } catch (error) {
-        console.warn("Failed to load plugin source for binding:", error);
+        console.warn("Falha ao carregar a fonte para vincular o plugin:", error);
         continue;
       }
 
@@ -2044,7 +2044,7 @@ export const useExtensionPage = (initialTab = "installed") => {
           checked: true,
           supported: false,
           message:
-            "Invalid astrbot_version. Use a PEP 440 range, e.g. >=4.16,<5.",
+            "astrbot_version inválido. Use uma faixa PEP 440, como >=4.16,<5.",
         };
       }
       if (!supported) {
@@ -2084,7 +2084,7 @@ export const useExtensionPage = (initialTab = "installed") => {
       await getExtensions();
     } catch (error) {
       console.debug(
-        "Failed to refresh extensions after install failure:",
+        "Falha ao atualizar as extensões após um erro de instalação:",
         error,
       );
     }
@@ -2406,7 +2406,7 @@ export const useExtensionPage = (initialTab = "installed") => {
           await checkUpdate();
           refreshRandomPlugins();
         } catch (err) {
-          console.debug("Failed to load plugin update metadata:", err);
+          console.debug("Falha ao carregar os metadados de atualização do plugin:", err);
         }
       })();
     }

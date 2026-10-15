@@ -252,7 +252,7 @@ export function useMessages(options: UseMessagesOptions) {
           .then((resp) => URL.createObjectURL(resp.data));
       } else {
         promise = fetchWithAuth(url).then(async (resp) => {
-          if (!resp.ok) throw new Error(`Media request failed: ${resp.status}`);
+          if (!resp.ok) throw new Error(`Falha na requisição de mídia: ${resp.status}`);
           return URL.createObjectURL(await resp.blob());
         });
       }
@@ -262,7 +262,7 @@ export function useMessages(options: UseMessagesOptions) {
       part.embedded_url = await promise;
     } catch (e) {
       attachmentBlobCache.delete(cacheKey);
-      console.error("Failed to resolve media:", cacheKey, e);
+      console.error("Falha ao resolver a mídia:", cacheKey, e);
     }
   }
 
@@ -303,7 +303,7 @@ export function useMessages(options: UseMessagesOptions) {
       });
       if (response.data?.status !== "ok") {
         throw new Error(
-          response.data?.message || "Failed to load session messages",
+          response.data?.message || "Falha ao carregar as mensagens da sessão",
         );
       }
       const payload = response.data?.data || {};
@@ -362,7 +362,7 @@ export function useMessages(options: UseMessagesOptions) {
       }
     } catch (error) {
       if (sessionLoadEpochs[sessionId] !== epoch) return;
-      console.error("Failed to load session messages:", error);
+      console.error("Falha ao carregar as mensagens da sessão:", error);
       messagesBySession[sessionId] = messagesBySession[sessionId] || [];
       const previousPagination = paginationBySession[sessionId];
       paginationBySession[sessionId] = {
@@ -401,7 +401,7 @@ export function useMessages(options: UseMessagesOptions) {
       if (sessionLoadEpochs[sessionId] !== epoch) return;
       if (response.data?.status !== "ok") {
         throw new Error(
-          response.data?.message || "Failed to load earlier messages",
+          response.data?.message || "Falha ao carregar as mensagens anteriores",
         );
       }
       const payload = response.data?.data || {};
@@ -426,7 +426,7 @@ export function useMessages(options: UseMessagesOptions) {
     } catch (error) {
       if (sessionLoadEpochs[sessionId] !== epoch) return;
       state.error = String((error as Error)?.message || error);
-      console.error("Failed to load earlier session messages:", error);
+      console.error("Falha ao carregar as mensagens anteriores da sessão:", error);
     } finally {
       if (sessionLoadEpochs[sessionId] === epoch) state.loading = false;
     }
@@ -693,12 +693,12 @@ export function useMessages(options: UseMessagesOptions) {
         },
       );
       if (!response.ok || !response.body) {
-        throw new Error(`Regenerate failed: ${response.status}`);
+        throw new Error(`Falha ao gerar novamente: ${response.status}`);
       }
       const contentType = response.headers.get("content-type") || "";
       if (!contentType.includes("text/event-stream")) {
         const payload = await response.json().catch(() => null);
-        throw new Error(payload?.message || "Regenerate failed.");
+        throw new Error(payload?.message || "Falha ao gerar novamente.");
       }
       await readSseStream(response.body, (payload) => {
         processStreamPayload(botRecord, payload, undefined, connection);
@@ -710,7 +710,7 @@ export function useMessages(options: UseMessagesOptions) {
           botRecord,
           `\n\n${String((error as Error)?.message || error)}`,
         );
-        console.error("Regenerate failed:", error);
+        console.error("Falha ao gerar novamente:", error);
       }
     } finally {
       if (activeConnections[connection.messageId]?.abort === abort) {
@@ -820,7 +820,7 @@ export function useMessages(options: UseMessagesOptions) {
     })
       .then(async (response) => {
         if (!response.ok || !response.body) {
-          throw new Error(`SSE connection failed: ${response.status}`);
+          throw new Error(`Falha na conexão SSE: ${response.status}`);
         }
         await readSseStream(response.body, (payload) => {
           processStreamPayload(botRecord, payload, userRecord, connection);
@@ -831,7 +831,7 @@ export function useMessages(options: UseMessagesOptions) {
         if (abort.signal.aborted) return;
         ensureBotRecordVisible(connection);
         appendPlain(botRecord, `\n\n${String(error?.message || error)}`);
-        console.error("SSE chat failed:", error);
+        console.error("Falha na conversa por SSE:", error);
       })
       .finally(async () => {
         if (activeConnections[messageId]?.abort === abort) {
@@ -883,7 +883,7 @@ export function useMessages(options: UseMessagesOptions) {
             !contentType.includes("text/event-stream")
           ) {
             retryable = response.status >= 500;
-            throw new Error(`Resume stream failed: ${response.status}`);
+            throw new Error(`Falha ao retomar o fluxo: ${response.status}`);
           }
 
           await readSseStream(response.body, (payload) => {
@@ -914,7 +914,7 @@ export function useMessages(options: UseMessagesOptions) {
       }
 
       if (!receivedEnd && lastError && !abort.signal.aborted) {
-        console.error("Resume chat stream failed:", lastError);
+        console.error("Falha ao retomar o fluxo da conversa:", lastError);
       }
 
       const ownsConnection = activeConnections[runId]?.abort === abort;
@@ -999,7 +999,7 @@ export function useMessages(options: UseMessagesOptions) {
         if (!connection.botRecord) continue;
         connection.errorShown = true;
         ensureBotRecordVisible(connection);
-        appendPlain(connection.botRecord, "\n\nWebSocket connection failed.");
+        appendPlain(connection.botRecord, "\n\nFalha na conexão WebSocket.");
       }
     };
     ws.onclose = async () => {
@@ -1046,9 +1046,9 @@ export function useMessages(options: UseMessagesOptions) {
         connection.errorShown = true;
         if (connection.botRecord) {
           ensureBotRecordVisible(connection);
-          appendPlain(connection.botRecord, "\n\nWebSocket connection failed.");
+          appendPlain(connection.botRecord, "\n\nFalha na conexão WebSocket.");
         }
-        console.error("Failed to send WebSocket payload:", error);
+        console.error("Falha ao enviar os dados por WebSocket:", error);
         void finishWebSocketStream(sessionId, messageId);
       }
     };
@@ -1090,7 +1090,7 @@ export function useMessages(options: UseMessagesOptions) {
         void finishWebSocketStream(sessionId, connection.messageId);
       }
     } catch (error) {
-      console.error("Failed to parse WebSocket payload:", error);
+      console.error("Falha ao interpretar os dados do WebSocket:", error);
     }
   }
 
@@ -1569,7 +1569,7 @@ async function readSseStream(
       try {
         onPayload(JSON.parse(data));
       } catch (error) {
-        console.error("Failed to parse SSE payload:", error, data);
+        console.error("Falha ao interpretar os dados SSE:", error, data);
       }
     }
   }

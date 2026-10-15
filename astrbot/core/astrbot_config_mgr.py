@@ -229,13 +229,13 @@ class AstrBotConfigManager:
             ValueError: If the default profile is requested.
         """
         if conf_id == "default":
-            raise ValueError("不能删除默认配置文件")
+            raise ValueError("Não é possível excluir a configuração padrão")
 
         async with self._abconf_lock:
             # 从映射中移除
             abconf_data = await self._load_abconf_mapping()
             if conf_id not in abconf_data:
-                logger.warning(f"配置文件 {conf_id} 不存在于映射中")
+                logger.warning(f"A configuração {conf_id} não existe于映射中")
                 return False
 
             # 获取配置文件路径
@@ -248,9 +248,9 @@ class AstrBotConfigManager:
             try:
                 if os.path.exists(conf_path):
                     os.remove(conf_path)
-                    logger.info(f"已删除配置文件: {conf_path}")
+                    logger.info(f"已删除配置Arquivo: {conf_path}")
             except Exception as e:
-                logger.error(f"删除配置文件 {conf_path} 失败: {e}")
+                logger.error(f"删除A configuração {conf_path}: {e}")
                 return False
 
             # 从内存中移除
@@ -261,7 +261,7 @@ class AstrBotConfigManager:
             del abconf_data[conf_id]
             await self._persist_abconf_mapping(abconf_data)
 
-            logger.info(f"成功删除配置文件 {conf_id}")
+            logger.info(f"成功删除A configuração {conf_id}")
             return True
 
     async def update_conf_info(
@@ -279,12 +279,14 @@ class AstrBotConfigManager:
             Whether the profile metadata was updated.
         """
         if conf_id == "default":
-            raise ValueError("不能更新默认配置文件的信息")
+            raise ValueError(
+                "Não é possível atualizar as informações da configuração padrão"
+            )
 
         async with self._abconf_lock:
             abconf_data = await self._load_abconf_mapping()
             if conf_id not in abconf_data:
-                logger.warning(f"配置文件 {conf_id} 不存在于映射中")
+                logger.warning(f"A configuração {conf_id} não existe于映射中")
                 return False
 
             # 更新名称
@@ -293,7 +295,7 @@ class AstrBotConfigManager:
 
             # 保存更新
             await self._persist_abconf_mapping(abconf_data)
-            logger.info(f"成功更新配置文件 {conf_id} 的信息")
+            logger.info(f"成功更新A configuração {conf_id} 的信息")
             return True
 
     def g(

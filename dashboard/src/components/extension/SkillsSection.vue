@@ -278,7 +278,7 @@
             class="d-flex flex-wrap justify-space-between align-center ga-2 mb-3"
           >
             <div>
-              <div class="text-subtitle-1 font-weight-bold">Neo Skills</div>
+              <div class="text-subtitle-1 font-weight-bold">Habilidades Neo</div>
               <div class="text-caption text-medium-emphasis">
                 {{ tm("skills.neoFilterHint") }}
               </div>
@@ -333,13 +333,13 @@
 
         <div class="mx-3 mb-3 d-flex flex-wrap ga-2">
           <v-chip size="small" color="primary" variant="tonal"
-            >Candidates: {{ neoCandidates.length }}</v-chip
+            >Candidatos: {{ neoCandidates.length }}</v-chip
           >
           <v-chip size="small" color="indigo" variant="tonal"
-            >Releases: {{ neoReleases.length }}</v-chip
+            >Versões: {{ neoReleases.length }}</v-chip
           >
           <v-chip size="small" color="success" variant="tonal"
-            >Active: {{ activeReleaseCount }}</v-chip
+            >Ativa: {{ activeReleaseCount }}</v-chip
           >
         </div>
 

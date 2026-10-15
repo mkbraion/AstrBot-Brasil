@@ -388,7 +388,7 @@ class EmbeddingProvider(AbstractProvider):
                             # 最后一次重试失败，记录失败的批次
                             failed_batches.append((batch_idx, batch_texts))
                             raise Exception(
-                                f"批次 {batch_idx} 处理失败，已重试 {max_retries} 次: {e!s}",
+                                f"O lote {batch_idx} falhou após {max_retries} tentativas: {e!s}",
                             )
                         # 等待一段时间后重试，使用指数退避
                         await asyncio.sleep(2**attempt)
@@ -406,7 +406,7 @@ class EmbeddingProvider(AbstractProvider):
         errors = [r for r in results if isinstance(r, Exception)]
         if errors:
             error_msg = (
-                f"有 {len(errors)} 个批次处理失败: {'; '.join(str(e) for e in errors)}"
+                f"Falha em {len(errors)} lotes: {'; '.join(str(e) for e in errors)}"
             )
             raise Exception(error_msg)
 

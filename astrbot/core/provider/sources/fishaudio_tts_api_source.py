@@ -130,9 +130,7 @@ class ProviderFishAudioTTSAPI(TTSProvider):
             # 验证reference_id格式
             if not self._validate_reference_id(self.reference_id):
                 raise ValueError(
-                    f"无效的FishAudio参考模型ID: '{self.reference_id}'. "
-                    f"请确保ID是32位十六进制字符串（例如: 626bb6d3f3364c9cbc3aa6a67300a664）。"
-                    f"您可以从 https://fish.audio/zh-CN/discovery 获取有效的模型ID。",
+                    f"ID de modelo de referência do Fish Audio inválido: '{self.reference_id}'. O ID deve ter 32 caracteres hexadecimais (exemplo: 626bb6d3f3364c9cbc3aa6a67300a664). Obtenha IDs válidos em https://fish.audio/zh-CN/discovery.",
                 )
             reference_id = self.reference_id.strip()
         else:
@@ -177,5 +175,5 @@ class ProviderFishAudioTTSAPI(TTSProvider):
             error_bytes = await response.aread()
             error_text = error_bytes.decode("utf-8", errors="replace")[:1024]
             raise Exception(
-                f"Fish Audio API请求失败: 状态码 {response.status_code}, 响应内容: {error_text}"
+                f"Falha na requisição à API do Fish Audio. Código de status: {response.status_code}; resposta: {error_text}"
             )

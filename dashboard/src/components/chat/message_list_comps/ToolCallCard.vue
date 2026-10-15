@@ -24,14 +24,14 @@
       </div>
 
       <div class="tool-call-detail-row">
-        <span class="detail-label">Args:</span>
+        <span class="detail-label">Argumentos:</span>
         <pre class="detail-value detail-json">{{
           JSON.stringify(toolCall.args, null, 2)
         }}</pre>
       </div>
 
       <div v-if="toolCall.result" class="tool-call-detail-row">
-        <span class="detail-label">Result:</span>
+        <span class="detail-label">Resultado:</span>
         <pre class="detail-value detail-json detail-result">{{
           formattedResult
         }}</pre>

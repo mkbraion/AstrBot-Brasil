@@ -18,7 +18,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "volcengine_tts",
-    "火山引擎 TTS",
+    "Volcengine TTS",
     provider_type=ProviderType.TEXT_TO_SPEECH,
 )
 class ProviderVolcengineTTS(TTSProvider):
@@ -86,7 +86,7 @@ class ProviderVolcengineTTS(TTSProvider):
                 logger.debug(f"响应状态码: {response.status}")
 
                 response_text = await response.text()
-                logger.debug(f"响应内容: {response_text[:200]}...")
+                logger.debug(f"响应Conteúdo: {response_text[:200]}...")
 
                 if response.status == 200:
                     resp_data = json.loads(response_text)
@@ -108,13 +108,15 @@ class ProviderVolcengineTTS(TTSProvider):
                         )
 
                         return file_path
-                    error_msg = resp_data.get("message", "未知错误")
-                    raise Exception(f"火山引擎 TTS API 返回错误: {error_msg}")
+                    error_msg = resp_data.get("message", "Erro desconhecido")
+                    raise Exception(
+                        f"A API TTS do Volcengine retornou um erro: {error_msg}"
+                    )
                 raise Exception(
-                    f"火山引擎 TTS API 请求失败: {response.status}, {response_text}",
+                    f"Falha na requisição à API TTS do Volcengine: {response.status}, {response_text}",
                 )
 
         except Exception as e:
             error_details = traceback.format_exc()
-            logger.debug(f"火山引擎 TTS 异常详情: {error_details}")
-            raise Exception(f"火山引擎 TTS 异常: {e!s}")
+            logger.debug(f"Volcengine TTS 异常详情: {error_details}")
+            raise Exception(f"Erro no TTS do Volcengine: {e!s}")

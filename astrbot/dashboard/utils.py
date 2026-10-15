@@ -37,7 +37,7 @@ async def generate_tsne_visualization(
         from sklearn.manifold import TSNE  # type: ignore[reportMissingImports]
     except ImportError as e:
         raise Exception(
-            "缺少必要的库以生成 t-SNE 可视化。请安装 matplotlib 和 scikit-learn: {e}",
+            "Faltam bibliotecas para gerar a visualização t-SNE. Instale matplotlib e scikit-learn: {e}",
         ) from e
 
     try:
@@ -67,7 +67,7 @@ async def generate_tsne_visualization(
             return None
 
         # 提取所有向量
-        logger.info(f"提取 {index.ntotal} 个向量用于可视化...")
+        logger.info(f"提取 {index.ntotal} itens向量用于可视化...")
         if isinstance(index, faiss.IndexIDMap):
             base_index = faiss.downcast_index(index.index)
             if hasattr(base_index, "reconstruct_n"):

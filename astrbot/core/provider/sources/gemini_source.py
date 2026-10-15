@@ -43,7 +43,7 @@ logging.getLogger("google_genai.types").addFilter(SuppressNonTextPartsWarning())
 
 @register_provider_adapter(
     "googlegenai_chat_completion",
-    "Google Gemini Chat Completion 提供商适配器",
+    "Adaptador de provedor de geração de respostas do Google Gemini",
 )
 class ProviderGoogleGenAI(Provider):
     CATEGORY_MAPPING = {
@@ -589,7 +589,7 @@ class ProviderGoogleGenAI(Provider):
             and part.inline_data.mime_type.startswith("image/")
             for part in result_parts
         ):
-            chain.append(Comp.Plain("这是图片"))
+            chain.append(Comp.Plain("Esta é uma imagem"))
         for part in result_parts:
             # Skip thinking parts — their text is already captured via
             # _extract_reasoning_content above.  Including them here would

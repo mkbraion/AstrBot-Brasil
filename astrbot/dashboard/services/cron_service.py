@@ -49,13 +49,13 @@ class CronService:
             raise
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise CronServiceError(f"Failed to list jobs: {exc!s}") from exc
+            raise CronServiceError(f"Falha ao listar as tarefas: {exc!s}") from exc
 
     async def create_job(self, payload: object) -> dict:
         try:
             cron_mgr = self._get_cron_manager()
             if not isinstance(payload, dict):
-                raise CronServiceError("Invalid payload")
+                raise CronServiceError("Dados inválidos")
 
             name = payload.get("name") or "active_agent_task"
             cron_expression = payload.get("cron_expression")
@@ -76,10 +76,10 @@ class CronService:
             run_at = payload.get("run_at")
 
             if run_once and not run_at:
-                raise CronServiceError("run_at is required when run_once=true")
+                raise CronServiceError("run_at é obrigatório quando run_once=true")
             if (not run_once) and not cron_expression:
                 raise CronServiceError(
-                    "cron_expression is required when run_once=false"
+                    "cron_expression é obrigatório quando run_once=false"
                 )
             if run_once and cron_expression:
                 cron_expression = None
@@ -109,23 +109,23 @@ class CronService:
             raise
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise CronServiceError(f"Failed to create job: {exc!s}") from exc
+            raise CronServiceError(f"Falha ao criar a tarefa: {exc!s}") from exc
 
     async def update_job(self, job_id: str, payload: object) -> dict:
         try:
             cron_mgr = self._get_cron_manager()
             if not isinstance(payload, dict):
-                raise CronServiceError("Invalid payload")
+                raise CronServiceError("Dados inválidos")
 
             job = await cron_mgr.db.get_cron_job(job_id)
             if not job:
-                raise CronServiceError("Job not found")
+                raise CronServiceError("Tarefa não encontrada")
 
             updates = {}
             if "name" in payload:
                 name = str(payload.get("name") or "").strip()
                 if not name:
-                    raise CronServiceError("name cannot be empty")
+                    raise CronServiceError("name não pode ficar vazio")
                 updates["name"] = name
 
             if "enabled" in payload:
@@ -142,13 +142,13 @@ class CronService:
 
             updated_job = await cron_mgr.update_job(job_id, **updates)
             if not updated_job:
-                raise CronServiceError("Job not found")
+                raise CronServiceError("Tarefa não encontrada")
             return self.serialize_job(updated_job)
         except CronServiceError:
             raise
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise CronServiceError(f"Failed to update job: {exc!s}") from exc
+            raise CronServiceError(f"Falha ao atualizar a tarefa: {exc!s}") from exc
 
     async def delete_job(self, job_id: str) -> None:
         try:
@@ -158,14 +158,14 @@ class CronService:
             raise
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise CronServiceError(f"Failed to delete job: {exc!s}") from exc
+            raise CronServiceError(f"Falha ao excluir a tarefa: {exc!s}") from exc
 
     async def run_job_now(self, job_id: str) -> None:
         try:
             cron_mgr = self._get_cron_manager()
             job = await cron_mgr.db.get_cron_job(job_id)
             if not job:
-                raise CronServiceError("Job not found")
+                raise CronServiceError("Tarefa não encontrada")
             task = asyncio.create_task(cron_mgr.run_job_now(job_id))
             self._background_tasks.add(task)
             task.add_done_callback(self._background_tasks.discard)
@@ -173,7 +173,7 @@ class CronService:
             raise
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise CronServiceError(f"Failed to run job: {exc!s}") from exc
+            raise CronServiceError(f"Falha ao executar a tarefa: {exc!s}") from exc
 
     @staticmethod
     def _parse_optional_run_at(run_at: object) -> datetime | None:
@@ -182,7 +182,9 @@ class CronService:
         try:
             return datetime.fromisoformat(str(run_at))
         except Exception as exc:
-            raise CronServiceError("run_at must be ISO datetime") from exc
+            raise CronServiceError(
+                "run_at deve ser uma data e hora no formato ISO"
+            ) from exc
 
     @staticmethod
     def _normalize_run_at_iso(run_at: object) -> str | None:
@@ -191,7 +193,9 @@ class CronService:
         try:
             return datetime.fromisoformat(str(run_at)).isoformat()
         except Exception as exc:
-            raise CronServiceError("run_at must be ISO datetime") from exc
+            raise CronServiceError(
+                "run_at deve ser uma data e hora no formato ISO"
+            ) from exc
 
     def _merge_active_agent_updates(self, job, payload: dict, updates: dict) -> None:
         merged_payload = dict(job.payload) if isinstance(job.payload, dict) else {}
@@ -229,13 +233,13 @@ class CronService:
 
         if next_run_once:
             if not run_at_iso:
-                raise CronServiceError("run_at is required when run_once=true")
+                raise CronServiceError("run_at é obrigatório quando run_once=true")
             next_cron_expression = None
             merged_payload["run_at"] = run_at_iso
         else:
             if not next_cron_expression:
                 raise CronServiceError(
-                    "cron_expression is required when run_once=false"
+                    "cron_expression é obrigatório quando run_once=false"
                 )
             merged_payload.pop("run_at", None)
 
@@ -254,14 +258,14 @@ class CronService:
         if "note" in payload:
             note = str(payload.get("note") or "").strip()
             if not note:
-                raise CronServiceError("note cannot be empty")
+                raise CronServiceError("note não pode ficar vazio")
             merged_payload["note"] = note
             updates["description"] = note
             note_updated = True
         elif "description" in payload:
             description = str(payload.get("description") or "").strip()
             if not description:
-                raise CronServiceError("description cannot be empty")
+                raise CronServiceError("description não pode ficar vazio")
             updates["description"] = description
             merged_payload["note"] = description
             note_updated = True
@@ -278,7 +282,7 @@ class CronService:
         if "cron_expression" in payload:
             cron_expression = str(payload.get("cron_expression") or "").strip()
             if not cron_expression:
-                raise CronServiceError("cron_expression cannot be empty")
+                raise CronServiceError("cron_expression não pode ficar vazio")
             updates["cron_expression"] = cron_expression
 
         if "description" in payload:

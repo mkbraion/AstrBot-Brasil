@@ -147,7 +147,7 @@ class KookEvent(AstrMessageEvent):
                 )
             case _:
                 raise NotImplementedError(
-                    f'kook适配器尚未实现对 "{message_component.type}" 消息类型的支持'
+                    f'O adaptador KOOK ainda não oferece suporte a mensagens do tipo "{message_component.type}"'
                 )
 
     async def send(self, message: MessageChain):
@@ -183,7 +183,7 @@ class KookEvent(AstrMessageEvent):
             if item.reply_id:
                 reply_id = item.reply_id
             if not item.text:
-                logger.debug(f'[Kook] 跳过空消息,类型为"{item.type.name}"')
+                logger.debug(f'[Kook] 跳过Mensagem vazia,类型为"{item.type.name}"')
                 continue
             try:
                 await self.client.send_text(

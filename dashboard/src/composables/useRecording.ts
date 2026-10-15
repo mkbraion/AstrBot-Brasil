@@ -69,10 +69,10 @@ export function useRecording() {
             isRecording.value = true;
             
             if (onStart) {
-                onStart('录音中...');
+                onStart('Gravando...');
             }
         } catch (error) {
-            console.error('Failed to start recording:', error);
+            console.error("Falha ao iniciar a gravação:", error);
             isRecording.value = false;
             throw error;
         }
@@ -88,7 +88,7 @@ export function useRecording() {
 
             isRecording.value = false;
             if (onStop) {
-                onStop('聊天输入框');
+                onStop('Campo de mensagem');
             }
 
             recorder.onstop = () => {

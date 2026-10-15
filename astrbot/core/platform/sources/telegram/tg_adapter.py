@@ -43,7 +43,7 @@ else:
     from typing_extensions import override
 
 
-@register_platform_adapter("telegram", "telegram 适配器")
+@register_platform_adapter("telegram", "Adaptador do Telegram")
 class TelegramPlatformAdapter(Platform):
     _FORUM_TOPIC_NAME_CACHE_MAX_SIZE = 1000
 
@@ -229,7 +229,9 @@ class TelegramPlatformAdapter(Platform):
     @override
     def meta(self) -> PlatformMetadata:
         id_ = self.config.get("id") or "telegram"
-        return PlatformMetadata(name="telegram", description="telegram 适配器", id=id_)
+        return PlatformMetadata(
+            name="telegram", description="Adaptador do Telegram", id=id_
+        )
 
     @override
     async def run(self) -> None:

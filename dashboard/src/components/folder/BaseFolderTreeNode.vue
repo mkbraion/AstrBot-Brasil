@@ -154,7 +154,7 @@ export default defineComponent({
           });
         }
       } catch (e) {
-        console.error("Failed to parse drop data:", e);
+        console.error("Falha ao interpretar os dados soltos:", e);
       }
     },
   },

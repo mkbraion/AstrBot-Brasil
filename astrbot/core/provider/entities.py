@@ -204,10 +204,10 @@ class ProviderRequest:
             content_blocks.append({"type": "text", "text": self.prompt})
         elif self.image_urls:
             # 如果没有文本但有图片，添加占位文本
-            content_blocks.append({"type": "text", "text": "[图片]"})
+            content_blocks.append({"type": "text", "text": "[Imagem]"})
         elif self.audio_urls:
             # 如果没有文本但有音频，添加占位文本
-            content_blocks.append({"type": "text", "text": "[音频]"})
+            content_blocks.append({"type": "text", "text": "[Áudio]"})
 
         # 2. 额外的内容块（系统提醒、指令等）
         if self.extra_user_content_parts:

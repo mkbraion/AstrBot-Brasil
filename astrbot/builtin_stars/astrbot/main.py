@@ -98,9 +98,7 @@ class Main(star.Star):
 
                     yield event.request_llm(
                         prompt=(
-                            "注意，你正在社交媒体上中与用户进行聊天，用户只是通过@来唤醒你，但并未在这条消息中输入内容，他可能会在接下来一条发送他想发送的内容。"
-                            "你友好地询问用户想要聊些什么或者需要什么帮助，回复要符合人设，不要太过机械化。"
-                            "请注意，你仅需要输出要回复用户的内容，不要输出其他任何东西"
+                            "Você está conversando com o usuário em uma rede social. Ele mencionou você, mas não incluiu texto na mensagem; pode enviar o conteúdo na próxima mensagem. Pergunte de forma amigável sobre o que gostaria de conversar ou como pode ajudar. Respeite a persona e evite um tom mecânico. Responda em português do Brasil, a menos que o usuário peça outro idioma. Produza apenas a resposta ao usuário."
                         ),
                         session_id=curr_cid,
                         contexts=[],
@@ -109,7 +107,7 @@ class Main(star.Star):
                     )
                 except Exception as e:
                     logger.error(f"LLM response failed: {e!s}")
-                    yield event.plain_result("想要问什么呢？😄")
+                    yield event.plain_result("O que você gostaria de perguntar? 😄")
 
             @session_waiter(60)
             async def empty_mention_waiter(
@@ -132,7 +130,9 @@ class Main(star.Star):
             except TimeoutError:
                 pass
             except Exception as e:
-                yield event.plain_result("发生错误，请联系管理员: " + str(e))
+                yield event.plain_result(
+                    "Ocorreu um erro. Entre em contato com o administrador: " + str(e)
+                )
             finally:
                 event.stop_event()
         except Exception as e:

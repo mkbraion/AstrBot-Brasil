@@ -46,17 +46,17 @@ class CozeAgentRunner(BaseAgentRunner[TContext]):
 
         self.api_key = provider_config.get("coze_api_key", "")
         if not self.api_key:
-            raise Exception("Coze API Key 不能为空。")
+            raise Exception("A chave de API do Coze não pode ficar vazia.")
         self.bot_id = provider_config.get("bot_id", "")
         if not self.bot_id:
-            raise Exception("Coze Bot ID 不能为空。")
+            raise Exception("O ID do bot do Coze não pode ficar vazio.")
         self.api_base: str = provider_config.get("coze_api_base", "https://api.coze.cn")
 
         if not isinstance(self.api_base, str) or not self.api_base.startswith(
             ("http://", "https://"),
         ):
             raise Exception(
-                "Coze API Base URL 格式不正确，必须以 http:// 或 https:// 开头。",
+                "A URL base da API do Coze é inválida. Deve começar com http:// ou https://.",
             )
 
         self.timeout = provider_config.get("timeout", 120)
@@ -92,15 +92,17 @@ class CozeAgentRunner(BaseAgentRunner[TContext]):
             async for response in self._execute_coze_request():
                 yield response
         except Exception as e:
-            logger.error(f"Coze 请求失败：{str(e)}")
+            logger.error(f"Falha na requisição ao Coze: {str(e)}")
             self._transition_state(AgentState.ERROR)
             self.final_llm_resp = LLMResponse(
-                role="err", completion_text=f"Coze 请求失败：{str(e)}"
+                role="err", completion_text=f"Falha na requisição ao Coze: {str(e)}"
             )
             yield AgentResponse(
                 type="err",
                 data=AgentResponseData(
-                    chain=MessageChain().message(f"Coze 请求失败：{str(e)}")
+                    chain=MessageChain().message(
+                        f"Falha na requisição ao Coze: {str(e)}"
+                    )
                 ),
             )
         finally:
@@ -180,7 +182,7 @@ class CozeAgentRunner(BaseAgentRunner[TContext]):
                                                 }
                                             )
                                     except Exception as e:
-                                        logger.warning(f"处理上下文图片失败: {e}")
+                                        logger.warning(f"处理上下文Imagem失败: {e}")
                                         continue
 
                         if processed_content:
@@ -306,10 +308,10 @@ class CozeAgentRunner(BaseAgentRunner[TContext]):
 
             elif event_type == "error":
                 # 错误处理
-                error_msg = data.get("msg", "未知错误")
+                error_msg = data.get("msg", "Erro desconhecido")
                 error_code = data.get("code", "UNKNOWN")
-                logger.error(f"Coze 出现错误: {error_code} - {error_msg}")
-                raise Exception(f"Coze 出现错误: {error_code} - {error_msg}")
+                logger.error(f"Erro no Coze: {error_code} - {error_msg}")
+                raise Exception(f"Erro no Coze: {error_code} - {error_msg}")
 
         if not message_started and not accumulated_content:
             logger.warning("Coze 未返回任何内容")
@@ -360,13 +362,13 @@ class CozeAgentRunner(BaseAgentRunner[TContext]):
 
             if session_id:
                 self.file_id_cache[session_id][cache_key] = file_id
-                logger.debug(f"[Coze] 图片上传成功并缓存，file_id: {file_id}")
+                logger.debug(f"[Coze] Imagem上传成功并缓存，file_id: {file_id}")
 
             return file_id
 
         except Exception as e:
             logger.error("处理图片失败 %s: %s", describe_media_ref(image_url), e)
-            raise Exception(f"处理图片失败: {e!s}") from e
+            raise Exception(f"Falha ao processar a imagem: {e!s}") from e
 
     @override
     def done(self) -> bool:

@@ -277,11 +277,11 @@ async function loadTools() {
       availableTools.value = response.data?.data || [];
     } else {
       availableTools.value = [];
-      emit("error", response.data?.message || "Failed to load tools");
+      emit("error", response.data?.message || "Falha ao carregar as ferramentas");
     }
   } catch (error) {
     availableTools.value = [];
-    emit("error", error?.response?.data?.message || "Failed to load tools");
+    emit("error", error?.response?.data?.message || "Falha ao carregar as ferramentas");
   } finally {
     loadingTools.value = false;
   }
@@ -297,11 +297,11 @@ async function loadSkills() {
       availableSkills.value = skills.filter((skill) => skill.active !== false);
     } else {
       availableSkills.value = [];
-      emit("error", response.data?.message || "Failed to load skills");
+      emit("error", response.data?.message || "Falha ao carregar as habilidades");
     }
   } catch (error) {
     availableSkills.value = [];
-    emit("error", error?.response?.data?.message || "Failed to load skills");
+    emit("error", error?.response?.data?.message || "Falha ao carregar as habilidades");
   } finally {
     loadingSkills.value = false;
   }

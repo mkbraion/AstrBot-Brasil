@@ -43,7 +43,7 @@ USER_NAME_LOOKUP_TIMEOUT_SECONDS = 5
 
 
 @register_platform_adapter(
-    "lark", "飞书机器人官方 API 适配器", support_streaming_message=True
+    "lark", "Adaptador da API oficial de bots do Lark", support_streaming_message=True
 )
 class LarkPlatformAdapter(Platform):
     def __init__(
@@ -130,7 +130,7 @@ class LarkPlatformAdapter(Platform):
             return None
 
         if response.file is None:
-            logger.error(f"[Lark] 消息资源响应中不包含文件流: {file_key}")
+            logger.error(f"[Lark] 消息资源响应中不包含Arquivo流: {file_key}")
             return None
 
         return response.file.read()
@@ -429,7 +429,7 @@ class LarkPlatformAdapter(Platform):
                     quoted_content_json = parsed
             except json.JSONDecodeError:
                 logger.warning(
-                    f"[Lark] 解析引用消息内容失败 id={quoted_message_id}",
+                    f"[Lark] 解析引用消息Conteúdo失败 id={quoted_message_id}",
                 )
 
         quoted_at_map = self._build_at_map(parent_message.mentions)
@@ -544,7 +544,7 @@ class LarkPlatformAdapter(Platform):
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             name="lark",
-            description="飞书机器人官方 API 适配器",
+            description="Adaptador da API oficial de bots do Lark",
             id=cast(str, self.config.get("id")),
             support_streaming_message=True,
         )
@@ -601,14 +601,14 @@ class LarkPlatformAdapter(Platform):
         try:
             content_json_b = json.loads(message.content)
         except json.JSONDecodeError:
-            logger.error(f"[Lark] 解析消息内容失败: {message.content}")
+            logger.error(f"[Lark] 解析消息Conteúdo失败: {message.content}")
             return
 
         if not isinstance(content_json_b, dict):
-            logger.error(f"[Lark] 消息内容不是 JSON Object: {message.content}")
+            logger.error(f"[Lark] 消息Conteúdo不是 JSON Object: {message.content}")
             return
 
-        logger.debug(f"[Lark] 解析消息内容: {content_json_b}")
+        logger.debug(f"[Lark] 解析消息Conteúdo: {content_json_b}")
         parsed_components = await self._parse_message_components(
             message_id=message.message_id,
             message_type=message.message_type or "unknown",
@@ -760,7 +760,7 @@ class LarkPlatformAdapter(Platform):
 
             webhook_uuid = self.config.get("webhook_uuid")
             if webhook_uuid:
-                log_webhook_info(f"{self.meta().id}(飞书 Webhook)", webhook_uuid)
+                log_webhook_info(f"{self.meta().id}(Webhook do Lark)", webhook_uuid)
             else:
                 logger.warning("[Lark] Webhook 模式已启用，但未配置 webhook_uuid")
         else:

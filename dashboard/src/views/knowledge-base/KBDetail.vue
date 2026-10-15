@@ -213,7 +213,7 @@ const loadKB = async () => {
       showSnackbar(response.data.message || t('states.loadError'), 'error')
     }
   } catch (error) {
-    console.error('Failed to load knowledge base:', error)
+    console.error("Falha ao carregar a base de conhecimento:", error)
     loadError.value = true
     showSnackbar(t('states.loadError'), 'error')
   } finally {

@@ -71,8 +71,7 @@ def try_cast(value: Any, type_: str):
 def _expect_type(value, expected_type, path_key, errors, expected_name=None) -> bool:
     if not isinstance(value, expected_type):
         errors.append(
-            f"错误的类型 {path_key}: 期望是 {expected_name or expected_type.__name__}, "
-            f"得到了 {type(value).__name__}"
+            f"Tipo inválido {path_key}: esperado {expected_name or expected_type.__name__}, recebido {type(value).__name__}"
         )
         return False
     return True
@@ -93,12 +92,14 @@ def _validate_template_list(value, meta, path_key, errors, validate_fn) -> None:
 
         template_key = item.get("__template_key") or item.get("template")
         if not template_key:
-            errors.append(f"缺少模板选择 {item_path}: 需要 __template_key")
+            errors.append(
+                f"Seleção de modelo ausente {item_path}: __template_key é obrigatório"
+            )
             continue
 
         template_meta = templates.get(template_key)
         if not template_meta:
-            errors.append(f"未知模板 {item_path}: {template_key}")
+            errors.append(f"Modelo desconhecido {item_path}: {template_key}")
             continue
 
         validate_fn(
@@ -236,7 +237,7 @@ def validate_config(
                 continue
             meta = metadata[key]
             if "type" not in meta:
-                logger.debug(f"配置项 {path}{key} 没有类型定义, 跳过校验")
+                logger.debug(f"A configuração {path}{key} 没有类型定义, 跳过校验")
                 continue
             if value is None:
                 data[key] = DEFAULT_VALUE_MAP[meta["type"]]
@@ -252,13 +253,13 @@ def validate_config(
                 for idx, item in enumerate(value):
                     if not isinstance(item, str):
                         errors.append(
-                            f"Invalid type {path}{key}[{idx}]: expected string, got {type(item).__name__}",
+                            f"Tipo inválido: {path}{key}[{idx}]: expected string, got {type(item).__name__}",
                         )
                         continue
                     normalized = _normalize_rel_path(item)
                     if not normalized or not normalized.startswith("files/"):
                         errors.append(
-                            f"Invalid file path {path}{key}[{idx}]: {item}",
+                            f"Caminho de arquivo inválido: {path}{key}[{idx}]: {item}",
                         )
                         continue
                     key_path = f"{path}{key}"
@@ -266,7 +267,7 @@ def validate_config(
                     expected_prefix = f"files/{expected_folder}/"
                     if not normalized.startswith(expected_prefix):
                         errors.append(
-                            f"Invalid file path {path}{key}[{idx}]: {item}",
+                            f"Caminho de arquivo inválido: {path}{key}[{idx}]: {item}",
                         )
                         continue
                     value[idx] = normalized
@@ -274,7 +275,7 @@ def validate_config(
 
             if meta["type"] == "list" and not isinstance(value, list):
                 errors.append(
-                    f"错误的类型 {path}{key}: 期望是 list, 得到了 {type(value).__name__}",
+                    f"Tipo inválido {path}{key}: esperado list, recebido {type(value).__name__}",
                 )
             elif (
                 meta["type"] == "list"
@@ -292,31 +293,31 @@ def validate_config(
                 casted = try_cast(value, "int")
                 if casted is None:
                     errors.append(
-                        f"错误的类型 {path}{key}: 期望是 int, 得到了 {type(value).__name__}",
+                        f"Tipo inválido {path}{key}: esperado int, recebido {type(value).__name__}",
                     )
                 data[key] = casted
             elif meta["type"] == "float" and not isinstance(value, float):
                 casted = try_cast(value, "float")
                 if casted is None:
                     errors.append(
-                        f"错误的类型 {path}{key}: 期望是 float, 得到了 {type(value).__name__}",
+                        f"Tipo inválido {path}{key}: esperado float, recebido {type(value).__name__}",
                     )
                 data[key] = casted
             elif meta["type"] == "bool" and not isinstance(value, bool):
                 errors.append(
-                    f"错误的类型 {path}{key}: 期望是 bool, 得到了 {type(value).__name__}",
+                    f"Tipo inválido {path}{key}: esperado bool, recebido {type(value).__name__}",
                 )
             elif meta["type"] in ["string", "text"] and not isinstance(value, str):
                 errors.append(
-                    f"错误的类型 {path}{key}: 期望是 string, 得到了 {type(value).__name__}",
+                    f"Tipo inválido {path}{key}: esperado string, recebido {type(value).__name__}",
                 )
             elif meta["type"] == "list" and not isinstance(value, list):
                 errors.append(
-                    f"错误的类型 {path}{key}: 期望是 list, 得到了 {type(value).__name__}",
+                    f"Tipo inválido {path}{key}: esperado list, recebido {type(value).__name__}",
                 )
             elif meta["type"] == "object" and not isinstance(value, dict):
                 errors.append(
-                    f"错误的类型 {path}{key}: 期望是 dict, 得到了 {type(value).__name__}",
+                    f"Tipo inválido {path}{key}: esperado dict, recebido {type(value).__name__}",
                 )
 
     if is_core:
@@ -335,7 +336,7 @@ def validate_config(
         )
         submitted_permissions = copy.deepcopy(permissions)
         if not isinstance(permissions, dict):
-            errors.append("Local computer permissions must be an object.")
+            errors.append("As permissões do computador local devem ser um objeto.")
         else:
             for role in ("member", "admin"):
                 if role not in permissions:
@@ -343,20 +344,20 @@ def validate_config(
                 policy = permissions[role]
                 if not isinstance(policy, dict):
                     errors.append(
-                        f"Local computer permissions for {role} must be an object."
+                        f"Local computer permissions for {role} deve ser um objeto."
                     )
                     continue
                 for key in ("allow_execution", "allow_network"):
                     if key in policy and not isinstance(policy[key], bool):
                         errors.append(
-                            f"Local permission {role}.{key} must be a boolean."
+                            f"Local permission {role}.{key} deve ser booleano."
                         )
                 scope = policy.get(
                     "filesystem_scope", defaults[role]["filesystem_scope"]
                 )
                 if scope not in ("none", "workspace", "host"):
                     errors.append(
-                        f"Invalid local filesystem scope for {role}: {scope}."
+                        f"Escopo de sistema de arquivos local inválido para {role}: {scope}."
                     )
                 if scope == "none":
                     policy["allow_execution"] = False
@@ -398,7 +399,7 @@ def validate_config(
                 ):
                     continue
                 if unsupported:
-                    reason = f"Local isolation is not supported on {runtime['os']}."
+                    reason = f"Isolamento local indisponível em {runtime['os']}."
                 else:
                     dependency = (
                         "Seatbelt (/usr/bin/sandbox-exec)"
@@ -407,16 +408,16 @@ def validate_config(
                     )
                     if runtime["sandbox"]["status"] == "unavailable":
                         detail = runtime["sandbox"].get(
-                            "error", "Sandbox startup failed."
+                            "error", "Falha ao iniciar o ambiente isolado."
                         )
                         reason = (
-                            f"{dependency} is installed but cannot start a sandbox: "
+                            f"{dependency} está instalado, mas não consegue iniciar um ambiente isolado: "
                             f"{detail} Restricted Local execution is unavailable. "
                             "Check system security policies or container restrictions, "
                             "then restart AstrBot to check again."
                         )
                     else:
-                        reason = f"Missing {dependency}; restricted Local execution is unavailable."
+                        reason = f"Ausente: {dependency}; restricted Local execution is unavailable."
                 errors.append(f"Local permission {role}: {reason}")
     else:
         validate(data, schema)
@@ -520,7 +521,7 @@ async def _validate_neo_connectivity(post_config: dict) -> str | None:
 
     endpoint = sandbox.get("shipyard_neo_endpoint", "").rstrip("/")
     if not endpoint:
-        return "⚠️ Shipyard Neo endpoint 未设置"
+        return "⚠️ Endpoint do Shipyard Neo não definido"
 
     access_token = sandbox.get("shipyard_neo_access_token", "")
     if not access_token:
@@ -529,10 +530,7 @@ async def _validate_neo_connectivity(post_config: dict) -> str | None:
         access_token = _discover_bay_credentials(endpoint)
 
     if not access_token:
-        return (
-            "⚠️ 未找到 Bay API Key。请填写访问令牌，"
-            "或确保 Bay 的 credentials.json 可被自动发现。"
-        )
+        return "⚠️ Chave de API do Bay não encontrada. Informe o token de acesso ou verifique se o arquivo credentials.json pode ser descoberto automaticamente."
 
     import aiohttp
 
@@ -544,12 +542,9 @@ async def _validate_neo_connectivity(post_config: dict) -> str | None:
                 timeout=aiohttp.ClientTimeout(total=5),
             ) as resp:
                 if resp.status != 200:
-                    return (
-                        f"⚠️ Bay 健康检查失败 (HTTP {resp.status})，"
-                        f"请确认 Bay 正在运行: {endpoint}"
-                    )
+                    return f"⚠️ Falha na verificação de integridade do Bay (HTTP {resp.status}). Verifique se o Bay está em execução: {endpoint}"
     except Exception:
-        return f"⚠️ 无法连接 Bay ({endpoint})，请确认 Bay 已启动。"
+        return f"⚠️ Não foi possível conectar ao Bay ({endpoint}). Verifique se o Bay está em execução."
 
     return None
 
@@ -594,10 +589,10 @@ def save_config(
             )
     except BaseException as exc:
         logger.error(traceback.format_exc())
-        logger.warning(f"验证配置时出现异常: {exc}")
-        raise ValueError(f"验证配置时出现异常: {exc}")
+        logger.warning(f"Erro ao validar a configuração: {exc}")
+        raise ValueError(f"Erro ao validar a configuração: {exc}")
     if errors:
-        raise ValueError(f"格式校验未通过: {errors}")
+        raise ValueError(f"Falha na validação do formato: {errors}")
 
     if is_core:
         _log_computer_config_changes(dict(config), post_config)
@@ -686,7 +681,7 @@ class ConfigProfileService:
             != DEFAULT_CONFIG.get("admins_id")
         ):
             raise ApiError(
-                "config:edit_admin scope is required to change admins_id",
+                "O escopo config:edit_admin é obrigatório para alterar admins_id",
                 status_code=403,
             )
         profile_config = copy.deepcopy(config or DEFAULT_CONFIG)
@@ -698,7 +693,7 @@ class ConfigProfileService:
             profile_config, CONFIG_METADATA_2, is_core=True, runtime=self.runtime
         )
         if errors:
-            raise ValueError(f"Configuration validation failed: {errors}")
+            raise ValueError(f"Falha na validação da configuração: {errors}")
         conf_id = await self.acm.create_conf(
             name=name,
             config=profile_config,
@@ -712,12 +707,12 @@ class ConfigProfileService:
     ) -> dict:
         data = payload if isinstance(payload, dict) else {}
         if not data:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
         return await self.create_profile(data.get("name"), data.get("config"))
 
     def get_profile(self, config_id: str) -> dict:
         if config_id not in self.acm.confs:
-            raise ValueError(f"Config file {config_id} does not exist")
+            raise ValueError(f"Config file {config_id} não existe")
         return {
             "config": self.acm.confs[config_id],
             "metadata": ConfigMetadataI18n.convert_to_i18n_keys(CONFIG_METADATA_3),
@@ -730,11 +725,11 @@ class ConfigProfileService:
         system_config: bool,
     ) -> dict:
         if not config_id and not system_config:
-            raise ValueError("缺少配置文件 ID")
+            raise ValueError("ID da configuração ausente")
         if system_config:
             return self.get_system_schema()
         if config_id is None:
-            raise ValueError("abconf_id cannot be None")
+            raise ValueError("abconf_id não pode ser None")
         return self.get_profile(config_id)
 
     def get_profile_from_dashboard_args(self, args) -> dict:
@@ -768,7 +763,7 @@ class ConfigProfileService:
             ValueError: If the profile does not exist or validation fails.
         """
         if config_id not in self.acm.confs:
-            raise ValueError(f"Config file {config_id} does not exist")
+            raise ValueError(f"Config file {config_id} não existe")
         config = copy.deepcopy(config)
         if config_id == "default":
             default_conf = getattr(self.acm, "default_conf", self.acm.confs["default"])
@@ -782,7 +777,7 @@ class ConfigProfileService:
             and config.get("admins_id") != current_config.get("admins_id")
         ):
             raise ApiError(
-                "config:edit_admin scope is required to change admins_id",
+                "O escopo config:edit_admin é obrigatório para alterar admins_id",
                 status_code=403,
             )
         protected_2fa_changed = _protected_2fa_config_changed(current_config, config)
@@ -792,7 +787,7 @@ class ConfigProfileService:
             and not await self._verify_config_2fa(current_config, two_factor_code)
         ):
             raise ApiError(
-                "需要 TOTP 验证",
+                "Verificação TOTP necessária",
                 status_code=401,
                 data={"totp_required": True},
             )
@@ -813,8 +808,8 @@ class ConfigProfileService:
         await self.core_lifecycle.reload_pipeline_scheduler(config_id)
         warning = await _validate_neo_connectivity(config)
         if warning:
-            return f"保存成功。{warning}"
-        return "保存成功~"
+            return f"Salvo.{warning}"
+        return "Salvo"
 
     async def update_profile_from_dashboard_payload(
         self,
@@ -824,11 +819,11 @@ class ConfigProfileService:
     ) -> str | None:
         data = payload if isinstance(payload, dict) else {}
         if not isinstance(payload, dict):
-            raise ValueError("Invalid request payload")
+            raise ValueError("Dados da requisição inválidos")
         config = data.get("config")
         conf_id = data.get("conf_id")
         if not isinstance(config, dict):
-            raise ValueError("Invalid config payload")
+            raise ValueError("Dados de configuração inválidos")
         return await self.update_profile(
             str(conf_id),
             config,
@@ -854,32 +849,32 @@ class ConfigProfileService:
 
     async def rename_profile(self, config_id: str, name: str | None) -> None:
         if not await self.acm.update_conf_info(config_id, name=name):
-            raise ValueError("Failed to update config profile")
+            raise ValueError("Falha ao atualizar o perfil de configuração")
 
     async def rename_profile_from_dashboard_payload(self, payload: object) -> str:
         data = payload if isinstance(payload, dict) else {}
         if not data:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
         conf_id = data.get("id")
         if not conf_id:
-            raise ValueError("缺少配置文件 ID")
+            raise ValueError("ID da configuração ausente")
         await self.rename_profile(str(conf_id), name=data.get("name"))
-        return "更新成功"
+        return "Atualizado"
 
     async def delete_profile(self, config_id: str) -> None:
         if not await self.acm.delete_conf(config_id):
-            raise ValueError("Failed to delete config profile")
+            raise ValueError("Falha ao excluir o perfil de configuração")
         self.core_lifecycle.pipeline_scheduler_mapping.pop(config_id, None)
 
     async def delete_profile_from_dashboard_payload(self, payload: object) -> str:
         data = payload if isinstance(payload, dict) else {}
         if not data:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
         conf_id = data.get("id")
         if not conf_id:
-            raise ValueError("缺少配置文件 ID")
+            raise ValueError("ID da configuração ausente")
         await self.delete_profile(str(conf_id))
-        return "删除成功"
+        return "Excluído"
 
 
 class ConfigRoutingService:
@@ -896,21 +891,21 @@ class ConfigRoutingService:
         payload = data if isinstance(data, dict) else {}
         new_routing = payload.get("routing")
         if not isinstance(new_routing, dict):
-            raise ValueError("缺少或错误的路由表数据")
+            raise ValueError("Tabela de rotas ausente ou inválida")
         await self.replace_route_mapping(new_routing)
 
     async def replace_routes_from_dashboard_payload(self, payload: object) -> str:
         if not isinstance(payload, dict) or not payload:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
         await self.replace_routes(payload)
-        return "更新成功"
+        return "Atualizado"
 
     async def upsert_route(self, data: object) -> None:
         payload = data if isinstance(data, dict) else {}
         umo = payload.get("umo")
         conf_id = payload.get("conf_id")
         if not umo or not conf_id:
-            raise ValueError("缺少 UMO 或配置文件 ID")
+            raise ValueError("UMO ou ID da configuração ausente")
         await self.set_route(str(umo), str(conf_id))
 
     async def set_route(self, umo: str, config_id: str) -> None:
@@ -921,15 +916,15 @@ class ConfigRoutingService:
 
     async def upsert_route_from_dashboard_payload(self, payload: object) -> str:
         if not isinstance(payload, dict) or not payload:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
         await self.upsert_route(payload)
-        return "更新成功"
+        return "Atualizado"
 
     async def delete_route(self, data: object) -> None:
         payload = data if isinstance(data, dict) else {}
         umo = payload.get("umo")
         if not umo:
-            raise ValueError("缺少 UMO")
+            raise ValueError("UMO ausente")
         await self.delete_route_by_umo(str(umo))
 
     async def delete_route_by_umo(self, umo: str) -> None:
@@ -939,9 +934,9 @@ class ConfigRoutingService:
 
     async def delete_route_from_dashboard_payload(self, payload: object) -> str:
         if not isinstance(payload, dict) or not payload:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
         await self.delete_route(payload)
-        return "删除成功"
+        return "Excluído"
 
 
 class ConfigDisplayService:
@@ -1024,7 +1019,7 @@ class ConfigDisplayService:
             result["config"] = plugin_md.config
             result["metadata"] = {
                 plugin_name: {
-                    "description": f"{plugin_name} 配置",
+                    "description": f"{plugin_name} configuração",
                     "type": "object",
                     "items": plugin_md.config.schema,
                 },
@@ -1061,7 +1056,7 @@ class ConfigDisplayService:
 
             platform_cls = platform_cls_map.get(platform.name)
             if not platform_cls:
-                logger.warning(f"Platform class not found for {platform.name}")
+                logger.warning(f"Platform class não encontrado for {platform.name}")
                 return
 
             logo_file_path = (
@@ -1070,7 +1065,7 @@ class ConfigDisplayService:
 
             if not logo_file_path.exists():
                 logger.warning(
-                    f"Platform {platform.name} logo file not found: {logo_file_path}",
+                    f"Platform {platform.name} logo file não encontrado: {logo_file_path}",
                 )
                 return
 
@@ -1159,13 +1154,13 @@ class ConfigFileService:
     ):
         scope = scope or "plugin"
         if scope != "plugin":
-            raise ValueError(f"Unsupported scope: {scope}")
+            raise ValueError(f"Escopo incompatível: {scope}")
         if not name or not key_path:
-            raise ValueError("Missing name or key parameter")
+            raise ValueError("Parâmetro name ou key ausente")
 
         metadata = self.get_plugin_metadata_by_name(name)
         if not metadata or not metadata.config:
-            raise ValueError(f"Plugin {name} not found or has no config")
+            raise ValueError(f"Plugin {name} não encontrado ou sem configuração")
 
         return scope, name, key_path, metadata, metadata.config
 
@@ -1176,9 +1171,9 @@ class ConfigFileService:
     ) -> None:
         metadata = self.get_plugin_metadata_by_name(plugin_name)
         if not metadata:
-            raise ValueError(f"插件 {plugin_name} 不存在")
+            raise ValueError(f"Plugin {plugin_name} não existe")
         if not metadata.config:
-            raise ValueError(f"插件 {plugin_name} 没有注册配置")
+            raise ValueError(f"Plugin {plugin_name} não registrou uma configuração")
 
         errors, post_configs = validate_config(
             post_configs,
@@ -1186,7 +1181,7 @@ class ConfigFileService:
             is_core=False,
         )
         if errors:
-            raise ValueError(f"格式校验未通过: {errors}")
+            raise ValueError(f"Falha na validação do formato: {errors}")
         metadata.config.save_config(post_configs)
         await self.core_lifecycle.plugin_manager.reload(plugin_name)
 
@@ -1198,7 +1193,7 @@ class ConfigFileService:
     ) -> str:
         post_configs = payload if isinstance(payload, dict) else {}
         await self.save_plugin_configs(post_configs, plugin_name)
-        return f"保存插件 {plugin_name} 成功~ 机器人正在热重载插件。"
+        return f"Plugin {plugin_name} salvo. O bot está recarregando o plugin sem reiniciar."
 
     async def upload_config_file(
         self,
@@ -1215,7 +1210,9 @@ class ConfigFileService:
         )
         meta = _get_schema_item(getattr(config, "schema", None), key_path)
         if not meta or meta.get("type") != "file":
-            raise ValueError("Config item not found or not file type")
+            raise ValueError(
+                "Item de configuração não encontrado ou de tipo diferente de arquivo"
+            )
         if not files:
             raise ValueError("No files uploaded")
 
@@ -1230,36 +1227,36 @@ class ConfigFileService:
         for file in files.values():
             filename = _sanitize_filename(file.filename or "")
             if not filename:
-                errors.append("Invalid filename")
+                errors.append("Nome de arquivo inválido")
                 continue
 
             file_size = getattr(file, "content_length", None)
             if isinstance(file_size, int) and file_size > MAX_FILE_BYTES:
-                errors.append(f"File too large: {filename}")
+                errors.append(f"Arquivo muito grande: {filename}")
                 continue
 
             ext = os.path.splitext(filename)[1].lstrip(".").lower()
             if allowed_exts and ext not in allowed_exts:
-                errors.append(f"Unsupported file type: {filename}")
+                errors.append(f"Tipo de arquivo incompatível: {filename}")
                 continue
 
             rel_path = f"files/{folder}/{filename}"
             save_path = self._safe_plugin_path(plugin_root_path, rel_path)
             if save_path is None:
-                errors.append(f"Invalid path: {filename}")
+                errors.append(f"Caminho inválido: {filename}")
                 continue
 
             save_path.parent.mkdir(parents=True, exist_ok=True)
             try:
                 await file.save(str(save_path), max_bytes=MAX_FILE_BYTES)
             except UploadTooLargeError:
-                errors.append(f"File too large: {filename}")
+                errors.append(f"Arquivo muito grande: {filename}")
                 continue
             uploaded.append(rel_path)
 
         if not uploaded:
             raise ValueError(
-                "Upload failed: " + ", ".join(errors) if errors else "Upload failed"
+                "Falha no envio: " + ", ".join(errors) if errors else "Falha no envio"
             )
 
         return {"uploaded": uploaded, "errors": errors}
@@ -1280,22 +1277,22 @@ class ConfigFileService:
         rel_path: str | None,
     ) -> None:
         if not name:
-            raise ValueError("Missing name parameter")
+            raise ValueError("Parâmetro name ausente")
         if (scope or "plugin") != "plugin":
-            raise ValueError(f"Unsupported scope: {scope}")
+            raise ValueError(f"Escopo incompatível: {scope}")
 
         rel_path = _normalize_rel_path(rel_path)
         if not rel_path or not rel_path.startswith("files/"):
-            raise ValueError("Invalid path parameter")
+            raise ValueError("Parâmetro path inválido")
 
         metadata = self.get_plugin_metadata_by_name(name)
         if not metadata:
-            raise ValueError(f"Plugin {name} not found")
+            raise ValueError(f"Plugin {name} não encontrado")
 
         plugin_root_path = self._plugin_root_path(name)
         target_path = self._safe_plugin_path(plugin_root_path, rel_path)
         if target_path is None:
-            raise ValueError("Invalid path parameter")
+            raise ValueError("Parâmetro path inválido")
         if target_path.is_file():
             target_path.unlink()
 
@@ -1339,7 +1336,9 @@ class ConfigFileService:
         )
         meta = _get_schema_item(getattr(config, "schema", None), key_path)
         if not meta or meta.get("type") != "file":
-            raise ValueError("Config item not found or not file type")
+            raise ValueError(
+                "Item de configuração não encontrado ou de tipo diferente de arquivo"
+            )
 
         plugin_root_path = self._plugin_root_path(name)
         target_dir = self._safe_plugin_path(
@@ -1347,7 +1346,7 @@ class ConfigFileService:
             f"files/{_config_key_to_folder(key_path)}",
         )
         if target_dir is None:
-            raise ValueError("Invalid path parameter")
+            raise ValueError("Parâmetro path inválido")
         if not target_dir.exists() or not target_dir.is_dir():
             return {"files": []}
 
@@ -1384,7 +1383,7 @@ class ConfigFileService:
         try:
             plugin_root_path.relative_to(storage_root_path)
         except ValueError as exc:
-            raise ValueError("Invalid name parameter") from exc
+            raise ValueError("Parâmetro name inválido") from exc
         return plugin_root_path
 
     @staticmethod
@@ -1434,7 +1433,7 @@ class BotConfigService:
     def get_bot(self, bot_id: str) -> dict:
         bot = self._find_bot(bot_id)
         if bot is None:
-            raise ValueError(f"Bot {bot_id} not found")
+            raise ValueError(f"Bot {bot_id} não encontrado")
         return {"bot": copy.deepcopy(bot)}
 
     def get_bot_stats(self) -> dict:
@@ -1443,7 +1442,7 @@ class BotConfigService:
     async def create_bot(self, config: dict) -> None:
         bot_id = config.get("id")
         if not bot_id:
-            raise ValueError("Bot config must have an 'id' field")
+            raise ValueError("A configuração do bot deve conter o campo 'id'")
         if self._find_bot(bot_id) is not None:
             raise ValueError(f"Bot {bot_id} already exists")
         ensure_platform_webhook_config(config)
@@ -1453,7 +1452,7 @@ class BotConfigService:
 
     async def update_bot(self, bot_id: str, config: dict) -> None:
         if config.get("id") != bot_id:
-            raise ValueError("Bot id cannot be changed")
+            raise ValueError("O ID do bot não pode ser alterado")
         ensure_platform_webhook_config(config)
         for idx, bot in enumerate(self.config.get("platform", [])):
             if bot.get("id") == bot_id:
@@ -1461,12 +1460,12 @@ class BotConfigService:
                 save_config(self.config, self.config, is_core=True)
                 await self.core_lifecycle.platform_manager.reload(config)
                 return
-        raise ValueError(f"Bot {bot_id} not found")
+        raise ValueError(f"Bot {bot_id} não encontrado")
 
     async def set_bot_enabled(self, bot_id: str, enabled: bool) -> None:
         bot = self._find_bot(bot_id)
         if bot is None:
-            raise ValueError(f"Bot {bot_id} not found")
+            raise ValueError(f"Bot {bot_id} não encontrado")
         new_config = copy.deepcopy(bot)
         new_config["enable"] = enabled
         await self.update_bot(bot_id, new_config)
@@ -1478,46 +1477,52 @@ class BotConfigService:
                 save_config(self.config, self.config, is_core=True)
                 await self.core_lifecycle.platform_manager.terminate_platform(bot_id)
                 return
-        raise ValueError(f"Bot {bot_id} not found")
+        raise ValueError(f"Bot {bot_id} não encontrado")
 
     def list_platforms_for_dashboard(self) -> dict:
         return {"platforms": self.list_bots()["bots"]}
 
     async def create_bot_from_dashboard_payload(self, payload: object) -> str:
         if not isinstance(payload, dict):
-            raise ValueError("参数错误")
+            raise ValueError("Parâmetro inválido")
         await self.create_bot(payload)
-        return "新增平台配置成功~"
+        return "Configuração de plataforma adicionada"
 
     async def update_bot_from_dashboard_payload(self, payload: object) -> str:
         data = payload if isinstance(payload, dict) else {}
         origin_platform_id = data.get("id")
         new_config = data.get("config")
         if not origin_platform_id or not isinstance(new_config, dict):
-            raise ValueError("参数错误")
+            raise ValueError("Parâmetro inválido")
         if origin_platform_id != new_config.get("id"):
-            raise ValueError("机器人名称不允许修改")
+            raise ValueError("O nome do bot não pode ser alterado")
 
         try:
             await self.update_bot(origin_platform_id, new_config)
         except ValueError as exc:
-            if "not found" in str(exc):
-                raise ValueError("未找到对应平台") from exc
+            if any(
+                text in str(exc)
+                for text in ("not found", "não encontrado", "não encontrada")
+            ):
+                raise ValueError("Plataforma correspondente não encontrada") from exc
             raise
-        return "更新平台配置成功~"
+        return "Configuração de plataforma atualizada"
 
     async def delete_bot_from_dashboard_payload(self, payload: object) -> str:
         data = payload if isinstance(payload, dict) else {}
         platform_id = data.get("id")
         if not platform_id:
-            raise ValueError("缺少平台 ID")
+            raise ValueError("ID da plataforma ausente")
         try:
             await self.delete_bot(str(platform_id))
         except ValueError as exc:
-            if "not found" in str(exc):
-                raise ValueError("未找到对应平台") from exc
+            if any(
+                text in str(exc)
+                for text in ("not found", "não encontrado", "não encontrada")
+            ):
+                raise ValueError("Plataforma correspondente não encontrada") from exc
             raise
-        return "删除平台配置成功~"
+        return "Configuração de plataforma excluída"
 
     def _find_bot(self, bot_id: str) -> dict | None:
         for bot in self.config.get("platform", []):
@@ -1601,21 +1606,23 @@ class ProviderConfigService:
     def get_provider_source(self, source_id: str) -> dict:
         source = self._find_provider_source(source_id)
         if source is None:
-            raise ValueError(f"Provider source {source_id} not found")
+            raise ValueError(f"Fonte de provedor {source_id} não encontrado")
         return {"provider_source": copy.deepcopy(source)}
 
     async def upsert_provider_source(self, source_id: str, config: dict) -> None:
         config = copy.deepcopy(config)
         next_source_id = str(config.get("id") or source_id).strip()
         if not next_source_id:
-            raise ValueError("Provider source config must have an 'id' field")
+            raise ValueError(
+                "A configuração da fonte do provedor deve conter o campo 'id'"
+            )
         config["id"] = next_source_id
         sources = self.config.setdefault("provider_sources", [])
 
         for source in sources:
             if source.get("id") == next_source_id and next_source_id != source_id:
                 raise ValueError(
-                    f"Provider source ID '{next_source_id}' exists already, please try another ID."
+                    f"Provider source ID '{next_source_id}' já existe. Tente outro ID."
                 )
 
         for idx, source in enumerate(sources):
@@ -1639,7 +1646,7 @@ class ProviderConfigService:
         sources = self.config.get("provider_sources", [])
         next_sources = [source for source in sources if source.get("id") != source_id]
         if len(next_sources) == len(sources):
-            raise ValueError(f"Provider source {source_id} not found")
+            raise ValueError(f"Fonte de provedor {source_id} não encontrado")
         self.config["provider_sources"] = next_sources
         await self.provider_manager.delete_provider(provider_source_id=source_id)
         save_config(self.config, self.config, is_core=True)
@@ -1649,42 +1656,47 @@ class ProviderConfigService:
         self, payload: object
     ) -> str:
         if not isinstance(payload, dict) or not payload:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
 
         new_source_config = payload.get("config") or payload
         original_id = payload.get("original_id")
         if not original_id:
-            raise ValueError("缺少 original_id")
+            raise ValueError("original_id ausente")
         if not isinstance(new_source_config, dict):
-            raise ValueError("缺少或错误的配置数据")
+            raise ValueError("Dados de configuração ausentes ou inválidos")
         if not new_source_config.get("id"):
             new_source_config["id"] = original_id
 
         await self.upsert_provider_source(str(original_id), new_source_config)
-        return "更新 provider source 成功"
+        return "Fonte de provedor atualizada"
 
     async def delete_provider_source_from_dashboard_payload(
         self, payload: object
     ) -> str:
         if not isinstance(payload, dict) or not payload:
-            raise ValueError("缺少配置数据")
+            raise ValueError("Dados de configuração ausentes")
 
         provider_source_id = payload.get("id")
         if not provider_source_id:
-            raise ValueError("缺少 provider_source_id")
+            raise ValueError("provider_source_id ausente")
 
         try:
             await self.delete_provider_source(str(provider_source_id))
         except ValueError as exc:
-            if "not found" in str(exc):
-                raise ValueError("未找到对应的 provider source") from exc
+            if any(
+                text in str(exc)
+                for text in ("not found", "não encontrado", "não encontrada")
+            ):
+                raise ValueError(
+                    "Fonte de provedor correspondente não encontrada"
+                ) from exc
             raise
-        return "删除 provider source 成功"
+        return "Fonte de provedor excluída"
 
     async def list_provider_source_models(self, source_id: str) -> dict:
         source = self._find_provider_source(source_id)
         if source is None:
-            raise ValueError(f"Provider source {source_id} not found")
+            raise ValueError(f"Fonte de provedor {source_id} não encontrado")
 
         from astrbot.core.provider import Provider
         from astrbot.core.provider.register import provider_cls_map
@@ -1692,15 +1704,19 @@ class ProviderConfigService:
 
         provider_type = source.get("type")
         if not provider_type:
-            raise ValueError("Provider source missing type")
+            raise ValueError("Campo type ausente na fonte de provedor")
         try:
             self.provider_manager.dynamic_import_provider(provider_type)
         except ImportError as exc:
-            raise ValueError(f"动态导入提供商适配器失败: {exc!s}") from exc
+            raise ValueError(
+                f"Falha ao importar dinamicamente o adaptador de provedor: {exc!s}"
+            ) from exc
         provider_metadata = provider_cls_map.get(provider_type)
         cls_type = provider_metadata.cls_type if provider_metadata else None
         if cls_type is None or not issubclass(cls_type, Provider):
-            raise ValueError(f"Provider source {source_id} does not support model list")
+            raise ValueError(
+                f"Fonte de provedor {source_id} não permite listar modelos"
+            )
 
         inst = cls_type(source, {})
         init_fn = getattr(inst, "initialize", None)
@@ -1728,7 +1744,7 @@ class ProviderConfigService:
         source_id: str | None,
     ) -> dict:
         if not source_id:
-            raise ValueError("缺少参数 source_id")
+            raise ValueError("Parâmetro source_id ausente")
         data = await self.list_provider_source_models(source_id)
         data.pop("provider_source_id", None)
         return data
@@ -1739,9 +1755,9 @@ class ProviderConfigService:
 
         provider = self.provider_manager.inst_map.get(provider_id)
         if not provider:
-            raise ValueError(f"未找到 ID 为 {provider_id} 的提供商")
+            raise ValueError(f"Nenhum provedor com ID {provider_id} encontrado")
         if not isinstance(provider, Provider):
-            raise ValueError(f"提供商 {provider_id} 类型不支持获取模型列表")
+            raise ValueError(f"O provedor {provider_id} não permite listar modelos")
 
         models = await provider.get_models()
         models = models or []
@@ -1760,7 +1776,7 @@ class ProviderConfigService:
         provider_id: str | None,
     ) -> dict:
         if not provider_id:
-            raise ValueError("缺少参数 provider_id")
+            raise ValueError("Parâmetro provider_id ausente")
         return await self.list_provider_models(provider_id)
 
     async def list_provider_models_from_dashboard_args(self, args) -> dict:
@@ -1770,14 +1786,14 @@ class ProviderConfigService:
 
     async def get_embedding_dimension(self, provider_config: dict | None) -> dict:
         if not provider_config:
-            raise ValueError("缺少参数 provider_config")
+            raise ValueError("Parâmetro provider_config ausente")
 
         from astrbot.core.provider.provider import EmbeddingProvider
         from astrbot.core.provider.register import provider_cls_map
 
         provider_type = provider_config.get("type")
         if not provider_type:
-            raise ValueError("provider_config 缺少 type 字段")
+            raise ValueError("Campo type ausente em provider_config")
 
         if provider_type not in provider_cls_map:
             try:
@@ -1791,13 +1807,13 @@ class ProviderConfigService:
                 dynamic_import_provider(provider_type)
             except ImportError as exc:
                 raise ValueError(
-                    "提供商适配器加载失败，请检查提供商类型配置或查看服务端日志"
+                    "Falha ao carregar o adaptador de provedor. Verifique o tipo configurado ou consulte os registros do servidor"
                 ) from exc
 
         provider_metadata = provider_cls_map.get(provider_type)
         cls_type = provider_metadata.cls_type if provider_metadata else None
         if not cls_type:
-            raise ValueError(f"无法找到 {provider_type} 的类")
+            raise ValueError(f"Não foi possível encontrar a classe de {provider_type}")
 
         inst = cls_type(provider_config, {})
         try:
@@ -1806,7 +1822,7 @@ class ProviderConfigService:
                 await run_maybe_async(init_fn)
 
             if not isinstance(inst, EmbeddingProvider):
-                raise ValueError("提供商不是 EmbeddingProvider 类型")
+                raise ValueError("O provedor não é do tipo EmbeddingProvider")
 
             vec = await inst.get_embedding("echo")
             dim = len(vec)
@@ -1873,7 +1889,7 @@ class ProviderConfigService:
         self, provider_type: str | None
     ) -> list[dict]:
         if not provider_type:
-            raise ValueError("缺少参数 provider_type")
+            raise ValueError("Parâmetro provider_type ausente")
 
         provider_list = []
         seen_ids = set()
@@ -1896,7 +1912,7 @@ class ProviderConfigService:
             merged=merged,
         )
         if provider is None:
-            raise ValueError(f"Provider {provider_id} not found")
+            raise ValueError(f"Provider {provider_id} não encontrado")
         provider_response = copy.deepcopy(provider)
         self._strip_legacy_reasoning_metadata(provider_response)
         from astrbot.core.utils.llm_metadata import LLM_METADATAS
@@ -1924,7 +1940,7 @@ class ProviderConfigService:
     async def set_provider_enabled(self, provider_id: str, enabled: bool) -> None:
         provider = self.provider_manager.get_provider_config_by_id(provider_id)
         if provider is None:
-            raise ValueError(f"Provider {provider_id} not found")
+            raise ValueError(f"Provider {provider_id} não encontrado")
         provider["enable"] = enabled
         await self.provider_manager.update_provider(provider_id, provider)
 
@@ -1933,33 +1949,33 @@ class ProviderConfigService:
 
     async def create_provider_from_dashboard_payload(self, payload: object) -> str:
         if not isinstance(payload, dict):
-            raise ValueError("参数错误")
+            raise ValueError("Parâmetro inválido")
         await self.create_provider(payload)
-        return "新增服务提供商配置成功"
+        return "Configuração de provedor adicionada"
 
     async def update_provider_from_dashboard_payload(self, payload: object) -> str:
         data = payload if isinstance(payload, dict) else {}
         origin_provider_id = data.get("id")
         new_config = data.get("config")
         if not origin_provider_id or not isinstance(new_config, dict):
-            raise ValueError("参数错误")
+            raise ValueError("Parâmetro inválido")
 
         await self.update_provider(origin_provider_id, new_config)
-        return "更新成功，已经实时生效~"
+        return "Atualizado; a alteração já está em vigor"
 
     async def delete_provider_from_dashboard_payload(self, payload: object) -> str:
         data = payload if isinstance(payload, dict) else {}
         provider_id = data.get("id", "")
         if not provider_id:
-            raise ValueError("缺少参数 id")
+            raise ValueError("Parâmetro id ausente")
 
         await self.delete_provider(provider_id)
-        return "删除成功，已经实时生效。"
+        return "Excluído; a alteração já está em vigor"
 
     async def test_provider(self, provider_id: str) -> dict:
         target = self.provider_manager.inst_map.get(provider_id)
         if not target:
-            raise ValueError(f"Provider {provider_id} not found")
+            raise ValueError(f"Provider {provider_id} não encontrado")
         meta = target.meta()
         provider_type = getattr(meta, "provider_type", None)
         result = {
@@ -1980,7 +1996,7 @@ class ProviderConfigService:
     async def test_provider_from_dashboard_args(self, args) -> dict:
         provider_id = args.get("id")
         if not provider_id:
-            raise ValueError("Missing provider_id parameter")
+            raise ValueError("Parâmetro provider_id ausente")
         logger.info(f"API call: /config/provider/check_one id={provider_id}")
         return await self.test_provider(provider_id)
 

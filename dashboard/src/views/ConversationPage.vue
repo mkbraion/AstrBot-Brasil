@@ -604,7 +604,7 @@ export default {
                 // tool / system 等非聊天角色不直接渲染为气泡，避免大文本走 markdown 路径卡死页面
                 .filter(msg => msg.role === 'user' || msg.role === 'assistant')
                 .map(msg => {
-                    console.log('处理消息:', msg.role, msg.content);
+                    console.log('Processar mensagem:', msg.role, msg.content);
 
                     const messageParts = this.convertContentToMessageParts(msg.content)
                         // 丢弃 convertContentToMessageParts 兜底插入的空 plain，避免 assistant 仅有工具调用时渲染空气泡
@@ -845,7 +845,7 @@ export default {
                     controller.signal.aborted
                 ) return;
 
-                console.error('获取对话列表出错:', error);
+                console.error('Erro ao obter a lista de conversas:', error);
                 this.listLoadState = 'error';
                 this.showErrorMessage(error.response?.data?.message || error.message || this.tm('messages.fetchError'));
             } finally {
@@ -865,7 +865,7 @@ export default {
             this.isEditingHistory = false;
 
             try {
-                console.log(`正在请求对话详情，user_id=${item.user_id}, cid=${item.cid}`);
+                console.log(`Solicitando detalhes da conversa，user_id=${item.user_id}, cid=${item.cid}`);
                 const response = await conversationApi.get(item.user_id, item.cid);
 
                 if (response.data.status === "ok") {
@@ -886,14 +886,14 @@ export default {
                     } catch (e) {
                         this.conversationHistory = [];
                         this.editedHistory = '[]';
-                        console.error('解析对话历史失败:', e);
+                        console.error('Falha ao interpretar o histórico da conversa:', e);
                     }
                     this.dialogView = true;
                 } else {
                     this.showErrorMessage(response.data.message || this.tm('messages.historyError'));
                 }
             } catch (error) {
-                console.error('获取对话详情出错:', error);
+                console.error('Erro ao obter os detalhes da conversa:', error);
                 this.showErrorMessage(error.response?.data?.message || error.message || this.tm('messages.historyError'));
             } finally {
                 this.actionLoading = false;
@@ -932,7 +932,7 @@ export default {
                     this.showErrorMessage(response.data.message || this.tm('messages.historySaveError'));
                 }
             } catch (error) {
-                console.error('更新对话历史出错:', error);
+                console.error('Erro ao atualizar o histórico da conversa:', error);
                 this.showErrorMessage(error.response?.data?.message || error.message || this.tm('messages.historySaveError'));
             } finally {
                 this.savingHistory = false;
@@ -1106,7 +1106,7 @@ export default {
                     this.showErrorMessage(response.data.message || this.tm('messages.batchDeleteError'));
                 }
             } catch (error) {
-                console.error('批量删除对话出错:', error);
+                console.error('Erro ao excluir conversas em lote:', error);
                 this.showErrorMessage(error.response?.data?.message || error.message || this.tm('messages.batchDeleteError'));
             } finally {
                 this.actionLoading = false;

@@ -255,7 +255,7 @@ class StatService:
         except Exception as exc:
             logger.error("获取存储占用失败", exc_info=True)
             raise StatServiceError(
-                "获取存储占用失败，请查看后端日志了解详情。"
+                "Falha ao obter o uso de armazenamento. Consulte os registros do backend para mais detalhes."
             ) from exc
 
     async def cleanup_storage(self, target: str) -> dict:
@@ -265,7 +265,9 @@ class StatService:
             raise StatServiceError(str(exc)) from exc
         except Exception as exc:
             logger.error("清理存储失败", exc_info=True)
-            raise StatServiceError("清理存储失败，请查看后端日志了解详情。") from exc
+            raise StatServiceError(
+                "Falha ao limpar o armazenamento. Consulte os registros do backend para mais detalhes."
+            ) from exc
 
     async def get_stat(self, offset_sec: int) -> dict:
         try:
@@ -420,7 +422,7 @@ class StatService:
                     + record.token_output
                 )
                 provider_id = record.provider_id or "unknown"
-                provider_model = record.provider_model or "Unknown"
+                provider_model = record.provider_model or "Desconhecido"
 
                 if created_at_local >= range_start_local:
                     bucket_local = created_at_local.replace(
@@ -566,7 +568,7 @@ class StatService:
     async def test_ghproxy_connection(self, proxy_url: str | None) -> dict:
         try:
             if not proxy_url:
-                raise StatServiceError("proxy_url is required")
+                raise StatServiceError("proxy_url é obrigatório")
 
             proxy_url = proxy_url.rstrip("/")
             test_url = f"{proxy_url}/https://github.com/AstrBotDevs/AstrBot/raw/refs/heads/master/.python-version"
@@ -585,7 +587,7 @@ class StatService:
                     return {
                         "latency": round((end_time - start_time) * 1000, 2),
                     }
-                raise StatServiceError(f"Failed. Status code: {response.status}")
+                raise StatServiceError(f"Falha. Código de status: {response.status}")
         except StatServiceError:
             raise
         except Exception as exc:
@@ -595,13 +597,13 @@ class StatService:
     def get_changelog(self, version: str | None) -> dict:
         try:
             if not version:
-                raise StatServiceError("version parameter is required")
+                raise StatServiceError("O parâmetro version é obrigatório")
 
             version = version.lstrip("v")
             if not re.match(r"^[a-zA-Z0-9._-]+$", version):
-                raise StatServiceError("Invalid version format")
+                raise StatServiceError("Formato de versão inválido")
             if ".." in version or "/" in version or "\\" in version:
-                raise StatServiceError("Invalid version format")
+                raise StatServiceError("Formato de versão inválido")
 
             changelogs_dir = (Path(get_astrbot_path()) / "changelogs").resolve()
             changelog_path = (changelogs_dir / f"v{version}.md").resolve(strict=False)
@@ -611,10 +613,12 @@ class StatService:
                     version,
                     changelog_path,
                 )
-                raise StatServiceError("Invalid version format")
+                raise StatServiceError("Formato de versão inválido")
 
             if not changelog_path.is_file():
-                raise StatServiceError(f"Changelog for version {version} not found")
+                raise StatServiceError(
+                    f"Changelog for version {version} não encontrado"
+                )
 
             content = changelog_path.read_text(encoding="utf-8")
             return {"content": content, "version": version}

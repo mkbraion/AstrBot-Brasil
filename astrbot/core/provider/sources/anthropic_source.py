@@ -34,7 +34,7 @@ from .request_retry import retry_provider_request, retry_provider_request_contex
 
 @register_provider_adapter(
     "anthropic_chat_completion",
-    "Anthropic Claude API 提供商适配器",
+    "Adaptador de provedor da API Anthropic Claude",
 )
 class ProviderAnthropic(Provider):
     _PROMPT_CACHE_CONTROL = {"type": "ephemeral"}
@@ -497,7 +497,7 @@ class ProviderAnthropic(Provider):
             logger.warning("tool_choice='tool' 无法指定工具名，已回退为 'auto'")
             return {"type": "auto"}
 
-        logger.warning(f"未知的 tool_choice 值: {tool_choice}，已回退为 'auto'")
+        logger.warning(f"Desconhecido的 tool_choice 值: {tool_choice}，已回退为 'auto'")
         return {"type": "auto"}
 
     @classmethod
@@ -775,7 +775,9 @@ class ProviderAnthropic(Provider):
                             )
                         except json.JSONDecodeError:
                             # JSON 解析失败，跳过这个工具调用
-                            logger.warning(f"工具调用参数 JSON 解析失败: {tool_info}")
+                            logger.warning(
+                                f"工具调用O parâmetro JSON 解析失败: {tool_info}"
+                            )
 
                         # 清理缓冲区
                         del tool_use_buffer[event.index]
@@ -1024,7 +1026,9 @@ class ProviderAnthropic(Provider):
                 elif isinstance(block, AudioURLPart):
                     content.append({"type": "text", "text": "[Audio]"})
                 else:
-                    raise ValueError(f"不支持的额外内容块类型: {type(block)}")
+                    raise ValueError(
+                        f"Tipo de bloco de conteúdo extra incompatível: {type(block)}"
+                    )
 
         # 3. 图片内容
         if image_urls:

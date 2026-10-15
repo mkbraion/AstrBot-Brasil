@@ -52,7 +52,7 @@ class KnowledgeBaseManager:
             await self.load_kbs()
 
         except ImportError as e:
-            logger.error(f"知识库模块导入失败: {e}")
+            logger.error(f"知识库模块Falha na importação: {e}")
             logger.warning("请确保已安装所需依赖: pypdf, aiofiles, Pillow, rank-bm25")
         except Exception as e:
             logger.error(f"知识库模块初始化失败: {e}", exc_info=True)
@@ -79,7 +79,7 @@ class KnowledgeBaseManager:
             except Exception as e:
                 kb_helper.init_error = str(e)
                 logger.error(
-                    f"知识库 {record.kb_name}({record.kb_id}) 初始化失败: {e}",
+                    f"A base de conhecimento {record.kb_name}({record.kb_id}) 初始化失败: {e}",
                     exc_info=True,
                 )
             self.kb_insts[record.kb_id] = kb_helper
@@ -99,11 +99,13 @@ class KnowledgeBaseManager:
     ) -> KBHelper:
         """创建新的知识库实例"""
         if embedding_provider_id is None:
-            raise ValueError("创建知识库时必须提供embedding_provider_id")
+            raise ValueError(
+                "embedding_provider_id é obrigatório para criar uma base de conhecimento"
+            )
         # 预先检查名称是否已存在，避免依赖异常字符串匹配
         existing = await self.kb_db.get_kb_by_name(kb_name)
         if existing:
-            raise ValueError(f"知识库名称 '{kb_name}' 已存在")
+            raise ValueError(f"A base de conhecimento '{kb_name}' já existe")
 
         kb = KnowledgeBase(
             kb_name=kb_name,
@@ -135,7 +137,7 @@ class KnowledgeBaseManager:
                 return kb_helper
         except IntegrityError as e:
             logger.exception("创建知识库失败：唯一约束冲突")
-            raise ValueError(f"知识库名称 '{kb_name}' 已存在") from e
+            raise ValueError(f"A base de conhecimento '{kb_name}' já existe") from e
         except Exception:
             logger.exception("创建知识库失败")
             raise
@@ -263,7 +265,7 @@ class KnowledgeBaseManager:
             kb.top_m_final = previous_state["top_m_final"]
             kb_helper.init_error = previous_init_error
             logger.error(
-                f"知识库 {kb.kb_name}({kb.kb_id}) 重新初始化失败，继续使用旧实例: {e}",
+                f"A base de conhecimento {kb.kb_name}({kb.kb_id}) 重新初始化失败，继续使用旧实例: {e}",
                 exc_info=True,
             )
             return kb_helper
@@ -294,7 +296,9 @@ class KnowledgeBaseManager:
             if kb_helper := await self.get_kb_by_name(kb_name):
                 if kb_helper.init_error:
                     unavailable_kbs.append((kb_name, kb_helper.init_error))
-                    logger.warning(f"知识库 {kb_name} 不可用: {kb_helper.init_error}")
+                    logger.warning(
+                        f"A base de conhecimento {kb_name} 不可用: {kb_helper.init_error}"
+                    )
                     continue
                 kb_ids.append(kb_helper.kb.kb_id)
                 kb_id_helper_map[kb_helper.kb.kb_id] = kb_helper
@@ -302,7 +306,9 @@ class KnowledgeBaseManager:
         # all requested KBs are unavailable
         if not kb_ids and unavailable_kbs:
             errors = "; ".join(f"{n}: {e}" for n, e in unavailable_kbs)
-            raise ValueError(f"所有请求的知识库均不可用: {errors}")
+            raise ValueError(
+                f"Nenhuma das bases de conhecimento solicitadas está disponível: {errors}"
+            )
 
         if not kb_ids:
             return {}
@@ -349,13 +355,15 @@ class KnowledgeBaseManager:
             str: 格式化的上下文文本
 
         """
-        lines = ["以下是相关的知识库内容,请参考这些信息回答用户的问题:\n"]
+        lines = [
+            "Conteúdo relevante da base de conhecimento. Use estas informações para responder à pergunta do usuário:\n"
+        ]
 
         for i, result in enumerate(results, 1):
-            lines.append(f"【知识 {i}】")
-            lines.append(f"来源: {result.kb_name} / {result.doc_name}")
-            lines.append(f"内容: {result.content}")
-            lines.append(f"相关度: {result.score:.2f}")
+            lines.append(f"【Conhecimento {i}】")
+            lines.append(f"Fonte: {result.kb_name} / {result.doc_name}")
+            lines.append(f"Conteúdo: {result.content}")
+            lines.append(f"Relevância: {result.score:.2f}")
             lines.append("")
 
         return "\n".join(lines)
@@ -366,7 +374,7 @@ class KnowledgeBaseManager:
             try:
                 await kb_helper.terminate()
             except Exception as e:
-                logger.error(f"关闭知识库 {kb_id} 失败: {e}")
+                logger.error(f"关闭A base de conhecimento {kb_id}: {e}")
 
         self.kb_insts.clear()
 

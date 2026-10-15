@@ -17,12 +17,12 @@
       <v-card-text class="pa-4">
         <template v-if="step === 'verify'">
           <div class="totp-dialog-subtitle mb-3">
-            输入当前认证器应用中的验证码以验证身份。
+            Informe o código do aplicativo autenticador atual para verificar sua identidade.
           </div>
           <div class="text-center">
             <v-text-field
               v-model="verifyCode"
-              label="当前验证码"
+              label="Código de verificação atual"
               variant="outlined"
               density="compact"
               class="totp-code-input"
@@ -40,7 +40,7 @@
               :disabled="verifyingIdentity"
               @click="onCancel"
             >
-              取消
+              Cancelar
             </v-btn>
             <v-btn
               color="primary"
@@ -49,7 +49,7 @@
               :disabled="!verifyCode || verifyCode.length < 6"
               @click="verifyIdentity"
             >
-              验证
+              Verificar
             </v-btn>
           </div>
         </template>
@@ -151,7 +151,7 @@ const verifyingIdentity = ref(false)
 
 const cardTitle = computed(() => {
   if (step.value === 'verify') {
-    return '验证当前 TOTP'
+    return 'Verificar atual TOTP'
   }
   return props.mode === 'rotate'
     ? tm('system_group.system.dashboard.totp.rotateTitle')
@@ -240,13 +240,13 @@ async function verifyIdentity() {
   try {
     const res = await authApi.setupTotp({ code: verifyCode.value })
     if (res.data.status !== 'ok') {
-      verifyError.value = res.data.message || '验证失败'
+      verifyError.value = res.data.message || 'Falha na verificação'
       return
     }
     newSecret.value = res.data.data?.secret || ''
     step.value = 'setup'
   } catch {
-    verifyError.value = '验证失败'
+    verifyError.value = 'Falha na verificação'
   } finally {
     verifyingIdentity.value = false
   }

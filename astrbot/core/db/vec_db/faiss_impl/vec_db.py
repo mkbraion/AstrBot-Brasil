@@ -90,8 +90,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="storage",
                 user_message=(
-                    f"存储失败：文本分块数量与元数据数量不一致（期望 {content_count}，"
-                    f"实际 {len(metadatas)}）。"
+                    f"Falha ao armazenar: a quantidade de blocos de texto difere da quantidade de metadados (esperado: {content_count}; recebido: {len(metadatas)}）。"
                 ),
                 details={
                     "expected_contents": content_count,
@@ -102,8 +101,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="storage",
                 user_message=(
-                    f"存储失败：文本分块数量与文档 ID 数量不一致（期望 {content_count}，"
-                    f"实际 {len(ids)}）。"
+                    f"Falha ao armazenar: a quantidade de blocos de texto difere da quantidade de IDs de documentos (esperado: {content_count}; recebido: {len(ids)}）。"
                 ),
                 details={
                     "expected_contents": content_count,
@@ -114,8 +112,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="storage",
                 user_message=(
-                    f"存储失败：文本分块数量与向量化文本数量不一致（期望 {content_count}，"
-                    f"实际 {len(embedding_contents)}）。"
+                    f"Falha ao armazenar: a quantidade de blocos de texto difere da quantidade de textos para vetorização (esperado: {content_count}; recebido: {len(embedding_contents)}）。"
                 ),
                 details={
                     "expected_contents": content_count,
@@ -140,10 +137,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="embedding",
                 user_message=(
-                    "向量化失败：嵌入模型返回的向量数量与文本分块数量不一致"
-                    f"（期望 {content_count}，实际 {len(vectors)}）。"
-                    "这通常说明当前 Embedding 接口未完整返回批量结果，"
-                    "或该服务不兼容当前批量请求格式。"
+                    f"Falha ao gerar vetores: a quantidade de vetores retornados difere da quantidade de blocos de texto (esperado: {content_count}; recebido: {len(vectors)}). A API de embeddings pode ter retornado um lote incompleto ou ser incompatível com o formato da requisição em lote."
                 ),
                 details={
                     "expected_contents": content_count,
@@ -159,8 +153,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="embedding",
                 user_message=(
-                    "向量化失败：嵌入模型返回的向量格式不正确，"
-                    "无法转换为统一的浮点向量矩阵。"
+                    "Falha ao gerar vetores: o formato retornado não permite construir uma matriz uniforme de valores de ponto flutuante."
                 ),
                 details={"vector_count": len(vectors)},
             ) from exc
@@ -168,7 +161,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="embedding",
                 user_message=(
-                    "向量化失败：嵌入模型返回的向量格式不正确，无法构造成二维向量矩阵。"
+                    "Falha ao gerar vetores: o modelo retornou um formato inválido, que não permite construir uma matriz de duas dimensões."
                 ),
                 details={"actual_ndim": int(vectors_array.ndim)},
             )
@@ -176,9 +169,7 @@ class FaissVecDB(BaseVecDB):
             raise KnowledgeBaseUploadError(
                 stage="embedding",
                 user_message=(
-                    "向量化失败：返回向量维度与当前知识库索引维度不一致"
-                    f"（期望 {self.embedding_storage.dimension}，"
-                    f"实际 {vectors_array.shape[1]}）。"
+                    f"Falha ao gerar vetores: as dimensões retornadas diferem das dimensões do índice atual (esperado: {self.embedding_storage.dimension}; recebido: {vectors_array.shape[1]}）。"
                 ),
                 details={
                     "expected_dimension": self.embedding_storage.dimension,
@@ -198,8 +189,7 @@ class FaissVecDB(BaseVecDB):
                 raise KnowledgeBaseUploadError(
                     stage="storage",
                     user_message=(
-                        f"存储失败：写入文档索引后返回的内部 ID 数量与文本分块数量不一致"
-                        f"（期望 {content_count}，实际 {len(int_ids)}）。"
+                        f"Falha ao armazenar: a quantidade de IDs internos após gravar o índice difere da quantidade de blocos de texto (esperado: {content_count}; recebido: {len(int_ids)}）。"
                     ),
                     details={
                         "expected_contents": content_count,

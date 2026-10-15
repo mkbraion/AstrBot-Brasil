@@ -109,7 +109,9 @@ class LarkWebhookServer:
             解密后的事件字典
         """
         if not self.cipher:
-            raise ValueError("未配置 encrypt_key，无法解密事件")
+            raise ValueError(
+                "encrypt_key não configurado; não é possível descriptografar o evento"
+            )
 
         decrypted_str = self.cipher.decrypt_string(encrypted_data)
         return json.loads(decrypted_str)

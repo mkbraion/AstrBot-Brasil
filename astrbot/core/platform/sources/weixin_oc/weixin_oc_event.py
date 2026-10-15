@@ -42,16 +42,16 @@ class WeixinOCMessageEvent(AstrMessageEvent):
         if isinstance(segment, Plain):
             return segment.text
         if isinstance(segment, Image):
-            return "[图片]"
+            return "[Imagem]"
         if isinstance(segment, File):
-            return f"[文件:{segment.name}]"
+            return f"[Arquivo:{segment.name}]"
         if isinstance(segment, Video):
-            return "[视频]"
+            return "[Vídeo]"
         if isinstance(segment, Record):
-            return "[音频]"
+            return "[Áudio]"
         if isinstance(segment, At):
             return f"@{segment.name or segment.qq}"
-        return "[消息]"
+        return "[Mensagem]"
 
     @staticmethod
     def _build_plain_text(message: MessageChain) -> str:

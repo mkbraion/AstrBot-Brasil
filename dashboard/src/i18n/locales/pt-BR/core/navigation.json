@@ -1,12 +1,17 @@
 {
   "welcome": "Início",
-  "dashboard": "Dashboard",
+  "dashboard": "Painel",
   "platforms": "Plataformas",
   "providers": "Provedores",
   "commands": "Comandos",
   "persona": "Personas",
   "data": "Dados e Logs",
-  "dataTabs": { "statistics": "Estatísticas", "conversations": "Conversas", "logs": "Logs", "trace": "Rastreamento" },
+  "dataTabs": {
+    "statistics": "Estatísticas",
+    "conversations": "Conversas",
+    "logs": "Registros",
+    "trace": "Rastreamento"
+  },
   "subagent": "Subagentes",
   "toolUse": "Ferramentas MCP",
   "config": "Configurações",
@@ -15,7 +20,13 @@
   "options": "Opções",
   "cron": "Tarefas futuras",
   "extension": "Extensões",
-  "extensionTabs": { "installed": "Plugins", "market": "Loja de Plugins", "mcp": "Servidores MCP", "skills": "Skills", "components": "Handlers" },
+  "extensionTabs": {
+    "installed": "Plugins",
+    "market": "Loja de Plugins",
+    "mcp": "Servidores MCP",
+    "skills": "Habilidades",
+    "components": "Manipuladores"
+  },
   "conversation": "Conversas",
   "sessionManagement": "Regras personalizadas",
   "console": "Console",
@@ -35,9 +46,23 @@
   "faq": "Perguntas frequentes",
   "github": "GitHub",
   "drag": "Arrastar",
-  "groups": { "more": "Mais recursos", "system": "Sistema", "extension": "Extensões" },
-  "changelogDialog": { "title": "Histórico de alterações", "loading": "Carregando...", "error": "Falha ao carregar", "notFound": "Histórico desta versão não encontrado", "selectVersion": "Selecionar versão", "current": "Atual" },
-  "configTabs": { "normal": "Configuração geral", "system": "Configuração do sistema" },
+  "groups": {
+    "more": "Mais recursos",
+    "system": "Sistema",
+    "extension": "Extensões"
+  },
+  "changelogDialog": {
+    "title": "Histórico de alterações",
+    "loading": "Carregando...",
+    "error": "Falha ao carregar",
+    "notFound": "Histórico desta versão não encontrado",
+    "selectVersion": "Selecionar versão",
+    "current": "Atual"
+  },
+  "configTabs": {
+    "normal": "Configuração geral",
+    "system": "Configuração do sistema"
+  },
   "pluginView": "Visualizações de plugins",
   "pluginViewType": "Visualização de plugin"
 }

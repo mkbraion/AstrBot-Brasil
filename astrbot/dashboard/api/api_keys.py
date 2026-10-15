@@ -62,7 +62,7 @@ async def _create_api_key(
 async def _revoke_api_key(key_id: str, service: ApiKeyService):
     try:
         if not await service.revoke_api_key(key_id):
-            raise ApiKeyServiceError("API key not found")
+            raise ApiKeyServiceError("Chave de API não encontrada")
         return ok()
     except ApiKeyServiceError as exc:
         _raise_api_key_error(exc)
@@ -71,7 +71,7 @@ async def _revoke_api_key(key_id: str, service: ApiKeyService):
 async def _delete_api_key(key_id: str, service: ApiKeyService):
     try:
         if not await service.delete_api_key(key_id):
-            raise ApiKeyServiceError("API key not found")
+            raise ApiKeyServiceError("Chave de API não encontrada")
         return ok()
     except ApiKeyServiceError as exc:
         _raise_api_key_error(exc)

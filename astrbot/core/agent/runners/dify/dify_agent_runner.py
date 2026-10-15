@@ -81,15 +81,17 @@ class DifyAgentRunner(BaseAgentRunner[TContext]):
             async for response in self._execute_dify_request():
                 yield response
         except Exception as e:
-            logger.error(f"Dify 请求失败：{str(e)}")
+            logger.error(f"Falha na requisição ao Dify: {str(e)}")
             self._transition_state(AgentState.ERROR)
             self.final_llm_resp = LLMResponse(
-                role="err", completion_text=f"Dify 请求失败：{str(e)}"
+                role="err", completion_text=f"Falha na requisição ao Dify: {str(e)}"
             )
             yield AgentResponse(
                 type="err",
                 data=AgentResponseData(
-                    chain=MessageChain().message(f"Dify 请求失败：{str(e)}")
+                    chain=MessageChain().message(
+                        f"Falha na requisição ao Dify: {str(e)}"
+                    )
                 ),
             )
         finally:
@@ -126,10 +128,10 @@ class DifyAgentRunner(BaseAgentRunner[TContext]):
             mime_type=image_data.mime_type,
             file_name=f"image.{image_extension}",
         )
-        logger.debug(f"Dify 上传图片响应：{file_response}")
+        logger.debug(f"Dify 上传Imagem响应：{file_response}")
         if "id" not in file_response:
             logger.warning(
-                f"上传图片后得到未知的 Dify 响应：{file_response}，图片将忽略。"
+                f"上传Imagem后得到Desconhecido的 Dify 响应：{file_response}，Imagem将忽略。"
             )
             return None
 
@@ -160,7 +162,7 @@ class DifyAgentRunner(BaseAgentRunner[TContext]):
             try:
                 image_payload = await self._upload_image_for_dify(image_url, session_id)
             except Exception as e:
-                logger.warning(f"上传图片失败：{e}")
+                logger.warning(f"上传Imagem失败：{e}")
                 continue
             if image_payload:
                 files_payload.append(image_payload)
@@ -181,7 +183,7 @@ class DifyAgentRunner(BaseAgentRunner[TContext]):
         match self.api_type:
             case "chat" | "agent" | "chatflow":
                 if not prompt:
-                    prompt = "请描述这张图片。"
+                    prompt = "Descreva esta imagem em português do Brasil."
 
                 async for chunk in self.api_client.chat_messages(
                     inputs={
@@ -219,7 +221,7 @@ class DifyAgentRunner(BaseAgentRunner[TContext]):
                     elif chunk["event"] == "error":
                         logger.error(f"Dify 出现错误：{chunk}")
                         raise Exception(
-                            f"Dify 出现错误 status: {chunk['status']} message: {chunk['message']}"
+                            f"Erro no Dify. Status: {chunk['status']} message: {chunk['message']}"
                         )
 
             case "workflow":
@@ -260,18 +262,18 @@ class DifyAgentRunner(BaseAgentRunner[TContext]):
                             logger.debug(f"Dify 工作流结果：{chunk}")
                             if chunk["data"]["error"]:
                                 logger.error(
-                                    f"Dify 工作流出现错误：{chunk['data']['error']}"
+                                    f"Erro no fluxo de trabalho do Dify: {chunk['data']['error']}"
                                 )
                                 raise Exception(
-                                    f"Dify 工作流出现错误：{chunk['data']['error']}"
+                                    f"Erro no fluxo de trabalho do Dify: {chunk['data']['error']}"
                                 )
                             if self.workflow_output_key not in chunk["data"]["outputs"]:
                                 raise Exception(
-                                    f"Dify 工作流的输出不包含指定的键名：{self.workflow_output_key}"
+                                    f"A saída do fluxo do Dify não contém a chave especificada: {self.workflow_output_key}"
                                 )
                             result = chunk
             case _:
-                raise Exception(f"未知的 Dify API 类型：{self.api_type}")
+                raise Exception(f"Tipo de API do Dify desconhecido: {self.api_type}")
 
         if not result:
             logger.warning("Dify 请求结果为空，请查看 Debug 日志。")

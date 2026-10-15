@@ -960,7 +960,7 @@ class TestConfigSchemaToDefault:
             "field": {"type": "unsupported_type"},
         }
 
-        with pytest.raises(TypeError, match="不受支持的配置类型"):
+        with pytest.raises(TypeError, match="Tipo de configuração incompatível"):
             AstrBotConfig(config_path=temp_config_path, schema=schema)
 
     def test_template_list_type(self, temp_config_path):

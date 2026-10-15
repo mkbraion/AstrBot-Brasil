@@ -115,7 +115,9 @@ class LiveChatSession:
         if self.temp_audio_path and os.path.exists(self.temp_audio_path):
             try:
                 os.remove(self.temp_audio_path)
-                logger.debug(f"[Live Chat] 已删除临时文件: {self.temp_audio_path}")
+                logger.debug(
+                    f"[Live Chat] foi excluído临时文件: {self.temp_audio_path}"
+                )
             except Exception as exc:
                 logger.warning(f"[Live Chat] 删除临时文件失败: {exc}")
         self.temp_audio_path = None
@@ -143,7 +145,7 @@ class LiveChatService:
         jwt_secret: str | None = None,
     ) -> str:
         if not token:
-            raise LiveChatAuthError("Missing authentication token")
+            raise LiveChatAuthError("Token de autenticação ausente")
         jwt_secret = jwt_secret or self.config["dashboard"].get("jwt_secret")
         try:
             payload = jwt.decode(token, jwt_secret, algorithms=["HS256"])
@@ -151,7 +153,7 @@ class LiveChatService:
         except jwt.ExpiredSignatureError as exc:
             raise LiveChatAuthError("Token expired") from exc
         except jwt.InvalidTokenError as exc:
-            raise LiveChatAuthError("Invalid token") from exc
+            raise LiveChatAuthError("Token inválido") from exc
 
     def create_session(self, username: str) -> LiveChatSession:
         session_id = f"webchat_live!{username}!{uuid.uuid4()}"
@@ -458,7 +460,7 @@ class LiveChatService:
                     {
                         "ct": "chat",
                         "t": "error",
-                        "data": "session_id is required",
+                        "data": "session_id é obrigatório",
                         "code": "INVALID_MESSAGE_FORMAT",
                     },
                     send_json,
@@ -506,7 +508,7 @@ class LiveChatService:
                 {
                     "ct": "chat",
                     "t": "error",
-                    "data": f"Unsupported message type: {msg_type}",
+                    "data": f"Tipo de mensagem incompatível: {msg_type}",
                     "code": "INVALID_MESSAGE_FORMAT",
                 },
                 send_json,
@@ -529,7 +531,7 @@ class LiveChatService:
                 {
                     "ct": "chat",
                     "t": "error",
-                    "data": "message must be list",
+                    "data": "message deve ser uma lista",
                     "code": "INVALID_MESSAGE_FORMAT",
                     **request_metadata,
                 },
@@ -789,7 +791,7 @@ class LiveChatService:
                 {
                     "ct": "chat",
                     "t": "error",
-                    "data": f"处理失败: {str(exc)}",
+                    "data": f"Falha no processamento: {str(exc)}",
                     "code": "PROCESSING_ERROR",
                     **request_metadata,
                 },
@@ -849,7 +851,7 @@ class LiveChatService:
 
             audio_path, assemble_duration = await session.end_speaking(stamp)
             if not audio_path:
-                await send_json({"t": "error", "data": "音频组装失败"})
+                await send_json({"t": "error", "data": "Falha ao montar o áudio"})
                 return
 
             await self.process_audio(session, audio_path, assemble_duration, send_json)
@@ -880,7 +882,12 @@ class LiveChatService:
 
             if not stt_provider:
                 logger.error("[Live Chat] STT Provider 未配置")
-                await send_json({"t": "error", "data": "语音识别服务未配置"})
+                await send_json(
+                    {
+                        "t": "error",
+                        "data": "Serviço de reconhecimento de fala não configurado",
+                    }
+                )
                 return
 
             await send_json({"t": "metrics", "data": {"stt": stt_provider.meta().type}})
@@ -1046,7 +1053,9 @@ class LiveChatService:
 
         except Exception as exc:
             logger.error(f"[Live Chat] 处理音频失败: {exc}", exc_info=True)
-            await send_json({"t": "error", "data": f"处理失败: {str(exc)}"})
+            await send_json(
+                {"t": "error", "data": f"Falha no processamento: {str(exc)}"}
+            )
 
         finally:
             session.is_processing = False
@@ -1056,7 +1065,7 @@ class LiveChatService:
     async def save_interrupted_message(
         session: LiveChatSession, user_text: str, bot_text: str
     ) -> None:
-        interrupted_text = bot_text + " [用户打断]"
+        interrupted_text = bot_text + " [interrompido pelo usuário]"
         logger.info(f"[Live Chat] 保存打断消息: {interrupted_text}")
 
         try:

@@ -14,7 +14,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     provider_type_name="gsv_tts_selfhost",
-    desc="GPT-SoVITS TTS(本地加载)",
+    desc="GPT-SoVITS TTS (execução local)",
     provider_type=ProviderType.TEXT_TO_SPEECH,
 )
 class ProviderGSVTTS(TTSProvider):
@@ -111,12 +111,12 @@ class ProviderGSVTTS(TTSProvider):
         except aiohttp.ClientError as e:
             logger.error(f"[GSV TTS] 设置模型路径时发生网络错误：{e}")
         except Exception as e:
-            logger.error(f"[GSV TTS] 设置模型路径时发生未知错误：{e}")
+            logger.error(f"[GSV TTS] 设置模型路径时发生Erro desconhecido：{e}")
 
     async def get_audio(self, text: str) -> str:
         """实现 TTS 核心方法，根据文本内容自动切换情绪"""
         if not text.strip():
-            raise ValueError("[GSV TTS] TTS 文本不能为空")
+            raise ValueError("[GSV TTS] O texto não pode ficar vazio")
 
         endpoint = f"{self.api_base}/tts"
 
@@ -126,14 +126,16 @@ class ProviderGSVTTS(TTSProvider):
         os.makedirs(temp_dir, exist_ok=True)
         path = os.path.join(temp_dir, f"gsv_tts_{generate_timestamp_id()}.wav")
 
-        logger.debug(f"[GSV TTS] 正在调用语音合成接口，参数：{params}")
+        logger.debug(f"[GSV TTS] 正在调用Voz合成接口，参数：{params}")
 
         result = await self._make_request(endpoint, params)
         if isinstance(result, bytes):
             with open(path, "wb") as f:
                 f.write(result)
             return path
-        raise Exception(f"[GSV TTS] 合成失败，输入文本：{text}，错误信息：{result}")
+        raise Exception(
+            f"[GSV TTS] Falha na síntese. Texto de entrada: {text}; mensagem de erro: {result}"
+        )
 
     def build_synthesis_params(self, text: str) -> dict:
         """构建语音合成所需的参数字典。

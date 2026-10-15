@@ -64,7 +64,7 @@ class WecomAIQueueListener:
 
 @register_platform_adapter(
     "wecom_ai_bot",
-    "企业微信智能机器人适配器，支持 HTTP 回调接收消息",
+    "Adaptador do bot de IA do WeCom, com recebimento de mensagens por callback HTTP",
 )
 class WecomAIBotAdapter(Platform):
     """企业微信智能机器人适配器"""
@@ -119,7 +119,7 @@ class WecomAIBotAdapter(Platform):
         # 平台元数据
         self.metadata = PlatformMetadata(
             name="wecom_ai_bot",
-            description="企业微信智能机器人适配器，支持 HTTP 回调和长连接模式",
+            description="Adaptador do bot de IA do WeCom, com suporte a callback HTTP e conexão persistente",
             id=self.config.get("id", "wecom_ai_bot"),
             support_proactive_message=True,
         )
@@ -199,7 +199,7 @@ class WecomAIBotAdapter(Platform):
             return None
         msgtype = message_data.get("msgtype")
         if not msgtype:
-            logger.warning(f"消息类型未知，忽略: {message_data}")
+            logger.warning(f"消息类型Desconhecido，忽略: {message_data}")
             return None
         session_id = self._extract_session_id(message_data)
         if msgtype in ("text", "image", "mixed"):
@@ -509,7 +509,7 @@ class WecomAIBotAdapter(Platform):
                         )
             content = " ".join(text_parts) if text_parts else ""
         else:
-            content = f"[{msgtype}消息]"
+            content = f"[{msgtype}mensagem]"
 
         # 并行处理图片下载和解密
         if _img_url_to_process:
@@ -522,12 +522,12 @@ class WecomAIBotAdapter(Platform):
                 if success:
                     image_base64.append(result)
                 else:
-                    logger.error(f"处理加密图片失败: {result}")
+                    logger.error(f"处理加密Imagem失败: {result}")
 
         # 构建 AstrBotMessage
         abm = AstrBotMessage()
         abm.self_id = self.bot_name
-        abm.message_str = content or "[未知消息]"
+        abm.message_str = content or "[Mensagem desconhecida]"
         abm.message_id = str(uuid.uuid4())
         abm.timestamp = int(time.time())
         abm.raw_message = payload
@@ -571,16 +571,14 @@ class WecomAIBotAdapter(Platform):
         """通过消息推送 webhook 发送消息。"""
         if not self.webhook_client:
             raise RuntimeError(
-                "主动消息发送失败: 未配置企业微信消息推送 Webhook URL，请前往配置添加。"
-                "详见文档: https://docs.astrbot.app/platform/wecom_ai_bot.html#%E9%85%8D%E7%BD%AE-astrbot。"
-                f"session_id={session.session_id}"
+                f"Falha no envio proativo: URL de webhook do WeCom não configurada. Adicione-a nas configurações. Documentação: https://docs.astrbot.app/platform/wecom_ai_bot.html#%E9%85%8D%E7%BD%AE-astrbot. session_id={session.session_id}"
             )
 
         try:
             await self.webhook_client.send_message_chain(message_chain)
         except Exception as e:
             raise RuntimeError(
-                f"企业微信消息推送失败: session_id={session.session_id}, error={e}"
+                f"Falha no envio do WeCom: session_id={session.session_id}, error={e}"
             ) from e
         await super().send_by_session(session, message_chain)
 
@@ -590,7 +588,9 @@ class WecomAIBotAdapter(Platform):
         async def run_both() -> None:
             if self.connection_mode == "long_connection":
                 if not self.long_connection_client:
-                    raise RuntimeError("长连接客户端未初始化")
+                    raise RuntimeError(
+                        "Cliente da conexão persistente não inicializado"
+                    )
                 logger.info(
                     "启动企业微信智能机器人长连接模式: %s", self.long_connection_ws_url
                 )
@@ -603,13 +603,13 @@ class WecomAIBotAdapter(Platform):
                 webhook_uuid = self.config.get("webhook_uuid")
                 if self.unified_webhook_mode and webhook_uuid:
                     log_webhook_info(
-                        f"{self.meta().id}(企业微信智能机器人)", webhook_uuid
+                        f"{self.meta().id}(Bot de IA do WeCom)", webhook_uuid
                     )
                     # 只运行队列监听器
                     await self.queue_listener.run()
                 else:
                     if not self.server:
-                        raise RuntimeError("Webhook 服务器未初始化")
+                        raise RuntimeError("Servidor de webhook não inicializado")
                     logger.info(
                         "启动企业微信智能机器人适配器，监听 %s:%d", self.host, self.port
                     )

@@ -46,7 +46,7 @@ AT_MENTION_PREFIX_REGEX = re.compile(r"^@[^\s]+(\s*-\s*[^\s]+)?\s*")
 
 @register_platform_adapter(
     "kook",
-    "KOOK 适配器",
+    "Adaptador do KOOK",
 )
 class KookPlatformAdapter(Platform):
     def __init__(
@@ -74,7 +74,7 @@ class KookPlatformAdapter(Platform):
 
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
-            name="kook", description="KOOK 适配器", id=self.kook_config.id
+            name="kook", description="Adaptador do KOOK", id=self.kook_config.id
         )
 
     def _should_ignore_event_by_bot_nickname(self, author_id: str) -> bool:
@@ -93,7 +93,7 @@ class KookPlatformAdapter(Platform):
                 abm = await self.convert_message(event)
                 await self.handle_msg(abm)
             except Exception as e:
-                logger.error(f"[KOOK] 消息处理异常: {e}")
+                logger.error(f"[KOOK] Erro ao processar a mensagem: {e}")
         elif event_type == KookMessageType.SYSTEM:
             match event.extra.type:
                 case KookRoleExtraType():
@@ -174,7 +174,7 @@ class KookPlatformAdapter(Platform):
                     wait_time = min(
                         2**consecutive_failures, max_retry_delay
                     )  # 指数退避
-                    logger.info(f"[KOOK] 等待 {wait_time} 秒后重试...")
+                    logger.info(f"[KOOK] 等待 {wait_time} segundos后重试...")
                     await asyncio.sleep(wait_time)
 
             except Exception as e:
@@ -337,7 +337,7 @@ class KookPlatformAdapter(Platform):
             logger.error(
                 f'[KOOK] 无法转换"{KookMessageType.KMARKDOWN.name}"消息, 消息中找不到kmarkdown字段'
             )
-            logger.error(f"[KOOK] 原始消息内容: {data.to_json()}")
+            logger.error(f"[KOOK] 原始消息Conteúdo: {data.to_json()}")
             return [], ""
 
         raw_content = kmarkdown.raw_content or content
@@ -417,7 +417,7 @@ class KookPlatformAdapter(Platform):
                 ).to_path(target_format="wav")
                 message.append(Record(file=path_wav, url=path_wav))
             else:
-                logger.warning(f"[KOOK] 跳过未知文件类型: {file_type.name}")
+                logger.warning(f"[KOOK] 跳过Arquivo desconhecido类型: {file_type.name}")
 
         return message, text
 
@@ -435,7 +435,7 @@ class KookPlatformAdapter(Platform):
         for el in module.elements:
             image_src = el.src
             if not el.src.startswith(("http://", "https://")):
-                logger.warning(f"[KOOK] 屏蔽非http图片url: {image_src}")
+                logger.warning(f"[KOOK] 屏蔽非httpImagemurl: {image_src}")
                 continue
             valid_urls.append(el.src)
         return valid_urls
@@ -467,7 +467,7 @@ class KookPlatformAdapter(Platform):
                 abm.group_id = session_id
                 abm.session_id = session_id
             case _:
-                raise ValueError(f"不支持的频道类型: {channel_type}")
+                raise ValueError(f"Tipo de canal incompatível: {channel_type}")
 
         abm.sender = MessageMember(
             user_id=author_id,
@@ -483,13 +483,13 @@ class KookPlatformAdapter(Platform):
                 abm.message, abm.message_str = await self._parse_card_message(data)
             except Exception as exp:
                 logger.error(f"[KOOK] 卡片消息解析失败: {exp}")
-                logger.error(f"[KOOK] 原始消息内容: {data.to_json()}")
-                abm.message_str = "[卡片消息解析失败]"
-                abm.message = [Plain(text="[卡片消息解析失败]")]
+                logger.error(f"[KOOK] 原始消息Conteúdo: {data.to_json()}")
+                abm.message_str = "[Falha ao interpretar o cartão]"
+                abm.message = [Plain(text="[Falha ao interpretar o cartão]")]
         else:
             logger.warning(f'[KOOK] 不支持的kook消息类型: "{data.type.name}"')
-            abm.message_str = "[不支持的消息类型]"
-            abm.message = [Plain(text="[不支持的消息类型]")]
+            abm.message_str = "[Tipo de mensagem incompatível]"
+            abm.message = [Plain(text="[Tipo de mensagem incompatível]")]
 
         return abm
 

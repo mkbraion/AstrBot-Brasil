@@ -146,7 +146,7 @@
                                         <strong>{{ t('features.settings.backup.import.version.backupVersion') }}:</strong> {{ checkResult?.backup_version }}<br>
                                         <strong>{{ t('features.settings.backup.import.version.currentVersion') }}:</strong> {{ checkResult?.current_version }}
                                     </div>
-                                    <div v-if="checkResult?.backup_time && checkResult?.backup_time !== '未知'" class="mb-2">
+                                    <div v-if="checkResult?.backup_time && checkResult?.backup_time !== 'Desconhecido'" class="mb-2">
                                         <strong>{{ t('features.settings.backup.import.version.backupTime') }}:</strong> {{ formatISODate(checkResult?.backup_time) }}
                                     </div>
                                     <div class="mt-3" style="white-space: pre-line;">{{ versionAlertMessage }}</div>
@@ -497,7 +497,7 @@ const loadBackupList = async () => {
             backupList.value = response.data.data.items || []
         }
     } catch (error) {
-        console.error('Failed to load backup list:', error)
+        console.error("Falha ao carregar os backups:", error)
     } finally {
         loadingList.value = false
     }
@@ -518,7 +518,7 @@ const startExport = async () => {
         }
     } catch (error) {
         exportStatus.value = 'failed'
-        exportError.value = error.message || 'Export failed'
+        exportError.value = error.message || "Falha ao exportar"
     }
 }
 
@@ -545,14 +545,14 @@ const pollExportProgress = async () => {
                 loadBackupList()
             } else if (data.status === 'failed') {
                 exportStatus.value = 'failed'
-                exportError.value = data.error || 'Export failed'
+                exportError.value = data.error || "Falha ao exportar"
             } else {
                 setTimeout(pollExportProgress, 1000)
             }
         }
     } catch (error) {
         exportStatus.value = 'failed'
-        exportError.value = error.message || 'Failed to get export progress'
+        exportError.value = error.message || "Falha ao obter o progresso da exportação"
     }
 }
 
@@ -629,7 +629,7 @@ const checkUploadedBackup = async () => {
 
     } catch (error) {
         importStatus.value = 'failed'
-        importError.value = error.response?.data?.message || error.message || 'Upload failed'
+        importError.value = error.response?.data?.message || error.message || "Falha no envio"
     }
 }
 
@@ -651,7 +651,7 @@ const confirmImport = async () => {
         }
     } catch (error) {
         importStatus.value = 'failed'
-        importError.value = error.response?.data?.message || error.message || 'Import failed'
+        importError.value = error.response?.data?.message || error.message || "Falha ao importar"
     }
 }
 
@@ -676,14 +676,14 @@ const pollImportProgress = async () => {
                 importStatus.value = 'completed'
             } else if (data.status === 'failed') {
                 importStatus.value = 'failed'
-                importError.value = data.error || 'Import failed'
+                importError.value = data.error || "Falha ao importar"
             } else {
                 setTimeout(pollImportProgress, 1000)
             }
         }
     } catch (error) {
         importStatus.value = 'failed'
-        importError.value = error.message || 'Failed to get import progress'
+        importError.value = error.message || "Falha ao obter o progresso da importação"
     }
 }
 
@@ -749,7 +749,7 @@ const restoreFromList = async (filename) => {
         importStatus.value = 'confirm'
 
     } catch (error) {
-        alert(error.response?.data?.message || error.message || 'Check failed')
+        alert(error.response?.data?.message || error.message || "Falha na verificação")
     }
 }
 
@@ -762,10 +762,10 @@ const deleteBackup = async (filename) => {
         if (response.data.status === 'ok') {
             loadBackupList()
         } else {
-            alert(response.data.message || 'Delete failed')
+            alert(response.data.message || "Falha ao excluir")
         }
     } catch (error) {
-        alert(error.message || 'Delete failed')
+        alert(error.message || "Falha ao excluir")
     }
 }
 

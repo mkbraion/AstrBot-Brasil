@@ -340,8 +340,8 @@ const normalizeHandlerList = (source) => {
       )
       .map((command) =>
         typeof command === "string"
-          ? { cmd: command, type: "指令" }
-          : { type: command.type || "指令", ...command },
+          ? { cmd: command, type: "Comando" }
+          : { type: command.type || "Comando", ...command },
       );
   }
   return [];
@@ -370,13 +370,13 @@ const getFallbackHandlerGroupKey = (handler) => {
   const eventType = String(handler?.event_type || "").trim();
   const eventTypeH = String(handler?.event_type_h || "").trim();
 
-  if (["指令", "指令组", "正则匹配"].includes(type)) {
+  if (["Comando", "Grupo de comandos", "Correspondência por expressão regular"].includes(type)) {
     return "command";
   }
-  if (eventType === "OnCallingFuncToolEvent" || eventTypeH === "函数工具") {
+  if (eventType === "OnCallingFuncToolEvent" || eventTypeH === "Ferramenta de função") {
     return "llm_tool";
   }
-  if (type === "事件监听器") {
+  if (type === "Ouvinte de eventos") {
     return "listener";
   }
   return "hook";
@@ -674,7 +674,7 @@ const fetchPluginDetail = async () => {
       await scrollToHashTarget();
     }
   } catch (err) {
-    console.debug("Failed to fetch plugin detail:", err);
+    console.debug("Falha ao obter os detalhes do plugin:", err);
   }
 };
 

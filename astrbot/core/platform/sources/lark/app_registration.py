@@ -84,7 +84,7 @@ async def _post_registration(
             status = response.status
             data = await response.json(content_type=None)
     if not isinstance(data, dict):
-        raise RuntimeError("飞书应用创建响应格式异常")
+        raise RuntimeError("Formato de resposta da criação de aplicativo Lark inválido")
     return status, data
 
 
@@ -113,7 +113,7 @@ async def request_app_registration(domain: str) -> LarkAppRegistration:
             "request_user_info": "open_id tenant_brand",
         },
     )
-    _raise_registration_error(status, raw, "发起扫码创建失败")
+    _raise_registration_error(status, raw, "Falha ao iniciar a criação por QR")
     data = _registration_data(raw)
     user_code = _string_field(data, "user_code")
     verification_uri = _string_field(data, "verification_uri")
@@ -163,7 +163,10 @@ async def poll_app_registration_once(
         if not client_secret and tenant_brand == "lark":
             client_secret = await _poll_lark_secret(device_code)
         if not client_secret:
-            return {"status": "error", "message": "应用创建成功但未获取到凭证"}
+            return {
+                "status": "error",
+                "message": "Aplicativo criado, mas as credenciais não foram obtidas",
+            }
         return {
             "status": "created",
             "app_id": client_id,
@@ -178,15 +181,15 @@ async def poll_app_registration_once(
     if error == "slow_down":
         return {"status": "slow_down"}
     if error == "access_denied":
-        return {"status": "denied", "message": "用户取消了扫码创建"}
+        return {"status": "denied", "message": "O usuário cancelou a criação por QR"}
     if error in {"expired_token", "invalid_grant"}:
-        return {"status": "expired", "message": "扫码已过期，请再次创建"}
+        return {"status": "expired", "message": "O código QR expirou. Crie outro"}
 
     message = (
         _string_field(raw, "error_description")
         or _string_field(data, "error_description")
         or error
-        or "获取扫码创建状态失败"
+        or "Falha ao obter o estado da criação por QR"
     )
     return {"status": "error", "message": message}
 

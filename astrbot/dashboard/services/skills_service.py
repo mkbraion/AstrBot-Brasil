@@ -106,14 +106,14 @@ class SkillsService:
     def resolve_local_skill_dir(self, name: str) -> Path:
         skill_name = str(name or "").strip()
         if not skill_name:
-            raise ValueError("Missing skill name")
+            raise ValueError("Nome da habilidade ausente")
         if not _SKILL_NAME_RE.match(skill_name):
-            raise ValueError("Invalid skill name")
+            raise ValueError("Nome da habilidade inválido")
 
         skill_mgr = SkillManager()
         if skill_mgr.is_sandbox_only_skill(skill_name):
             raise PermissionError(
-                "Sandbox preset skill cannot be opened from local skill files."
+                "A habilidade predefinida do ambiente isolado não pode ser aberta pelos arquivos locais."
             )
 
         plugin_skill_dir = skill_mgr._get_plugin_skill_dir(skill_name)
@@ -123,9 +123,9 @@ class SkillsService:
         skills_root = Path(skill_mgr.skills_root).resolve(strict=True)
         skill_dir = (skills_root / skill_name).resolve(strict=True)
         if not skill_dir.is_relative_to(skills_root):
-            raise PermissionError("Invalid skill path")
+            raise PermissionError("Caminho da habilidade inválido")
         if not skill_dir.is_dir() or not (skill_dir / "SKILL.md").exists():
-            raise FileNotFoundError("Local skill not found")
+            raise FileNotFoundError("Habilidade local não encontrada")
         return skill_dir
 
     @staticmethod
@@ -138,15 +138,15 @@ class SkillsService:
         raw_path = str(relative_path or ".").strip() or "."
         normalized = Path(raw_path.replace("\\", "/"))
         if normalized.is_absolute() or ".." in normalized.parts:
-            raise ValueError("Invalid relative path")
+            raise ValueError("Caminho relativo inválido")
 
         target = (skill_dir / normalized).resolve(strict=True)
         if not target.is_relative_to(skill_dir):
             raise PermissionError("Path escapes skill directory")
         if expect_file and not target.is_file():
-            raise FileNotFoundError("Skill file not found")
+            raise FileNotFoundError("Arquivo da habilidade não encontrado")
         if not expect_file and not target.is_dir():
-            raise FileNotFoundError("Skill directory not found")
+            raise FileNotFoundError("Diretório da habilidade não encontrado")
         return target
 
     @staticmethod
@@ -279,7 +279,7 @@ class SkillsService:
         self._ensure_mutation_allowed()
         temp_path = None
         if not file:
-            raise SkillsServiceError("Missing file")
+            raise SkillsServiceError("Arquivo ausente")
 
         filename = os.path.basename(file.filename or "skill.zip")
         if not filename.lower().endswith(".zip"):
@@ -425,7 +425,7 @@ class SkillsService:
             return SkillsOperationResult(
                 ok=False,
                 data=data,
-                message=f"Upload failed for all {total} file(s).",
+                message=f"Falha no envio de todos os {total} file(s).",
             )
 
         return SkillsOperationResult(
@@ -436,24 +436,24 @@ class SkillsService:
     def prepare_skill_archive(self, name: str) -> SkillArchive:
         skill_name = str(name or "").strip()
         if not skill_name:
-            raise SkillsServiceError("Missing skill name")
+            raise SkillsServiceError("Nome da habilidade ausente")
         if not _SKILL_NAME_RE.match(skill_name):
-            raise SkillsServiceError("Invalid skill name")
+            raise SkillsServiceError("Nome da habilidade inválido")
 
         skill_mgr = SkillManager()
         if skill_mgr.is_sandbox_only_skill(skill_name):
             raise SkillsServiceError(
-                "Sandbox preset skill cannot be downloaded from local skill files."
+                "A habilidade predefinida do ambiente isolado não pode ser baixada pelos arquivos locais."
             )
         if skill_mgr.is_plugin_skill(skill_name):
             raise SkillsServiceError(
-                "Plugin-provided skill cannot be downloaded from local skill files."
+                "A habilidade fornecida por plugin não pode ser baixada pelos arquivos locais."
             )
 
         skill_dir = Path(skill_mgr.skills_root) / skill_name
         skill_md = skill_dir / "SKILL.md"
         if not skill_dir.is_dir() or not skill_md.exists():
-            raise SkillsServiceError("Local skill not found", status_code=404)
+            raise SkillsServiceError("Habilidade local não encontrada", status_code=404)
 
         export_dir = Path(get_astrbot_temp_path()) / "skill_exports"
         export_dir.mkdir(parents=True, exist_ok=True)
@@ -533,11 +533,11 @@ class SkillsService:
             expect_file=True,
         )
         if not self.is_editable_skill_file(target_file):
-            raise SkillsServiceError("Unsupported file type")
+            raise SkillsServiceError("Tipo de arquivo incompatível")
 
         size = target_file.stat().st_size
         if size > _SKILL_FILE_MAX_BYTES:
-            raise SkillsServiceError("File is too large")
+            raise SkillsServiceError("Arquivo muito grande")
 
         try:
             content = target_file.read_text(encoding="utf-8")
@@ -567,11 +567,11 @@ class SkillsService:
         relative_path = payload.get("path", "SKILL.md")
         content = payload.get("content")
         if not isinstance(content, str):
-            raise SkillsServiceError("Missing file content")
+            raise SkillsServiceError("Conteúdo do arquivo ausente")
 
         encoded = content.encode("utf-8")
         if len(encoded) > _SKILL_FILE_MAX_BYTES:
-            raise SkillsServiceError("File content is too large")
+            raise SkillsServiceError("Conteúdo do arquivo muito grande")
 
         skill_dir = self.resolve_local_skill_dir(skill_name)
         if SkillManager().is_plugin_skill(skill_name):
@@ -582,7 +582,7 @@ class SkillsService:
             expect_file=True,
         )
         if not self.is_editable_skill_file(target_file):
-            raise SkillsServiceError("Unsupported file type")
+            raise SkillsServiceError("Tipo de arquivo incompatível")
 
         target_file.write_text(content, encoding="utf-8")
 
@@ -603,7 +603,7 @@ class SkillsService:
         name = payload.get("name")
         active = payload.get("active", True)
         if not name:
-            raise SkillsServiceError("Missing skill name")
+            raise SkillsServiceError("Nome da habilidade ausente")
         SkillManager().set_skill_active(name, bool(active))
         return {"name": name, "active": bool(active)}
 
@@ -612,7 +612,7 @@ class SkillsService:
         payload = self._payload(data)
         name = payload.get("name")
         if not name:
-            raise SkillsServiceError("Missing skill name")
+            raise SkillsServiceError("Nome da habilidade ausente")
         SkillManager().delete_skill(name)
         try:
             await sync_skills_to_active_sandboxes()
@@ -704,7 +704,7 @@ class SkillsService:
         logger.info("[Neo] GET /skills/neo/payload requested.")
         payload_ref = query.get("payload_ref", "")
         if not payload_ref:
-            return SkillsOperationResult(ok=False, message="Missing payload_ref")
+            return SkillsOperationResult(ok=False, message="payload_ref ausente")
 
         async def _do(client):
             payload = await client.skills.get_payload(payload_ref)
@@ -733,7 +733,7 @@ class SkillsService:
         if not candidate_id or passed_value is None:
             return SkillsOperationResult(
                 ok=False,
-                message="Missing candidate_id or passed",
+                message="candidate_id ou passed ausente",
             )
         passed = _to_bool(passed_value, False)
 
@@ -760,11 +760,11 @@ class SkillsService:
         stage = payload.get("stage", "canary")
         sync_to_local = _to_bool(payload.get("sync_to_local"), True)
         if not candidate_id:
-            return SkillsOperationResult(ok=False, message="Missing candidate_id")
+            return SkillsOperationResult(ok=False, message="candidate_id ausente")
         if stage not in {"canary", "stable"}:
             return SkillsOperationResult(
                 ok=False,
-                message="Invalid stage, must be canary/stable",
+                message="Estágio inválido. Use canary ou stable",
             )
 
         async def _do(client):
@@ -815,7 +815,7 @@ class SkillsService:
         payload = self._payload(data)
         release_id = payload.get("release_id")
         if not release_id:
-            return SkillsOperationResult(ok=False, message="Missing release_id")
+            return SkillsOperationResult(ok=False, message="release_id ausente")
 
         async def _do(client):
             result = await client.skills.rollback_release(release_id)
@@ -834,7 +834,7 @@ class SkillsService:
         if not release_id and not skill_key:
             return SkillsOperationResult(
                 ok=False,
-                message="Missing release_id or skill_key",
+                message="release_id ou skill_key ausente",
             )
 
         async def _do(client):
@@ -868,7 +868,7 @@ class SkillsService:
         candidate_id = payload.get("candidate_id")
         reason = payload.get("reason")
         if not candidate_id:
-            return SkillsOperationResult(ok=False, message="Missing candidate_id")
+            return SkillsOperationResult(ok=False, message="candidate_id ausente")
 
         async def _do(client):
             result = await client.skills.delete_candidate(candidate_id, reason=reason)
@@ -884,7 +884,7 @@ class SkillsService:
         release_id = payload.get("release_id")
         reason = payload.get("reason")
         if not release_id:
-            return SkillsOperationResult(ok=False, message="Missing release_id")
+            return SkillsOperationResult(ok=False, message="release_id ausente")
 
         async def _do(client):
             result = await client.skills.delete_release(release_id, reason=reason)

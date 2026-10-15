@@ -61,7 +61,7 @@ export interface UseFolderManagerReturn {
  * 创建文件夹管理 composable
  */
 export function useFolderManager(options: UseFolderManagerOptions): UseFolderManagerReturn {
-  const { operations, rootFolderName = '根目录', autoLoad = false } = options;
+  const { operations, rootFolderName = 'Diretório raiz', autoLoad = false } = options;
   
   // 状态
   const folderTree = ref<FolderTreeNode[]>([]);

@@ -36,12 +36,18 @@ from astrbot.core.star.star_manager import (
 from astrbot.core.utils.astrbot_path import get_astrbot_data_path, get_astrbot_temp_path
 
 PLUGIN_UPDATE_CONCURRENCY = 3
-PLUGIN_OPERATION_FAILED_MESSAGE = "插件操作失败，请查看服务端日志。"
-PLUGIN_UPDATE_FAILED_MESSAGE = "更新失败，请查看服务端日志。"
+PLUGIN_OPERATION_FAILED_MESSAGE = (
+    "Falha na operação do plugin. Consulte os registros do servidor."
+)
+PLUGIN_UPDATE_FAILED_MESSAGE = (
+    "Falha na atualização. Consulte os registros do servidor."
+)
 PLUGIN_INSTALL_SOURCES_KEY = "plugin_install_sources"
 PLUGIN_DEFAULT_REGISTRY_NAME = "Default"
-PLUGIN_UPDATE_DISABLED_MESSAGE = "该插件不是通过插件市场安装，无法检测或执行更新。"
-PLUGIN_UPDATE_SOURCE_REQUIRED_MESSAGE = "请先选择插件安装源后再更新。"
+PLUGIN_UPDATE_DISABLED_MESSAGE = "Este plugin não foi instalado pelo catálogo de plugins e não permite verificar ou aplicar atualizações."
+PLUGIN_UPDATE_SOURCE_REQUIRED_MESSAGE = (
+    "Selecione a fonte de instalação do plugin antes de atualizar."
+)
 PLUGIN_COMPONENT_TYPE_ORDER = {
     "page": 0,
     "skill": 1,
@@ -97,15 +103,15 @@ class PluginService:
         self.core_lifecycle = core_lifecycle
         self.plugin_manager = plugin_manager
         self.translated_event_type = {
-            EventType.AdapterMessageEvent: "平台消息下发时",
-            EventType.OnLLMRequestEvent: "LLM 请求时",
-            EventType.OnLLMResponseEvent: "LLM 响应后",
-            EventType.OnAgentBeginEvent: "Agent 开始运行时",
-            EventType.OnAgentDoneEvent: "Agent 运行完成后",
-            EventType.OnDecoratingResultEvent: "回复消息前",
-            EventType.OnCallingFuncToolEvent: "函数工具",
-            EventType.OnAfterMessageSentEvent: "发送消息后",
-            EventType.OnPluginErrorEvent: "插件报错时",
+            EventType.AdapterMessageEvent: "Ao enviar uma mensagem à plataforma",
+            EventType.OnLLMRequestEvent: "Durante uma requisição ao modelo",
+            EventType.OnLLMResponseEvent: "Após a resposta do modelo",
+            EventType.OnAgentBeginEvent: "Ao iniciar o agente",
+            EventType.OnAgentDoneEvent: "Após a conclusão do agente",
+            EventType.OnDecoratingResultEvent: "Antes de responder à mensagem",
+            EventType.OnCallingFuncToolEvent: "Ferramenta de função",
+            EventType.OnAfterMessageSentEvent: "Após enviar a mensagem",
+            EventType.OnPluginErrorEvent: "Quando ocorre um erro no plugin",
         }
         self._logo_cache: dict[str, str] = {}
 
@@ -143,13 +149,15 @@ class PluginService:
         payload = data if isinstance(data, dict) else {}
         dir_name = payload.get("dir_name")
         if not dir_name:
-            raise PluginServiceError("缺少插件目录名")
+            raise PluginServiceError("Nome do diretório do plugin ausente")
 
         success, err = await self.plugin_manager.reload_failed_plugin(dir_name)
         if not success:
-            raise PluginServiceError(f"重载失败: {err}", public_message="重载失败")
+            raise PluginServiceError(
+                f"Falha ao recarregar: {err}", public_message="Falha ao recarregar"
+            )
         await self.sync_skills_after_plugin_change()
-        return None, f"插件 {dir_name} 重载成功。"
+        return None, f"Plugin {dir_name} recarregado."
 
     async def reload_plugin(self, data: object) -> tuple[None, str]:
         self._ensure_not_demo()
@@ -158,11 +166,11 @@ class PluginService:
         success, message = await self.plugin_manager.reload(plugin_name)
         if not success:
             raise PluginServiceError(
-                message or "插件重载失败",
-                public_message="插件重载失败",
+                message or "Falha ao recarregar o plugin",
+                public_message="Falha ao recarregar o plugin",
             )
         await self.sync_skills_after_plugin_change()
-        return None, "重载成功。"
+        return None, "Recarregado."
 
     async def list_plugins(
         self,
@@ -229,7 +237,7 @@ class PluginService:
         serialize_pages: PluginPagesSerializer,
     ) -> dict:
         if not plugin_name:
-            raise PluginServiceError("缺少插件名")
+            raise PluginServiceError("Nome do plugin ausente")
 
         install_sources = await self.get_plugin_install_sources()
         for plugin in self.plugin_manager.context.get_all_stars():
@@ -253,7 +261,7 @@ class PluginService:
                 ),
             }
 
-        raise PluginServiceError("插件不存在")
+        raise PluginServiceError("Plugin não encontrado")
 
     async def get_plugin_detail_from_dashboard_query(
         self,
@@ -726,7 +734,7 @@ class PluginService:
                 handler.event_type.name,
             )
             info["handler_full_name"] = handler.handler_full_name
-            info["description"] = handler.desc or "无描述"
+            info["description"] = handler.desc or "Sem descrição"
             info["handler_name"] = handler.handler_name
 
             component_type = "hook"
@@ -736,7 +744,7 @@ class PluginService:
                 for event_filter in handler.event_filters:
                     if isinstance(event_filter, CommandFilter):
                         component_type = "command"
-                        info["display_type"] = "指令"
+                        info["display_type"] = "Comando"
                         info["cmd"] = self._get_command_filter_display_name(
                             event_filter
                         )
@@ -746,7 +754,7 @@ class PluginService:
                         )
                     elif isinstance(event_filter, CommandGroupFilter):
                         component_type = "command"
-                        info["display_type"] = "指令组"
+                        info["display_type"] = "Grupo de comandos"
                         info["cmd"] = event_filter.get_complete_command_names()[
                             0
                         ].strip()
@@ -756,25 +764,25 @@ class PluginService:
                         )
                     elif isinstance(event_filter, RegexFilter):
                         component_type = "command"
-                        info["display_type"] = "正则匹配"
+                        info["display_type"] = "Correspondência por expressão regular"
                         info["cmd"] = event_filter.regex_str
                         component = {
                             "type": "command",
                             "name": event_filter.regex_str,
-                            "description": handler.desc or "无描述",
+                            "description": handler.desc or "Sem descrição",
                             "match": "regex",
                         }
                     elif isinstance(event_filter, PermissionTypeFilter):
                         has_admin = True
                 info["has_admin"] = has_admin
                 if "cmd" not in info:
-                    info["cmd"] = "未知"
+                    info["cmd"] = "Desconhecido"
                 if "display_type" not in info:
-                    info["display_type"] = "事件监听器"
+                    info["display_type"] = "Ouvinte de eventos"
                     component_type = "listener"
             else:
-                info["cmd"] = "自动触发"
-                info["display_type"] = "无"
+                info["cmd"] = "Acionamento automático"
+                info["display_type"] = "Nenhum"
                 if handler.event_type == EventType.OnCallingFuncToolEvent:
                     component_type = "llm_tool"
 
@@ -782,7 +790,7 @@ class PluginService:
                 component = {
                     "type": component_type,
                     "name": handler.handler_name or handler.event_type.name,
-                    "description": handler.desc or "无描述",
+                    "description": handler.desc or "Sem descrição",
                 }
             else:
                 component["type"] = component_type
@@ -829,7 +837,7 @@ class PluginService:
                 {
                     "type": "skill",
                     "name": skill.name,
-                    "description": skill.description or "无描述",
+                    "description": skill.description or "Sem descrição",
                     "path": skill.path,
                 }
             )
@@ -846,7 +854,7 @@ class PluginService:
     ) -> str:
         handler_md = getattr(command_filter, "handler_md", None)
         desc = getattr(handler_md, "desc", "") if handler_md else ""
-        return desc or fallback or "无描述"
+        return desc or fallback or "Sem descrição"
 
     def _build_command_filter_component(
         self,
@@ -918,7 +926,7 @@ class PluginService:
             component = {
                 "type": "command",
                 "name": parent_name,
-                "description": "无描述",
+                "description": "Sem descrição",
                 "subcommands": [component],
             }
         return component
@@ -946,7 +954,7 @@ class PluginService:
         return merged
 
     def _merge_command_component(self, target: dict, source: dict) -> None:
-        if target.get("description") == "无描述" and source.get("description"):
+        if target.get("description") == "Sem descrição" and source.get("description"):
             target["description"] = source["description"]
         for key, value in source.items():
             if key in {"subcommands", "description"}:
@@ -1043,9 +1051,11 @@ class PluginService:
             logger.warning(
                 "Failed to fetch remote plugin marketplace data; using cached data."
             )
-            return cached_data, "使用缓存数据，可能不是最新版本"
+            return cached_data, "Usando dados em cache, que podem estar desatualizados"
 
-        raise PluginServiceError("获取插件列表失败，且没有可用的缓存数据")
+        raise PluginServiceError(
+            "Falha ao obter os plugins. Nenhum dado em cache disponível"
+        )
 
     async def get_online_plugins_from_dashboard_query(
         self,
@@ -1286,8 +1296,8 @@ class PluginService:
         market_plugin_id = self.get_market_plugin_id(payload)
         if not market_plugin_id:
             raise PluginServiceError(
-                "缺少插件市场标识，无法安装。",
-                public_message="缺少插件市场标识，无法安装。",
+                "Identificador do catálogo de plugins ausente. Não é possível instalar.",
+                public_message="Identificador do catálogo de plugins ausente. Não é possível instalar.",
             )
 
         registry_url = self.normalize_registry_url(payload.get("registry_url"))
@@ -1301,15 +1311,15 @@ class PluginService:
         )
         if not market_plugin:
             raise PluginServiceError(
-                "插件源中未找到该插件，无法安装。",
-                public_message="插件源中未找到该插件，无法安装。",
+                "Plugin não encontrado na fonte. Não é possível instalar.",
+                public_message="Plugin não encontrado na fonte. Não é possível instalar.",
             )
 
         repo_url = str(market_plugin.get("repo") or "").strip()
         if not repo_url:
             raise PluginServiceError(
-                "插件市场记录缺少仓库地址，无法安装。",
-                public_message="插件市场记录缺少仓库地址，无法安装。",
+                "O registro no catálogo não tem endereço de repositório. Não é possível instalar.",
+                public_message="O registro no catálogo não tem endereço de repositório. Não é possível instalar.",
             )
 
         return {
@@ -1333,7 +1343,7 @@ class PluginService:
         """
         plugin = self.find_plugin_by_name(plugin_name)
         if not plugin:
-            raise PluginServiceError("插件不存在")
+            raise PluginServiceError("Plugin não encontrado")
         records = await self.get_plugin_install_sources()
         record = self.resolve_plugin_install_source(plugin, records)
         if not isinstance(record, dict) or record.get("implicit"):
@@ -1371,8 +1381,8 @@ class PluginService:
         market_plugin = self.resolve_market_plugin_entry(market_data, record)
         if not market_plugin:
             raise PluginServiceError(
-                "原插件源中未找到该插件，无法更新。",
-                public_message="原插件源中未找到该插件，无法更新。",
+                "Plugin não encontrado na fonte original. Não é possível atualizar.",
+                public_message="Plugin não encontrado na fonte original. Não é possível atualizar.",
             )
 
         return {
@@ -1402,15 +1412,15 @@ class PluginService:
         plugin = self.find_plugin_by_name(plugin_name)
         if not plugin or not plugin.root_dir_name:
             raise PluginServiceError(
-                "插件不存在",
-                public_message="插件不存在",
+                "Plugin não encontrado",
+                public_message="Plugin não encontrado",
             )
 
         plugin_repo = str(plugin.repo or "").strip()
         if not plugin_repo:
             raise PluginServiceError(
-                "当前插件缺少仓库地址，无法更换插件源。",
-                public_message="当前插件缺少仓库地址，无法更换插件源。",
+                "O plugin atual não tem endereço de repositório. Não é possível trocar a fonte.",
+                public_message="O plugin atual não tem endereço de repositório. Não é possível trocar a fonte.",
             )
 
         install_method = str(payload.get("install_method") or "market").strip().lower()
@@ -1444,19 +1454,19 @@ class PluginService:
                     records.pop(key, None)
             records[plugin.root_dir_name] = record
             await self.save_plugin_install_sources(records)
-            return record, "插件源已更新。"
+            return record, "Fonte de plugins atualizada."
 
         if install_method != "market":
             raise PluginServiceError(
-                "不支持的插件源类型。",
-                public_message="不支持的插件源类型。",
+                "Tipo de fonte de plugins incompatível.",
+                public_message="Tipo de fonte de plugins incompatível.",
             )
 
         market_plugin_id = self.get_market_plugin_id(payload)
         if not market_plugin_id:
             raise PluginServiceError(
-                "缺少插件市场标识，无法更换插件源。",
-                public_message="缺少插件市场标识，无法更换插件源。",
+                "Identificador do catálogo de plugins ausente. Não é possível trocar a fonte.",
+                public_message="Identificador do catálogo de plugins ausente. Não é possível trocar a fonte.",
             )
 
         registry_url = self.normalize_registry_url(payload.get("registry_url"))
@@ -1470,15 +1480,15 @@ class PluginService:
         )
         if not market_plugin:
             raise PluginServiceError(
-                "插件源中未找到该插件，无法更换插件源。",
-                public_message="插件源中未找到该插件，无法更换插件源。",
+                "Plugin não encontrado na fonte. Não é possível trocar a fonte.",
+                public_message="Plugin não encontrado na fonte. Não é possível trocar a fonte.",
             )
 
         repo_url = str(market_plugin.get("repo") or "").strip()
         if not repo_url:
             raise PluginServiceError(
-                "插件市场记录缺少仓库地址，无法更换插件源。",
-                public_message="插件市场记录缺少仓库地址，无法更换插件源。",
+                "O registro no catálogo não tem endereço de repositório. Não é possível trocar a fonte.",
+                public_message="O registro no catálogo não tem endereço de repositório. Não é possível trocar a fonte.",
             )
 
         plugin_repo_identifier = self.repo_identifier_from_url(plugin_repo)
@@ -1497,8 +1507,8 @@ class PluginService:
             )
         if not repo_matches:
             raise PluginServiceError(
-                "插件仓库地址与所选插件源不一致，无法更换插件源。",
-                public_message="插件仓库地址与所选插件源不一致，无法更换插件源。",
+                "O endereço do repositório do plugin difere da fonte selecionada. Não é possível trocar a fonte.",
+                public_message="O endereço do repositório do plugin difere da fonte selecionada. Não é possível trocar a fonte.",
             )
 
         registry_name = await self.resolve_registry_name(registry_url)
@@ -1528,7 +1538,7 @@ class PluginService:
                 records.pop(key, None)
         records[plugin.root_dir_name] = record
         await self.save_plugin_install_sources(records)
-        return record, "插件源已更新。"
+        return record, "Fonte de plugins atualizada."
 
     async def refresh_plugin_install_source_after_update(
         self,
@@ -1586,7 +1596,7 @@ class PluginService:
                 "market_plugin_id": market_install_info["market_plugin_id"],
             }
         if not repo_url:
-            raise PluginServiceError("缺少插件仓库地址")
+            raise PluginServiceError("Endereço do repositório do plugin ausente")
 
         try:
             repo_url = normalize_repository_url(repo_url)
@@ -1594,7 +1604,7 @@ class PluginService:
         except ValueError as exc:
             raise PluginServiceError(
                 str(exc),
-                public_message="请输入有效的 Git 仓库地址。",
+                public_message="Informe um endereço de repositório Git válido.",
             ) from exc
 
         expected_transport = str(payload.get("repository_transport") or "").strip()
@@ -1603,12 +1613,12 @@ class PluginService:
         ):
             raise PluginServiceError(
                 "GitHub archive endpoint received a non-GitHub repository.",
-                public_message="请输入有效的 GitHub HTTP(S) 仓库地址。",
+                public_message="Informe um endereço HTTP(S) válido de repositório no GitHub.",
             )
         if expected_transport == "git" and repository.transport != "git":
             raise PluginServiceError(
                 "Git clone endpoint received a GitHub archive repository.",
-                public_message="该地址应通过 GitHub 仓库安装入口处理。",
+                public_message="Este endereço deve ser tratado pela instalação de repositórios do GitHub.",
             )
 
         proxy: str | None = payload.get("proxy", None)
@@ -1634,7 +1644,7 @@ class PluginService:
             )
             await self.sync_skills_after_plugin_change()
             logger.info(f"Installed plugin {repo_url} successfully.")
-            return plugin_info or {}, "安装成功。"
+            return plugin_info or {}, "Instalado."
         except PluginVersionUnsupportedError as exc:
             raise PluginServiceWarning(
                 str(exc),
@@ -1642,7 +1652,7 @@ class PluginService:
                     "warning_type": "astrbot_version_unsupported",
                     "can_ignore": True,
                 },
-                public_message="当前 AstrBot 版本不满足插件要求",
+                public_message="A versão atual do AstrBot não atende aos requisitos do plugin",
             ) from exc
         except GitUnavailableError as exc:
             raise PluginServiceError(str(exc), public_message=str(exc)) from exc
@@ -1662,13 +1672,13 @@ class PluginService:
         payload = self._payload(data)
         repo_url = str(payload.get("url") or payload.get("repository") or "").strip()
         if not repo_url:
-            raise PluginServiceError("缺少插件仓库地址")
+            raise PluginServiceError("Endereço do repositório do plugin ausente")
         try:
             repo_url = normalize_repository_url(repo_url)
         except ValueError as exc:
             raise PluginServiceError(
                 str(exc),
-                public_message="请输入有效的 Git 仓库地址。",
+                public_message="Informe um endereço de repositório Git válido.",
             ) from exc
 
         proxy = str(payload.get("proxy") or "").strip()
@@ -1677,7 +1687,7 @@ class PluginService:
                 repo_url,
                 proxy,
             )
-            return metadata, "插件校验通过。"
+            return metadata, "Plugin validado."
         except ValueError as exc:
             raise PluginServiceError(
                 str(exc),
@@ -1690,8 +1700,8 @@ class PluginService:
                 "Plugin repository validation failed for %s: %s", repo_url, exc
             )
             raise PluginServiceError(
-                "插件校验失败",
-                public_message="插件校验失败，请查看服务端日志。",
+                "Falha na validação do plugin",
+                public_message="Falha na validação do plugin. Consulte os registros do servidor.",
             ) from exc
 
     async def install_plugin_upload(
@@ -1722,7 +1732,7 @@ class PluginService:
             )
             await self.sync_skills_after_plugin_change()
             logger.info(f"Installed plugin {upload_file.filename} successfully.")
-            return plugin_info or {}, "安装成功。"
+            return plugin_info or {}, "Instalado."
         except PluginVersionUnsupportedError as exc:
             raise PluginServiceWarning(
                 str(exc),
@@ -1730,7 +1740,7 @@ class PluginService:
                     "warning_type": "astrbot_version_unsupported",
                     "can_ignore": True,
                 },
-                public_message="当前 AstrBot 版本不满足插件要求",
+                public_message="A versão atual do AstrBot não atende aos requisitos do plugin",
             ) from exc
 
     async def install_plugin_upload_from_dashboard_form(
@@ -1761,7 +1771,7 @@ class PluginService:
         await self.remove_plugin_install_source(root_dir_name)
         await self.sync_skills_after_plugin_change()
         logger.info(f"Uninstalled plugin {plugin_name} successfully.")
-        return None, "卸载成功"
+        return None, "Desinstalado"
 
     async def uninstall_failed_plugin(self, data: object) -> tuple[None, str]:
         self._ensure_not_demo()
@@ -1770,7 +1780,7 @@ class PluginService:
         delete_config = payload.get("delete_config", False)
         delete_data = payload.get("delete_data", False)
         if not dir_name:
-            raise PluginServiceError("缺少失败插件目录名")
+            raise PluginServiceError("Nome do diretório do plugin com falha ausente")
 
         logger.info(f"Uninstalling failed plugin {dir_name}")
         await self.plugin_manager.uninstall_failed_plugin(
@@ -1780,7 +1790,7 @@ class PluginService:
         )
         await self.sync_skills_after_plugin_change()
         logger.info(f"Uninstalled failed plugin {dir_name} successfully.")
-        return None, "卸载成功"
+        return None, "Desinstalado"
 
     async def update_plugin(self, data: object) -> tuple[None, str]:
         self._ensure_not_demo()
@@ -1801,7 +1811,7 @@ class PluginService:
         await self.plugin_manager.reload(plugin_name)
         await self.sync_skills_after_plugin_change()
         logger.info(f"Updated plugin {plugin_name} successfully.")
-        return None, "更新成功。"
+        return None, "Atualizado."
 
     async def update_all_plugins(self, data: object) -> tuple[dict, str]:
         self._ensure_not_demo()
@@ -1810,7 +1820,7 @@ class PluginService:
         proxy: str = payload.get("proxy", "")
 
         if not isinstance(plugin_names, list) or not plugin_names:
-            raise PluginServiceError("插件列表不能为空")
+            raise PluginServiceError("A lista de plugins não pode ficar vazia")
 
         results = []
         sem = asyncio.Semaphore(PLUGIN_UPDATE_CONCURRENCY)
@@ -1832,7 +1842,7 @@ class PluginService:
                         name,
                         update_info,
                     )
-                    return {"name": name, "status": "ok", "message": "更新成功"}
+                    return {"name": name, "status": "ok", "message": "Atualizado"}
                 except PluginServiceError as exc:
                     logger.error(
                         f"/api/plugin/update-all: Failed to update plugin {name}: {exc}",
@@ -1879,9 +1889,9 @@ class PluginService:
         if len(failed) < len(results):
             await self.sync_skills_after_plugin_change()
         message = (
-            "批量更新完成，全部成功。"
+            "Atualização em lote concluída sem falhas."
             if not failed
-            else f"批量更新完成，其中 {len(failed)}/{len(results)} 个插件失败。"
+            else f"Atualização em lote concluída; {len(failed)}/{len(results)} plugins falharam."
         )
 
         return {"results": results}, message
@@ -1894,11 +1904,11 @@ class PluginService:
         plugin_name = payload["name"]
         if enabled:
             await self.plugin_manager.turn_on_plugin(plugin_name)
-            message = "启用成功。"
+            message = "Ativado."
             log_action = "Enabled"
         else:
             await self.plugin_manager.turn_off_plugin(plugin_name)
-            message = "停用成功。"
+            message = "Desativado."
             log_action = "Disabled"
         await self.sync_skills_after_plugin_change()
         logger.info(f"{log_action} plugin {plugin_name}.")
@@ -1906,7 +1916,7 @@ class PluginService:
 
     def resolve_plugin_dir(self, plugin_name: str) -> Path:
         if not plugin_name:
-            raise PluginServiceError("插件名称不能为空")
+            raise PluginServiceError("O nome do plugin não pode ficar vazio")
 
         plugin_obj = None
         for plugin in self.plugin_manager.context.get_all_stars():
@@ -1915,9 +1925,9 @@ class PluginService:
                 break
 
         if not plugin_obj:
-            raise PluginServiceError(f"插件 {plugin_name} 不存在")
+            raise PluginServiceError(f"Plugin {plugin_name} não existe")
         if not plugin_obj.root_dir_name:
-            raise PluginServiceError(f"插件 {plugin_name} 目录不存在")
+            raise PluginServiceError(f"Plugin {plugin_name} diretório não encontrado")
 
         plugin_dir = (
             Path(
@@ -1928,30 +1938,32 @@ class PluginService:
             / plugin_obj.root_dir_name
         )
         if not plugin_dir.is_dir():
-            raise PluginServiceError(f"无法找到插件 {plugin_name} 的目录")
+            raise PluginServiceError(
+                f"Não foi possível encontrar o diretório do plugin {plugin_name}"
+            )
         return plugin_dir
 
     def get_plugin_readme(self, plugin_name: str | None) -> tuple[dict, str]:
         if not plugin_name:
             logger.warning("The plugin name is empty.")
-            raise PluginServiceError("插件名称不能为空")
+            raise PluginServiceError("O nome do plugin não pode ficar vazio")
 
         plugin_dir = self.resolve_plugin_dir(plugin_name)
         readme_path = plugin_dir / "README.md"
 
         if not readme_path.is_file():
             logger.warning(f"Plugin {plugin_name} has no README file.")
-            raise PluginServiceError(f"插件 {plugin_name} 没有README文件")
+            raise PluginServiceError(f"Plugin {plugin_name} não tem arquivo README")
 
         try:
             return {
                 "content": readme_path.read_text(encoding="utf-8")
-            }, "成功获取README内容"
+            }, "Conteúdo do README obtido"
         except Exception as exc:
             logger.warning(f"Failed to read README for plugin {plugin_name}: {exc}")
             raise PluginServiceError(
-                "读取README文件失败",
-                public_message="读取README文件失败",
+                "Falha ao ler o README",
+                public_message="Falha ao ler o README",
             ) from exc
 
     def get_plugin_readme_from_dashboard_query(
@@ -1964,7 +1976,7 @@ class PluginService:
         logger.debug(f"Getting the changelog for plugin {plugin_name}")
         if not plugin_name:
             logger.warning("The plugin name is empty.")
-            raise PluginServiceError("插件名称不能为空")
+            raise PluginServiceError("O nome do plugin não pode ficar vazio")
 
         plugin_dir = self.resolve_plugin_dir(plugin_name)
         changelog_names = ["CHANGELOG.md", "changelog.md", "CHANGELOG", "changelog"]
@@ -1975,19 +1987,19 @@ class PluginService:
             try:
                 return (
                     {"content": changelog_path.read_text(encoding="utf-8")},
-                    "成功获取更新日志",
+                    "Histórico de alterações obtido",
                 )
             except Exception as exc:
                 logger.warning(
                     f"Failed to read the changelog for plugin {plugin_name}: {exc}"
                 )
                 raise PluginServiceError(
-                    "读取更新日志失败",
-                    public_message="读取更新日志失败",
+                    "Falha ao ler o histórico de alterações",
+                    public_message="Falha ao ler o histórico de alterações",
                 ) from exc
 
         logger.warning(f"Plugin {plugin_name} has no changelog file.")
-        return {"content": None}, "该插件没有更新日志文件"
+        return {"content": None}, "Este plugin não tem histórico de alterações"
 
     def get_plugin_changelog_from_dashboard_query(
         self,
@@ -2006,7 +2018,7 @@ class PluginService:
         payload = data if isinstance(data, dict) else {}
         sources = PluginService._custom_sources_from_payload(payload)
         await sp.global_put("custom_plugin_sources", sources)
-        return None, "保存成功"
+        return None, "Salvo"
 
     @staticmethod
     def _normalize_custom_sources(raw_sources: object) -> list:
@@ -2016,7 +2028,7 @@ class PluginService:
     def _custom_sources_from_payload(payload: dict[str, Any]) -> list:
         sources = payload.get("sources", [])
         if not isinstance(sources, list):
-            raise PluginServiceError("sources fields must be a list")
+            raise PluginServiceError("O campo sources deve ser uma lista")
         return sources
 
     @staticmethod

@@ -504,7 +504,7 @@ class PluginManager:
         plugin_root = Path(plugin_path)
 
         if not plugin_root.exists():
-            raise Exception("插件不存在。")
+            raise Exception("Plugin não encontrado.")
 
         metadata_path = next(
             (
@@ -526,7 +526,9 @@ class PluginManager:
             try:
                 _PluginUpdater.validate_plugin_metadata(metadata, metadata_label)
             except ValueError as exc:
-                raise Exception(f"插件元数据校验失败：{exc!s}") from exc
+                raise Exception(
+                    f"Falha na validação dos metadados do plugin: {exc!s}"
+                ) from exc
             metadata = StarMetadata(
                 name=metadata["name"],
                 author=metadata["author"],
@@ -615,11 +617,11 @@ class PluginManager:
                 return json.load(f)
         except UnicodeDecodeError as exc:
             raise ValueError(
-                f"插件配置 schema 必须使用 UTF-8 编码: {schema_path}"
+                f"O esquema de configuração do plugin deve usar UTF-8: {schema_path}"
             ) from exc
         except json.JSONDecodeError as exc:
             raise ValueError(
-                f"插件配置 schema 不是有效的 JSON: {schema_path} "
+                f"O esquema de configuração do plugin não é um JSON válido: {schema_path} "
                 f"(line {exc.lineno}, column {exc.colno})"
             ) from exc
 
@@ -631,11 +633,11 @@ class PluginManager:
     def _validate_importable_name(plugin_name: str) -> None:
         if "/" in plugin_name or "\\" in plugin_name:
             raise ValueError(
-                "metadata 文件中 name 含有路径分隔符，不可用于 importlib 加载。"
+                "O campo name dos metadados contém separadores de caminho e não pode ser carregado por importlib."
             )
         if not plugin_name.isidentifier() or keyword.iskeyword(plugin_name):
             raise Exception(
-                "metadata 文件中 name 不是合法的模块名称（应为合法 Python 标识符且非关键字）。"
+                "O campo name dos metadados não é um nome de módulo válido. Use um identificador Python válido que não seja uma palavra reservada."
             )
 
     @staticmethod
@@ -651,22 +653,24 @@ class PluginManager:
         )
         if metadata_path is None:
             raise Exception(
-                "未找到 metadata.yaml 或 metadata.yml，无法获取插件目录名。"
+                "metadata.yaml ou metadata.yml não encontrado; não é possível obter o nome do diretório do plugin."
             )
 
         with metadata_path.open(encoding="utf-8") as f:
             metadata = yaml.safe_load(f)
 
         if not isinstance(metadata, dict):
-            raise Exception(f"{metadata_path.name} 格式错误。")
+            raise Exception(f"{metadata_path.name} tem formato inválido.")
 
         plugin_name = metadata.get("name")
         if not isinstance(plugin_name, str) or not plugin_name.strip():
-            raise Exception(f"{metadata_path.name} 中缺少 name 字段。")
+            raise Exception(f"{metadata_path.name} não contém o campo name.")
 
         plugin_dir_name = PluginManager._normalize_plugin_dir_name(plugin_name)
         if not plugin_dir_name:
-            raise Exception(f"{metadata_path.name} 中 name 字段内容非法。")
+            raise Exception(
+                f"{metadata_path.name} contém um valor inválido no campo name."
+            )
         PluginManager._validate_importable_name(plugin_dir_name)
         return plugin_dir_name
 
@@ -866,20 +870,22 @@ class PluginManager:
         lines = []
         for dir_name, info in self.failed_plugin_dict.items():
             if isinstance(info, dict):
-                error = info.get("error", "未知错误")
+                error = info.get("error", "Erro desconhecido")
                 display_name = info.get("display_name") or info.get("name") or dir_name
                 version = info.get("version") or info.get("astrbot_version")
                 if version:
                     lines.append(
-                        f"加载插件「{display_name}」(目录: {dir_name}, 版本: {version}) 时出现问题，原因：{error}。",
+                        f"Erro ao carregar o plugin 「{display_name}」(diretório: {dir_name}; versão: {version}). Motivo: {error}。",
                     )
                 else:
                     lines.append(
-                        f"加载插件「{display_name}」(目录: {dir_name}) 时出现问题，原因：{error}。",
+                        f"Erro ao carregar o plugin 「{display_name}」(diretório: {dir_name}). Motivo: {error}。",
                     )
             else:
                 error = str(info)
-                lines.append(f"加载插件目录 {dir_name} 时出现问题，原因：{error}。")
+                lines.append(
+                    f"Erro ao carregar o diretório do plugin {dir_name}. Motivo: {error}。"
+                )
 
         self.failed_plugin_info = "\n".join(lines) + "\n"
 
@@ -1000,7 +1006,7 @@ class PluginManager:
 
         async with self._pm_lock:
             if dir_name not in self.failed_plugin_dict:
-                return False, "插件不存在于失败列表中"
+                return False, "O plugin não está na lista de falhas"
 
             self._cleanup_plugin_state(dir_name)
 
@@ -1098,7 +1104,7 @@ class PluginManager:
 
         plugin_modules = self._get_plugin_modules()
         if plugin_modules is None:
-            return False, "未找到任何插件模块"
+            return False, "Nenhum módulo de plugin encontrado"
 
         has_load_error = False
 
@@ -1253,7 +1259,7 @@ class PluginManager:
                     metadata.reserved = reserved
 
                     assert metadata.module_path is not None, (
-                        f"插件 {metadata.name} 的模块路径为空。"
+                        f"O plugin {metadata.name} tem caminho de módulo vazio."
                     )
 
                     plugin_disabled = metadata.module_path in inactivated_plugins
@@ -1319,8 +1325,7 @@ class PluginManager:
                     classes = self._get_classes(module)
                     if not classes:
                         raise Exception(
-                            f"插件 {root_dir_name} 未通过 Star 注册，也没有找到旧版插件类。"
-                            "请确认插件主类继承 astrbot.api.star.Star，或类名以 Plugin 结尾 / 命名为 Main。",
+                            f"O plugin {root_dir_name} não foi registrado como Star e nenhuma classe de plugin antiga foi encontrada. A classe principal deve herdar de astrbot.api.star.Star, ter nome terminado em Plugin ou se chamar Main.",
                         )
 
                     plugin_cls = getattr(module, classes[0])
@@ -1348,7 +1353,9 @@ class PluginManager:
                         plugin_obj=obj,
                     )
                     if not metadata:
-                        raise Exception(f"无法找到插件 {plugin_dir_path} 的元数据。")
+                        raise Exception(
+                            f"Não foi possível encontrar os metadados do plugin {plugin_dir_path}."
+                        )
 
                     if not ignore_version_check:
                         is_valid, error_message = (
@@ -1379,7 +1386,9 @@ class PluginManager:
                 if os.path.exists(logo_path):
                     metadata.logo_path = logo_path
 
-                assert metadata.module_path, f"插件 {metadata.name} 模块路径为空"
+                assert metadata.module_path, (
+                    f"O plugin {metadata.name} tem caminho de módulo vazio"
+                )
 
                 full_names = []
                 for handler in star_handlers_registry.get_handlers_by_module_name(
@@ -1695,9 +1704,11 @@ class PluginManager:
         async with self._pm_lock:
             plugin = self.context.get_registered_star(plugin_name)
             if not plugin:
-                raise Exception("插件不存在。")
+                raise Exception("Plugin não encontrado.")
             if plugin.reserved:
-                raise Exception("该插件是 AstrBot 保留插件，无法卸载。")
+                raise Exception(
+                    "Este é um plugin reservado do AstrBot e não pode ser desinstalado."
+                )
             root_dir_name = plugin.root_dir_name
             ppath = self.plugin_store_path
 
@@ -1713,7 +1724,9 @@ class PluginManager:
 
             # 从 star_registry 和 star_map 中删除
             if plugin.module_path is None or root_dir_name is None:
-                raise Exception(f"插件 {plugin_name} 数据不完整，无法卸载。")
+                raise Exception(
+                    f"O plugin {plugin_name} tem dados incompletos e não pode ser desinstalado."
+                )
 
             await self._unbind_plugin(plugin_name, plugin.module_path)
 
@@ -1722,7 +1735,7 @@ class PluginManager:
                 remove_dir(os.path.join(ppath, root_dir_name))
             except Exception as e:
                 raise Exception(
-                    f"移除插件成功，但是删除插件文件夹失败: {e!s}。您可以手动删除该文件夹，位于 addons/plugins/ 下。",
+                    f"Plugin removido, mas não foi possível excluir sua pasta: {e!s}. Você pode removê-la manualmente em addons/plugins/.",
                 )
 
             plugin_id = plugin.plugin_id
@@ -1884,9 +1897,11 @@ class PluginManager:
         """
         plugin = self.context.get_registered_star(plugin_name)
         if not plugin:
-            raise Exception("插件不存在。")
+            raise Exception("Plugin não encontrado.")
         if plugin.reserved:
-            raise Exception("该插件是 AstrBot 保留插件，无法更新。")
+            raise Exception(
+                "Este é um plugin reservado do AstrBot e não pode ser atualizado."
+            )
 
         await self._updater.update(
             plugin,
@@ -1911,7 +1926,7 @@ class PluginManager:
         async with self._pm_lock:
             plugin = self.context.get_registered_star(plugin_name)
             if not plugin:
-                raise Exception("插件不存在。")
+                raise Exception("Plugin não encontrado.")
 
             # 调用插件的终止方法
             await self._terminate_plugin(plugin)
@@ -1981,7 +1996,7 @@ class PluginManager:
     async def turn_on_plugin(self, plugin_name: str) -> None:
         plugin = self.context.get_registered_star(plugin_name)
         if plugin is None:
-            raise Exception(f"插件 {plugin_name} 不存在。")
+            raise Exception(f"O plugin {plugin_name} não existe.")
         inactivated_plugins: list = await sp.global_get("inactivated_plugins", [])
         inactivated_llm_tools: list = await sp.global_get("inactivated_llm_tools", [])
         if plugin.module_path in inactivated_plugins:
@@ -1993,7 +2008,7 @@ class PluginManager:
 
         success, error = await self.reload(plugin_name)
         if not success:
-            raise Exception(error or f"插件 {plugin_name} 启用失败。")
+            raise Exception(error or f"O plugin {plugin_name} não pôde ser ativado.")
         current_plugin = self.context.get_registered_star(plugin_name)
         if current_plugin:
             current_plugin.activated = True
@@ -2071,7 +2086,9 @@ class PluginManager:
                 else metadata_dir_name
             )
             if plugin and plugin.reserved:
-                raise Exception("该插件是 AstrBot 保留插件，无法更新。")
+                raise Exception(
+                    "Este é um plugin reservado do AstrBot e não pode ser atualizado."
+                )
             if target_plugin_path.exists():
                 # Only replace a directory whose metadata identifies the same plugin.
                 if (
@@ -2081,7 +2098,7 @@ class PluginManager:
                     != metadata_dir_name
                 ):
                     raise Exception(
-                        f"安装失败：目录 {target_plugin_path.name} 已存在。"
+                        f"Falha na instalação: o diretório {target_plugin_path.name} já existe."
                     )
 
                 metadata = self._load_plugin_metadata(desti_dir)
@@ -2126,7 +2143,9 @@ class PluginManager:
                         ignore_version_check=ignore_version_check,
                     )
                     if not success:
-                        raise Exception(error_message or f"更新插件 {dir_name} 失败。")
+                        raise Exception(
+                            error_message or f"Falha ao atualizar o plugin {dir_name}."
+                        )
                     keep_backup = False
                 except BaseException:
                     try:
@@ -2185,7 +2204,7 @@ class PluginManager:
                 if not success:
                     raise Exception(
                         error_message
-                        or f"安装插件 {dir_name} 失败，请检查插件依赖或兼容性。"
+                        or f"Falha ao instalar o plugin {dir_name}. Verifique as dependências e a compatibilidade do plugin."
                     )
 
             self.failed_plugin_dict.pop(dir_name, None)

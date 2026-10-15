@@ -3,7 +3,7 @@
  * i18n key checker for the AstrBot dashboard.
  *
  * Verifies that every statically-resolvable translation key used in dashboard/src
- * actually exists in all four locale bundles.
+ * actually exists in all locale bundles.
  *
  * Why this exists: the i18n helper returns the string "[MISSING: <key>]" when a
  * key is absent, which is truthy, so `t(key) || 'fallback'` never falls back and
@@ -26,7 +26,7 @@ const DASHBOARD = path.resolve(__dirname, '..');
 const SRC = path.join(DASHBOARD, 'src');
 const LOCALES = path.join(SRC, 'i18n', 'locales');
 
-const LANGS = ['zh-CN', 'en-US', 'ru-RU', 'ja-JP'];
+const LANGS = ['zh-CN', 'en-US', 'ru-RU', 'ja-JP', 'pt-BR'];
 const BASE = 'zh-CN';
 const VERBOSE = process.argv.includes('--verbose');
 
@@ -41,12 +41,13 @@ function buildTree(lang) {
   const idx = fs.readFileSync(path.join(dir, 'index.ts'), 'utf8');
 
   const varToFile = new Map();
-  for (const m of idx.matchAll(/^import\s+(\w+)\s+from\s+'(\.\/[^']+)';/gm)) {
+  for (const m of idx.matchAll(/\bimport\s+(\w+)\s+from\s+'(\.\/[^']+)';/gm)) {
     varToFile.set(m[1], m[2]);
   }
   if (varToFile.size === 0) throw new Error(`no imports parsed from ${lang}/index.ts`);
 
-  const body = idx.slice(idx.indexOf('{', idx.indexOf('export default')));
+  const declaration = lang === 'pt-BR' ? 'const ptBR =' : 'export default';
+  const body = idx.slice(idx.indexOf('{', idx.indexOf(declaration)));
   let i = 0;
 
   const parseObj = () => {
@@ -364,7 +365,7 @@ let failed = false;
 
 console.log('\n[A] keys used in source but missing from a bundle');
 if (codeProblems.size === 0) {
-  console.log('  OK - every statically-resolvable key resolves in all four locales');
+  console.log('  OK - every statically-resolvable key resolves in all locales');
 } else {
   failed = true;
   for (const [key, rec] of [...codeProblems].sort()) {

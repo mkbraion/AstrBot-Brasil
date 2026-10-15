@@ -243,7 +243,7 @@ def register_command_group(
             handler_md.event_filters.append(new_group)
 
             return RegisteringCommandable(new_group)
-        raise ValueError("注册指令组失败。")
+        raise ValueError("Falha ao registrar o grupo de comandos.")
 
     return decorator
 
@@ -637,7 +637,7 @@ def register_llm_tool(name: str | None = None, **kwargs):
             type_name = arg.type_name
             if not type_name:
                 raise ValueError(
-                    f"LLM 函数工具 {awaitable.__module__}_{llm_tool_name} 的参数 {arg.arg_name} 缺少类型注释。",
+                    f"Na ferramenta de função {awaitable.__module__}_{llm_tool_name}, o parâmetro {arg.arg_name} não tem anotação de tipo.",
                 )
             # parse type_name to handle cases like "list[string]"
             match = re.match(r"(\w+)\[(\w+)\]", type_name)
@@ -651,7 +651,7 @@ def register_llm_tool(name: str | None = None, **kwargs):
                 sub_type_name and sub_type_name not in SUPPORTED_TYPES
             ):
                 raise ValueError(
-                    f"LLM 函数工具 {awaitable.__module__}_{llm_tool_name} 不支持的参数类型：{arg.type_name}",
+                    f"Na ferramenta de função {awaitable.__module__}_{llm_tool_name} usa um tipo de parâmetro incompatível: {arg.type_name}",
                 )
 
             arg_json_schema = {

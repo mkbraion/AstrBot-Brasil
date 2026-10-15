@@ -120,7 +120,12 @@ export function useProviderSources(options: UseProviderSourcesOptions) {
       if (template.provider_type === selectedProviderType.value) {
         types.push({
           value: templateName,
-          label: templateName,
+          label: ({
+            dashscope_tts: 'Alibaba Cloud Bailian TTS (API)',
+            volcengine_tts: 'Volcengine TTS (API)',
+            bailian_rerank: 'Alibaba Cloud Bailian (reclassificação)'
+          } as Record<string, string>)[template.type] ||
+            (templateName === 'SSYCloud(胜算云)' ? 'SSYCloud' : templateName),
           icon: getProviderIcon(template.provider),
           isMonochrome: isMonochromeProviderIcon(template.provider),
           isSponsor: builtInSponsors.includes(templateName)
@@ -344,7 +349,7 @@ export function useProviderSources(options: UseProviderSourcesOptions) {
   function getSourceDisplayName(source: any) {
     if (!source) return ''
     if (source.isPlaceholder) return source.templateKey || source.id || ''
-    if (source.id === 'ssycloud') return 'ssycloud(胜算云)'
+    if (source.id === 'ssycloud') return 'SSYCloud'
     return source.id
   }
 
@@ -497,7 +502,7 @@ export function useProviderSources(options: UseProviderSourcesOptions) {
       ? { ...baseTemplate, id: sponsor.id, api_base: sponsor.api_base }
       : baseTemplate
     if (!template) {
-      showMessage('未找到对应的模板配置', 'error')
+      showMessage('Configuração do modelo não encontrada', 'error')
       return
     }
 
@@ -770,7 +775,7 @@ export function useProviderSources(options: UseProviderSourcesOptions) {
         providers.value = response.data.data.providers || []
       }
     } catch (error) {
-      console.error('Failed to load provider template:', error)
+      console.error("Falha ao carregar o modelo do provedor:", error)
     } finally {
       loadingSources.value = false
     }

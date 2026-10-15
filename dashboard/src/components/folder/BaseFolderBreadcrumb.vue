@@ -32,7 +32,7 @@ export default defineComponent({
     },
     rootFolderName: {
       type: String,
-      default: "根目录",
+      default: "Diretório raiz",
     },
   },
   emits: ["navigate"],

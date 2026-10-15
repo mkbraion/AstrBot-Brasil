@@ -66,29 +66,35 @@ class LogService:
         try:
             return {"logs": list(self.log_broker.log_cache)}
         except Exception as exc:
-            logger.error(f"获取日志历史失败: {exc}")
-            raise LogServiceError(f"获取日志历史失败: {exc}") from exc
+            logger.error(f"Falha ao obter o histórico de registros: {exc}")
+            raise LogServiceError(
+                f"Falha ao obter o histórico de registros: {exc}"
+            ) from exc
 
     def get_trace_settings(self) -> dict:
         try:
             return {"trace_enable": self.config.get("trace_enable", True)}
         except Exception as exc:
-            logger.error(f"获取 Trace 设置失败: {exc}")
-            raise LogServiceError(f"获取 Trace 设置失败: {exc}") from exc
+            logger.error(f"Falha ao obter as configurações de rastreamento: {exc}")
+            raise LogServiceError(
+                f"Falha ao obter as configurações de rastreamento: {exc}"
+            ) from exc
 
     def update_trace_settings(self, payload: dict | None) -> str:
         try:
             if payload is None:
-                raise LogServiceError("请求数据为空")
+                raise LogServiceError("Dados da requisição vazios")
 
             trace_enable = payload.get("trace_enable")
             if trace_enable is not None:
                 self.config["trace_enable"] = bool(trace_enable)
                 self.config.save_config()
 
-            return "Trace 设置已更新"
+            return "Configurações de rastreamento atualizadas"
         except LogServiceError:
             raise
         except Exception as exc:
-            logger.error(f"更新 Trace 设置失败: {exc}")
-            raise LogServiceError(f"更新 Trace 设置失败: {exc}") from exc
+            logger.error(f"Falha ao atualizar as configurações de rastreamento: {exc}")
+            raise LogServiceError(
+                f"Falha ao atualizar as configurações de rastreamento: {exc}"
+            ) from exc

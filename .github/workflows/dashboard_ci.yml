@@ -5,11 +5,19 @@ on:
     branches: [ main ]
     paths:
       - 'dashboard/**'
+      - 'astrbot/__init__.py'
+      - 'astrbot/core/utils/t2i/template/shiki_runtime.iife.js'
+      - 'build-dashboard.ps1'
+      - 'Dockerfile'
       - '.github/workflows/dashboard_ci.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'dashboard/**'
+      - 'astrbot/__init__.py'
+      - 'astrbot/core/utils/t2i/template/shiki_runtime.iife.js'
+      - 'build-dashboard.ps1'
+      - 'Dockerfile'
       - '.github/workflows/dashboard_ci.yml'
   workflow_dispatch:
 
@@ -24,7 +32,7 @@ jobs:
       - name: Configurar pnpm
         uses: pnpm/action-setup@v6.1.0
         with:
-          version: 10.28.2
+          version: 10.32.1
 
       - name: Configurar Node.js
         uses: actions/setup-node@v7
@@ -45,10 +53,14 @@ jobs:
         working-directory: dashboard
         run: pnpm run build
 
-      - name: Registrar SHA do commit no artefato
+      - name: Verificar cobertura e marcadores do português
+        working-directory: dashboard
+        run: pnpm run i18n:check:ptbr
+
+      - name: Registrar versão do núcleo no artefato
         run: |
           mkdir -p dashboard/dist/assets
-          git rev-parse HEAD > dashboard/dist/assets/version
+          python -c "from pathlib import Path; from astrbot import __version__; Path('dashboard/dist/assets/version').write_text('v' + __version__, encoding='utf-8')"
 
       - name: Salvar build do dashboard
         uses: actions/upload-artifact@v7

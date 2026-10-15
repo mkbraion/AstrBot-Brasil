@@ -38,7 +38,7 @@ async def _json_or_empty(request: Request) -> dict:
 def _required_text(value: object, name: str) -> str:
     text = str(value or "").strip()
     if not text:
-        raise ValueError(f"Missing key: {name}")
+        raise ValueError(f"Chave ausente: {name}")
     return text
 
 
@@ -112,9 +112,9 @@ async def create_provider_source(
     config = payload.to_dashboard_config()
     source_id = config.get("id")
     if not source_id:
-        raise ValueError("Provider source config must have an 'id' field")
+        raise ValueError("A configuração da fonte do provedor deve conter o campo 'id'")
     await service.upsert_provider_source(source_id, config)
-    return ok(message="更新 provider source 成功")
+    return ok(message="Fonte de provedor atualizada")
 
 
 @router.get("/provider-sources/by-id")
@@ -137,7 +137,7 @@ async def upsert_provider_source_by_id(
         source_id,
         payload.to_dashboard_config(fallback_id=source_id),
     )
-    return ok(message="更新 provider source 成功")
+    return ok(message="Fonte de provedor atualizada")
 
 
 @router.delete("/provider-sources/by-id")
@@ -147,7 +147,7 @@ async def delete_provider_source_by_id(
     service: ProviderConfigService = Depends(get_service),
 ):
     await service.delete_provider_source(source_id)
-    return ok(message="删除 provider source 成功")
+    return ok(message="Fonte de provedor excluída")
 
 
 @router.get("/provider-sources/models")
@@ -180,7 +180,7 @@ async def create_provider_in_source_by_id(
         payload.to_dashboard_config(source_id=source_id),
         source_id,
     )
-    return ok(message="新增服务提供商配置成功")
+    return ok(message="Configuração de provedor adicionada")
 
 
 @router.get("/provider-sources/{source_id:path}/models")
@@ -212,7 +212,7 @@ async def create_provider_in_source(
     await service.create_provider(
         payload.to_dashboard_config(source_id=source_id), source_id
     )
-    return ok(message="新增服务提供商配置成功")
+    return ok(message="Configuração de provedor adicionada")
 
 
 @router.get("/provider-sources/{source_id:path}")
@@ -235,7 +235,7 @@ async def upsert_provider_source(
         source_id,
         payload.to_dashboard_config(),
     )
-    return ok(message="更新 provider source 成功")
+    return ok(message="Fonte de provedor atualizada")
 
 
 @router.delete("/provider-sources/{source_id:path}")
@@ -245,7 +245,7 @@ async def delete_provider_source(
     service: ProviderConfigService = Depends(get_service),
 ):
     await service.delete_provider_source(source_id)
-    return ok(message="删除 provider source 成功")
+    return ok(message="Fonte de provedor excluída")
 
 
 @router.get("/providers")
@@ -272,7 +272,7 @@ async def create_provider(
     service: ProviderConfigService = Depends(get_service),
 ):
     await service.create_provider(payload.to_dashboard_config())
-    return ok(message="新增服务提供商配置成功")
+    return ok(message="Configuração de provedor adicionada")
 
 
 @router.get("/providers/by-id")
@@ -296,7 +296,7 @@ async def update_provider_by_id(
         provider_id,
         payload.to_dashboard_config(fallback_id=provider_id),
     )
-    return ok(message="更新成功，已经实时生效~")
+    return ok(message="Atualizado; a alteração já está em vigor")
 
 
 @router.delete("/providers/by-id")
@@ -306,7 +306,7 @@ async def delete_provider_by_id(
     service: ProviderConfigService = Depends(get_service),
 ):
     await service.delete_provider(provider_id)
-    return ok(message="删除成功，已经实时生效。")
+    return ok(message="Excluído; a alteração já está em vigor")
 
 
 @router.patch("/providers/enabled")
@@ -317,7 +317,7 @@ async def set_provider_enabled_by_id(
 ):
     provider_id = _required_text(payload.provider_id, "provider_id")
     await service.set_provider_enabled(provider_id, bool(payload.enabled))
-    return ok(message="更新成功，已经实时生效~")
+    return ok(message="Atualizado; a alteração já está em vigor")
 
 
 @router.post("/providers/test")
@@ -353,7 +353,7 @@ async def set_provider_enabled(
     service: ProviderConfigService = Depends(get_service),
 ):
     await service.set_provider_enabled(provider_id, payload.enabled)
-    return ok(message="更新成功，已经实时生效~")
+    return ok(message="Atualizado; a alteração já está em vigor")
 
 
 @router.post("/providers/{provider_id:path}/test")
@@ -401,7 +401,7 @@ async def update_provider(
         provider_id,
         payload.to_dashboard_config(fallback_id=provider_id),
     )
-    return ok(message="更新成功，已经实时生效~")
+    return ok(message="Atualizado; a alteração já está em vigor")
 
 
 @router.delete("/providers/{provider_id:path}")
@@ -411,7 +411,7 @@ async def delete_provider(
     service: ProviderConfigService = Depends(get_service),
 ):
     await service.delete_provider(provider_id)
-    return ok(message="删除成功，已经实时生效。")
+    return ok(message="Excluído; a alteração já está em vigor")
 
 
 @legacy_router.get("/provider/template")
@@ -429,7 +429,7 @@ async def list_dashboard_alias_providers(
     service: ProviderConfigService = Depends(get_service),
 ):
     if not provider_type:
-        return _alias_error("缺少参数 provider_type")
+        return _alias_error("Parâmetro provider_type ausente")
     providers = []
     seen_ids = set()
     for item in provider_type.split(","):
@@ -450,7 +450,7 @@ async def create_dashboard_alias_provider(
 ):
     try:
         await service.create_provider(payload.to_dashboard_config())
-        return ok(message="新增服务提供商配置成功")
+        return ok(message="Configuração de provedor adicionada")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -465,7 +465,7 @@ async def update_dashboard_alias_provider(
     provider_id = body.get("id")
     config = body.get("config")
     if not provider_id or not isinstance(config, dict):
-        return _alias_error("参数错误")
+        return _alias_error("Parâmetro inválido")
     try:
         await service.update_provider(
             str(provider_id),
@@ -473,7 +473,7 @@ async def update_dashboard_alias_provider(
                 fallback_id=str(provider_id),
             ),
         )
-        return ok(message="更新成功，已经实时生效~")
+        return ok(message="Atualizado; a alteração já está em vigor")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -487,10 +487,10 @@ async def delete_dashboard_alias_provider(
     body = await _json_or_empty(request)
     provider_id = body.get("id")
     if not provider_id:
-        return _alias_error("缺少参数 id")
+        return _alias_error("Parâmetro id ausente")
     try:
         await service.delete_provider(str(provider_id))
-        return ok(message="删除成功，已经实时生效。")
+        return ok(message="Excluído; a alteração já está em vigor")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -502,7 +502,7 @@ async def check_dashboard_alias_provider(
     service: ProviderConfigService = Depends(get_service),
 ):
     if not id:
-        return _alias_error("Missing provider_id parameter")
+        return _alias_error("Parâmetro provider_id ausente")
     try:
         return ok(await service.test_provider(id))
     except ValueError as exc:
@@ -541,7 +541,7 @@ async def list_dashboard_alias_provider_source_models(
     service: ProviderConfigService = Depends(get_service),
 ):
     if not source_id:
-        return _alias_error("缺少参数 source_id")
+        return _alias_error("Parâmetro source_id ausente")
     try:
         data = await service.list_provider_source_models(source_id)
         data.pop("provider_source_id", None)
@@ -560,9 +560,9 @@ async def update_dashboard_alias_provider_source(
     source_id = body.get("original_id")
     config = body.get("config") or body
     if not source_id:
-        return _alias_error("缺少 original_id")
+        return _alias_error("original_id ausente")
     if not isinstance(config, dict):
-        return _alias_error("缺少或错误的配置数据")
+        return _alias_error("Dados de configuração ausentes ou inválidos")
     try:
         await service.upsert_provider_source(
             str(source_id),
@@ -570,7 +570,7 @@ async def update_dashboard_alias_provider_source(
                 fallback_id=str(source_id),
             ),
         )
-        return ok(message="更新 provider source 成功")
+        return ok(message="Fonte de provedor atualizada")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -584,9 +584,9 @@ async def delete_dashboard_alias_provider_source(
     body = await _json_or_empty(request)
     source_id = body.get("id")
     if not source_id:
-        return _alias_error("缺少 provider_source_id")
+        return _alias_error("provider_source_id ausente")
     try:
         await service.delete_provider_source(str(source_id))
-        return ok(message="删除 provider source 成功")
+        return ok(message="Fonte de provedor excluída")
     except ValueError as exc:
         return _alias_error(str(exc))

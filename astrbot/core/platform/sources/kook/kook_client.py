@@ -200,7 +200,7 @@ class KookClient:
                     logger.error(
                         f"[KOOK] 获取机器人账号信息失败, 响应数据格式错误: \n{e}"
                     )
-                    logger.error(f"[KOOK] 响应内容: {await resp.text()}")
+                    logger.error(f"[KOOK] 响应Conteúdo: {await resp.text()}")
                     return
 
                 if not resp_content.success():
@@ -248,7 +248,7 @@ class KookClient:
 
         except pydantic.ValidationError as e:
             logger.error(f"[KOOK] 获取gateway失败, 响应数据格式错误: \n{e}")
-            logger.error(f"[KOOK] 原始响应内容: {await resp.text()}")
+            logger.error(f"[KOOK] 原始响应Conteúdo: {await resp.text()}")
             return None
 
         except Exception as e:
@@ -323,7 +323,7 @@ class KookClient:
 
                 except pydantic.ValidationError as e:
                     logger.error(f"[KOOK] 解析WebSocket事件数据格式失败: \n{e}")
-                    logger.error(f"[KOOK] 原始响应内容: {msg}")
+                    logger.error(f"[KOOK] 原始响应Conteúdo: {msg}")
                     continue
 
                 except asyncio.TimeoutError:
@@ -333,7 +333,9 @@ class KookClient:
                     logger.warning("[KOOK] WebSocket连接已关闭")
                     break
                 except Exception:
-                    logger.error(f"[KOOK] 消息处理异常: {traceback.format_exc()}")
+                    logger.error(
+                        f"[KOOK] Erro ao processar a mensagem: {traceback.format_exc()}"
+                    )
                     break
 
         except Exception as e:
@@ -354,13 +356,13 @@ class KookClient:
 
             case KookMessageSignal.HELLO:
                 assert isinstance(data, KookHelloEventData), (
-                    f"期望 data 为 {KookHelloEventData.__name__}, 实际为 {type(data).__name__}，"
+                    f"Esperado data do tipo {KookHelloEventData.__name__}; recebido {type(data).__name__}，"
                 )
                 await self._handle_hello(data)
 
             case KookMessageSignal.RESUME_ACK:
                 assert isinstance(data, KookResumeAckEventData), (
-                    f"期望 data 为 {KookResumeAckEventData.__name__}, 实际为 {type(data).__name__}，"
+                    f"Esperado data do tipo {KookResumeAckEventData.__name__}; recebido {type(data).__name__}，"
                 )
                 await self._handle_resume_ack(data)
 
@@ -497,19 +499,19 @@ class KookClient:
                     result = await resp.json()
                     if result.get("code") != 0:
                         raise RuntimeError(
-                            f'发送kook消息类型 "{kook_message_type.name}" 失败: {result}'
+                            f'Erro ao enviar mensagem KOOK do tipo "{kook_message_type.name}". Falha: {result}'
                         )
                     # else:
                     #     logger.info("[KOOK] 发送消息成功")
                 else:
                     raise RuntimeError(
-                        f'发送kook消息类型 "{kook_message_type.name}" HTTP错误: {resp.status} , 响应内容 : {await resp.text()}'
+                        f'Erro ao enviar mensagem KOOK do tipo "{kook_message_type.name}". Erro HTTP: {resp.status}; resposta: {await resp.text()}'
                     )
         except RuntimeError:
             raise
         except Exception as e:
             logger.error(
-                f'[KOOK] 发送kook消息类型 "{kook_message_type.name}" 异常: {e}'
+                f'[KOOK] Erro ao enviar mensagem KOOK do tipo "{kook_message_type.name}" 异常: {e}'
             )
 
     async def upload_asset(self, file_url: str | None) -> str:
@@ -534,22 +536,24 @@ class KookClient:
             async with self._http_client.post(url, data=data) as resp:
                 if resp.status == 200:
                     result: dict = await resp.json()
-                    logger.debug(f"[KOOK] 上传文件响应: {result}")
+                    logger.debug(f"[KOOK] 上传Arquivo响应: {result}")
                     if result.get("code") == 0:
                         logger.info("[KOOK] 上传文件到kook服务器成功")
                         remote_url = result["data"]["url"]
-                        logger.debug(f"[KOOK] 文件远端URL: {remote_url}")
+                        logger.debug(f"[KOOK] Arquivo远端URL: {remote_url}")
                         return remote_url
                     else:
-                        raise RuntimeError(f"上传文件到kook服务器失败: {result}")
+                        raise RuntimeError(
+                            f"Falha ao enviar arquivo ao servidor KOOK: {result}"
+                        )
                 else:
                     raise RuntimeError(
-                        f"上传文件到kook服务器 HTTP错误: {resp.status} , {await resp.text()}"
+                        f"Erro HTTP ao enviar arquivo ao servidor KOOK: {resp.status} , {await resp.text()}"
                     )
         except RuntimeError:
             raise
         except Exception as e:
-            raise RuntimeError(f"上传文件到kook服务器异常: {e}") from e
+            raise RuntimeError(f"Erro ao enviar arquivo ao servidor KOOK: {e}") from e
 
     async def wait_until_closed(self):
         """提供给外部调用的等待方法"""

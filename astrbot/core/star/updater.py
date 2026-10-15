@@ -65,7 +65,7 @@ class _PluginUpdater(_RepoZipUpdater):
         git_executable = shutil.which("git")
         if not git_executable:
             raise GitUnavailableError(
-                "安装此仓库需要 Git，但当前运行环境中未找到 git 命令。"
+                "A instalação deste repositório exige Git, mas o comando git não foi encontrado no ambiente atual."
             )
 
         target = Path(target_path)
@@ -132,7 +132,7 @@ class _PluginUpdater(_RepoZipUpdater):
             normalized_url = normalize_repository_url(repo_url)
             repository = parse_repository_url(normalized_url)
         except ValueError as exc:
-            raise ValueError("请输入有效的 Git 仓库地址。") from exc
+            raise ValueError("Informe um endereço de repositório Git válido.") from exc
 
         metadata: object | None = None
         if repository.transport == "git":
@@ -164,30 +164,34 @@ class _PluginUpdater(_RepoZipUpdater):
                             except ValueError:
                                 too_large = False
                             if too_large:
-                                raise ValueError(f"{filename} 超过 1MB。")
+                                raise ValueError(f"{filename} ultrapassa 1 MB.")
 
                         metadata_bytes = bytearray()
                         async for chunk in response.aiter_bytes():
                             metadata_bytes.extend(chunk)
                             if len(metadata_bytes) > PLUGIN_METADATA_MAX_BYTES:
-                                raise ValueError(f"{filename} 超过 1MB。")
+                                raise ValueError(f"{filename} ultrapassa 1 MB.")
 
                     try:
                         metadata_text = bytes(metadata_bytes).decode("utf-8")
                     except UnicodeDecodeError as exc:
-                        raise ValueError(f"{filename} 必须使用 UTF-8 编码。") from exc
+                        raise ValueError(f"{filename} deve usar UTF-8.") from exc
                     try:
                         metadata = yaml.safe_load(metadata_text)
                     except yaml.YAMLError as exc:
-                        raise ValueError(f"{filename} 格式错误。") from exc
+                        raise ValueError(f"{filename} tem formato inválido.") from exc
                     try:
                         self.validate_plugin_metadata(metadata, filename)
                     except ValueError as exc:
-                        raise ValueError(f"插件校验失败：{exc!s}") from exc
+                        raise ValueError(
+                            f"Falha na validação do plugin: {exc!s}"
+                        ) from exc
                     break
 
         if metadata is None:
-            raise ValueError("未在仓库根目录找到 metadata.yaml 或 metadata.yml。")
+            raise ValueError(
+                "metadata.yaml ou metadata.yml não encontrado na raiz do repositório."
+            )
         normalized_metadata = dict(metadata) if isinstance(metadata, dict) else {}
         if "desc" not in normalized_metadata and "description" in normalized_metadata:
             normalized_metadata["desc"] = normalized_metadata["description"]
@@ -228,7 +232,7 @@ class _PluginUpdater(_RepoZipUpdater):
         repo_name = self._format_name(repository.name)
         plugin_path = str(target_dir or Path(self.plugin_store_path) / repo_name)
         if os.path.exists(plugin_path):
-            raise Exception(f"安装失败：目录 {repo_name} 已存在。")
+            raise Exception(f"Falha na instalação: o diretório {repo_name} já existe.")
         if download_url:
             logger.info(f"Downloading plugin archive for {repo_name}: {download_url}")
             await self._download_file(download_url, plugin_path + ".zip")
@@ -368,7 +372,7 @@ class _PluginUpdater(_RepoZipUpdater):
             ValueError: If metadata is malformed or misses required fields.
         """
         if not isinstance(metadata, dict):
-            raise ValueError(f"{metadata_label} 格式错误。")
+            raise ValueError(f"{metadata_label} tem formato inválido.")
 
         normalized_metadata = dict(metadata)
         if "desc" not in normalized_metadata and "description" in normalized_metadata:
@@ -381,7 +385,7 @@ class _PluginUpdater(_RepoZipUpdater):
         ]
         if missing_fields:
             raise ValueError(
-                f"{metadata_label} 中缺少必需字段: {', '.join(missing_fields)}。"
+                f"{metadata_label} não contém o campo obrigatório: {', '.join(missing_fields)}。"
             )
 
         invalid_fields = [
@@ -392,7 +396,7 @@ class _PluginUpdater(_RepoZipUpdater):
         ]
         if invalid_fields:
             raise ValueError(
-                f"{metadata_label} 中字段 {', '.join(invalid_fields)} 必须是非空字符串。"
+                f"{metadata_label}: o campo {', '.join(invalid_fields)} deve ser um texto não vazio."
             )
 
     @classmethod
@@ -414,16 +418,18 @@ class _PluginUpdater(_RepoZipUpdater):
             if not metadata_path.is_file():
                 continue
             if metadata_path.stat().st_size > PLUGIN_METADATA_MAX_BYTES:
-                raise ValueError(f"{filename} 超过 1MB。")
+                raise ValueError(f"{filename} ultrapassa 1 MB.")
             try:
                 metadata = yaml.safe_load(metadata_path.read_text(encoding="utf-8"))
             except UnicodeDecodeError as exc:
-                raise ValueError(f"{filename} 必须使用 UTF-8 编码。") from exc
+                raise ValueError(f"{filename} deve usar UTF-8.") from exc
             except yaml.YAMLError as exc:
-                raise ValueError(f"{filename} 格式错误。") from exc
+                raise ValueError(f"{filename} tem formato inválido.") from exc
             cls.validate_plugin_metadata(metadata, filename)
             return {"metadata_entry": filename, "metadata": metadata}
-        raise ValueError("未在仓库根目录找到 metadata.yaml 或 metadata.yml。")
+        raise ValueError(
+            "metadata.yaml ou metadata.yml não encontrado na raiz do repositório."
+        )
 
     @classmethod
     def inspect_plugin_archive(cls, zip_path: str) -> dict[str, object]:
@@ -443,16 +449,16 @@ class _PluginUpdater(_RepoZipUpdater):
                 metadata_entry = cls.find_plugin_metadata_entry(z.namelist())
                 if metadata_entry is None:
                     raise ValueError(
-                        "压缩包不是合法的 AstrBot 插件：未找到 metadata.yaml 或 metadata.yml。"
+                        "O pacote não é um plugin válido do AstrBot: metadata.yaml ou metadata.yml não encontrado."
                     )
 
                 try:
                     metadata_text = z.read(metadata_entry).decode("utf-8")
                     metadata = yaml.safe_load(metadata_text)
                 except UnicodeDecodeError as exc:
-                    raise ValueError(f"{metadata_entry} 必须使用 UTF-8 编码。") from exc
+                    raise ValueError(f"{metadata_entry} deve usar UTF-8.") from exc
                 except yaml.YAMLError as exc:
-                    raise ValueError(f"{metadata_entry} 格式错误。") from exc
+                    raise ValueError(f"{metadata_entry} tem formato inválido.") from exc
 
                 cls.validate_plugin_metadata(metadata, metadata_entry)
                 return {
@@ -460,7 +466,7 @@ class _PluginUpdater(_RepoZipUpdater):
                     "metadata": metadata,
                 }
         except zipfile.BadZipFile as exc:
-            raise ValueError("插件压缩包格式错误。") from exc
+            raise ValueError("Formato de pacote de plugin inválido.") from exc
 
     @classmethod
     def validate_plugin_archive(cls, zip_path: str) -> str:

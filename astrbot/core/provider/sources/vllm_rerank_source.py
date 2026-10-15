@@ -7,7 +7,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "vllm_rerank",
-    "VLLM Rerank 适配器",
+    "Adaptador de reclassificação VLLM",
     provider_type=ProviderType.RERANK,
 )
 class VLLMRerankProvider(RerankProvider):

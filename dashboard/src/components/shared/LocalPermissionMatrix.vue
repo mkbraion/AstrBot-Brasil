@@ -202,7 +202,7 @@ onMounted(async () => {
     const response = await statsApi.version()
     runtime.value = response.data?.data?.runtime ?? null
   } catch (error) {
-    console.warn('Failed to load runtime information:', error)
+    console.warn("Falha ao carregar as informações de execução:", error)
   } finally {
     runtimeLoading.value = false
   }

@@ -38,7 +38,7 @@ class ChatUIProjectService:
                 or "workspace_path" in payload
             ):
                 raise ChatUIProjectServiceError(
-                    "API key projects cannot use custom workspaces"
+                    "Projetos de chaves de API não podem usar áreas de trabalho personalizadas"
                 )
             payload = {**payload, "workspace_type": requested_workspace_type}
         title = payload.get("title")
@@ -47,7 +47,7 @@ class ChatUIProjectService:
         workspace_type, workspace_path = self._normalize_workspace_config(payload)
 
         if not title:
-            raise ChatUIProjectServiceError("Missing key: title")
+            raise ChatUIProjectServiceError("Chave ausente: title")
 
         project = await self.db.create_chatui_project(
             creator=username,
@@ -65,7 +65,7 @@ class ChatUIProjectService:
 
     async def get_project(self, username: str, project_id: str | None) -> dict:
         if not project_id:
-            raise ChatUIProjectServiceError("Missing key: project_id")
+            raise ChatUIProjectServiceError("Chave ausente: project_id")
 
         project = await self._get_owned_project(username, project_id)
         return self._serialize_project(project)
@@ -81,7 +81,7 @@ class ChatUIProjectService:
         payload = self._as_payload(data)
         project_id = payload.get("project_id")
         if not project_id:
-            raise ChatUIProjectServiceError("Missing key: project_id")
+            raise ChatUIProjectServiceError("Chave ausente: project_id")
 
         project = await self._get_owned_project(username, project_id)
         workspace_type = None
@@ -95,7 +95,7 @@ class ChatUIProjectService:
                 and requested_workspace_type == WORKSPACE_TYPE_CUSTOM
             ) or "workspace_path" in payload:
                 raise ChatUIProjectServiceError(
-                    "API key projects cannot use custom workspaces"
+                    "Projetos de chaves de API não podem usar áreas de trabalho personalizadas"
                 )
             if normalize_project_workspace_type(project.workspace_type) == (
                 WORKSPACE_TYPE_CUSTOM
@@ -118,7 +118,7 @@ class ChatUIProjectService:
 
     async def delete_project(self, username: str, project_id: str | None) -> None:
         if not project_id:
-            raise ChatUIProjectServiceError("Missing key: project_id")
+            raise ChatUIProjectServiceError("Chave ausente: project_id")
 
         await self._get_owned_project(username, project_id)
         await self.db.delete_chatui_project(project_id)
@@ -136,9 +136,9 @@ class ChatUIProjectService:
         project_id = payload.get("project_id")
 
         if not session_id:
-            raise ChatUIProjectServiceError("Missing key: session_id")
+            raise ChatUIProjectServiceError("Chave ausente: session_id")
         if not project_id:
-            raise ChatUIProjectServiceError("Missing key: project_id")
+            raise ChatUIProjectServiceError("Chave ausente: project_id")
 
         await self._get_owned_project(username, project_id)
         await self._get_owned_session(username, session_id)
@@ -149,7 +149,7 @@ class ChatUIProjectService:
         session_id = payload.get("session_id")
 
         if not session_id:
-            raise ChatUIProjectServiceError("Missing key: session_id")
+            raise ChatUIProjectServiceError("Chave ausente: session_id")
 
         await self._get_owned_session(username, session_id)
         await self.db.remove_session_from_project(session_id)
@@ -160,7 +160,7 @@ class ChatUIProjectService:
         project_id: str | None,
     ) -> list[dict]:
         if not project_id:
-            raise ChatUIProjectServiceError("Missing key: project_id")
+            raise ChatUIProjectServiceError("Chave ausente: project_id")
 
         await self._get_owned_project(username, project_id)
         sessions = await self.db.get_project_sessions(project_id)
@@ -208,7 +208,7 @@ class ChatUIProjectService:
         raw_path = str(relative_path or "").strip()
         normalized_path = Path(raw_path.replace("\\", "/") or ".")
         if normalized_path.is_absolute() or ".." in normalized_path.parts:
-            raise ChatUIProjectServiceError("Invalid workspace path")
+            raise ChatUIProjectServiceError("Caminho da área de trabalho inválido")
 
         target_dir_path = os.path.normcase(
             os.path.realpath(os.path.join(workspace_root_path, normalized_path))
@@ -223,7 +223,9 @@ class ChatUIProjectService:
         if not workspace_root.exists() and normalized_path == Path("."):
             return {"path": "", "entries": []}
         if not target_dir.is_dir():
-            raise ChatUIProjectServiceError("Workspace directory not found")
+            raise ChatUIProjectServiceError(
+                "Diretório da área de trabalho não encontrado"
+            )
 
         try:
             children = sorted(
@@ -232,7 +234,7 @@ class ChatUIProjectService:
             )
         except OSError as exc:
             raise ChatUIProjectServiceError(
-                "Workspace directory cannot be read"
+                "Não foi possível ler o diretório da área de trabalho"
             ) from exc
 
         entries = []
@@ -293,9 +295,13 @@ class ChatUIProjectService:
             with target_file.open("rb") as file:
                 content_bytes = file.read(_WORKSPACE_FILE_MAX_BYTES + 1)
         except OSError as exc:
-            raise ChatUIProjectServiceError("Workspace file cannot be read") from exc
+            raise ChatUIProjectServiceError(
+                "Não foi possível ler o arquivo da área de trabalho"
+            ) from exc
         if len(content_bytes) > _WORKSPACE_FILE_MAX_BYTES:
-            raise ChatUIProjectServiceError("Workspace file is too large to preview")
+            raise ChatUIProjectServiceError(
+                "Arquivo da área de trabalho muito grande para visualizar"
+            )
         try:
             content = content_bytes.decode("utf-8")
         except UnicodeDecodeError as exc:
@@ -347,7 +353,7 @@ class ChatUIProjectService:
             or normalized_path.is_absolute()
             or ".." in normalized_path.parts
         ):
-            raise ChatUIProjectServiceError("Invalid workspace path")
+            raise ChatUIProjectServiceError("Caminho da área de trabalho inválido")
 
         # Match server-enumerated entries so request values never form a file path.
         target_file = Path(workspace_root_path)
@@ -357,11 +363,13 @@ class ChatUIProjectService:
                 children = {entry.name: entry for entry in target_file.iterdir()}
             except OSError as exc:
                 raise ChatUIProjectServiceError(
-                    "Workspace file cannot be read"
+                    "Não foi possível ler o arquivo da área de trabalho"
                 ) from exc
             child = children.get(part)
             if child is None:
-                raise ChatUIProjectServiceError("Workspace file not found")
+                raise ChatUIProjectServiceError(
+                    "Arquivo da área de trabalho não encontrado"
+                )
             if child.is_symlink():
                 if not child.resolve(strict=False).is_relative_to(
                     Path(workspace_root_path)
@@ -369,19 +377,25 @@ class ChatUIProjectService:
                     raise ChatUIProjectServiceError(
                         "Workspace path escapes project directory"
                     )
-                raise ChatUIProjectServiceError("Workspace file not found")
+                raise ChatUIProjectServiceError(
+                    "Arquivo da área de trabalho não encontrado"
+                )
             if index < len(path_parts) - 1 and not child.is_dir():
-                raise ChatUIProjectServiceError("Workspace file not found")
+                raise ChatUIProjectServiceError(
+                    "Arquivo da área de trabalho não encontrado"
+                )
             target_file = child
         if not path_parts or not target_file.is_file():
-            raise ChatUIProjectServiceError("Workspace file not found")
+            raise ChatUIProjectServiceError(
+                "Arquivo da área de trabalho não encontrado"
+            )
 
         return Path(workspace_root_path), target_file
 
     async def _get_owned_project(self, username: str, project_id: str):
         project = await self.db.get_chatui_project_by_id(project_id)
         if not project:
-            raise ChatUIProjectServiceError(f"Project {project_id} not found")
+            raise ChatUIProjectServiceError(f"Project {project_id} não encontrado")
         if project.creator != username:
             raise ChatUIProjectServiceError("Permission denied")
         return project
@@ -389,7 +403,7 @@ class ChatUIProjectService:
     async def _get_owned_session(self, username: str, session_id: str):
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatUIProjectServiceError(f"Session {session_id} not found")
+            raise ChatUIProjectServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatUIProjectServiceError("Permission denied")
         return session
@@ -479,9 +493,13 @@ class ChatUIProjectService:
         except ValueError as exc:
             raise ChatUIProjectServiceError(str(exc)) from exc
         if not workspace_root.exists():
-            raise ChatUIProjectServiceError("Custom workspace path does not exist")
+            raise ChatUIProjectServiceError(
+                "O caminho personalizado da área de trabalho não existe"
+            )
         if not workspace_root.is_dir():
-            raise ChatUIProjectServiceError("Custom workspace path must be a directory")
+            raise ChatUIProjectServiceError(
+                "O caminho personalizado da área de trabalho deve ser um diretório"
+            )
         if not os.access(workspace_root, os.R_OK | os.W_OK | os.X_OK):
             raise ChatUIProjectServiceError(
                 "Custom workspace path requires read, write, and enter permissions"

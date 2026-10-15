@@ -44,7 +44,7 @@ async def _get_config(service: SubAgentService):
 async def _update_config(payload: SubAgentConfigRequest, service: SubAgentService):
     try:
         await service.update_config(_payload_dict(payload))
-        return ok(message="保存成功")
+        return ok(message="Salvo")
     except SubAgentServiceError as exc:
         _raise_subagent_error(exc)
 

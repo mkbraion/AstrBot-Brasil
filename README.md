@@ -47,11 +47,12 @@ A edição brasileira prioriza:
 
 ## Captura de tela
 
-A captura anterior mostrava a interface original em inglês e foi removida para não representar incorretamente esta edição. O painel usa português do Brasil por padrão, mas a tradução ainda é parcial: textos sem tradução usam o catálogo em inglês.
+A captura anterior mostrava a interface original em inglês e foi removida para não representar incorretamente esta edição. O painel usa português do Brasil por padrão. O catálogo pt-BR cobre todas as chaves da interface e preserva os marcadores de interpolação, com verificação automática no CI. A instalação compila o painel desta edição. Conteúdos de plugins de terceiros, respostas das APIs externas e documentação original em outros idiomas dependem de seus autores.
 
 ## Requisitos
 
 - Python 3.12 ou superior;
+- Node.js 20 ou superior com npm ou pnpm para compilar o painel;
 - Windows 10/11, Linux ou macOS;
 - Git para contribuição;
 - `uv` recomendado para gerenciamento do ambiente Python.

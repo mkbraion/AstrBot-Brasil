@@ -254,7 +254,9 @@ def _extract_text_from_multimsg_json(raw_json: str) -> str | None:
         text_content = item.get("text")
         if not isinstance(text_content, str):
             continue
-        cleaned = text_content.strip().replace("[图片]", "").strip()
+        cleaned = (
+            text_content.strip().replace("[图片]", "").replace("[Imagem]", "").strip()
+        )
         if cleaned:
             texts.append(cleaned)
 

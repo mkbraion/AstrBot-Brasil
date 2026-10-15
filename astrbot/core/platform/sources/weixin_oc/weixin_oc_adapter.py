@@ -97,7 +97,7 @@ class WeixinOCReplyMeta:
 
 @register_platform_adapter(
     "weixin_oc",
-    "个人微信",
+    "WeChat pessoal",
     support_streaming_message=False,
 )
 class WeixinOCAdapter(Platform):
@@ -154,7 +154,7 @@ class WeixinOCAdapter(Platform):
 
         self.metadata = PlatformMetadata(
             name="weixin_oc",
-            description="个人微信",
+            description="WeChat pessoal",
             id=cast(str, self.config.get("id", "weixin_oc")),
             support_streaming_message=False,
         )
@@ -1131,7 +1131,7 @@ class WeixinOCAdapter(Platform):
         if status == "expired":
             self._qr_expired_count += 1
             if self._qr_expired_count > 3:
-                login_session.error = "二维码已过期，超过重试次数，等待下次重试"
+                login_session.error = "O código QR expirou e o limite de tentativas foi atingido. Aguardando a próxima tentativa"
                 self._login_session = None
                 return
             logger.warning(
@@ -1150,7 +1150,7 @@ class WeixinOCAdapter(Platform):
             base_url = data.get("baseurl")
             user_id = data.get("ilink_user_id")
             if not bot_token:
-                login_session.error = "登录返回成功但未返回 bot_token"
+                login_session.error = "Login concluído, mas bot_token não foi retornado"
                 return
             login_session.bot_token = str(bot_token)
             login_session.account_id = str(account_id) if account_id else None
@@ -1178,17 +1178,17 @@ class WeixinOCAdapter(Platform):
                 if text:
                     text_parts.append(text)
             elif item_type == 2:
-                text_parts.append("[图片]")
+                text_parts.append("[Imagem]")
             elif item_type == 3:
                 voice_text = str(item.get("voice_item", {}).get("text", "")).strip()
                 if voice_text:
                     text_parts.append(voice_text)
                 else:
-                    text_parts.append("[语音]")
+                    text_parts.append("[Voz]")
             elif item_type == 4:
-                text_parts.append("[文件]")
+                text_parts.append("[Arquivo]")
             elif item_type == 5:
-                text_parts.append("[视频]")
+                text_parts.append("[Vídeo]")
             else:
                 if include_ref_text:
                     ref = item.get("ref_msg")
@@ -1202,7 +1202,7 @@ class WeixinOCAdapter(Platform):
                                 )
                             )
                             if ref_text:
-                                text_parts.append(f"[引用:{ref_text}]")
+                                text_parts.append(f"[Citação:{ref_text}]")
         return "\n".join(text_parts).strip()
 
     def _item_type_to_kind(self, item_type: int | None) -> str:

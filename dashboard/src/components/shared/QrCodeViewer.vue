@@ -36,7 +36,7 @@ export default {
     },
     emptyHint: {
       type: String,
-      default: "暂无可用二维码",
+      default: "Nenhum código QR disponível",
     },
   },
   data() {

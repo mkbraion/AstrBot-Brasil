@@ -8,9 +8,24 @@
     "deleteProvider": "Excluir provedor",
     "selectHint": "Selecione um provedor",
     "providerType": "Tipo de provedor",
-    "tabs": { "all": "Todos", "chatCompletion": "Chat Completion", "speechToText": "Fala para texto", "textToSpeech": "Texto para fala", "embedding": "Embedding", "rerank": "Rerank" },
-    "empty": { "all": "Nenhum provedor disponível. Clique em Adicionar provedor.", "typed": "Nenhum provedor do tipo {type} disponível. Clique em Adicionar provedor." },
-    "description": { "openai": "Compatível com provedores no padrão da API da OpenAI.", "kimi_code": "Integração dedicada ao Kimi CodingPlan / Kimi Code usando um adaptador personalizado da API Anthropic.", "vllm_rerank": "Também compatível com Jina AI, Cohere, PPIO e outros provedores.", "default": "" }
+    "tabs": {
+      "all": "Todos",
+      "chatCompletion": "Geração de respostas",
+      "speechToText": "Fala para texto",
+      "textToSpeech": "Texto para fala",
+      "embedding": "Embeddings",
+      "rerank": "Reclassificação"
+    },
+    "empty": {
+      "all": "Nenhum provedor disponível. Clique em Adicionar provedor.",
+      "typed": "Nenhum provedor do tipo {type} disponível. Clique em Adicionar provedor."
+    },
+    "description": {
+      "openai": "Compatível com provedores no padrão da API da OpenAI.",
+      "kimi_code": "Integração dedicada ao Kimi CodingPlan / Kimi Code usando um adaptador personalizado da API Anthropic.",
+      "vllm_rerank": "Também compatível com Jina AI, Cohere, PPIO e outros provedores.",
+      "default": ""
+    }
   },
   "availability": {
     "title": "Disponibilidade dos provedores",
@@ -23,22 +38,73 @@
     "errorMessage": "Mensagem de erro",
     "test": "Testar"
   },
-  "logs": { "title": "Logs do serviço", "expand": "Expandir", "collapse": "Recolher" },
+  "logs": {
+    "title": "Logs do serviço",
+    "expand": "Expandir",
+    "collapse": "Recolher"
+  },
   "dialogs": {
-    "addProvider": { "title": "Provedor de serviço", "tabs": { "basic": "Básico", "speechToText": "Fala para texto", "textToSpeech": "Texto para fala", "embedding": "Embedding", "rerank": "Rerank" }, "noTemplates": "Não há templates disponíveis para este tipo de provedor" },
-    "config": { "addTitle": "Adicionar", "editTitle": "Editar", "provider": "Provedor de serviço", "cancel": "Cancelar", "save": "Salvar" },
-    "settings": { "title": "Configurações do provedor", "sessionSeparation": { "title": "Ativar isolamento de provedor por sessão", "description": "Sessões diferentes podem escolher de forma independente os provedores de geração de texto, TTS, STT e outros serviços." }, "close": "Fechar" }
+    "addProvider": {
+      "title": "Provedor de serviço",
+      "tabs": {
+        "basic": "Básico",
+        "speechToText": "Fala para texto",
+        "textToSpeech": "Texto para fala",
+        "embedding": "Embeddings",
+        "rerank": "Reclassificação"
+      },
+      "noTemplates": "Não há templates disponíveis para este tipo de provedor"
+    },
+    "config": {
+      "addTitle": "Adicionar",
+      "editTitle": "Editar",
+      "provider": "Provedor de serviço",
+      "cancel": "Cancelar",
+      "save": "Salvar"
+    },
+    "settings": {
+      "title": "Configurações do provedor",
+      "sessionSeparation": {
+        "title": "Ativar isolamento de provedor por sessão",
+        "description": "Sessões diferentes podem escolher de forma independente os provedores de geração de texto, TTS, STT e outros serviços."
+      },
+      "close": "Fechar"
+    }
   },
   "messages": {
-    "success": { "update": "Atualizado com sucesso!", "add": "Adicionado com sucesso!", "delete": "Excluído com sucesso!", "statusUpdate": "Status atualizado!", "sessionSeparation": "Configuração de isolamento de sessão atualizada" },
-    "error": { "sessionSeparation": "Falha ao obter a configuração de isolamento por sessão", "fetchStatus": "Falha ao obter o status do provedor", "testError": "Falha ao testar {id}: {error}" },
-    "confirm": { "delete": "Excluir o provedor {id}?" }
+    "success": {
+      "update": "Atualizado com sucesso!",
+      "add": "Adicionado com sucesso!",
+      "delete": "Excluído com sucesso!",
+      "statusUpdate": "Status atualizado!",
+      "sessionSeparation": "Configuração de isolamento de sessão atualizada"
+    },
+    "error": {
+      "sessionSeparation": "Falha ao obter a configuração de isolamento por sessão",
+      "fetchStatus": "Falha ao obter o status do provedor",
+      "testError": "Falha ao testar {id}: {error}"
+    },
+    "confirm": {
+      "delete": "Excluir o provedor {id}?"
+    }
   },
-  "providerTypes": { "title": "Tipos de provedor" },
+  "providerTypes": {
+    "title": "Tipos de provedor"
+  },
   "providerSources": {
     "website": "Site",
     "setupGuide": "Guia de configuração",
-    "selector": { "ssycloud": "SSYCloud", "title": "Novo provedor de modelo", "sponsors": "Patrocinadores", "sponsorInfoTitle": "Patrocinadores do projeto original", "sponsorInfoBody": "O projeto-base AstrBot é open source e pode receber apoio de patrocinadores. Consulte os termos de cada serviço antes de utilizá-lo.", "providers": "Provedores", "search": "Pesquisar", "clearSearch": "Limpar pesquisa", "noResults": "Nenhum provedor encontrado" },
+    "selector": {
+      "ssycloud": "SSYCloud",
+      "title": "Novo provedor de modelo",
+      "sponsors": "Patrocinadores",
+      "sponsorInfoTitle": "Patrocinadores do projeto original",
+      "sponsorInfoBody": "O projeto-base AstrBot é open source e pode receber apoio de patrocinadores. Consulte os termos de cada serviço antes de utilizá-lo.",
+      "providers": "Provedores",
+      "search": "Pesquisar",
+      "clearSearch": "Limpar pesquisa",
+      "noResults": "Nenhum provedor encontrado"
+    },
     "title": "Fontes de provedores",
     "add": "Adicionar",
     "delete": "Excluir fonte do provedor",
@@ -57,9 +123,20 @@
     "enabled": "Ativada",
     "disabled": "Desativada",
     "advancedConfig": "Configuração avançada...",
-    "fields": { "name": "Nome", "apiKey": "API Key", "baseUrl": "URL base" },
-    "hints": { "id": "ID da fonte do provedor (não é o ID do provider)", "key": "API key usada para autenticação", "apiBase": "URL personalizada do endpoint da API", "proxy": "Proxy HTTP/HTTPS, por exemplo http://127.0.0.1:7890. Afeta somente as requisições deste provedor." },
-    "labels": { "proxy": "Proxy" }
+    "fields": {
+      "name": "Nome",
+      "apiKey": "Chave de API",
+      "baseUrl": "URL base"
+    },
+    "hints": {
+      "id": "ID da fonte do provedor (não é o ID do provider)",
+      "key": "API key usada para autenticação",
+      "apiBase": "URL personalizada do endpoint da API",
+      "proxy": "Proxy HTTP/HTTPS, por exemplo http://127.0.0.1:7890. Afeta somente as requisições deste provedor."
+    },
+    "labels": {
+      "proxy": "Proxy"
+    }
   },
   "models": {
     "title": "Modelos",
@@ -85,7 +162,19 @@
     "manualModelExists": "O modelo já existe",
     "configure": "Configurar",
     "testButton": "Testar modelo",
-    "metadata": { "image": "Entrada de imagem", "audio": "Entrada de áudio", "toolUse": "Uso de ferramentas", "reasoning": "Raciocínio", "context": "Janela de contexto de {tokens}", "available": "Os metadados do modelo indicam suporte a {capability}", "enabled": "{capability} ativado", "supportedDisabled": "Os metadados indicam suporte a {capability}, mas esse recurso não está habilitado nas modalidades do provedor." },
-    "tooltips": { "providerId": "ID do provedor", "modelId": "ID do modelo" }
+    "metadata": {
+      "image": "Entrada de imagem",
+      "audio": "Entrada de áudio",
+      "toolUse": "Uso de ferramentas",
+      "reasoning": "Raciocínio",
+      "context": "Janela de contexto de {tokens}",
+      "available": "Os metadados do modelo indicam suporte a {capability}",
+      "enabled": "{capability} ativado",
+      "supportedDisabled": "Os metadados indicam suporte a {capability}, mas esse recurso não está habilitado nas modalidades do provedor."
+    },
+    "tooltips": {
+      "providerId": "ID do provedor",
+      "modelId": "ID do modelo"
+    }
   }
 }

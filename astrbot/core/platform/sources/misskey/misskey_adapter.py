@@ -46,7 +46,7 @@ DEFAULT_UPLOAD_CONCURRENCY = 3
 
 
 @register_platform_adapter(
-    "misskey", "Misskey 平台适配器", support_streaming_message=False
+    "misskey", "Adaptador da plataforma Misskey", support_streaming_message=False
 )
 class MisskeyPlatformAdapter(Platform):
     def __init__(
@@ -116,7 +116,7 @@ class MisskeyPlatformAdapter(Platform):
 
         return PlatformMetadata(
             name="misskey",
-            description="Misskey 平台适配器",
+            description="Adaptador da plataforma Misskey",
             id=self.config.get("id", "misskey"),
             default_config_tmpl=default_config,
             support_streaming_message=False,
@@ -294,7 +294,7 @@ class MisskeyPlatformAdapter(Platform):
                 jitter = random.uniform(0, 1.0)
                 sleep_time = backoff_delay + jitter
                 logger.info(
-                    f"[Misskey] {sleep_time:.1f}秒后重连 (下次尝试 #{connection_attempts + 1})",
+                    f"[Misskey] {sleep_time:.1f}segundos后重连 (下次尝试 #{connection_attempts + 1})",
                 )
                 await asyncio.sleep(sleep_time)
                 backoff_delay = min(backoff_delay * backoff_multiplier, max_backoff)
@@ -508,7 +508,9 @@ class MisskeyPlatformAdapter(Platform):
                         ):
                             try:
                                 os.remove(local_path)
-                                logger.debug(f"[Misskey] 已清理临时文件: {local_path}")
+                                logger.debug(
+                                    f"[Misskey] 已清理临时Arquivo: {local_path}"
+                                )
                             except Exception:
                                 pass
 
@@ -533,7 +535,7 @@ class MisskeyPlatformAdapter(Platform):
 
             if len(file_components) > MAX_FILE_UPLOAD_COUNT:
                 logger.warning(
-                    f"[Misskey] 文件数量超过限制 ({len(file_components)} > {MAX_FILE_UPLOAD_COUNT})，只上传前{MAX_FILE_UPLOAD_COUNT}个文件",
+                    f"[Misskey] Arquivo数量超过限制 ({len(file_components)} > {MAX_FILE_UPLOAD_COUNT})，只上传前{MAX_FILE_UPLOAD_COUNT}个Arquivo",
                 )
                 file_components = file_components[:MAX_FILE_UPLOAD_COUNT]
 
@@ -586,7 +588,7 @@ class MisskeyPlatformAdapter(Platform):
                         payload["fileId"] = file_ids[0]
                         if len(file_ids) > 1:
                             logger.warning(
-                                f"[Misskey] 聊天消息只支持单个文件，忽略其余 {len(file_ids) - 1} 个文件",
+                                f"[Misskey] 聊天消息只支持单个Arquivo，忽略其余 {len(file_ids) - 1} 个Arquivo",
                             )
                     await self.api.send_message(payload)
                 else:

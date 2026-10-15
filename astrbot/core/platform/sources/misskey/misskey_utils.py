@@ -88,10 +88,10 @@ def serialize_message_chain(chain: list[Any]) -> tuple[str, bool]:
             return component.text
         if isinstance(component, Comp.File):
             # 为文件组件返回占位符，但适配器仍会处理原组件
-            return "[文件]"
+            return "[Arquivo]"
         if isinstance(component, Comp.Image):
             # 为图片组件返回占位符，但适配器仍会处理原组件
-            return "[图片]"
+            return "[Imagem]"
         if isinstance(component, Comp.At):
             has_at = True
             # 优先使用name字段（用户名），如果没有则使用qq字段
@@ -273,21 +273,21 @@ def add_at_mention_if_needed(
 async def create_file_component(file_info: dict[str, Any]) -> tuple[Any, str]:
     """创建文件组件和描述文本"""
     file_url = file_info.get("url", "")
-    file_name = file_info.get("name", "未知文件")
+    file_name = file_info.get("name", "Arquivo desconhecido")
     file_type = file_info.get("type", "")
 
     if file_type.startswith("image/"):
-        return Comp.Image(url=file_url, file=file_name), f"图片[{file_name}]"
+        return Comp.Image(url=file_url, file=file_name), f"Imagem [{file_name}]"
     if file_type.startswith("audio/"):
         path_wav = await MediaResolver(
             file_url,
             media_type="audio",
             default_suffix=".wav",
         ).to_path(target_format="wav")
-        return Comp.Record(url=path_wav, file=path_wav), f"音频[{file_name}]"
+        return Comp.Record(url=path_wav, file=path_wav), f"Áudio [{file_name}]"
     if file_type.startswith("video/"):
-        return Comp.Video(url=file_url, file=file_name), f"视频[{file_name}]"
-    return Comp.File(name=file_name, url=file_url), f"文件[{file_name}]"
+        return Comp.Video(url=file_url, file=file_name), f"Vídeo [{file_name}]"
+    return Comp.File(name=file_name, url=file_url), f"Arquivo [{file_name}]"
 
 
 async def process_files(
@@ -312,12 +312,13 @@ def format_poll(poll: dict[str, Any]) -> str:
     multiple = poll.get("multiple", False)
     choices = poll.get("choices", [])
     text_choices = [
-        f"({idx}) {c.get('text', '')} [{c.get('votes', 0)}票]"
+        f"({idx}) {c.get('text', '')} [{c.get('votes', 0)}votos]"
         for idx, c in enumerate(choices, start=1)
     ]
-    parts = ["[投票]", ("允许多选" if multiple else "单选")] + (
-        ["选项: " + ", ".join(text_choices)] if text_choices else []
-    )
+    parts = [
+        "[Enquete]",
+        ("Permite múltipla escolha" if multiple else "Escolha única"),
+    ] + (["Opções: " + ", ".join(text_choices)] if text_choices else [])
     return " ".join(parts)
 
 

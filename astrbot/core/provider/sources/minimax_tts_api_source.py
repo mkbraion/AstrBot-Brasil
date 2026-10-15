@@ -143,7 +143,7 @@ class ProviderMiniMaxTTSAPI(TTSProvider):
                             buffer = buffer[-1024:]
 
         except aiohttp.ClientError as e:
-            raise Exception(f"MiniMax TTS API请求失败: {e!s}")
+            raise Exception(f"Falha na requisição à API TTS do MiniMax: {e!s}")
 
     async def _audio_play(self, audio_stream: AsyncIterator[str]) -> bytes:
         """解码数据流到 audio 比特流"""

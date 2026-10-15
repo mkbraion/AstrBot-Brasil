@@ -49,13 +49,13 @@ export function useChunkedUpload(api: ChunkedUploadApi) {
 
     function envelopeData(response: any): any {
         if (response.data?.status !== 'ok') {
-            throw new Error(response.data?.message || 'Upload failed');
+            throw new Error(response.data?.message || "Falha no envio");
         }
         return response.data.data;
     }
 
     function toMessage(err: any): string {
-        return err?.response?.data?.message || err?.message || 'Upload failed';
+        return err?.response?.data?.message || err?.message || "Falha no envio";
     }
 
     function planChunks() {
@@ -207,7 +207,7 @@ export function useChunkedUpload(api: ChunkedUploadApi) {
             reset();
             if (id) {
                 void api.abortUpload({ upload_id: id }).catch(e =>
-                    console.error('Failed to abort upload:', e),
+                    console.error("Falha ao cancelar o envio:", e),
                 );
             }
             return undefined;
@@ -230,7 +230,7 @@ export function useChunkedUpload(api: ChunkedUploadApi) {
             try {
                 await api.abortUpload({ upload_id: id });
             } catch (err) {
-                console.error('Failed to abort upload:', err);
+                console.error("Falha ao cancelar o envio:", err);
             }
         }
     }

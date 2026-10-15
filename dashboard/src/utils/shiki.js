@@ -52,7 +52,7 @@ export function renderShikiCode(highlighter, code, language, colorMode = "auto")
     return highlighter.codeToHtml(code, options);
   } catch (err) {
     console.warn(
-      `Failed to render code with Shiki language "${normalizedLanguage}". Falling back to plain text.`,
+      `Falha ao renderizar o código com a linguagem Shiki "${normalizedLanguage}". Falling back to plain text.`,
       err,
     );
 

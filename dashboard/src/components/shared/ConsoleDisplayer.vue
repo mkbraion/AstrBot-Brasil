@@ -194,7 +194,7 @@ export default {
         this.eventSource = null;
       }
 
-      console.log(`正在连接日志流... (尝试次数: ${this.retryAttempts})`);
+      console.log(`Conectando ao fluxo de registros... (Tentativas: ${this.retryAttempts})`);
 
       const token = localStorage.getItem("token");
 
@@ -207,7 +207,7 @@ export default {
       });
 
       this.eventSource.onopen = () => {
-        console.log("日志流连接成功！");
+        console.log("Conexão com o fluxo de registros estabelecida！");
         this.retryAttempts = 0;
 
         if (!this.lastEventId) {
@@ -224,15 +224,15 @@ export default {
           const payload = JSON.parse(event.data);
           this.processNewLogs([payload]);
         } catch (e) {
-          console.error("解析日志失败:", e);
+          console.error("Falha ao interpretar o registro:", e);
         }
       };
 
       this.eventSource.onerror = (err) => {
         if (err.status === 401) {
-          console.error("鉴权失败 (401)，可能是 Token 过期了。");
+          console.error("Falha na autenticação (401)，Possivelmente Token expirou。");
         } else {
-          console.warn("日志流连接错误:", err);
+          console.warn("Erro na conexão com o fluxo de registros:", err);
         }
 
         if (this.eventSource) {
@@ -241,7 +241,7 @@ export default {
         }
 
         if (this.retryAttempts >= this.maxRetryAttempts) {
-          console.error("❌ 已达到最大重试次数，停止重连。请刷新页面重试。");
+          console.error("❌ Número máximo de tentativas atingido. Recarregue a página para tentar novamente。");
           return;
         }
 
@@ -251,7 +251,7 @@ export default {
         );
 
         console.log(
-          `⏳ ${delay}ms 后尝试第 ${this.retryAttempts + 1} 次重连...`,
+          `⏳ ${delay}ms Nova tentativa após ${this.retryAttempts + 1} tentativa de reconexão...`,
         );
 
         if (this.retryTimer) {
@@ -328,7 +328,7 @@ export default {
           this.processNewLogs(res.data.data.logs);
         }
       } catch (err) {
-        console.error("Failed to fetch log history:", err);
+        console.error("Falha ao obter o histórico de registros:", err);
       }
     },
 
@@ -424,7 +424,7 @@ export default {
       if (!document.fullscreenElement) {
         container.requestFullscreen().catch((err) => {
           console.error(
-            `Error attempting to enable full-screen mode: ${err.message}`,
+            `Erro ao ativar o modo de tela cheia: ${err.message}`,
           );
         });
       } else {

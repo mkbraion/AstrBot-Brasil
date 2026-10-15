@@ -33,13 +33,13 @@ def put_config(namespace: str, name: str, key: str, value, description: str) -> 
     注意：value一定要是该配置项对应类型的值，否则类型判断会乱。
     """
     if namespace == "":
-        raise ValueError("namespace 不能为空。")
+        raise ValueError("namespace não pode ficar vazio.")
     if namespace.startswith("internal_"):
-        raise ValueError("namespace 不能以 internal_ 开头。")
+        raise ValueError("namespace não pode começar com internal_.")
     if not isinstance(key, str):
-        raise ValueError("key 只支持 str 类型。")
+        raise ValueError("key deve ser do tipo str.")
     if not isinstance(value, str | int | float | bool | list):
-        raise ValueError("value 只支持 str, int, float, bool, list 类型。")
+        raise ValueError("value deve ser do tipo str, int, float, bool ou list.")
 
     config_dir = os.path.join(get_astrbot_data_path(), "config")
     path = os.path.join(config_dir, f"{namespace}.json")
@@ -72,12 +72,12 @@ def update_config(namespace: str, key: str, value) -> None:
     """
     path = os.path.join(get_astrbot_data_path(), "config", f"{namespace}.json")
     if not os.path.exists(path):
-        raise FileNotFoundError(f"配置文件 {namespace}.json 不存在。")
+        raise FileNotFoundError(f"A configuração {namespace}.json não encontrado.")
     with open(path, encoding="utf-8-sig") as f:
         d = json.load(f)
     assert isinstance(d, dict)
     if key not in d:
-        raise KeyError(f"配置项 {key} 不存在。")
+        raise KeyError(f"A configuração {key} não existe.")
     d[key]["value"] = value
     with open(path, "w", encoding="utf-8-sig") as f:
         json.dump(d, f, indent=2, ensure_ascii=False)

@@ -1,12 +1,98 @@
 {
-  "header":{"eyebrow":"Dashboard","title":"Estatísticas do sistema","subtitle":"Visão unificada de plataformas, mensagens e chamadas de modelos.","notUpdated":"Ainda não atualizado"},
-  "ranges":{"oneDay":"1 dia","threeDays":"3 dias","oneWeek":"1 semana"},
-  "rangeLabels":{"oneDay":"Último dia","threeDays":"Últimos 3 dias","oneWeek":"Última semana"},
-  "overviewCards":{"platformCount":{"label":"Instâncias de plataforma","note":"Plataformas configuradas e em execução"},"messageCount":{"label":"Mensagens","note":"Total acumulado de mensagens"},"todayModelCalls":{"label":"Chamadas de modelo hoje","note":"Tokens"},"cpu":{"label":"CPU","note":"Uso de CPU do AstrBot"},"memory":{"label":"Memória do processo","note":"Memória do sistema {systemMemory}"},"uptime":{"label":"Tempo em execução","note":"Iniciado em {startTime}"}},
-  "messageOverview":{"title":"Mensagens"},"messageTrend":{"title":"Tendência de mensagens","totalMessages":"Total de mensagens"},"platformRanking":{"title":"Ranking de mensagens por plataforma"},"modelCalls":{"title":"Modelos de IA"},"modelTrend":{"title":"Tendência de chamadas de modelo"},
-  "modelTotal":{"title":"Total de chamadas de modelo em {range}","callCount":"{count} chamadas","avgTtft":"TTFT médio","avgDuration":"Tempo médio de resposta","avgTpm":"TPM médio de saída","successRate":"Taxa de sucesso"},
-  "modelRanking":{"title":"Ranking de uso de modelos"},"sessionRanking":{"title":"Top 10 de uso de modelos por sessão em {range}","openConversation":"Ver conversa"},
-  "empty":{"platformStats":"Nenhuma estatística de mensagens por plataforma.","modelCalls":"Nenhuma chamada de modelo em {range}.","sessionCalls":"Nenhum dado de sessão em {range}."},
-  "chart":{"messages":"Mensagens","others":"Outros"},"units":{"tokens":"Tokens","tpm":"TPM","gb":"GB","mb":"MB","ms":"ms","hoursShort":"h","minutesShort":"min","secondsShort":"s"},
-  "errors":{"loadFailed":"Falha ao carregar as estatísticas. Tente novamente mais tarde.","rangeFailed":"Falha ao alterar o período das estatísticas. Tente novamente."}
+  "header": {
+    "eyebrow": "Painel",
+    "title": "Estatísticas do sistema",
+    "subtitle": "Visão unificada de plataformas, mensagens e chamadas de modelos.",
+    "notUpdated": "Ainda não atualizado"
+  },
+  "ranges": {
+    "oneDay": "1 dia",
+    "threeDays": "3 dias",
+    "oneWeek": "1 semana"
+  },
+  "rangeLabels": {
+    "oneDay": "Último dia",
+    "threeDays": "Últimos 3 dias",
+    "oneWeek": "Última semana"
+  },
+  "overviewCards": {
+    "platformCount": {
+      "label": "Instâncias de plataforma",
+      "note": "Plataformas configuradas e em execução"
+    },
+    "messageCount": {
+      "label": "Mensagens",
+      "note": "Total acumulado de mensagens"
+    },
+    "todayModelCalls": {
+      "label": "Chamadas de modelo hoje",
+      "note": "Tokens"
+    },
+    "cpu": {
+      "label": "CPU",
+      "note": "Uso de CPU do AstrBot"
+    },
+    "memory": {
+      "label": "Memória do processo",
+      "note": "Memória do sistema {systemMemory}"
+    },
+    "uptime": {
+      "label": "Tempo em execução",
+      "note": "Iniciado em {startTime}"
+    }
+  },
+  "messageOverview": {
+    "title": "Mensagens"
+  },
+  "messageTrend": {
+    "title": "Tendência de mensagens",
+    "totalMessages": "Total de mensagens"
+  },
+  "platformRanking": {
+    "title": "Ranking de mensagens por plataforma"
+  },
+  "modelCalls": {
+    "title": "Modelos de IA"
+  },
+  "modelTrend": {
+    "title": "Tendência de chamadas de modelo"
+  },
+  "modelTotal": {
+    "title": "Total de chamadas de modelo em {range}",
+    "callCount": "{count} chamadas",
+    "avgTtft": "TTFT médio",
+    "avgDuration": "Tempo médio de resposta",
+    "avgTpm": "TPM médio de saída",
+    "successRate": "Taxa de sucesso"
+  },
+  "modelRanking": {
+    "title": "Ranking de uso de modelos"
+  },
+  "sessionRanking": {
+    "title": "Top 10 de uso de modelos por sessão em {range}",
+    "openConversation": "Ver conversa"
+  },
+  "empty": {
+    "platformStats": "Nenhuma estatística de mensagens por plataforma.",
+    "modelCalls": "Nenhuma chamada de modelo em {range}.",
+    "sessionCalls": "Nenhum dado de sessão em {range}."
+  },
+  "chart": {
+    "messages": "Mensagens",
+    "others": "Outros"
+  },
+  "units": {
+    "tokens": "Tokens",
+    "tpm": "TPM",
+    "gb": "GB",
+    "mb": "MB",
+    "ms": "ms",
+    "hoursShort": "h",
+    "minutesShort": "min",
+    "secondsShort": "s"
+  },
+  "errors": {
+    "loadFailed": "Falha ao carregar as estatísticas. Tente novamente mais tarde.",
+    "rangeFailed": "Falha ao alterar o período das estatísticas. Tente novamente."
+  }
 }

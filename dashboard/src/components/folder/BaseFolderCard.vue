@@ -76,10 +76,10 @@ interface DefaultLabels {
 }
 
 const defaultLabels: DefaultLabels = {
-  open: "打开",
-  rename: "重命名",
-  moveTo: "移动到...",
-  delete: "删除",
+  open: "Abrir",
+  rename: "Renomear",
+  moveTo: "Mover para...",
+  delete: "Excluir",
 };
 
 export default defineComponent({
@@ -144,7 +144,7 @@ export default defineComponent({
           });
         }
       } catch (e) {
-        console.error("Failed to parse drop data:", e);
+        console.error("Falha ao interpretar os dados soltos:", e);
       }
     },
   },

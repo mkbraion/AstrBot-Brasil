@@ -299,12 +299,12 @@ const syncPreviewVersion = async () => {
       previewVersion.value = rawVersion.startsWith('v') ? rawVersion : `v${rawVersion}`
     }
   } catch (error) {
-    console.warn('Failed to fetch version:', error)
+    console.warn("Falha ao obter a versão:", error)
   }
 }
 
 const previewData = computed(() => ({
-  text: tm('t2iTemplateEditor.previewText') || '这是一个示例文本，用于预览模板效果。\n\n这里可以包含多行文本，支持换行和各种格式。',
+  text: tm('t2iTemplateEditor.previewText') || 'Este é um texto de exemplo para visualizar o modelo。\n\nO texto pode ter várias linhas, quebras de linha e diferentes formatos。',
   version: previewVersion.value
 }))
 
@@ -380,7 +380,7 @@ const previewContent = computed(() => {
     return usedExistingShikiPlaceholder ? content : injectShikiRuntime(content)
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error)
-    return `<div style="color: red; padding: 20px;">模板渲染错误: ${errorMessage}</div>`
+    return `<div style="color: red; padding: 20px;">Erro ao renderizar o modelo: ${errorMessage}</div>`
   }
 })
 
@@ -396,13 +396,13 @@ const loadInitialData = async () => {
     if (listRes.data.status === 'ok') {
       templates.value = listRes.data.data
     } else {
-      console.error('加载模板列表失败:', listRes.data.message)
+      console.error('Falha ao carregar os modelos:', listRes.data.message)
     }
 
     if (activeRes.data.status === 'ok') {
       activeTemplate.value = activeRes.data.data.active_template
     } else {
-      console.error('加载活动模板失败:', activeRes.data.message)
+      console.error('Falha ao carregar o modelo ativo:', activeRes.data.message)
     }
 
     // 设置初始选中的模板
@@ -411,7 +411,7 @@ const loadInitialData = async () => {
     }
 
   } catch (error) {
-    console.error('加载初始数据失败:', error)
+    console.error('Falha ao carregar os dados iniciais:', error)
   } finally {
     loading.value = false
   }
@@ -425,10 +425,10 @@ const loadTemplateContent = async (name) => {
     if (response.data.status === 'ok') {
       templateContent.value = response.data.data.content
     } else {
-      console.error(`加载模板 '${name}' 失败:`, response.data.message)
+      console.error(`Carregar modelo '${name}' falhou:`, response.data.message)
     }
   } catch (error) {
-    console.error(`加载模板 '${name}' 失败:`, error)
+    console.error(`Carregar modelo '${name}' falhou:`, error)
   } finally {
     previewLoading.value = false
   }
@@ -444,7 +444,7 @@ const saveTemplate = async () => {
         name: editingName.value,
         content: templateContent.value
       })
-      await loadInitialData() // 重新加载所有数据
+      await loadInitialData() // Recarregar todos os dados
       selectedTemplate.value = response.data.data.name
       isCreatingNew.value = false
     } else {
@@ -454,7 +454,7 @@ const saveTemplate = async () => {
     }
   } catch (error) {
     const msg = error?.response?.data?.message || error?.message || String(error)
-    console.error('保存模板失败:', msg)
+    console.error('Falha ao salvar o modelo:', msg)
     toast.error(msg)
   } finally {
     saveLoading.value = false
@@ -468,7 +468,7 @@ const setActiveTemplate = async (name) => {
     activeTemplate.value = name
   } catch (error) {
     const msg = error?.response?.data?.message || error?.message || String(error)
-    console.error(`应用模板 '${name}' 失败:`, msg)
+    console.error(`Aplicar modelo '${name}' falhou:`, msg)
     toast.error(msg)
   } finally {
     applyLoading.value = false
@@ -491,7 +491,7 @@ const confirmDelete = async () => {
     selectedTemplate.value = 'base'
   } catch (error) {
     const msg = error?.response?.data?.message || error?.message || String(error)
-    console.error(`删除模板失败:`, msg)
+    console.error(`Falha ao excluir o modelo:`, msg)
     toast.error(msg)
   } finally {
     saveLoading.value = false
@@ -511,7 +511,7 @@ const confirmReset = async () => {
     }
   } catch (error) {
     const msg = error?.response?.data?.message || error?.message || String(error)
-    console.error('重置模板失败:', msg)
+    console.error('Falha ao redefinir o modelo:', msg)
     toast.error(msg)
   } finally {
     resetLoading.value = false
@@ -532,10 +532,10 @@ const newTemplate = () => {
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>New Template</title>
+  <title>Novo modelo</title>
 </head>
 <body>
-  <!-- 从这里开始编辑 -->
+  <!-- Comece a editar aqui -->
   <article>{{ text | safe }}</article>
 </body>
 </html>

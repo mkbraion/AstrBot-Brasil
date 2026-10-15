@@ -174,7 +174,7 @@ def create_dashboard_asgi_app(
                 error(exc.detail), status_code=exc.status_code, headers=exc.headers
             )
         return JSONResponse(
-            error("Request failed", exc.detail),
+            error("Falha na requisição", exc.detail),
             status_code=exc.status_code,
             headers=exc.headers,
         )

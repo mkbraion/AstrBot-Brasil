@@ -274,7 +274,9 @@ class Record(BaseMessageComponent):
         callback_host = astrbot_config.get("callback_api_base")
 
         if not callback_host:
-            raise Exception("未配置 callback_api_base，文件服务不可用")
+            raise Exception(
+                "callback_api_base não configurado; serviço de arquivos indisponível"
+            )
 
         file_path = await self.convert_to_file_path()
 
@@ -377,7 +379,9 @@ class Video(BaseMessageComponent):
         callback_host = astrbot_config.get("callback_api_base")
 
         if not callback_host:
-            raise Exception("未配置 callback_api_base，文件服务不可用")
+            raise Exception(
+                "callback_api_base não configurado; serviço de arquivos indisponível"
+            )
 
         file_path = await self.convert_to_file_path()
 
@@ -576,7 +580,9 @@ class Image(BaseMessageComponent):
         callback_host = astrbot_config.get("callback_api_base")
 
         if not callback_host:
-            raise Exception("未配置 callback_api_base，文件服务不可用")
+            raise Exception(
+                "callback_api_base não configurado; serviço de arquivos indisponível"
+            )
 
         file_path = await self.convert_to_file_path()
 
@@ -891,7 +897,9 @@ class File(BaseMessageComponent):
         callback_host = astrbot_config.get("callback_api_base")
 
         if not callback_host:
-            raise Exception("未配置 callback_api_base，文件服务不可用")
+            raise Exception(
+                "callback_api_base não configurado; serviço de arquivos indisponível"
+            )
 
         file_path = await self.get_file()
 

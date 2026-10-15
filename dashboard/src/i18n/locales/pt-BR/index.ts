@@ -1,10 +1,43 @@
-// AstrBot Brasil — pacote de idioma pt-BR.
-// A edição brasileira usa merge recursivo: qualquer chave ainda não traduzida
-// continua disponível via en-US sem apagar campos internos da configuração.
+// Catálogo completo de português do Brasil. O fallback protege atualizações futuras.
+import ptBRCommon from './core/common.json';
+import ptBRActions from './core/actions.json';
+import ptBRStatus from './core/status.json';
+import ptBRNavigation from './core/navigation.json';
+import ptBRHeader from './core/header.json';
+import ptBRShared from './core/shared.json';
+import ptBRChat from './features/chat.json';
+import ptBRExtension from './features/extension.json';
+import ptBRConversation from './features/conversation.json';
+import ptBRSessionManagement from './features/session-management.json';
+import ptBRToolUse from './features/tool-use.json';
+import ptBRProvider from './features/provider.json';
+import ptBRPlatform from './features/platform.json';
+import ptBRConfig from './features/config.json';
+import ptBRConfigMetadata from './features/config-metadata.json';
+import ptBRConsole from './features/console.json';
+import ptBRTrace from './features/trace.json';
+import ptBRAbout from './features/about.json';
+import ptBRSettings from './features/settings.json';
+import ptBRAuth from './features/auth.json';
+import ptBRChart from './features/chart.json';
+import ptBRDashboard from './features/dashboard.json';
+import ptBRCron from './features/cron.json';
+import ptBRStats from './features/stats.json';
+import ptBRAlkaidIndex from './features/alkaid/index.json';
+import ptBRAlkaidKnowledgeBase from './features/alkaid/knowledge-base.json';
+import ptBRAlkaidMemory from './features/alkaid/memory.json';
+import ptBRKnowledgeBaseIndex from './features/knowledge-base/index.json';
+import ptBRKnowledgeBaseDetail from './features/knowledge-base/detail.json';
+import ptBRKnowledgeBaseDocument from './features/knowledge-base/document.json';
+import ptBRPersona from './features/persona.json';
+import ptBRCommand from './features/command.json';
+import ptBRSubagent from './features/subagent.json';
+import ptBRWelcome from './features/welcome.json';
+import ptBRErrors from './messages/errors.json';
+import ptBRSuccess from './messages/success.json';
+import ptBRValidation from './messages/validation.json';
+
 import enUS from '../en-US';
-import common from './core/common.json'; import actions from './core/actions.json'; import status from './core/status.json'; import navigation from './core/navigation.json'; import header from './core/header.json'; import shared from './core/shared.json';
-import auth from './features/auth.json'; import welcome from './features/welcome.json'; import dashboard from './features/dashboard.json'; import about from './features/about.json'; import consoleMessages from './features/console.json'; import settings from './features/settings.json'; import provider from './features/provider.json'; import platform from './features/platform.json'; import config from './features/config.json'; import configMetadata from './features/config-metadata.json'; import chat from './features/chat.json'; import conversation from './features/conversation.json'; import command from './features/command.json'; import persona from './features/persona.json'; import sessionManagement from './features/session-management.json'; import cron from './features/cron.json'; import stats from './features/stats.json'; import subagent from './features/subagent.json'; import toolUse from './features/tool-use.json'; import trace from './features/trace.json'; import chart from './features/chart.json'; import extension from './features/extension.json'; import knowledgeBaseIndex from './features/knowledge-base/index.json'; import knowledgeBaseDetail from './features/knowledge-base/detail.json'; import knowledgeBaseDocument from './features/knowledge-base/document.json'; import alkaidIndex from './features/alkaid/index.json'; import alkaidKnowledgeBase from './features/alkaid/knowledge-base.json'; import alkaidMemory from './features/alkaid/memory.json';
-import errors from './messages/errors.json'; import success from './messages/success.json'; import validation from './messages/validation.json';
 
 function mergeDeep(base: any, patch: any): any {
   if (Array.isArray(patch)) return [...patch];
@@ -19,9 +52,53 @@ function mergeDeep(base: any, patch: any): any {
 }
 
 const ptBR = {
-  core:{common,actions,status,navigation,header,shared},
-  features:{extension,auth,welcome,dashboard,about,console:consoleMessages,settings,provider,platform,config,'config-metadata':configMetadata,chat,conversation,command,persona,'session-management':sessionManagement,cron,stats,subagent,tooluse:toolUse,trace,chart,alkaid:{index:alkaidIndex,'knowledge-base':alkaidKnowledgeBase,memory:alkaidMemory},'knowledge-base':{index:knowledgeBaseIndex,detail:knowledgeBaseDetail,document:knowledgeBaseDocument}},
-  messages:{errors,success,validation}
-};
+    core: {
+      common: ptBRCommon,
+      actions: ptBRActions,
+      status: ptBRStatus,
+      navigation: ptBRNavigation,
+      header: ptBRHeader,
+      shared: ptBRShared
+    },
+    features: {
+      chat: ptBRChat,
+      extension: ptBRExtension,
+      conversation: ptBRConversation,
+      'session-management': ptBRSessionManagement,
+      tooluse: ptBRToolUse,
+      provider: ptBRProvider,
+      platform: ptBRPlatform,
+      config: ptBRConfig,
+      'config-metadata': ptBRConfigMetadata,
+      console: ptBRConsole,
+      trace: ptBRTrace,
+      about: ptBRAbout,
+      settings: ptBRSettings,
+      auth: ptBRAuth,
+      chart: ptBRChart,
+      dashboard: ptBRDashboard,
+      cron: ptBRCron,
+      stats: ptBRStats,
+      alkaid: {
+        index: ptBRAlkaidIndex,
+        'knowledge-base': ptBRAlkaidKnowledgeBase,
+        memory: ptBRAlkaidMemory
+      },
+      'knowledge-base': {
+        index: ptBRKnowledgeBaseIndex,
+        detail: ptBRKnowledgeBaseDetail,
+        document: ptBRKnowledgeBaseDocument
+      },
+      persona: ptBRPersona,
+      command: ptBRCommand,
+      subagent: ptBRSubagent,
+      welcome: ptBRWelcome
+    },
+    messages: {
+      errors: ptBRErrors,
+      success: ptBRSuccess,
+      validation: ptBRValidation
+    }
+  };
 
 export default mergeDeep(enUS, ptBR) as typeof enUS;

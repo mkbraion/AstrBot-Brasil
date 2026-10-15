@@ -338,7 +338,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
                                     )
                                     await self.send(img_chain)
                             except Exception as e:
-                                logger.error(f"图片转换为base64失败: {e}")
+                                logger.error(f"Imagem转换为base64失败: {e}")
                         else:
                             content_parts.append(str(component))
 
@@ -375,12 +375,10 @@ class SatoriPlatformEvent(AstrMessageEvent):
                     if image_data_url:
                         return f'<img src="{image_data_url}"/>'
                 except Exception as e:
-                    logger.error(f"图片转换为base64失败: {e}")
+                    logger.error(f"Imagem转换为base64失败: {e}")
 
             elif isinstance(component, File):
-                return (
-                    f'<file src="{component.file}" name="{component.name or "文件"}"/>'
-                )
+                return f'<file src="{component.file}" name="{component.name or "Arquivo"}"/>'
 
             elif isinstance(component, Record):
                 try:
@@ -388,7 +386,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
                     if record_base64:
                         return f'<audio src="data:audio/wav;base64,{record_base64}"/>'
                 except Exception as e:
-                    logger.error(f"语音转换为base64失败: {e}")
+                    logger.error(f"Voz转换为base64失败: {e}")
 
             elif isinstance(component, Reply):
                 return f'<reply id="{component.id}"/>'
@@ -399,7 +397,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
                     if video_path_url:
                         return f'<video src="{video_path_url}"/>'
                 except Exception as e:
-                    logger.error(f"视频文件转换失败: {e}")
+                    logger.error(f"视频Arquivo转换失败: {e}")
 
             elif isinstance(component, Forward):
                 return f'<message id="{component.id}" forward/>'
@@ -427,7 +425,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
 
             # 如果内容为空，添加默认内容
             if not content.strip():
-                content = "[转发消息]"
+                content = "[Mensagem encaminhada]"
 
             # 构建 Satori 格式的转发节点
             author_attrs = []
@@ -468,12 +466,10 @@ class SatoriPlatformEvent(AstrMessageEvent):
                     if image_data_url:
                         return f'<img src="{image_data_url}"/>'
                 except Exception as e:
-                    logger.error(f"图片转换为base64失败: {e}")
+                    logger.error(f"Imagem转换为base64失败: {e}")
 
             elif isinstance(component, File):
-                return (
-                    f'<file src="{component.file}" name="{component.name or "文件"}"/>'
-                )
+                return f'<file src="{component.file}" name="{component.name or "Arquivo"}"/>'
 
             elif isinstance(component, Record):
                 try:
@@ -481,7 +477,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
                     if record_base64:
                         return f'<audio src="data:audio/wav;base64,{record_base64}"/>'
                 except Exception as e:
-                    logger.error(f"语音转换为base64失败: {e}")
+                    logger.error(f"Voz转换为base64失败: {e}")
 
             elif isinstance(component, Reply):
                 return f'<reply id="{component.id}"/>'
@@ -492,7 +488,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
                     if video_path_url:
                         return f'<video src="{video_path_url}"/>'
                 except Exception as e:
-                    logger.error(f"视频文件转换失败: {e}")
+                    logger.error(f"视频Arquivo转换失败: {e}")
 
             elif isinstance(component, Forward):
                 return f'<message id="{component.id}" forward/>'
@@ -521,7 +517,7 @@ class SatoriPlatformEvent(AstrMessageEvent):
 
             # 如果内容为空，添加默认内容
             if not content.strip():
-                content = "[转发消息]"
+                content = "[Mensagem encaminhada]"
 
             author_attrs = []
             if node.uin:

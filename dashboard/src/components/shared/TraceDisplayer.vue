@@ -157,7 +157,7 @@ export default {
         const traces = logs.filter((item) => item.type === "trace");
         this.processNewTraces(traces);
       } catch (err) {
-        console.error("Failed to fetch trace history:", err);
+        console.error("Falha ao obter o histórico de rastreamento:", err);
       }
     },
     connectSSE() {
@@ -195,7 +195,7 @@ export default {
           }
           this.processNewTraces([payload]);
         } catch (e) {
-          console.error("Failed to parse trace payload:", e);
+          console.error("Falha ao interpretar os dados de rastreamento:", e);
         }
       };
 
@@ -206,7 +206,7 @@ export default {
         }
 
         if (this.retryAttempts >= this.maxRetryAttempts) {
-          console.error("Trace stream reached max retry attempts.");
+          console.error("O fluxo de rastreamento atingiu o limite de tentativas.");
           return;
         }
 

@@ -46,7 +46,10 @@ def weixin_oc_login_result(
     if raw_status == "confirmed":
         bot_token = _string_field(data, "bot_token")
         if not bot_token:
-            return {"status": "error", "message": "登录成功但未返回 token"}
+            return {
+                "status": "error",
+                "message": "Login concluído, mas o token não foi retornado",
+            }
         base_url = _string_field(data, "baseurl") or default_base_url
         return {
             "status": "created",
@@ -57,9 +60,17 @@ def weixin_oc_login_result(
             "weixin_oc_user_id": _string_field(data, "ilink_user_id"),
         }
     if raw_status == "expired":
-        return {"status": "expired", "qr_status": raw_status, "message": "二维码已过期"}
+        return {
+            "status": "expired",
+            "qr_status": raw_status,
+            "message": "O código QR expirou",
+        }
     if raw_status in {"cancel", "canceled", "denied"}:
-        return {"status": "denied", "qr_status": raw_status, "message": "用户取消登录"}
+        return {
+            "status": "denied",
+            "qr_status": raw_status,
+            "message": "O usuário cancelou o login",
+        }
     return {"status": "pending", "qr_status": raw_status}
 
 
@@ -116,7 +127,9 @@ async def request_weixin_oc_login_qr(
     qrcode = _string_field(data, "qrcode")
     qrcode_img_content = _string_field(data, "qrcode_img_content")
     if not qrcode or not qrcode_img_content:
-        raise RuntimeError("个人微信二维码响应格式异常")
+        raise RuntimeError(
+            "Formato de resposta do código QR pessoal do WeChat inválido"
+        )
 
     return WeixinOCLoginRegistration(
         qrcode=qrcode,

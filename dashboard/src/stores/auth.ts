@@ -167,7 +167,7 @@ export const useAuthStore = defineStore("auth", {
 
         return hasProvider;
       } catch (e) {
-        console.error('Failed to check onboarding status:', e);
+        console.error("Falha ao verificar o estado da configuração inicial:", e);
         return false;
       }
     },

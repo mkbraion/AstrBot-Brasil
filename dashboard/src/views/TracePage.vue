@@ -22,7 +22,7 @@ async function fetchTraceSettings() {
       traceEnabled.value = typeof enabled === "boolean" ? enabled : true;
     }
   } catch (error) {
-    console.error("Failed to fetch trace settings:", error);
+    console.error("Falha ao obter as configurações de rastreamento:", error);
   }
 }
 
@@ -32,7 +32,7 @@ async function updateTraceSettings() {
     await traceApi.updateSettings({ trace_enable: traceEnabled.value });
     traceDisplayerKey.value += 1;
   } catch (error) {
-    console.error("Failed to update trace settings:", error);
+    console.error("Falha ao atualizar as configurações de rastreamento:", error);
   } finally {
     loading.value = false;
   }

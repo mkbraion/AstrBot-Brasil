@@ -95,7 +95,9 @@ class AstrBotExporter:
             with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
                 # 1. 导出主数据库
                 if progress_callback:
-                    await progress_callback("main_db", 0, 100, "正在导出主数据库...")
+                    await progress_callback(
+                        "main_db", 0, 100, "Exportando banco de dados principal..."
+                    )
                 main_data = await self._export_main_database()
                 main_db_json = json.dumps(
                     main_data, ensure_ascii=False, indent=2, default=str
@@ -103,7 +105,9 @@ class AstrBotExporter:
                 zf.writestr("databases/main_db.json", main_db_json)
                 self._add_checksum("databases/main_db.json", main_db_json)
                 if progress_callback:
-                    await progress_callback("main_db", 100, 100, "主数据库导出完成")
+                    await progress_callback(
+                        "main_db", 100, 100, "Banco de dados principal exportado"
+                    )
 
                 # 2. 导出知识库数据
                 kb_meta_data: dict[str, Any] = {
@@ -114,7 +118,10 @@ class AstrBotExporter:
                 if self.kb_manager:
                     if progress_callback:
                         await progress_callback(
-                            "kb_metadata", 0, 100, "正在导出知识库元数据..."
+                            "kb_metadata",
+                            0,
+                            100,
+                            "Exportando metadados das bases de conhecimento...",
                         )
                     kb_meta_data = await self._export_kb_metadata()
                     kb_meta_json = json.dumps(
@@ -124,7 +131,10 @@ class AstrBotExporter:
                     self._add_checksum("databases/kb_metadata.json", kb_meta_json)
                     if progress_callback:
                         await progress_callback(
-                            "kb_metadata", 100, 100, "知识库元数据导出完成"
+                            "kb_metadata",
+                            100,
+                            100,
+                            "Metadados das bases de conhecimento exportados",
                         )
 
                     # 导出每个知识库的文档数据
@@ -136,7 +146,7 @@ class AstrBotExporter:
                                 "kb_documents",
                                 idx,
                                 total_kbs,
-                                f"正在导出知识库 {kb_helper.kb.kb_name} 的文档数据...",
+                                f"Exportando documentos da base de conhecimento {kb_helper.kb.kb_name}...",
                             )
                         doc_data = await self._export_kb_documents(kb_helper)
                         doc_json = json.dumps(
@@ -154,44 +164,60 @@ class AstrBotExporter:
 
                     if progress_callback:
                         await progress_callback(
-                            "kb_documents", total_kbs, total_kbs, "知识库文档导出完成"
+                            "kb_documents",
+                            total_kbs,
+                            total_kbs,
+                            "Documentos das bases de conhecimento exportados",
                         )
 
                 # 3. 导出配置文件
                 if progress_callback:
-                    await progress_callback("config", 0, 100, "正在导出配置文件...")
+                    await progress_callback(
+                        "config", 0, 100, "Exportando configurações..."
+                    )
                 if os.path.exists(self.config_path):
                     with open(self.config_path, encoding="utf-8") as f:
                         config_content = f.read()
                     zf.writestr("config/cmd_config.json", config_content)
                     self._add_checksum("config/cmd_config.json", config_content)
                 if progress_callback:
-                    await progress_callback("config", 100, 100, "配置文件导出完成")
+                    await progress_callback(
+                        "config", 100, 100, "Configurações exportadas"
+                    )
 
                 # 4. 导出附件文件
                 if progress_callback:
-                    await progress_callback("attachments", 0, 100, "正在导出附件...")
+                    await progress_callback(
+                        "attachments", 0, 100, "Exportando anexos..."
+                    )
                 await self._export_attachments(zf, main_data.get("attachments", []))
                 if progress_callback:
-                    await progress_callback("attachments", 100, 100, "附件导出完成")
+                    await progress_callback(
+                        "attachments", 100, 100, "Anexos exportados"
+                    )
 
                 # 5. 导出插件和其他目录
                 if progress_callback:
                     await progress_callback(
-                        "directories", 0, 100, "正在导出插件和数据目录..."
+                        "directories",
+                        0,
+                        100,
+                        "Exportando diretórios de plugins e dados...",
                     )
                 dir_stats = await self._export_directories(zf)
                 if progress_callback:
-                    await progress_callback("directories", 100, 100, "目录导出完成")
+                    await progress_callback(
+                        "directories", 100, 100, "Diretórios exportados"
+                    )
 
                 # 6. 生成 manifest
                 if progress_callback:
-                    await progress_callback("manifest", 0, 100, "正在生成清单...")
+                    await progress_callback("manifest", 0, 100, "Gerando manifesto...")
                 manifest = self._generate_manifest(main_data, kb_meta_data, dir_stats)
                 manifest_json = json.dumps(manifest, ensure_ascii=False, indent=2)
                 zf.writestr("manifest.json", manifest_json)
                 if progress_callback:
-                    await progress_callback("manifest", 100, 100, "清单生成完成")
+                    await progress_callback("manifest", 100, 100, "Manifesto gerado")
 
             logger.info(f"备份导出完成: {zip_path}")
             return zip_path
@@ -219,7 +245,7 @@ class AstrBotExporter:
                         f"导出表 {table_name}: {len(export_data[table_name])} 条记录"
                     )
                 except Exception as e:
-                    logger.warning(f"导出表 {table_name} 失败: {e}")
+                    logger.warning(f"导出表 {table_name}: {e}")
                     export_data[table_name] = []
 
         return export_data
@@ -243,7 +269,7 @@ class AstrBotExporter:
                         f"导出知识库表 {table_name}: {len(export_data[table_name])} 条记录"
                     )
                 except Exception as e:
-                    logger.warning(f"导出知识库表 {table_name} 失败: {e}")
+                    logger.warning(f"导出知识库表 {table_name}: {e}")
                     export_data[table_name] = []
 
         return export_data
@@ -302,7 +328,7 @@ class AstrBotExporter:
                     archive_path = f"files/kb_media/{kb_id}/{rel_path}"
                     zf.write(str(file_path), archive_path)
         except Exception as e:
-            logger.warning(f"导出知识库媒体文件失败: {e}")
+            logger.warning(f"导出知识库媒体Arquivo失败: {e}")
 
     async def _export_directories(
         self, zf: zipfile.ZipFile
@@ -343,14 +369,14 @@ class AstrBotExporter:
                             file_count += 1
                             total_size += file_path.stat().st_size
                         except Exception as e:
-                            logger.warning(f"导出文件 {file_path} 失败: {e}")
+                            logger.warning(f"导出Arquivo {file_path}: {e}")
 
                 stats[dir_name] = {"files": file_count, "size": total_size}
                 logger.debug(
-                    f"导出目录 {dir_name}: {file_count} 个文件, {total_size} 字节"
+                    f"导出目录 {dir_name}: {file_count} 个Arquivo, {total_size} 字节"
                 )
             except Exception as e:
-                logger.warning(f"导出目录 {dir_path} 失败: {e}")
+                logger.warning(f"导出目录 {dir_path}: {e}")
                 stats[dir_name] = {"files": 0, "size": 0}
 
         return stats

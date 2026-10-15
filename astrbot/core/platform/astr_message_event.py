@@ -150,22 +150,24 @@ class AstrMessageEvent(abc.ABC):
             if isinstance(i, Plain):
                 parts.append(i.text)
             elif isinstance(i, Image):
-                parts.append("[图片]")
+                parts.append("[Imagem]")
             elif isinstance(i, Face):
-                parts.append(f"[表情:{i.id}]")
+                parts.append(f"[Emoji:{i.id}]")
             elif isinstance(i, AtAll):
-                parts.append("[At:全体成员]")
+                parts.append("[Menção: todos]")
             elif isinstance(i, At):
                 parts.append(f"[At:{i.qq}]")
             elif isinstance(i, Forward):
                 # 转发消息
-                parts.append("[转发消息]")
+                parts.append("[Mensagem encaminhada]")
             elif isinstance(i, Reply):
                 # 引用回复
                 if i.message_str:
-                    parts.append(f"[引用消息({i.sender_nickname}: {i.message_str})]")
+                    parts.append(
+                        f"[Mensagem citada ({i.sender_nickname}: {i.message_str})]"
+                    )
                 else:
-                    parts.append("[引用消息]")
+                    parts.append("[Mensagem citada]")
             else:
                 parts.append(f"[{i.type}]")
         return " ".join(parts)

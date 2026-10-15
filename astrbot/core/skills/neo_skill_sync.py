@@ -69,7 +69,7 @@ def _derive_description(markdown_body: str) -> str:
     heading_idx = None
     for i, line in enumerate(lines):
         normalized = line.strip().lower()
-        if normalized in {"## 描述", "## description"}:
+        if normalized in {"## 描述", "## descrição", "## description"}:
             heading_idx = i
             break
 

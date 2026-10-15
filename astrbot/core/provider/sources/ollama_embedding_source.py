@@ -9,7 +9,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "ollama_embedding",
-    "Ollama Embedding 提供商适配器",
+    "Adaptador de provedor de embeddings do Ollama",
     provider_type=ProviderType.EMBEDDING,
 )
 class OllamaEmbeddingProvider(EmbeddingProvider):

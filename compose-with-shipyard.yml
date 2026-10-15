@@ -1,17 +1,18 @@
 version: '3.8'
 
-# 当接入 QQ NapCat 时，请使用这个 compose 文件一键部署: https://github.com/NapNeko/NapCat-Docker/blob/main/compose/astrbot.yml
+# Para conectar o QQ NapCat, consulte: https://github.com/NapNeko/NapCat-Docker/blob/main/compose/astrbot.yml
 
 services:
   astrbot:
-    image: soulter/astrbot:latest
+    build: .
+    image: astrbot-brasil:local
     container_name: astrbot
     restart: always
-    ports: # mappings description: https://github.com/AstrBotDevs/AstrBot/issues/497
-      - "6185:6185" # 必选，AstrBot WebUI 端口
-      - "6199:6199" # 可选, QQ 个人号 WebSocket 端口
+    ports: # Sobre as portas: https://github.com/AstrBotDevs/AstrBot/issues/497
+      - "6185:6185" # Obrigatória: painel do AstrBot
+      - "6199:6199" # Opcional: WebSocket da conta pessoal do QQ
     environment:
-      - TZ=Asia/Shanghai
+      - TZ=America/Sao_Paulo
     volumes:
       - ${PWD}/data:/AstrBot/data
       # - /etc/timezone:/etc/timezone:ro
@@ -37,7 +38,7 @@ services:
       - DEFAULT_SHIP_MEMORY=512m
     volumes:
       - ${PWD}/data/shipyard/bay_data:/app/data
-      - ${PWD}/data/temp:/AstrBot/data/temp           # Bind the local temp directory to the sandbox so that the uploaded file can be accessed in the sandbox
+      - ${PWD}/data/temp:/AstrBot/data/temp           # Permite que o ambiente isolado acesse os arquivos enviados
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - astrbot_network

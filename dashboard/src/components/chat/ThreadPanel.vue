@@ -121,7 +121,7 @@ async function loadThread(threadId: string) {
     messages.value = history.map(normalizeRecord);
     scrollToBottom();
   } catch (error) {
-    console.error("Failed to load thread:", error);
+    console.error("Falha ao carregar a conversa paralela:", error);
     messages.value = [];
   }
 }
@@ -176,7 +176,7 @@ async function send() {
       },
     );
     if (!response.ok || !response.body) {
-      throw new Error(`Thread request failed: ${response.status}`);
+      throw new Error(`Falha na requisição da conversa paralela: ${response.status}`);
     }
     await readSseStream(response.body, (payload) => {
       processPayload(threadBotRecord, threadUserRecord, payload);
@@ -187,7 +187,7 @@ async function send() {
       threadBotRecord,
       `\n\n${String((error as Error)?.message || error)}`,
     );
-    console.error("Failed to send thread message:", error);
+    console.error("Falha ao enviar mensagem na conversa paralela:", error);
   } finally {
     sending.value = false;
   }
@@ -237,7 +237,7 @@ async function readSseStream(
       try {
         onPayload(JSON.parse(data));
       } catch (error) {
-        console.error("Failed to parse thread SSE payload:", error, data);
+        console.error("Falha ao interpretar os dados SSE da conversa paralela:", error, data);
       }
     }
   }

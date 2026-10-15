@@ -41,11 +41,11 @@ def _parse_int(value: object, default: int, name: str) -> int:
     if value is None:
         return default
     if not isinstance(value, int | float | str | bytes | bytearray):
-        raise ApiError(f"{name} must be an integer")
+        raise ApiError(f"{name} deve ser um inteiro")
     try:
         return int(value)
     except (TypeError, ValueError) as exc:
-        raise ApiError(f"{name} must be an integer") from exc
+        raise ApiError(f"{name} deve ser um inteiro") from exc
 
 
 @router.get("/stats")

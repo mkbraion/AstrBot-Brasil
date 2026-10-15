@@ -318,16 +318,16 @@ def extract_web_search_refs(accumulated_text: str, accumulated_parts: list) -> d
 
 def sanitize_message_content(content: dict) -> dict:
     if not isinstance(content, dict):
-        raise ValueError("Missing key: content")
+        raise ValueError("Chave ausente: content")
 
     normalized = deepcopy(content)
     message_type = normalized.get("type")
     if message_type not in {"user", "bot"}:
-        raise ValueError("Invalid key: content.type")
+        raise ValueError("Chave inválida: content.type")
 
     message_parts = normalized.get("message")
     if not isinstance(message_parts, list):
-        raise ValueError("Missing key: content.message")
+        raise ValueError("Chave ausente: content.message")
     normalized["message"] = strip_message_parts_path_fields(message_parts)
     return normalized
 
@@ -589,7 +589,7 @@ class ChatService:
         self, filename: str | None
     ) -> tuple[str, str | None]:
         if not filename:
-            raise ChatServiceError("Missing key: filename")
+            raise ChatServiceError("Chave ausente: filename")
 
         safe_name = os.path.basename(filename)
         attachments_dir = Path(self.attachments_dir).resolve(strict=False)
@@ -604,7 +604,7 @@ class ChatService:
                 file_root = webchat_img_dir
 
         if not file_path.is_relative_to(file_root):
-            raise ChatServiceError("Invalid file path")
+            raise ChatServiceError("Caminho de arquivo inválido")
         if not file_path.exists():
             raise ChatServiceError("File access error")
 
@@ -626,11 +626,11 @@ class ChatService:
         attachment_id: str | None,
     ) -> tuple[str, str | None]:
         if not attachment_id:
-            raise ChatServiceError("Missing key: attachment_id")
+            raise ChatServiceError("Chave ausente: attachment_id")
 
         attachment = await self.db.get_attachment_by_id(attachment_id)
         if not attachment:
-            raise ChatServiceError("Attachment not found")
+            raise ChatServiceError("Anexo não encontrado")
 
         file_path = Path(attachment.path).resolve(strict=False)
         if not file_path.exists():
@@ -646,7 +646,7 @@ class ChatService:
     async def save_uploaded_file(self, file) -> dict:
         if (file.content_length or 0) > MAX_UPLOAD_FILE_SIZE_BYTES:
             raise ChatServiceError(
-                f"File too large (limit {MAX_UPLOAD_FILE_SIZE_MB} MB)"
+                f"Arquivo muito grande (limite: {MAX_UPLOAD_FILE_SIZE_MB} MB)"
             )
         filename = sanitize_upload_filename(file.filename)
         content_type = file.content_type or "application/octet-stream"
@@ -665,13 +665,13 @@ class ChatService:
             strict=False
         )
         if not file_path.is_relative_to(attachments_dir):
-            raise ChatServiceError("Invalid filename")
+            raise ChatServiceError("Nome de arquivo inválido")
 
         try:
             await file.save(str(file_path), max_bytes=MAX_UPLOAD_FILE_SIZE_BYTES)
         except UploadTooLargeError as exc:
             raise ChatServiceError(
-                f"File too large (limit {MAX_UPLOAD_FILE_SIZE_MB} MB)"
+                f"Arquivo muito grande (limite: {MAX_UPLOAD_FILE_SIZE_MB} MB)"
             ) from exc
         if attach_type == "image":
             detected_mime_type = await detect_image_mime_type_async(
@@ -698,7 +698,7 @@ class ChatService:
         )
 
         if not attachment:
-            raise ChatServiceError("Failed to create attachment")
+            raise ChatServiceError("Falha ao criar o anexo")
 
         return {
             "attachment_id": attachment.attachment_id,
@@ -709,7 +709,7 @@ class ChatService:
 
     async def save_uploaded_file_from_dashboard_files(self, files) -> dict:
         if "file" not in files:
-            raise ChatServiceError("Missing key: file")
+            raise ChatServiceError("Chave ausente: file")
         return await self.save_uploaded_file(files["file"])
 
     def upload_init(self, data: object, *, owner: str = "") -> dict:
@@ -718,12 +718,12 @@ class ChatService:
         total_size = payload.get("total_size", 0)
 
         if not original_filename:
-            raise ChatServiceError("Missing key: filename")
+            raise ChatServiceError("Chave ausente: filename")
         if not isinstance(total_size, int) or total_size <= 0:
-            raise ChatServiceError("Invalid file size")
+            raise ChatServiceError("Tamanho de arquivo inválido")
         if total_size > MAX_UPLOAD_FILE_SIZE_BYTES:
             raise ChatServiceError(
-                f"File too large (limit {MAX_UPLOAD_FILE_SIZE_MB} MB)"
+                f"Arquivo muito grande (limite: {MAX_UPLOAD_FILE_SIZE_MB} MB)"
             )
 
         self.chunked_uploads.ensure_cleanup_task_started()
@@ -757,12 +757,12 @@ class ChatService:
         owner: str = "",
     ) -> dict:
         if not upload_id or chunk_index_str is None or not chunk_file:
-            raise ChatServiceError("Missing required parameters")
+            raise ChatServiceError("Parâmetros obrigatórios ausentes")
 
         try:
             chunk_index = int(chunk_index_str)
         except ValueError as exc:
-            raise ChatServiceError("Invalid chunk_index") from exc
+            raise ChatServiceError("chunk_index inválido") from exc
 
         try:
             return await self.chunked_uploads.save_chunk(
@@ -775,7 +775,7 @@ class ChatService:
         payload = data if isinstance(data, dict) else {}
         upload_id = payload.get("upload_id")
         if not upload_id:
-            raise ChatServiceError("Missing key: upload_id")
+            raise ChatServiceError("Chave ausente: upload_id")
 
         try:
             session = self.chunked_uploads.get_session(upload_id, owner=owner)
@@ -817,7 +817,7 @@ class ChatService:
         payload = data if isinstance(data, dict) else {}
         upload_id = payload.get("upload_id")
         if not upload_id:
-            raise ChatServiceError("Missing key: upload_id")
+            raise ChatServiceError("Chave ausente: upload_id")
 
         try:
             return self.chunked_uploads.session_status(upload_id, owner=owner)
@@ -1062,7 +1062,7 @@ class ChatService:
         """
         run = self.chat_runs.get(run_id)
         if run is None:
-            raise ChatServiceError(f"Chat run {run_id} not found")
+            raise ChatServiceError(f"Chat run {run_id} não encontrado")
         if run.username != username:
             raise ChatServiceError("Permission denied")
         return self._subscribe_chat_run(run, include_snapshot=True)
@@ -1222,7 +1222,7 @@ class ChatService:
             logger.exception(f"WebChat run unexpected error: {exc}", exc_info=True)
             self._publish_chat_run(
                 run,
-                {"type": "error", "data": "WebChat run failed"},
+                {"type": "error", "data": "Falha na execução do WebChat"},
             )
         finally:
             try:
@@ -1266,9 +1266,9 @@ class ChatService:
         post_data: dict,
     ) -> AsyncIterator[str]:
         if "message" not in post_data and "files" not in post_data:
-            raise ChatServiceError("Missing key: message or files")
+            raise ChatServiceError("Chave ausente: message ou files")
         if "session_id" not in post_data and "conversation_id" not in post_data:
-            raise ChatServiceError("Missing key: session_id or conversation_id")
+            raise ChatServiceError("Chave ausente: session_id ou conversation_id")
 
         message = post_data.get("message", post_data.get("files", []))
         session_id = post_data.get("session_id", post_data.get("conversation_id"))
@@ -1378,7 +1378,7 @@ class ChatService:
     async def stop_session(self, username: str, session_id: str) -> dict:
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
 
@@ -1394,7 +1394,7 @@ class ChatService:
         data = self._dashboard_payload(payload)
         session_id = data.get("session_id")
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         return await self.stop_session(username, session_id)
 
     async def delete_session_internal(self, session, username: str) -> None:
@@ -1450,7 +1450,7 @@ class ChatService:
     async def delete_webchat_session(self, username: str, session_id: str) -> None:
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
         await self.delete_session_internal(session, username)
@@ -1461,7 +1461,7 @@ class ChatService:
         session_id: str | None,
     ) -> None:
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         await self.delete_webchat_session(username, session_id)
 
     async def batch_delete_sessions(
@@ -1512,7 +1512,7 @@ class ChatService:
         data = self._dashboard_payload(payload)
         session_ids = data.get("session_ids")
         if not session_ids or not isinstance(session_ids, list):
-            raise ChatServiceError("Missing or invalid key: session_ids")
+            raise ChatServiceError("Chave session_ids ausente ou inválida")
         return await self.batch_delete_sessions(username, session_ids, delete_session)
 
     async def delete_attachments(self, attachment_ids: list[str]) -> None:
@@ -1607,12 +1607,12 @@ class ChatService:
             ChatServiceError: If pagination is invalid or the session is inaccessible.
         """
         if page < 1:
-            raise ChatServiceError("page must be at least 1")
+            raise ChatServiceError("page deve ser pelo menos 1")
         if page_size < 1 or page_size > 1000:
-            raise ChatServiceError("page_size must be between 1 and 1000")
+            raise ChatServiceError("page_size deve ficar entre 1 e 1000")
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
         platform_id = session.platform_id
@@ -1668,7 +1668,7 @@ class ChatService:
         session_id: str | None,
     ) -> dict:
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         return await self.get_session(username, session_id)
 
     async def create_thread(self, username: str, data: dict) -> dict:
@@ -1676,20 +1676,20 @@ class ChatService:
         parent_message_id = data.get("parent_message_id")
         selected_text = str(data.get("selected_text") or "").strip()
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         if parent_message_id is None:
-            raise ChatServiceError("Missing key: parent_message_id")
+            raise ChatServiceError("Chave ausente: parent_message_id")
         if not selected_text:
-            raise ChatServiceError("Missing key: selected_text")
+            raise ChatServiceError("Chave ausente: selected_text")
 
         try:
             parent_message_id = int(parent_message_id)
         except (TypeError, ValueError) as exc:
-            raise ChatServiceError("Invalid key: parent_message_id") from exc
+            raise ChatServiceError("Chave inválida: parent_message_id") from exc
 
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
 
@@ -1701,9 +1701,9 @@ class ChatService:
             or parent_record.platform_id != session.platform_id
             or parent_record.user_id != session_id
         ):
-            raise ChatServiceError("Parent message not found")
+            raise ChatServiceError("Mensagem original não encontrada")
         if not isinstance(parent_record.content, dict):
-            raise ChatServiceError("Invalid parent message content")
+            raise ChatServiceError("Conteúdo da mensagem original inválido")
         if parent_record.content.get("type") != "bot":
             raise ChatServiceError("Only bot messages can create threads")
 
@@ -1723,7 +1723,7 @@ class ChatService:
         conversation_id, history = await self.load_current_conversation_history(session)
         turn_range = find_turn_range(history, checkpoint_id)
         if not conversation_id or not turn_range:
-            raise ChatServiceError("Linked checkpoint not found")
+            raise ChatServiceError("Ponto de controle vinculado não encontrado")
 
         _start, end = turn_range
         base_history = history[: end + 1]
@@ -1754,7 +1754,7 @@ class ChatService:
     async def get_thread(self, username: str, thread_id: str) -> dict:
         thread = await self.db.get_webchat_thread_by_id(thread_id)
         if not thread:
-            raise ChatServiceError(f"Thread {thread_id} not found")
+            raise ChatServiceError(f"Thread {thread_id} não encontrado")
         if thread.creator != username:
             raise ChatServiceError("Permission denied")
 
@@ -1777,17 +1777,17 @@ class ChatService:
         thread_id: str | None,
     ) -> dict:
         if not thread_id:
-            raise ChatServiceError("Missing key: thread_id")
+            raise ChatServiceError("Chave ausente: thread_id")
         return await self.get_thread(username, thread_id)
 
     async def prepare_thread_chat_payload(self, username: str, data: dict) -> dict:
         thread_id = data.get("thread_id")
         if not thread_id:
-            raise ChatServiceError("Missing key: thread_id")
+            raise ChatServiceError("Chave ausente: thread_id")
 
         thread = await self.db.get_webchat_thread_by_id(thread_id)
         if not thread:
-            raise ChatServiceError(f"Thread {thread_id} not found")
+            raise ChatServiceError(f"Thread {thread_id} não encontrado")
         if thread.creator != username:
             raise ChatServiceError("Permission denied")
 
@@ -1815,7 +1815,7 @@ class ChatService:
     async def delete_thread(self, username: str, thread_id: str) -> dict:
         thread = await self.db.get_webchat_thread_by_id(thread_id)
         if not thread:
-            raise ChatServiceError(f"Thread {thread_id} not found")
+            raise ChatServiceError(f"Thread {thread_id} não encontrado")
         if thread.creator != username:
             raise ChatServiceError("Permission denied")
 
@@ -1831,7 +1831,7 @@ class ChatService:
         data = self._dashboard_payload(payload)
         thread_id = data.get("thread_id")
         if not thread_id:
-            raise ChatServiceError("Missing key: thread_id")
+            raise ChatServiceError("Chave ausente: thread_id")
         return await self.delete_thread(username, thread_id)
 
     async def update_message(self, username: str, data: dict) -> dict:
@@ -1839,33 +1839,33 @@ class ChatService:
         message_id = data.get("message_id")
         content = data.get("content")
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         if message_id is None:
-            raise ChatServiceError("Missing key: message_id")
+            raise ChatServiceError("Chave ausente: message_id")
 
         try:
             message_id = int(message_id)
             if not isinstance(content, dict):
-                raise ValueError("Missing key: content")
+                raise ValueError("Chave ausente: content")
             content = sanitize_message_content(content)
         except (TypeError, ValueError) as exc:
             raise ChatServiceError(str(exc)) from exc
 
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
 
         record = await self.db.get_platform_message_history_by_id(message_id)
         if not record:
-            raise ChatServiceError(f"Message {message_id} not found")
+            raise ChatServiceError(f"Message {message_id} não encontrado")
         if record.platform_id != session.platform_id or record.user_id != session_id:
-            raise ChatServiceError("Message does not belong to the session")
+            raise ChatServiceError("A mensagem não pertence à sessão")
         if not isinstance(record.content, dict):
-            raise ChatServiceError("Invalid message content")
+            raise ChatServiceError("Conteúdo da mensagem inválido")
         if record.content.get("type") != content.get("type"):
-            raise ChatServiceError("Message type cannot be changed")
+            raise ChatServiceError("O tipo da mensagem não pode ser alterado")
         if content.get("type") != "user":
             raise ChatServiceError("Only user messages can be edited")
 
@@ -1884,20 +1884,20 @@ class ChatService:
         checkpoint_id = record.llm_checkpoint_id
         if not checkpoint_id:
             raise ChatServiceError(
-                "This message is not linked to LLM history and cannot be edited"
+                "Esta mensagem não está vinculada ao histórico do modelo e não pode ser editada"
             )
 
         conversation_id, history = await self.load_current_conversation_history(session)
         turn_range = find_turn_range(history, checkpoint_id)
         if not conversation_id or not turn_range:
-            raise ChatServiceError("Linked checkpoint not found")
+            raise ChatServiceError("Ponto de controle vinculado não encontrado")
         if not is_latest_checkpoint(history, checkpoint_id):
             raise ChatServiceError("Only the latest turn can be edited")
 
         start, end = turn_range
         target_index = find_turn_user_index(history, start, end)
         if target_index is None:
-            raise ChatServiceError("Linked user message not found")
+            raise ChatServiceError("Mensagem vinculada do usuário não encontrada")
 
         new_checkpoint_id = str(uuid.uuid4())
         truncated_history = history[:start]
@@ -1942,31 +1942,31 @@ class ChatService:
         session_id = data.get("session_id")
         message_id = data.get("message_id")
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         if message_id is None:
-            raise ChatServiceError("Missing key: message_id")
+            raise ChatServiceError("Chave ausente: message_id")
 
         try:
             message_id = int(message_id)
         except (TypeError, ValueError) as exc:
-            raise ChatServiceError("Invalid key: message_id") from exc
+            raise ChatServiceError("Chave inválida: message_id") from exc
 
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
 
         target_record = await self.db.get_platform_message_history_by_id(message_id)
         if not target_record:
-            raise ChatServiceError(f"Message {message_id} not found")
+            raise ChatServiceError(f"Message {message_id} não encontrado")
         if (
             target_record.platform_id != session.platform_id
             or target_record.user_id != session_id
         ):
-            raise ChatServiceError("Message does not belong to the session")
+            raise ChatServiceError("A mensagem não pertence à sessão")
         if not isinstance(target_record.content, dict):
-            raise ChatServiceError("Invalid message content")
+            raise ChatServiceError("Conteúdo da mensagem inválido")
         if target_record.content.get("type") != "bot":
             raise ChatServiceError("Only bot messages can be regenerated")
 
@@ -1977,14 +1977,14 @@ class ChatService:
         conversation_id, history = await self.load_current_conversation_history(session)
         turn_range = find_turn_range(history, checkpoint_id)
         if not conversation_id or not turn_range:
-            raise ChatServiceError("Linked checkpoint not found")
+            raise ChatServiceError("Ponto de controle vinculado não encontrado")
         if not is_latest_checkpoint(history, checkpoint_id):
             raise ChatServiceError("Regenerating older turns requires branching")
 
         start, end = turn_range
         user_index = find_turn_user_index(history, start, end)
         if user_index is None:
-            raise ChatServiceError("Linked user message not found")
+            raise ChatServiceError("Mensagem vinculada do usuário não encontrada")
 
         platform_history = await self.get_sorted_platform_history(session)
         source_user_record = next(
@@ -1998,7 +1998,9 @@ class ChatService:
             None,
         )
         if not source_user_record:
-            raise ChatServiceError("Linked user display message not found")
+            raise ChatServiceError(
+                "Mensagem de exibição vinculada do usuário não encontrada"
+            )
 
         old_bot_record_ids = [
             item.id
@@ -2009,7 +2011,9 @@ class ChatService:
             and item.content.get("type") == "bot"
         ]
         if not old_bot_record_ids:
-            raise ChatServiceError("Linked bot display message not found")
+            raise ChatServiceError(
+                "Mensagem de exibição vinculada do bot não encontrada"
+            )
 
         new_checkpoint_id = str(uuid.uuid4())
         new_history = history[:start] + history[end + 1 :]
@@ -2059,7 +2063,7 @@ class ChatService:
     ) -> dict:
         session = await self.db.get_platform_session_by_id(session_id)
         if not session:
-            raise ChatServiceError(f"Session {session_id} not found")
+            raise ChatServiceError(f"Session {session_id} não encontrado")
         if session.creator != username:
             raise ChatServiceError("Permission denied")
 
@@ -2078,9 +2082,9 @@ class ChatService:
         session_id = data.get("session_id")
         display_name = data.get("display_name")
         if not session_id:
-            raise ChatServiceError("Missing key: session_id")
+            raise ChatServiceError("Chave ausente: session_id")
         if display_name is None:
-            raise ChatServiceError("Missing key: display_name")
+            raise ChatServiceError("Chave ausente: display_name")
         return await self.update_session_display_name(
             username, session_id, display_name
         )
@@ -2088,7 +2092,7 @@ class ChatService:
     @staticmethod
     def _dashboard_payload(payload: object) -> dict:
         if payload is None:
-            raise ChatServiceError("Missing JSON body")
+            raise ChatServiceError("Corpo JSON ausente")
         if not isinstance(payload, dict):
-            raise ChatServiceError("Invalid JSON body: expected object")
+            raise ChatServiceError("Corpo JSON inválido: esperado um objeto")
         return payload

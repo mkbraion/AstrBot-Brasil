@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 @register_platform_adapter(
-    "satori", "Satori 协议适配器", support_streaming_message=False
+    "satori", "Adaptador do protocolo Satori", support_streaming_message=False
 )
 class SatoriPlatformAdapter(Platform):
     def __init__(
@@ -75,7 +75,7 @@ class SatoriPlatformAdapter(Platform):
 
         self.metadata = PlatformMetadata(
             name="satori",
-            description="Satori 通用协议适配器",
+            description="Adaptador do protocolo universal Satori",
             id=self.config["id"],
             support_streaming_message=False,
         )
@@ -158,7 +158,9 @@ class SatoriPlatformAdapter(Platform):
 
         if not self.endpoint.startswith(("ws://", "wss://")):
             logger.error(f"无效的WebSocket URL: {self.endpoint}")
-            raise ValueError(f"WebSocket URL必须以ws://或wss://开头: {self.endpoint}")
+            raise ValueError(
+                f"A URL do WebSocket deve começar com ws:// ou wss://: {self.endpoint}"
+            )
 
         try:
             websocket = await connect(
@@ -202,10 +204,10 @@ class SatoriPlatformAdapter(Platform):
 
     async def send_identify(self) -> None:
         if not self.ws:
-            raise Exception("WebSocket连接未建立")
+            raise Exception("Conexão WebSocket não estabelecida")
 
         if self._is_websocket_closed(self.ws):
-            raise Exception("WebSocket连接已关闭")
+            raise Exception("Conexão WebSocket encerrada")
 
         identify_payload = {
             "op": 3,  # IDENTIFY
@@ -290,7 +292,7 @@ class SatoriPlatformAdapter(Platform):
                     self.sequence = body["sn"]
 
         except json.JSONDecodeError as e:
-            logger.error(f"解析 WebSocket 消息失败: {e}, 消息内容: {message}")
+            logger.error(f"解析 WebSocket 消息失败: {e}, 消息Conteúdo: {message}")
         except Exception as e:
             logger.error(f"处理 WebSocket 消息异常: {e}")
 
@@ -381,7 +383,9 @@ class SatoriPlatformAdapter(Platform):
                         quote = quote_info["quote"]
                         content_for_parsing = quote_info["content_without_quote"]
                 except Exception as e:
-                    logger.error(f"解析<quote>标签时发生错误: {e}, 错误内容: {content}")
+                    logger.error(
+                        f"解析<quote>标签时发生错误: {e}, 错误Conteúdo: {content}"
+                    )
 
             if quote:
                 # 引用消息
@@ -589,7 +593,7 @@ class SatoriPlatformAdapter(Platform):
                 # 如果没有作者信息，使用默认值
                 quote_abm.sender = MessageMember(
                     user_id=quote.get("user_id", ""),
-                    nickname="内容",
+                    nickname="Conteúdo",
                 )
 
             # 解析引用消息内容
@@ -605,7 +609,7 @@ class SatoriPlatformAdapter(Platform):
 
             # 如果没有任何内容，使用默认文本
             if not quote_abm.message_str.strip():
-                quote_abm.message_str = "[引用消息]"
+                quote_abm.message_str = "[Mensagem citada]"
 
             return quote_abm
         except Exception as e:
@@ -643,12 +647,14 @@ class SatoriPlatformAdapter(Platform):
             root = ET.fromstring(processed_content)
             await self._parse_xml_node(root, elements)
         except ET.ParseError as e:
-            logger.warning(f"解析 Satori 元素时发生解析错误: {e}, 错误内容: {content}")
+            logger.warning(
+                f"解析 Satori 元素时发生解析错误: {e}, 错误Conteúdo: {content}"
+            )
             # 如果解析失败，将整个内容当作纯文本
             if content.strip():
                 elements.append(Plain(text=content))
         except Exception as e:
-            logger.error(f"解析 Satori 元素时发生未知错误: {e}")
+            logger.error(f"解析 Satori 元素时发生Erro desconhecido: {e}")
             raise e
 
         # 如果没有解析到任何元素，将整个内容当作纯文本
@@ -683,7 +689,7 @@ class SatoriPlatformAdapter(Platform):
 
             elif tag_name == "file":
                 src = attrs.get("src", "")
-                name = attrs.get("name", "文件")
+                name = attrs.get("name", "Arquivo")
                 if src:
                     elements.append(File(name=name, file=src))
 
@@ -708,13 +714,15 @@ class SatoriPlatformAdapter(Platform):
                 face_type = attrs.get("type", "")
 
                 if face_name:
-                    elements.append(Plain(text=f"[表情:{face_name}]"))
+                    elements.append(Plain(text=f"[Emoji:{face_name}]"))
                 elif face_id and face_type:
-                    elements.append(Plain(text=f"[表情ID:{face_id},类型:{face_type}]"))
+                    elements.append(
+                        Plain(text=f"[ID do emoji:{face_id}; tipo:{face_type}]")
+                    )
                 elif face_id:
-                    elements.append(Plain(text=f"[表情ID:{face_id}]"))
+                    elements.append(Plain(text=f"[ID do emoji:{face_id}]"))
                 else:
-                    elements.append(Plain(text="[表情]"))
+                    elements.append(Plain(text="[Emoji]"))
 
             elif tag_name == "ark":
                 # 作为纯文本添加到消息链中
@@ -723,9 +731,11 @@ class SatoriPlatformAdapter(Platform):
                     import html
 
                     decoded_data = html.unescape(data)
-                    elements.append(Plain(text=f"[ARK卡片数据: {decoded_data}]"))
+                    elements.append(
+                        Plain(text=f"[Dados do cartão ARK: {decoded_data}]")
+                    )
                 else:
-                    elements.append(Plain(text="[ARK卡片]"))
+                    elements.append(Plain(text="[Cartão ARK]"))
 
             elif tag_name == "json":
                 # JSON标签 视为ARK卡片消息
@@ -734,9 +744,11 @@ class SatoriPlatformAdapter(Platform):
                     import html
 
                     decoded_data = html.unescape(data)
-                    elements.append(Plain(text=f"[ARK卡片数据: {decoded_data}]"))
+                    elements.append(
+                        Plain(text=f"[Dados do cartão ARK: {decoded_data}]")
+                    )
                 else:
-                    elements.append(Plain(text="[JSON卡片]"))
+                    elements.append(Plain(text="[Cartão JSON]"))
 
             else:
                 # 未知标签，递归处理其内容
@@ -779,7 +791,7 @@ class SatoriPlatformAdapter(Platform):
         user_id: str | None = None,
     ) -> dict:
         if not self.session:
-            raise Exception("HTTP session 未初始化")
+            raise Exception("Sessão HTTP não inicializada")
 
         headers = {
             "Content-Type": "application/json",

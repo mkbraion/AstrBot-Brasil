@@ -83,8 +83,12 @@ class ConversationService:
                 include_history=include_history,
             )
         except Exception as exc:
-            logger.error(f"数据库查询出错: {exc!s}\n{traceback.format_exc()}")
-            raise ConversationServiceError(f"数据库查询出错: {exc!s}") from exc
+            logger.error(
+                f"Erro na consulta ao banco de dados: {exc!s}\n{traceback.format_exc()}"
+            )
+            raise ConversationServiceError(
+                f"Erro na consulta ao banco de dados: {exc!s}"
+            ) from exc
 
         total_pages = (
             (total_count + page_size - 1) // page_size if total_count > 0 else 1
@@ -149,7 +153,7 @@ class ConversationService:
             conversation_id=cid,
         )
         if not conversation:
-            raise ConversationServiceError("对话不存在")
+            raise ConversationServiceError("Conversa não encontrada")
 
         webchat_titles = await self._get_webchat_titles([conversation])
         alias_map = build_umo_alias_map(await self.db_helper.get_umo_aliases([user_id]))
@@ -176,7 +180,7 @@ class ConversationService:
             conversation_id=cid,
         )
         if not conversation:
-            raise ConversationServiceError("对话不存在")
+            raise ConversationServiceError("Conversa não encontrada")
 
         persona_id = payload.get("persona_id", conversation.persona_id)
 
@@ -187,7 +191,7 @@ class ConversationService:
                 title=title,
                 persona_id=persona_id,
             )
-        return {"message": "对话信息更新成功"}
+        return {"message": "Informações da conversa atualizadas"}
 
     async def delete_conversation(self, data: object) -> dict:
         payload = self._payload(data)
@@ -199,7 +203,7 @@ class ConversationService:
             unified_msg_origin=user_id,
             conversation_id=cid,
         )
-        return {"message": "对话删除成功"}
+        return {"message": "Conversa excluída"}
 
     async def update_history(self, data: object) -> dict:
         payload = self._payload(data)
@@ -207,7 +211,7 @@ class ConversationService:
         history = payload.get("history")
 
         if history is None:
-            raise ConversationServiceError("缺少必要参数: history")
+            raise ConversationServiceError("Parâmetro obrigatório ausente: history")
 
         history = self._normalize_history(history)
 
@@ -216,7 +220,7 @@ class ConversationService:
             conversation_id=cid,
         )
         if not conversation:
-            raise ConversationServiceError("对话不存在")
+            raise ConversationServiceError("Conversa não encontrada")
 
         await self.conv_mgr.update_conversation(
             unified_msg_origin=user_id,
@@ -224,14 +228,14 @@ class ConversationService:
             history=history,
         )
 
-        return {"message": "对话历史更新成功"}
+        return {"message": "Histórico da conversa atualizado"}
 
     async def export_conversations(self, data: object) -> ConversationExport:
         payload = self._payload(data)
         conversations_to_export = payload.get("conversations", [])
 
         if not conversations_to_export:
-            raise ConversationServiceError("导出列表不能为空")
+            raise ConversationServiceError("A lista de exportação não pode ficar vazia")
 
         jsonl_lines = []
         exported_count = 0
@@ -242,7 +246,9 @@ class ConversationService:
             cid = conv_info.get("cid")
 
             if not user_id or not cid:
-                failed_items.append(f"user_id:{user_id}, cid:{cid} - 缺少必要参数")
+                failed_items.append(
+                    f"user_id:{user_id}, cid:{cid} - parâmetros obrigatórios ausentes"
+                )
                 continue
 
             try:
@@ -252,7 +258,9 @@ class ConversationService:
                 )
 
                 if not conversation:
-                    failed_items.append(f"user_id:{user_id}, cid:{cid} - 对话不存在")
+                    failed_items.append(
+                        f"user_id:{user_id}, cid:{cid} - conversa não encontrada"
+                    )
                     continue
 
                 webchat_titles = await self._get_webchat_titles([conversation])
@@ -278,7 +286,7 @@ class ConversationService:
                 )
 
         if exported_count == 0:
-            raise ConversationServiceError("没有成功导出任何对话")
+            raise ConversationServiceError("Nenhuma conversa foi exportada")
 
         jsonl_content = "\n".join(jsonl_lines)
         file_obj = BytesIO(jsonl_content.encode("utf-8"))
@@ -292,20 +300,24 @@ class ConversationService:
 
     async def _delete_conversations(self, conversations: object) -> dict:
         if not isinstance(conversations, list) or not conversations:
-            raise ConversationServiceError("批量删除时conversations参数不能为空")
+            raise ConversationServiceError(
+                "O parâmetro conversations não pode ficar vazio na exclusão em lote"
+            )
 
         deleted_count = 0
         failed_items = []
 
         for conv in conversations:
             if not isinstance(conv, dict):
-                failed_items.append(f"{conv!r} - 格式错误")
+                failed_items.append(f"{conv!r} - formato inválido")
                 continue
             user_id = conv.get("user_id")
             cid = conv.get("cid")
 
             if not user_id or not cid:
-                failed_items.append(f"user_id:{user_id}, cid:{cid} - 缺少必要参数")
+                failed_items.append(
+                    f"user_id:{user_id}, cid:{cid} - parâmetros obrigatórios ausentes"
+                )
                 continue
 
             try:
@@ -317,9 +329,9 @@ class ConversationService:
             except Exception as exc:
                 failed_items.append(f"user_id:{user_id}, cid:{cid} - {exc!s}")
 
-        message = f"成功删除 {deleted_count} 个对话"
+        message = f"Excluídas {deleted_count} conversas"
         if failed_items:
-            message += f"，失败 {len(failed_items)} 个"
+            message += f"; falhas: {len(failed_items)} itens"
 
         return {
             "message": message,
@@ -436,7 +448,9 @@ class ConversationService:
         user_id = payload.get("user_id")
         cid = payload.get("cid")
         if not user_id or not cid:
-            raise ConversationServiceError("缺少必要参数: user_id 和 cid")
+            raise ConversationServiceError(
+                "Parâmetros obrigatórios ausentes: user_id e cid"
+            )
         return user_id, cid
 
     @staticmethod
@@ -448,7 +462,7 @@ class ConversationService:
                 json.loads(history)
         except json.JSONDecodeError as exc:
             raise ConversationServiceError(
-                "history 必须是有效的 JSON 字符串或数组"
+                "history deve ser uma string JSON válida ou um array"
             ) from exc
 
         return json.loads(history) if isinstance(history, str) else history

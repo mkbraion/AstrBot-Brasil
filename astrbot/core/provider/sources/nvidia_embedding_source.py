@@ -9,7 +9,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "nvidia_embedding",
-    "NVIDIA NIM Embedding 提供商适配器",
+    "Adaptador de provedor de embeddings do NVIDIA NIM",
     provider_type=ProviderType.EMBEDDING,
 )
 class NvidiaEmbeddingProvider(EmbeddingProvider):

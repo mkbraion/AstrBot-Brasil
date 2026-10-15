@@ -198,7 +198,7 @@ async function updateRenderedHtml() {
       .map((token) => normalizeShikiLanguage(token.info));
     highlighter = await ensureShikiLanguages(languages);
   } catch (err) {
-    console.error("Failed to initialize Shiki for README dialog:", err);
+    console.error("Falha ao inicializar o Shiki para a janela do README:", err);
   }
 
   if (renderId !== lastRenderId.value) return;

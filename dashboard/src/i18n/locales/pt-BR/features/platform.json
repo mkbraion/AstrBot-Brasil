@@ -40,7 +40,11 @@
       "patternInvalid": "Use o formato plataforma:tipo de mensagem:ID da conversa",
       "patternPlatformMismatch": "A parte de plataforma deve corresponder ao ID do bot atual",
       "duplicatePattern": "Foram encontradas rotas duplicadas. Revise e tente novamente.",
-      "sessionTypes": { "group": "Grupo", "friend": "Mensagem direta", "other": "Conversa" }
+      "sessionTypes": {
+        "group": "Grupo",
+        "friend": "Mensagem direta",
+        "other": "Conversa"
+      }
     }
   },
   "viewWebhook": "Ver URL do Webhook",
@@ -51,7 +55,11 @@
     "description": "Garanta que o endereço possa ser acessado publicamente. Você também pode definir o endereço externo de callback em Configurações -> Geral.",
     "close": "Fechar"
   },
-  "details": { "adapterType": "Tipo de adaptador", "token": "Token", "description": "Descrição" },
+  "details": {
+    "adapterType": "Tipo de adaptador",
+    "token": "Token",
+    "description": "Descrição"
+  },
   "dialog": {
     "add": "Adicionar",
     "edit": "Editar",
@@ -63,8 +71,16 @@
     "connectTitle": "Conectar {name}",
     "viewTutorial": "Ver tutorial",
     "noTemplates": "Nenhum template de plataforma disponível",
-    "idConflict": { "title": "Conflito de ID", "message": "O ID \"{id}\" já está em uso. Escolha outro ID.", "confirm": "OK" },
-    "securityWarning": { "title": "Aviso de segurança", "aiocqhttpTokenMissing": "Para aumentar a segurança da conexão, configure ws_reverse_token. Operar sem token pode gerar riscos de segurança.", "learnMore": "Saiba mais" },
+    "idConflict": {
+      "title": "Conflito de ID",
+      "message": "O ID \"{id}\" já está em uso. Escolha outro ID.",
+      "confirm": "OK"
+    },
+    "securityWarning": {
+      "title": "Aviso de segurança",
+      "aiocqhttpTokenMissing": "Para aumentar a segurança da conexão, configure ws_reverse_token. Operar sem token pode gerar riscos de segurança.",
+      "learnMore": "Saiba mais"
+    },
     "invalidPlatformId": "O ID da plataforma não pode conter ':' ou '!'."
   },
   "createDialog": {
@@ -92,7 +108,12 @@
     "editMode": "Editar",
     "noRouteRules": "Nenhuma regra de rota para esta plataforma. A configuração padrão será usada.",
     "sessionIdPlaceholder": "ID da sessão ou *",
-    "routeSource": { "selectPlaceholder": "Selecionar origem da sessão", "noData": "Ainda não há origem de mensagem disponível para este bot. Ela aparecerá após receber a primeira mensagem.", "switchToKnown": "Usar origem conhecida", "switchToManual": "Digitar manualmente" },
+    "routeSource": {
+      "selectPlaceholder": "Selecionar origem da sessão",
+      "noData": "Ainda não há origem de mensagem disponível para este bot. Ela aparecerá após receber a primeira mensagem.",
+      "switchToKnown": "Usar origem conhecida",
+      "switchToManual": "Digitar manualmente"
+    },
     "allSessions": "Todas as sessões",
     "configMissing": "Arquivo de configuração não encontrado",
     "routeHint": "Ao entregar mensagens, será usada a primeira configuração que corresponder à origem da sessão. Use * para corresponder a todas. Use /sid para obter o ID da sessão.",
@@ -100,10 +121,25 @@
     "warningEditAgain": "Editar novamente",
     "configDrawerTitle": "Gerenciamento de configurações",
     "configDrawerIdLabel": "ID",
-    "configTableHeaders": { "configId": "ID de configuração vinculado a esta instância", "scope": "Escopo nesta instância" },
-    "routeTableHeaders": { "source": "Origem da mensagem (Tipo: ID da sessão)", "config": "Arquivo de configuração", "actions": "Ações" },
-    "messageTypeOptions": { "all": "Todas as mensagens", "group": "Mensagens de grupo (GroupMessage)", "friend": "Mensagens diretas (FriendMessage)" },
-    "messageTypeLabels": { "all": "Todas as mensagens", "group": "Mensagens de grupo", "friend": "Mensagens diretas" }
+    "configTableHeaders": {
+      "configId": "ID de configuração vinculado a esta instância",
+      "scope": "Escopo nesta instância"
+    },
+    "routeTableHeaders": {
+      "source": "Origem da mensagem (Tipo: ID da sessão)",
+      "config": "Arquivo de configuração",
+      "actions": "Ações"
+    },
+    "messageTypeOptions": {
+      "all": "Todas as mensagens",
+      "group": "Mensagens de grupo (GroupMessage)",
+      "friend": "Mensagens diretas (FriendMessage)"
+    },
+    "messageTypeLabels": {
+      "all": "Todas as mensagens",
+      "group": "Mensagens de grupo",
+      "friend": "Mensagens diretas"
+    }
   },
   "messages": {
     "updateSuccess": "Atualizado com sucesso!",
@@ -121,14 +157,70 @@
     "platformIdMissing": "Não foi possível obter o ID da plataforma.",
     "routingSaveFailed": "Falha ao salvar a tabela de roteamento: {message}"
   },
-  "status": { "enabled": "Ativado", "disabled": "Desativado", "connecting": "Conectando", "connected": "Conectado", "disconnected": "Desconectado", "error": "Erro" },
-  "runtimeStatus": { "running": "Em execução", "error": "Erro", "pending": "Pendente", "stopped": "Parado", "unknown": "Desconhecido", "errors": "erro(s)" },
-  "platformQr": { "title": "Login por QR Code", "show": "Mostrar QR Code", "status": "Status do QR Code", "waiting": "Aguardando QR Code", "close": "Fechar" },
+  "status": {
+    "enabled": "Ativado",
+    "disabled": "Desativado",
+    "connecting": "Conectando",
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "error": "Erro"
+  },
+  "runtimeStatus": {
+    "running": "Em execução",
+    "error": "Erro",
+    "pending": "Pendente",
+    "stopped": "Parado",
+    "unknown": "Desconhecido",
+    "errors": "erro(s)"
+  },
+  "platformQr": {
+    "title": "Login por QR Code",
+    "show": "Mostrar QR Code",
+    "status": "Status do QR Code",
+    "waiting": "Aguardando QR Code",
+    "close": "Fechar"
+  },
   "registrationAction": {
-    "lark": { "title": "Configuração rápida por QR Code", "show": "Configurar por QR Code", "scanTitle": "Escaneie com o Feishu no celular", "feishu": "Feishu China", "lark": "Lark Global" },
-    "weixinOc": { "title": "Login pessoal do WeChat por QR Code", "scanTitle": "Escaneie com o WeChat no celular", "created": "Login concluído", "status": { "idle": "Não iniciado", "starting": "Obtendo QR Code", "pending": "Aguardando leitura", "created": "Login concluído — lembre-se de salvar!", "denied": "Cancelado", "expired": "Expirado", "error": "Falha no login" } },
-    "dingtalk": { "title": "Configuração DingTalk por QR Code", "scanTitle": "Escaneie com o DingTalk no celular", "created": "Configuração concluída" },
-    "qqOfficial": { "title": "Vinculação do bot oficial do QQ", "scanTitle": "Escaneie com o QQ no celular", "created": "Vinculação concluída", "status": { "idle": "Não iniciado", "starting": "Obtendo QR Code", "pending": "Aguardando leitura", "created": "Vinculação concluída — lembre-se de salvar!", "denied": "Cancelado", "expired": "Expirado", "error": "Falha na vinculação" } },
+    "lark": {
+      "title": "Configuração rápida por QR Code",
+      "show": "Configurar por QR Code",
+      "scanTitle": "Escaneie com o Feishu no celular",
+      "feishu": "Feishu China",
+      "lark": "Lark Global"
+    },
+    "weixinOc": {
+      "title": "Login pessoal do WeChat por QR Code",
+      "scanTitle": "Escaneie com o WeChat no celular",
+      "created": "Login concluído",
+      "status": {
+        "idle": "Não iniciado",
+        "starting": "Obtendo QR Code",
+        "pending": "Aguardando leitura",
+        "created": "Login concluído — lembre-se de salvar!",
+        "denied": "Cancelado",
+        "expired": "Expirado",
+        "error": "Falha no login"
+      }
+    },
+    "dingtalk": {
+      "title": "Configuração DingTalk por QR Code",
+      "scanTitle": "Escaneie com o DingTalk no celular",
+      "created": "Configuração concluída"
+    },
+    "qqOfficial": {
+      "title": "Vinculação do bot oficial do QQ",
+      "scanTitle": "Escaneie com o QQ no celular",
+      "created": "Vinculação concluída",
+      "status": {
+        "idle": "Não iniciado",
+        "starting": "Obtendo QR Code",
+        "pending": "Aguardando leitura",
+        "created": "Vinculação concluída — lembre-se de salvar!",
+        "denied": "Cancelado",
+        "expired": "Expirado",
+        "error": "Falha na vinculação"
+      }
+    },
     "start": "Iniciar configuração",
     "created": "Configuração concluída",
     "startFailed": "Falha ao iniciar a configuração por QR Code",
@@ -136,9 +228,31 @@
     "platformIdLabel": "ID do bot",
     "platformIdRequired": "O ID do bot é obrigatório",
     "platformIdInvalid": "O ID do bot não pode conter espaços, ':' ou '!'",
-    "mode": { "title": "Escolha o método de configuração", "scan": "Configuração rápida por QR Code", "manual": "Configuração manual", "larkManual": "Configuração manual (compatível com Feishu self-hosted)" },
+    "mode": {
+      "title": "Escolha o método de configuração",
+      "scan": "Configuração rápida por QR Code",
+      "manual": "Configuração manual",
+      "larkManual": "Configuração manual (compatível com Feishu self-hosted)"
+    },
     "scanTitle": "Escaneie com o Feishu no celular",
-    "status": { "idle": "Não iniciado", "starting": "Iniciando", "pending": "Aguardando leitura", "slow_down": "Consulta desacelerada", "created": "Configuração concluída — lembre-se de salvar!", "denied": "Cancelado", "expired": "Expirado", "error": "Falha na configuração" }
+    "status": {
+      "idle": "Não iniciado",
+      "starting": "Iniciando",
+      "pending": "Aguardando leitura",
+      "slow_down": "Consulta desacelerada",
+      "created": "Configuração concluída — lembre-se de salvar!",
+      "denied": "Cancelado",
+      "expired": "Expirado",
+      "error": "Falha na configuração"
+    }
   },
-  "errorDialog": { "title": "Detalhes do erro", "platformId": "ID da plataforma", "errorCount": "Quantidade de erros", "lastError": "Último erro", "occurredAt": "Ocorreu em", "traceback": "Traceback", "close": "Fechar" }
+  "errorDialog": {
+    "title": "Detalhes do erro",
+    "platformId": "ID da plataforma",
+    "errorCount": "Quantidade de erros",
+    "lastError": "Último erro",
+    "occurredAt": "Ocorreu em",
+    "traceback": "Rastreamento do erro",
+    "close": "Fechar"
+  }
 }

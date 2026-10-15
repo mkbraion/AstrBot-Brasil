@@ -63,7 +63,7 @@ async def sync_command_configs() -> None:
 async def toggle_command(handler_full_name: str, enabled: bool) -> CommandDescriptor:
     descriptor = _build_descriptor_by_full_name(handler_full_name)
     if not descriptor:
-        raise ValueError("指定的处理函数不存在或不是指令。")
+        raise ValueError("A função especificada não existe ou não é um comando.")
 
     existing_cfg = await db_helper.get_command_config(handler_full_name)
     config = await db_helper.upsert_command_config(
@@ -98,16 +98,18 @@ async def rename_command(
 ) -> CommandDescriptor:
     descriptor = _build_descriptor_by_full_name(handler_full_name)
     if not descriptor:
-        raise ValueError("指定的处理函数不存在或不是指令。")
+        raise ValueError("A função especificada não existe ou não é um comando.")
 
     new_fragment = new_fragment.strip()
     if not new_fragment:
-        raise ValueError("指令名不能为空。")
+        raise ValueError("O nome do comando não pode ficar vazio.")
 
     # 校验主指令名
     candidate_full = _compose_command(descriptor.parent_signature, new_fragment)
     if _is_command_in_use(handler_full_name, candidate_full):
-        raise ValueError(f"指令名 '{candidate_full}' 已被其他指令占用。")
+        raise ValueError(
+            f"O nome de comando '{candidate_full}' já está sendo usado por outro comando."
+        )
 
     # 校验别名
     if aliases:
@@ -117,7 +119,9 @@ async def rename_command(
                 continue
             alias_full = _compose_command(descriptor.parent_signature, alias)
             if _is_command_in_use(handler_full_name, alias_full):
-                raise ValueError(f"别名 '{alias_full}' 已被其他指令占用。")
+                raise ValueError(
+                    f"O nome alternativo '{alias_full}' já está sendo usado por outro comando."
+                )
 
     existing_cfg = await db_helper.get_command_config(handler_full_name)
     merged_extra = dict(existing_cfg.extra_data or {}) if existing_cfg else {}
@@ -149,7 +153,7 @@ async def update_command_permission(
 ) -> CommandDescriptor:
     descriptor = _build_descriptor_by_full_name(handler_full_name)
     if not descriptor:
-        raise ValueError("指定的处理函数不存在或不是指令。")
+        raise ValueError("A função especificada não existe ou não é um comando.")
 
     if permission_type not in COMMAND_PERMISSION_TYPES:
         raise ValueError(
@@ -159,7 +163,7 @@ async def update_command_permission(
     handler = descriptor.handler
     found_plugin = star_map.get(handler.handler_module_path)
     if not found_plugin:
-        raise ValueError("未找到指令所属插件")
+        raise ValueError("Plugin responsável pelo comando não encontrado")
 
     # 1. Update Persistent Config (alter_cmd)
     alter_cmd_cfg = await sp.global_get("alter_cmd", {})

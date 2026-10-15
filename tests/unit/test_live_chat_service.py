@@ -41,7 +41,7 @@ async def test_run_websocket_session_closes_when_token_is_missing():
         close=close,
     )
 
-    assert closed == [(1008, "Missing authentication token")]
+    assert closed == [(1008, "Token de autenticação ausente")]
     assert service.sessions == {}
 
 

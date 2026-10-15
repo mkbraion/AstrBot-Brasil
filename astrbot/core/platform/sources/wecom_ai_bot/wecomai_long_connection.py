@@ -99,16 +99,18 @@ class WecomAIBotLongConnectionClient:
         await self._send_json(payload)
 
         if not self._ws:
-            raise RuntimeError("WebSocket 未建立")
+            raise RuntimeError("WebSocket não estabelecido")
 
         reply = await self._ws.receive(timeout=10)
         if reply.type != aiohttp.WSMsgType.TEXT:
-            raise RuntimeError(f"订阅失败: 非文本响应 {reply.type}")
+            raise RuntimeError(
+                f"Falha na assinatura: resposta não textual {reply.type}"
+            )
 
         data = json.loads(reply.data)
         if data.get("errcode") != 0:
             raise RuntimeError(
-                f"订阅失败 errcode={data.get('errcode')} errmsg={data.get('errmsg')}"
+                f"Falha na assinatura. errcode={data.get('errcode')} errmsg={data.get('errmsg')}"
             )
 
     async def _heartbeat_loop(self) -> None:
@@ -237,7 +239,7 @@ class WecomAIBotLongConnectionClient:
     async def _send_json(self, payload: dict[str, Any]) -> None:
         ws = self._ws
         if ws is None or ws.closed:
-            raise RuntimeError("长连接尚未建立")
+            raise RuntimeError("Conexão persistente ainda não estabelecida")
         async with self._send_lock:
             await ws.send_json(payload)
 

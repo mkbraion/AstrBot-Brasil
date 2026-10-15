@@ -30,7 +30,9 @@ class BailianNetworkError(BailianRerankError):
 
 
 @register_provider_adapter(
-    "bailian_rerank", "阿里云百炼文本排序适配器", provider_type=ProviderType.RERANK
+    "bailian_rerank",
+    "Adaptador de reclassificação de texto do Alibaba Cloud Bailian",
+    provider_type=ProviderType.RERANK,
 )
 class BailianRerankProvider(RerankProvider):
     """阿里云百炼文本重排序适配器."""
@@ -51,7 +53,9 @@ class BailianRerankProvider(RerankProvider):
             "DASHSCOPE_API_KEY", ""
         )
         if not self.api_key:
-            raise ValueError("阿里云百炼 API Key 不能为空。")
+            raise ValueError(
+                "A chave de API do Alibaba Cloud Bailian não pode ficar vazia."
+            )
 
         self.model = provider_config.get("rerank_model", "qwen3-rerank")
         self.timeout = provider_config.get("timeout", 30)
@@ -158,14 +162,14 @@ class BailianRerankProvider(RerankProvider):
             code = data.get("code")
             if code:
                 raise BailianAPIError(
-                    f"百炼 API 错误: {code} – {data.get('message', '')}"
+                    f"Erro na API do Bailian: {code} – {data.get('message', '')}"
                 )
             results = data.get("results", [])
         else:
             code = data.get("code", "200")
             if code != "200":
                 raise BailianAPIError(
-                    f"百炼 API 错误: {code} – {data.get('message', '')}"
+                    f"Erro na API do Bailian: {code} – {data.get('message', '')}"
                 )
             results = data.get("output", {}).get("results", [])
 
@@ -262,13 +266,13 @@ class BailianRerankProvider(RerankProvider):
                 return results
 
         except aiohttp.ClientError as e:
-            error_msg = f"网络请求失败: {e}"
-            logger.error(f"百炼 Rerank 网络请求失败: {e}")
+            error_msg = f"Falha na requisição de rede: {e}"
+            logger.error(f"百炼 Rerank Falha na requisição de rede: {e}")
             raise BailianNetworkError(error_msg) from e
         except BailianRerankError:
             raise
         except Exception as e:
-            error_msg = f"重排序失败: {e}"
+            error_msg = f"Falha na reclassificação: {e}"
             logger.error(f"百炼 Rerank 处理失败: {e}")
             raise BailianRerankError(error_msg) from e
 

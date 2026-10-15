@@ -425,9 +425,11 @@ class ConversationManager:
                         record["tool_calls"],
                         ensure_ascii=False,
                     )
-                    temp_contexts.append(f"Assistant: [函数调用] {tool_calls_str}")
+                    temp_contexts.append(
+                        f"Assistant: [chamada de função] {tool_calls_str}"
+                    )
                 else:
-                    temp_contexts.append("Assistant: [未知的内容]")
+                    temp_contexts.append("Assistant: [conteúdo desconhecido]")
                 contexts_groups.insert(0, temp_contexts)
                 temp_contexts = []
 

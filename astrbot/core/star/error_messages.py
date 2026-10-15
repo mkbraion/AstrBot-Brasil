@@ -1,11 +1,10 @@
 """Shared plugin error message templates for star manager flows."""
 
 PLUGIN_ERROR_TEMPLATES = {
-    "not_found_in_failed_list": "插件不存在于失败列表中。",
-    "reserved_plugin_cannot_uninstall": "该插件是 AstrBot 保留插件，无法卸载。",
+    "not_found_in_failed_list": "O plugin não está na lista de falhas.",
+    "reserved_plugin_cannot_uninstall": "Este é um plugin reservado do AstrBot e não pode ser desinstalado.",
     "failed_plugin_dir_remove_error": (
-        "移除失败插件成功，但是删除插件文件夹失败: {error}。"
-        "您可以手动删除该文件夹，位于 addons/plugins/ 下。"
+        "O plugin com falha foi removido, mas não foi possível excluir sua pasta: {error}. Você pode removê-la manualmente em addons/plugins/."
     ),
 }
 

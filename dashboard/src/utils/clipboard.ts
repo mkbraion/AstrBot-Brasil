@@ -31,15 +31,15 @@ export async function copyToClipboard(
       console.info("[clipboard] copied via Clipboard API", debugInfo);
       return true;
     } catch (err) {
-      console.warn("[clipboard] Clipboard API failed, falling back:", err, debugInfo);
+      console.warn("[clipboard] Falha na API da área de transferência; usando alternativa:", err, debugInfo);
     }
   }
 
   const fallbackOk = fallbackCopy(text, container);
   if (fallbackOk) {
-    console.info("[clipboard] fallback succeeded via document.execCommand('copy')", debugInfo);
+    console.info("[clipboard] Cópia alternativa concluída por document.execCommand('copy')", debugInfo);
   } else {
-    console.warn("[clipboard] fallback failed via document.execCommand('copy')", debugInfo);
+    console.warn("[clipboard] Falha na cópia alternativa por document.execCommand('copy')", debugInfo);
   }
   return fallbackOk;
 }
@@ -77,7 +77,7 @@ function fallbackCopy(text: string, container?: HTMLElement | null): boolean {
   try {
     return document.execCommand("copy");
   } catch (err) {
-    console.error("Fallback copy failed:", err);
+    console.error("Falha na cópia alternativa:", err);
     return false;
   } finally {
     if (textArea.parentNode) {

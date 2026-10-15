@@ -90,7 +90,7 @@ async def _send_chat(
 ):
     post_data = payload if payload is not None else await _json_or_none(request)
     if post_data is None:
-        return JSONResponse(error("Missing JSON body"))
+        return JSONResponse(error("Corpo JSON ausente"))
 
     try:
         stream = await service.build_chat_stream(username, post_data)
@@ -553,11 +553,11 @@ async def dashboard_post_file(
         content_length = int(request.headers.get("content-length") or 0)
         if content_length > MAX_UPLOAD_FILE_SIZE_BYTES:
             raise ChatServiceError(
-                f"File too large (limit {MAX_UPLOAD_FILE_SIZE_MB} MB)"
+                f"Arquivo muito grande (limite: {MAX_UPLOAD_FILE_SIZE_MB} MB)"
             )
         upload = await single_upload(request)
         if upload is None:
-            raise ChatServiceError("Missing key: file")
+            raise ChatServiceError("Chave ausente: file")
         return ok(await service.save_uploaded_file(upload))
     except ChatServiceError as exc:
         return error(str(exc))

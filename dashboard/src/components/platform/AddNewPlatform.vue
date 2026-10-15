@@ -36,7 +36,7 @@
                 <v-select
                   v-model="selectedPlatformType"
                   :items="Object.keys(platformTemplates)"
-                  item-title="name"
+                  :item-title="platformTemplateTitle"
                   item-value="name"
                   :label="tm('createDialog.platformTypeLabel')"
                   variant="outlined"
@@ -1197,6 +1197,20 @@ export default {
       }
       return getPlatformIcon(platformType);
     },
+    platformTemplateTitle(name) {
+      const type = this.platformTemplates[name]?.type;
+      const labels = {
+        qq_official: 'QQ oficial (WebSocket, recomendado)',
+        qq_official_webhook: 'QQ oficial (webhook)',
+        lark: 'Lark / Feishu',
+        weixin_oc: 'WeChat pessoal',
+        wecom_ai_bot: 'WeCom (bot de IA)',
+        wecom: 'WeCom e atendimento do WeChat',
+        weixin_official_account: 'Conta oficial do WeChat',
+        dingtalk: 'DingTalk'
+      };
+      return labels[type] || name;
+    },
     getPlatformDescription,
     resetForm() {
       this.selectedPlatformType = null;
@@ -1256,7 +1270,7 @@ export default {
         this.selectedConfigData = response.data.data.config;
         this.selectedConfigMetadata = response.data.data.metadata;
       } catch (error) {
-        console.error("获取配置文件预览数据失败:", error);
+        console.error("Falha ao obter a prévia da configuração:", error);
         this.selectedConfigData = null;
         this.selectedConfigMetadata = null;
       } finally {
@@ -1272,7 +1286,7 @@ export default {
         this.newConfigData = response.data.data.config;
         this.newConfigMetadata = response.data.data.metadata;
       } catch (error) {
-        console.error("获取默认配置模板失败:", error);
+        console.error("Falha ao obter o modelo de configuração padrão:", error);
         this.newConfigData = null;
         this.newConfigMetadata = null;
       } finally {
@@ -1440,9 +1454,9 @@ export default {
       try {
         await configRouteApi.upsert(umop, { config_id: configId });
 
-        console.log(`成功更新路由表: ${umop} -> ${configId}`);
+        console.log(`Tabela de rotas atualizada: ${umop} -> ${configId}`);
       } catch (err) {
-        console.error("更新路由表失败:", err);
+        console.error("Falha ao atualizar a tabela de rotas:", err);
         const errorMessage = err.response?.data?.message || err.message;
         throw new Error(
           this.tm("messages.routingUpdateFailed", { message: errorMessage }),
@@ -1465,11 +1479,11 @@ export default {
         });
 
         const newConfigId = createRes.data.data.conf_id;
-        console.log(`成功创建新配置文件 ${configName}，ID: ${newConfigId}`);
+        console.log(`Configuração criada ${configName}，ID: ${newConfigId}`);
 
         return newConfigId;
       } catch (err) {
-        console.error("创建新配置文件失败:", err);
+        console.error("Falha ao criar a configuração:", err);
         const errorMessage = err.response?.data?.message || err.message;
         throw new Error(
           this.tm("messages.createConfigFailed", { message: errorMessage }),
@@ -1639,7 +1653,7 @@ export default {
           });
         }
       } catch (err) {
-        console.error("获取平台路由配置失败:", err);
+        console.error("Falha ao obter as rotas da plataforma:", err);
         this.platformRoutes = [];
       }
     },
@@ -1662,7 +1676,7 @@ export default {
           this.mergeKnownRouteUmoInfos(res.data.data?.umo_infos || []);
         }
       } catch (err) {
-        console.error("获取已有消息来源失败:", err);
+        console.error("Falha ao obter as origens de mensagens existentes:", err);
       } finally {
         this.loadingKnownRouteUmos = false;
       }
@@ -1845,7 +1859,7 @@ export default {
           routing: fullRoutingTable,
         });
       } catch (err) {
-        console.error("保存路由表失败:", err);
+        console.error("Falha ao salvar a tabela de rotas:", err);
         const errorMessage = err.response?.data?.message || err.message;
         throw new Error(
           this.tm("messages.routingSaveFailed", { message: errorMessage }),

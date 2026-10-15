@@ -125,7 +125,7 @@ onMounted(async () => {
     })
     .catch((error) => {
       if (import.meta.env.DEV) {
-        console.warn('Failed to load public versions:', error);
+        console.warn("Falha ao carregar as versões públicas:", error);
       }
     });
 

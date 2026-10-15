@@ -146,7 +146,7 @@ async def test_create_kb_accepts_legacy_name_field():
         }
     )
 
-    assert message == "创建知识库成功"
+    assert message == "Base de conhecimento criada"
     assert result == {"kb_id": "kb-1", "kb_name": "From Name"}
     kb_manager.create_kb.assert_awaited_once_with(
         kb_name="From Name",
@@ -244,7 +244,10 @@ async def test_create_kb_raises_when_kb_name_is_missing():
     kb_manager = MagicMock()
     service = make_service(kb_manager)
 
-    with pytest.raises(KnowledgeBaseServiceError, match="知识库名称不能为空"):
+    with pytest.raises(
+        KnowledgeBaseServiceError,
+        match="O nome da base de conhecimento não pode ficar vazio",
+    ):
         await service.create_kb({"embedding_provider_id": "embedding-1"})
 
 
@@ -254,7 +257,7 @@ async def test_create_kb_raises_when_embedding_provider_is_missing():
     service = make_service(kb_manager)
 
     with pytest.raises(
-        KnowledgeBaseServiceError, match="缺少参数 embedding_provider_id"
+        KnowledgeBaseServiceError, match="Parâmetro embedding_provider_id ausente"
     ):
         await service.create_kb({"kb_name": "Test KB"})
 
@@ -265,7 +268,10 @@ async def test_create_kb_raises_when_embedding_provider_is_invalid():
     kb_manager.provider_manager.get_provider_by_id = AsyncMock(return_value=None)
     service = make_service(kb_manager)
 
-    with pytest.raises(KnowledgeBaseServiceError, match="嵌入模型不存在或类型错误"):
+    with pytest.raises(
+        KnowledgeBaseServiceError,
+        match="Modelo de embeddings ausente ou de tipo inválido",
+    ):
         await service.create_kb(
             {"kb_name": "Test KB", "embedding_provider_id": "missing-provider"}
         )

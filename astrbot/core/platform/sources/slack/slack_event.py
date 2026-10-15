@@ -48,7 +48,7 @@ class SlackMessageEvent(AstrMessageEvent):
                 return {
                     "type": "image",
                     "image_url": url,
-                    "alt_text": "图片",
+                    "alt_text": "Imagem",
                 }
             path = await segment.convert_to_file_path()
             response = await web_client.files_upload_v2(
@@ -59,7 +59,7 @@ class SlackMessageEvent(AstrMessageEvent):
                 logger.error(f"Slack file upload failed: {response['error']}")
                 return {
                     "type": "section",
-                    "text": {"type": "mrkdwn", "text": "图片上传失败"},
+                    "text": {"type": "mrkdwn", "text": "Falha ao enviar a imagem"},
                 }
             image_url = cast(list, response["files"])[0]["url_private"]
             logger.debug(f"Slack file upload response: {response}")
@@ -68,7 +68,7 @@ class SlackMessageEvent(AstrMessageEvent):
                 "slack_file": {
                     "url": image_url,
                 },
-                "alt_text": "图片",
+                "alt_text": "Imagem",
             }
         if isinstance(segment, File):
             source = segment.url
@@ -100,14 +100,14 @@ class SlackMessageEvent(AstrMessageEvent):
                 logger.error(f"Slack file upload failed: {response['error']}")
                 return {
                     "type": "section",
-                    "text": {"type": "mrkdwn", "text": "文件上传失败"},
+                    "text": {"type": "mrkdwn", "text": "Falha ao enviar o arquivo"},
                 }
             file_url = cast(list, response["files"])[0]["permalink"]
             return {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"文件: <{file_url}|{segment.name or '文件'}>",
+                    "text": f"Arquivo: <{file_url}|{segment.name or 'Arquivo'}>",
                 },
             }
 
@@ -247,9 +247,9 @@ class SlackMessageEvent(AstrMessageEvent):
                     elif isinstance(segment, At):
                         parts.append(f"<@{segment.qq}>")
                     elif isinstance(segment, File):
-                        parts.append(f" [文件: {segment.name}] ")
+                        parts.append(f" [Arquivo: {segment.name}] ")
                     elif isinstance(segment, Image):
-                        parts.append(" [图片] ")
+                        parts.append(" [Imagem] ")
                     elif (
                         isinstance(segment, Record) and segment.text not in plain_texts
                     ):

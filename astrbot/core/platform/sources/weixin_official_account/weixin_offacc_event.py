@@ -105,9 +105,13 @@ class WeixinOfficialAccountPlatformEvent(AstrMessageEvent):
                     try:
                         response = self.client.media.upload("image", f)
                     except Exception as e:
-                        logger.error(f"微信公众平台上传图片失败: {e}")
+                        logger.error(
+                            f"Falha ao enviar imagem à plataforma oficial do WeChat: {e}"
+                        )
                         await self.send(
-                            MessageChain().message(f"微信公众平台上传图片失败: {e}"),
+                            MessageChain().message(
+                                f"Falha ao enviar imagem à plataforma oficial do WeChat: {e}"
+                            ),
                         )
                         return
                     logger.debug(f"微信公众平台上传图片返回: {response}")
@@ -136,10 +140,12 @@ class WeixinOfficialAccountPlatformEvent(AstrMessageEvent):
                         try:
                             response = self.client.media.upload("voice", f)
                         except Exception as e:
-                            logger.error(f"微信公众平台上传语音失败: {e}")
+                            logger.error(
+                                f"Falha ao enviar áudio à plataforma oficial do WeChat: {e}"
+                            )
                             await self.send(
                                 MessageChain().message(
-                                    f"微信公众平台上传语音失败: {e}"
+                                    f"Falha ao enviar áudio à plataforma oficial do WeChat: {e}"
                                 ),
                             )
                             return

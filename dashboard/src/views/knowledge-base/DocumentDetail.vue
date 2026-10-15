@@ -135,7 +135,7 @@
 
             <template #item.char_count="{ item }">
               <v-chip size="small" variant="outlined">
-                {{ item.char_count }} 字符
+                {{ item.char_count }} caracteres
               </v-chip>
             </template>
 
@@ -216,7 +216,7 @@
                 <v-icon>mdi-text</v-icon>
               </template>
               <v-list-item-title>{{ t('view.charCount') }}</v-list-item-title>
-              <v-list-item-subtitle>{{ selectedChunk?.char_count || 0 }} 字符</v-list-item-subtitle>
+              <v-list-item-subtitle>{{ selectedChunk?.char_count || 0 }} caracteres</v-list-item-subtitle>
             </v-list-item>
 
             <v-list-item>
@@ -324,7 +324,7 @@ const loadDocument = async () => {
       showSnackbar(response.data.message || t('states.loadError'), 'error')
     }
   } catch (error) {
-    console.error('Failed to load document:', error)
+    console.error("Falha ao carregar o documento:", error)
     loadError.value = true
     showSnackbar(t('states.loadError'), 'error')
   } finally {
@@ -351,7 +351,7 @@ const loadChunks = async () => {
       showSnackbar(response.data.message || t('states.chunksLoadError'), 'error')
     }
   } catch (error) {
-    console.error('Failed to load chunks:', error)
+    console.error("Falha ao carregar os blocos:", error)
     chunksLoadError.value = true
     showSnackbar(t('states.chunksLoadError'), 'error')
   } finally {
@@ -389,7 +389,7 @@ const deleteChunk = async (chunk: any) => {
       showSnackbar(t('chunks.deleteFailed'), 'error')
     }
   } catch (error) {
-    console.error('Failed to delete chunk:', error)
+    console.error("Falha ao excluir o bloco:", error)
     showSnackbar(t('chunks.deleteFailed'), 'error')
   }
 }

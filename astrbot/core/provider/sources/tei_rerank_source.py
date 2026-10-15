@@ -9,7 +9,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "tei_rerank",
-    "HuggingFace TEI Rerank 适配器",
+    "Adaptador de reclassificação HuggingFace TEI",
     provider_type=ProviderType.RERANK,
 )
 class TEIRerankProvider(RerankProvider):

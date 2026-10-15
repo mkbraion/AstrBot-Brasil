@@ -1390,7 +1390,7 @@ export const pluginApi = {
     const data = await response.json();
     if (!response.ok) {
       throw new Error(
-        data?.message || `Plugin upload failed (${response.status})`,
+        data?.message || `Falha ao enviar o plugin (${response.status})`,
       );
     }
     return { data } as AxiosResponse<ApiEnvelope<OpenConfig>>;

@@ -23,12 +23,14 @@ class SubAgentService:
             return self._normalize_config(config_data)
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise SubAgentServiceError(f"获取 subagent 配置失败: {exc!s}") from exc
+            raise SubAgentServiceError(
+                f"Falha ao obter a configuração dos subagentes: {exc!s}"
+            ) from exc
 
     async def update_config(self, data: object) -> None:
         try:
             if not isinstance(data, dict):
-                raise SubAgentServiceError("配置必须为 JSON 对象")
+                raise SubAgentServiceError("A configuração deve ser um objeto JSON")
 
             config = self.core_lifecycle.astrbot_config
             config["subagent_orchestrator"] = data
@@ -41,7 +43,9 @@ class SubAgentService:
             raise
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise SubAgentServiceError(f"保存 subagent 配置失败: {exc!s}") from exc
+            raise SubAgentServiceError(
+                f"Falha ao salvar a configuração dos subagentes: {exc!s}"
+            ) from exc
 
     def get_available_tools(self) -> list[dict]:
         try:
@@ -62,7 +66,9 @@ class SubAgentService:
             return tools
         except Exception as exc:
             logger.error(traceback.format_exc())
-            raise SubAgentServiceError(f"获取可用工具失败: {exc!s}") from exc
+            raise SubAgentServiceError(
+                f"Falha ao obter as ferramentas disponíveis: {exc!s}"
+            ) from exc
 
     @staticmethod
     def _normalize_config(data: object) -> dict:

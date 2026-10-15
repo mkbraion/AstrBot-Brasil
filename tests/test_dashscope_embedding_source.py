@@ -47,7 +47,7 @@ def _patch_sdk(monkeypatch, *, text=None, multimodal=None):
 
 
 def test_requires_api_key():
-    with pytest.raises(ValueError, match="API Key"):
+    with pytest.raises(ValueError, match="A chave de API de embeddings"):
         DashScopeEmbeddingProvider({"embedding_api_key": ""}, {})
 
 

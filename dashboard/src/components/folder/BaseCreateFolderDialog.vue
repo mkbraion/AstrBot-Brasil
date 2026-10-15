@@ -42,12 +42,12 @@ interface DefaultLabels {
 }
 
 const defaultLabels: DefaultLabels = {
-    title: '创建文件夹',
-    nameLabel: '名称',
-    descriptionLabel: '描述',
-    nameRequired: '请输入文件夹名称',
-    cancelButton: '取消',
-    createButton: '创建'
+    title: 'Criar pasta',
+    nameLabel: 'Nome',
+    descriptionLabel: 'Descrição',
+    nameRequired: 'Informe o nome da pasta',
+    cancelButton: 'Cancelar',
+    createButton: 'Criar'
 };
 
 export default defineComponent({

@@ -28,7 +28,7 @@ def register_platform_adapter(
     def decorator(cls):
         if adapter_name in platform_cls_map:
             raise ValueError(
-                f"平台适配器 {adapter_name} 已经注册过了，可能发生了适配器命名冲突。",
+                f"O adaptador de plataforma {adapter_name} já foi registrado. Pode haver um conflito de nomes de adaptadores.",
             )
 
         # 添加必备选项
@@ -86,6 +86,8 @@ def unregister_platform_adapters_by_module(module_path_prefix: str) -> list[str]
         platform_registry.remove(pm)
         if pm.name in platform_cls_map:
             del platform_cls_map[pm.name]
-        logger.debug(f"平台适配器 {pm.name} 已注销 (来自模块 {pm.module_path})")
+        logger.debug(
+            f"O adaptador de plataforma {pm.name} 已注销 (来自模块 {pm.module_path})"
+        )
 
     return unregistered

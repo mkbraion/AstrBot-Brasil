@@ -16,7 +16,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "xinference_rerank",
-    "Xinference Rerank 适配器",
+    "Adaptador de reclassificação Xinference",
     provider_type=ProviderType.RERANK,
 )
 class XinferenceRerankProvider(RerankProvider):

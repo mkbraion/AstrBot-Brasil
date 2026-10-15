@@ -60,8 +60,8 @@ def _record_tool_call_name(
 
 def _build_tool_call_status_message(tool_info: dict | None) -> str:
     if tool_info:
-        return f"🔨 调用工具: {tool_info.get('name', 'unknown')}"
-    return "🔨 调用工具..."
+        return f"🔨 Chamando ferramenta: {tool_info.get('name', 'unknown')}"
+    return "🔨 Chamando ferramenta..."
 
 
 def _build_tool_result_status_message(
@@ -81,9 +81,9 @@ def _build_tool_result_status_message(
         tool_result = msg_chain.get_plain_text(with_other_comps_mark=True)
     tool_result = _truncate_tool_result(tool_result, 70)
 
-    status_msg = f"🔨 调用工具: {tool_name}"
+    status_msg = f"🔨 Chamando ferramenta: {tool_name}"
     if tool_result:
-        status_msg = f"{status_msg}\n📎 返回结果: {tool_result}"
+        status_msg = f"{status_msg}\n📎 Resultado: {tool_result}"
     return status_msg
 
 

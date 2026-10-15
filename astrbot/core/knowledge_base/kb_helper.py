@@ -152,13 +152,15 @@ class KBHelper:
 
     async def get_ep(self) -> EmbeddingProvider:
         if not self.kb.embedding_provider_id:
-            raise ValueError(f"知识库 {self.kb.kb_name} 未配置 Embedding Provider")
+            raise ValueError(
+                f"A base de conhecimento {self.kb.kb_name} não tem um provedor de embeddings configurado"
+            )
         ep: EmbeddingProvider = await self.prov_mgr.get_provider_by_id(
             self.kb.embedding_provider_id,
         )  # type: ignore
         if not ep:
             raise ValueError(
-                f"无法找到 ID 为 {self.kb.embedding_provider_id} 的 Embedding Provider",
+                f"Não foi possível encontrar o provedor com ID {self.kb.embedding_provider_id} de embeddings",
             )
         return ep
 
@@ -170,14 +172,16 @@ class KBHelper:
         )  # type: ignore
         if not rp:
             logger.warning(
-                f"知识库 {self.kb.kb_name}({self.kb.kb_id}) 的 Rerank Provider({self.kb.rerank_provider_id}) 不可用，将跳过重排序。",
+                f"A base de conhecimento {self.kb.kb_name}({self.kb.kb_id}) 的 Rerank Provider({self.kb.rerank_provider_id}) 不可用，将跳过重排序。",
             )
             return None
         return rp
 
     async def _ensure_vec_db(self) -> "FaissVecDB":
         if not self.kb.embedding_provider_id:
-            raise ValueError(f"知识库 {self.kb.kb_name} 未配置 Embedding Provider")
+            raise ValueError(
+                f"A base de conhecimento {self.kb.kb_name} não tem um provedor de embeddings configurado"
+            )
 
         ep = await self.get_ep()
         rp: RerankProvider | None = None
@@ -185,7 +189,7 @@ class KBHelper:
             rp = await self.get_rp()
         except Exception as e:
             logger.warning(
-                f"知识库 {self.kb.kb_name}({self.kb.kb_id}) 初始化重排序能力失败，将跳过重排序: {e}",
+                f"A base de conhecimento {self.kb.kb_name}({self.kb.kb_id}) 初始化重排序能力失败，将跳过重排序: {e}",
             )
 
         from astrbot.core.db.vec_db.faiss_impl.vec_db import FaissVecDB
@@ -274,7 +278,7 @@ class KBHelper:
                 # 否则，执行标准的文件解析和分块流程
                 if file_content is None:
                     raise ValueError(
-                        "当未提供 pre_chunked_text 时，file_content 不能为空。"
+                        "file_content não pode ficar vazio quando pre_chunked_text não é informado."
                     )
 
                 file_size = len(file_content)
@@ -292,8 +296,7 @@ class KBHelper:
                     raise KnowledgeBaseUploadError(
                         stage="parsing",
                         user_message=(
-                            "文档解析失败：无法读取或解析上传文件。"
-                            "请确认文件格式受支持且文件内容未损坏。"
+                            "Falha ao interpretar o documento: não foi possível ler o arquivo enviado. Verifique se o formato é compatível e se o conteúdo está íntegro."
                         ),
                         details={"file_name": file_name},
                     ) from exc
@@ -303,8 +306,7 @@ class KBHelper:
                     raise KnowledgeBaseUploadError(
                         stage="parsing",
                         user_message=(
-                            "文档解析失败：未能从文件中提取可索引文本。"
-                            "该文件可能是扫描件、纯图片 PDF，或格式暂不受支持。"
+                            "Falha ao interpretar o documento: nenhum texto indexável foi extraído. O arquivo pode ser uma digitalização, um PDF só com imagens ou um formato incompatível."
                         ),
                         details={"file_name": file_name},
                     )
@@ -365,8 +367,7 @@ class KBHelper:
                     raise KnowledgeBaseUploadError(
                         stage="chunking",
                         user_message=(
-                            "分块失败：文档内容在切分文本块时发生错误。"
-                            "请稍后重试，或调整分块参数后再次上传。"
+                            "Falha ao dividir em blocos. Tente novamente mais tarde ou ajuste os parâmetros de divisão e reenvie o documento."
                         ),
                         details={"file_name": file_name},
                     ) from exc
@@ -375,14 +376,16 @@ class KBHelper:
                 if pre_chunked_text is not None:
                     raise KnowledgeBaseUploadError(
                         stage="validation",
-                        user_message=("预分块文本为空，未提供任何可索引文本块。"),
+                        user_message=(
+                            "O texto pré-dividido está vazio. Nenhum bloco indexável fornecido."
+                        ),
                         details={"file_name": file_name},
                     )
                 else:
                     raise KnowledgeBaseUploadError(
                         stage="chunking",
                         user_message=(
-                            "分块失败：文档内容为空，未生成任何可索引文本块。"
+                            "Falha ao dividir em blocos: o documento está vazio e nenhum bloco indexável foi gerado."
                         ),
                         details={"file_name": file_name},
                     )
@@ -428,7 +431,9 @@ class KBHelper:
             except Exception as exc:
                 raise KnowledgeBaseUploadError(
                     stage="storage",
-                    user_message=("存储失败：文本块已生成，但写入知识库索引时出错。"),
+                    user_message=(
+                        "Falha ao armazenar: os blocos foram gerados, mas ocorreu um erro ao gravar o índice da base de conhecimento."
+                    ),
                     details={
                         "file_name": file_name,
                         "doc_id": doc_id,
@@ -466,14 +471,14 @@ class KBHelper:
                     raise KnowledgeBaseUploadError(
                         stage="metadata",
                         user_message=(
-                            "元数据更新失败：文档已上传，但文档记录刷新失败。"
+                            "Falha ao atualizar metadados: o documento foi enviado, mas seu registro não foi atualizado."
                         ),
                         details={"file_name": file_name, "doc_id": doc_id},
                     ) from exc
                 raise KnowledgeBaseUploadError(
                     stage="metadata",
                     user_message=(
-                        "元数据保存失败：文本块已写入知识库，但文档记录保存失败。"
+                        "Falha ao salvar metadados: os blocos foram gravados, mas o registro do documento não foi salvo."
                     ),
                     details={"file_name": file_name, "doc_id": doc_id},
                 ) from exc
@@ -489,7 +494,7 @@ class KBHelper:
                 raise KnowledgeBaseUploadError(
                     stage="metadata",
                     user_message=(
-                        "元数据更新失败：文档已上传，但知识库统计信息刷新失败。"
+                        "Falha ao atualizar metadados: o documento foi enviado, mas as estatísticas da base de conhecimento não foram atualizadas."
                     ),
                     details={"file_name": file_name, "doc_id": doc_id},
                 ) from exc
@@ -650,7 +655,9 @@ class KBHelper:
         """更新文档的元数据"""
         doc = await self.get_document(doc_id)
         if not doc:
-            raise ValueError(f"无法找到 ID 为 {doc_id} 的文档")
+            raise ValueError(
+                f"Não foi possível encontrar o provedor com ID {doc_id}: documentos"
+            )
         chunk_count = await self.get_chunk_count_by_doc_id(doc_id)
         doc.chunk_count = chunk_count
         async with self.kb_db.get_db() as session:
@@ -793,7 +800,7 @@ class KBHelper:
 
         if enable_cleaning and not final_chunks:
             raise ValueError(
-                "内容清洗后未提取到有效文本。请尝试关闭内容清洗功能，或更换更高性能的LLM模型后重试。"
+                "Nenhum texto válido extraído após a limpeza. Tente desativar a limpeza de conteúdo ou usar um modelo mais capaz."
             )
 
         # 创建一个虚拟文件名
@@ -832,7 +839,7 @@ class KBHelper:
         if not enable_cleaning:
             # 如果不启用清洗，则使用从前端传递的参数进行分块
             logger.info(
-                f"内容清洗未启用，使用指定参数进行分块: chunk_size={chunk_size}, chunk_overlap={chunk_overlap}"
+                f"Conteúdo清洗未启用，使用指定参数进行分块: chunk_size={chunk_size}, chunk_overlap={chunk_overlap}"
             )
             return await self.chunker.chunk(
                 content, chunk_size=chunk_size, chunk_overlap=chunk_overlap
@@ -852,7 +859,7 @@ class KBHelper:
             llm_provider = await self.prov_mgr.get_provider_by_id(cleaning_provider_id)
             if not llm_provider or not isinstance(llm_provider, LLMProvider):
                 raise ValueError(
-                    f"无法找到 ID 为 {cleaning_provider_id} 的 LLM Provider 或类型不正确"
+                    f"Não foi possível encontrar o provedor com ID {cleaning_provider_id} de modelo de linguagem, ou o tipo está incorreto"
                 )
 
             # 初步分块
@@ -896,6 +903,8 @@ class KBHelper:
             return final_chunks
 
         except Exception as e:
-            logger.error(f"使用 Provider '{cleaning_provider_id}' 清洗内容失败: {e}")
+            logger.error(
+                f"使用 Provider '{cleaning_provider_id}' 清洗Conteúdo失败: {e}"
+            )
             # 清洗失败，返回默认分块结果，保证流程不中断
             return await self.chunker.chunk(content)

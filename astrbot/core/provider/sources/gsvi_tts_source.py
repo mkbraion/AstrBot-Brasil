@@ -57,7 +57,7 @@ class ProviderGSVITTS(TTSProvider):
                     msg = resp_json.get("msg")
                     audio_url = resp_json.get("audio_url")
                     if not msg or msg != "合成成功":
-                        raise Exception(f"GSVI TTS API 合成失败: {msg}")
+                        raise Exception(f"Falha na síntese da API TTS do GSVI: {msg}")
                     async with session.get(audio_url) as audio_response:
                         if audio_response.status == 200:
                             with open(path, "wb") as f:
@@ -65,12 +65,12 @@ class ProviderGSVITTS(TTSProvider):
                         else:
                             error_text = await audio_response.text()
                             raise Exception(
-                                f"GSVI TTS API 下载音频失败，状态码: {audio_response.status}，错误: {error_text}",
+                                f"Falha ao baixar o áudio da API TTS do GSVI. Código de status: {audio_response.status}; erro: {error_text}",
                             )
                 else:
                     error_text = await response.text()
                     raise Exception(
-                        f"GSVI TTS API 请求失败，状态码: {response.status}，错误: {error_text}",
+                        f"Falha na requisição à API TTS do GSVI. Código de status: {response.status}; erro: {error_text}",
                     )
 
         return str(path)

@@ -1,13 +1,173 @@
 {
-  "header":{"eyebrow":"Automação","live":"Sincronização ao vivo"},
-  "page":{"title":"Gerenciamento de tarefas futuras","beta":"Experimental","subtitle":"O AstrBot executa a tarefa no horário agendado e envia o resultado para a conversa de destino.","proactive":{"link":"Plataformas compatíveis","supported":"O envio proativo está disponível somente nas plataformas configuradas abaixo","unsupported":"Nenhuma plataforma com mensagens proativas está ativada. Ative uma em Plataformas."}},
-  "actions":{"create":"Nova tarefa","edit":"Editar","refresh":"Atualizar","delete":"Excluir","cancel":"Cancelar","close":"Fechar","more":"Mais ações","runNow":"Executar agora","save":"Salvar","submit":"Criar"},
-  "platformDialog":{"title":"Plataformas compatíveis","description":"Somente as plataformas listadas oferecem envio proativo. O AstrBot só consegue devolver resultados de tarefas para conversas nesses canais."},
-  "card":{"onceAt":"Única · {time}","runAt":"Executar em: {time}","nextRun":"Próxima execução: {time}","dailyAt":"Diariamente às {time}","weeklyAt":"Toda {day} às {time}","monthlyAt":"Todo dia {day} do mês às {time}","everyMinutes":"A cada {count} minutos","everyHours":"A cada {count} horas","everyDays":"A cada {count} dias","customCron":"Personalizado · {cron}","noDeliveryTarget":"Sem destino de entrega"},
-  "filters":{"search":"Pesquisar título e conteúdo","umo":"Filtrar por destino","noUmos":"Nenhum UMO","noDeliveryTarget":"Sem destino de entrega","noMatches":"Nenhuma tarefa encontrada."},
-  "overview":{"totalTasks":"Total de tarefas","totalTasksNote":"Tarefas futuras cadastradas","enabledTasks":"Tarefas ativas","enabledTasksNote":"Prontas para executar","oneOffTasks":"Tarefas únicas","recurringTasksNote":"{count} tarefas recorrentes","proactivePlatforms":"Plataformas proativas","proactivePlatformsNote":"Plataformas capazes de entregar resultados automaticamente"},
-  "section":{"registered":{"title":"Lista de tarefas","subtitle":"Consulte tarefas, horários e estado atual"},"delivery":{"title":"Status de entrega","subtitle":"Após a execução, os resultados são enviados pelas plataformas compatíveis","support":"Entrega proativa","available":"Disponível","unavailable":"Indisponível","enabledPlatforms":"Plataformas ativas"},"quickCreate":{"title":"Criação rápida","runMode":"Modo da tarefa","target":"Destino"},"platforms":{"title":"Plataformas compatíveis"}},
-  "table":{"title":"Tarefas cadastradas","subtitle":"Acompanhe agendamento, destino, última execução e estado","empty":"Nenhuma tarefa cadastrada.","headers":{"name":"Nome","type":"Tipo","cron":"Cron","session":"ID da sessão","nextRun":"Próxima execução","lastRun":"Última execução","note":"Observação","actions":"Ações"},"type":{"once":"Única","recurring":"Recorrente","activeAgent":"Agente ativo","workflow":"Workflow","unknown":"{type}"},"timezoneLocal":"local","notAvailable":"—"},
-  "form":{"title":"Nova tarefa","editTitle":"Editar tarefa","chatHint":"Você também pode pedir ao AstrBot pelo chat para criar tarefas futuras.","runOnce":"Tarefa única","name":"Nome da tarefa *","note":"O que deve ser feito *","scheduleMode":"Horário de execução *","scheduleModes":{"once":"Única","interval":"Intervalo","daily":"Diária","weekly":"Semanal","monthly":"Mensal","cron":"Cron personalizado"},"intervalEvery":"A cada *","intervalUnit":"Unidade *","intervalUnits":{"minutes":"Minutos","hours":"Horas","days":"Dias"},"dailyTime":"Horário *","weeklyDay":"Dia da semana *","weeklyTime":"Horário *","monthlyDay":"Dia do mês *","monthlyTime":"Horário *","weekdays":{"sunday":"Domingo","monday":"Segunda-feira","tuesday":"Terça-feira","wednesday":"Quarta-feira","thursday":"Quinta-feira","friday":"Sexta-feira","saturday":"Sábado"},"cron":"Expressão Cron *","cronPlaceholder":"0 9 * * *","runAt":"Executar em *","session":"Entregar para","noUmos":"Nenhuma sessão disponível","timezone":"Fuso horário (opcional, ex.: America/Sao_Paulo)","enabled":"Ativada"},
-  "messages":{"loadFailed":"Falha ao carregar tarefas","updateSuccess":"Atualizada com sucesso","updateFailed":"Falha ao atualizar","deleteSuccess":"Excluída","deleteFailed":"Falha ao excluir","nameRequired":"Informe o nome da tarefa","sessionRequired":"Informe o destino de entrega","noteRequired":"Informe o que a tarefa deve fazer","cronRequired":"Informe a expressão Cron","runAtRequired":"Selecione o horário de execução","intervalRequired":"Informe um intervalo válido","dailyTimeRequired":"Selecione o horário diário","weeklyTimeRequired":"Selecione o dia e horário semanal","monthlyTimeRequired":"Selecione o dia e horário mensal","createSuccess":"Criada com sucesso","createFailed":"Falha ao criar","runStarted":"Execução iniciada","runFailed":"Falha ao executar"}
+  "header": {
+    "eyebrow": "Automação",
+    "live": "Sincronização ao vivo"
+  },
+  "page": {
+    "title": "Gerenciamento de tarefas futuras",
+    "beta": "Experimental",
+    "subtitle": "O AstrBot executa a tarefa no horário agendado e envia o resultado para a conversa de destino.",
+    "proactive": {
+      "link": "Plataformas compatíveis",
+      "supported": "O envio proativo está disponível somente nas plataformas configuradas abaixo",
+      "unsupported": "Nenhuma plataforma com mensagens proativas está ativada. Ative uma em Plataformas."
+    }
+  },
+  "actions": {
+    "create": "Nova tarefa",
+    "edit": "Editar",
+    "refresh": "Atualizar",
+    "delete": "Excluir",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "more": "Mais ações",
+    "runNow": "Executar agora",
+    "save": "Salvar",
+    "submit": "Criar"
+  },
+  "platformDialog": {
+    "title": "Plataformas compatíveis",
+    "description": "Somente as plataformas listadas oferecem envio proativo. O AstrBot só consegue devolver resultados de tarefas para conversas nesses canais."
+  },
+  "card": {
+    "onceAt": "Única · {time}",
+    "runAt": "Executar em: {time}",
+    "nextRun": "Próxima execução: {time}",
+    "dailyAt": "Diariamente às {time}",
+    "weeklyAt": "Toda {day} às {time}",
+    "monthlyAt": "Todo dia {day} do mês às {time}",
+    "everyMinutes": "A cada {count} minutos",
+    "everyHours": "A cada {count} horas",
+    "everyDays": "A cada {count} dias",
+    "customCron": "Personalizado · {cron}",
+    "noDeliveryTarget": "Sem destino de entrega"
+  },
+  "filters": {
+    "search": "Pesquisar título e conteúdo",
+    "umo": "Filtrar por destino",
+    "noUmos": "Nenhum UMO",
+    "noDeliveryTarget": "Sem destino de entrega",
+    "noMatches": "Nenhuma tarefa encontrada."
+  },
+  "overview": {
+    "totalTasks": "Total de tarefas",
+    "totalTasksNote": "Tarefas futuras cadastradas",
+    "enabledTasks": "Tarefas ativas",
+    "enabledTasksNote": "Prontas para executar",
+    "oneOffTasks": "Tarefas únicas",
+    "recurringTasksNote": "{count} tarefas recorrentes",
+    "proactivePlatforms": "Plataformas proativas",
+    "proactivePlatformsNote": "Plataformas capazes de entregar resultados automaticamente"
+  },
+  "section": {
+    "registered": {
+      "title": "Lista de tarefas",
+      "subtitle": "Consulte tarefas, horários e estado atual"
+    },
+    "delivery": {
+      "title": "Status de entrega",
+      "subtitle": "Após a execução, os resultados são enviados pelas plataformas compatíveis",
+      "support": "Entrega proativa",
+      "available": "Disponível",
+      "unavailable": "Indisponível",
+      "enabledPlatforms": "Plataformas ativas"
+    },
+    "quickCreate": {
+      "title": "Criação rápida",
+      "runMode": "Modo da tarefa",
+      "target": "Destino"
+    },
+    "platforms": {
+      "title": "Plataformas compatíveis"
+    }
+  },
+  "table": {
+    "title": "Tarefas cadastradas",
+    "subtitle": "Acompanhe agendamento, destino, última execução e estado",
+    "empty": "Nenhuma tarefa cadastrada.",
+    "headers": {
+      "name": "Nome",
+      "type": "Tipo",
+      "cron": "Cron",
+      "session": "ID da sessão",
+      "nextRun": "Próxima execução",
+      "lastRun": "Última execução",
+      "note": "Observação",
+      "actions": "Ações"
+    },
+    "type": {
+      "once": "Única",
+      "recurring": "Recorrente",
+      "activeAgent": "Agente ativo",
+      "workflow": "Fluxo de trabalho",
+      "unknown": "{type}"
+    },
+    "timezoneLocal": "local",
+    "notAvailable": "—"
+  },
+  "form": {
+    "title": "Nova tarefa",
+    "editTitle": "Editar tarefa",
+    "chatHint": "Você também pode pedir ao AstrBot pelo chat para criar tarefas futuras.",
+    "runOnce": "Tarefa única",
+    "name": "Nome da tarefa *",
+    "note": "O que deve ser feito *",
+    "scheduleMode": "Horário de execução *",
+    "scheduleModes": {
+      "once": "Única",
+      "interval": "Intervalo",
+      "daily": "Diária",
+      "weekly": "Semanal",
+      "monthly": "Mensal",
+      "cron": "Cron personalizado"
+    },
+    "intervalEvery": "A cada *",
+    "intervalUnit": "Unidade *",
+    "intervalUnits": {
+      "minutes": "Minutos",
+      "hours": "Horas",
+      "days": "Dias"
+    },
+    "dailyTime": "Horário *",
+    "weeklyDay": "Dia da semana *",
+    "weeklyTime": "Horário *",
+    "monthlyDay": "Dia do mês *",
+    "monthlyTime": "Horário *",
+    "weekdays": {
+      "sunday": "Domingo",
+      "monday": "Segunda-feira",
+      "tuesday": "Terça-feira",
+      "wednesday": "Quarta-feira",
+      "thursday": "Quinta-feira",
+      "friday": "Sexta-feira",
+      "saturday": "Sábado"
+    },
+    "cron": "Expressão Cron *",
+    "cronPlaceholder": "0 9 * * *",
+    "runAt": "Executar em *",
+    "session": "Entregar para",
+    "noUmos": "Nenhuma sessão disponível",
+    "timezone": "Fuso horário (opcional, ex.: America/Sao_Paulo)",
+    "enabled": "Ativada"
+  },
+  "messages": {
+    "loadFailed": "Falha ao carregar tarefas",
+    "updateSuccess": "Atualizada com sucesso",
+    "updateFailed": "Falha ao atualizar",
+    "deleteSuccess": "Excluída",
+    "deleteFailed": "Falha ao excluir",
+    "nameRequired": "Informe o nome da tarefa",
+    "sessionRequired": "Informe o destino de entrega",
+    "noteRequired": "Informe o que a tarefa deve fazer",
+    "cronRequired": "Informe a expressão Cron",
+    "runAtRequired": "Selecione o horário de execução",
+    "intervalRequired": "Informe um intervalo válido",
+    "dailyTimeRequired": "Selecione o horário diário",
+    "weeklyTimeRequired": "Selecione o dia e horário semanal",
+    "monthlyTimeRequired": "Selecione o dia e horário mensal",
+    "createSuccess": "Criada com sucesso",
+    "createFailed": "Falha ao criar",
+    "runStarted": "Execução iniciada",
+    "runFailed": "Falha ao executar"
+  }
 }

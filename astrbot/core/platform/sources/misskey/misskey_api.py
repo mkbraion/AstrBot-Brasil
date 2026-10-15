@@ -79,7 +79,7 @@ class StreamingClient:
                             await self.subscribe_channel(channel_type, params)
                         except Exception as e:
                             logger.warning(
-                                f"[Misskey WebSocket] 重新订阅 {channel_type} 失败: {e}",
+                                f"[Misskey WebSocket] 重新订阅 {channel_type}: {e}",
                             )
                 except Exception:
                     pass
@@ -104,7 +104,7 @@ class StreamingClient:
         params: dict | None = None,
     ) -> str:
         if not self.is_connected or not self.websocket:
-            raise WebSocketError("WebSocket 未连接")
+            raise WebSocketError("WebSocket desconectado")
 
         channel_id = str(uuid.uuid4())
         message = {
@@ -141,7 +141,7 @@ class StreamingClient:
 
     async def listen(self) -> None:
         if not self.is_connected or not self.websocket:
-            raise WebSocketError("WebSocket 未连接")
+            raise WebSocketError("WebSocket desconectado")
 
         try:
             async for message in self.websocket:
@@ -194,7 +194,7 @@ class StreamingClient:
         def _build_channel_summary(message_type: str | None, body: Any) -> str:
             try:
                 if not isinstance(body, dict):
-                    return f"[Misskey WebSocket] 收到消息类型: {message_type}"
+                    return f"[WebSocket do Misskey] Tipo de mensagem recebido: {message_type}"
 
                 inner = body.get("body") if isinstance(body.get("body"), dict) else body
                 note = (
@@ -211,12 +211,14 @@ class StreamingClient:
                 user = note.get("user", {}) if note else None
 
                 return (
-                    f"[Misskey WebSocket] 收到消息类型: {message_type} | "
+                    f"[WebSocket do Misskey] Tipo de mensagem recebido: {message_type} | "
                     f"note_id={note_id} | user={user.get('username') if user else None} | "
                     f"text={text[:80] if text else '[no-text]'} | files={has_files} | hidden={is_hidden}"
                 )
             except Exception:
-                return f"[Misskey WebSocket] 收到消息类型: {message_type}"
+                return (
+                    f"[WebSocket do Misskey] Tipo de mensagem recebido: {message_type}"
+                )
 
         channel_summary = _build_channel_summary(message_type, body)
         logger.info(channel_summary)
@@ -378,7 +380,9 @@ class MisskeyAPI:
     def _handle_response_status(self, status: int, endpoint: str) -> NoReturn:
         """处理 HTTP 响应状态码"""
         if status == 400:
-            logger.error(f"[Misskey API] 请求参数错误: {endpoint} (HTTP {status})")
+            logger.error(
+                f"[Misskey API] 请求Parâmetro inválido: {endpoint} (HTTP {status})"
+            )
             raise APIError(f"Bad request for {endpoint}")
         if status == 401:
             logger.error(f"[Misskey API] 未授权访问: {endpoint} (HTTP {status})")
@@ -407,7 +411,7 @@ class MisskeyAPI:
         if status == 504:
             logger.error(f"[Misskey API] 网关超时: {endpoint} (HTTP {status})")
             raise APIConnectionError(f"Gateway timeout for {endpoint}")
-        logger.error(f"[Misskey API] 未知错误: {endpoint} (HTTP {status})")
+        logger.error(f"[Misskey API] Erro desconhecido: {endpoint} (HTTP {status})")
         raise APIConnectionError(f"HTTP {status} for {endpoint}")
 
     async def _process_response(
@@ -441,7 +445,7 @@ class MisskeyAPI:
             try:
                 error_text = await response.text()
                 logger.error(
-                    f"[Misskey API] 请求失败: {endpoint} - HTTP {response.status}, 响应: {error_text}",
+                    f"[Misskey API] 请求失败: {endpoint} - HTTP {response.status}; resposta: {error_text}",
                 )
             except Exception:
                 logger.error(
@@ -557,7 +561,7 @@ class MisskeyAPI:
             try:
                 f = open(file_path, "rb")
             except FileNotFoundError as e:
-                logger.error(f"[Misskey API] 本地文件不存在: {file_path}")
+                logger.error(f"[Misskey API] 本地Arquivo não encontrado: {file_path}")
                 raise APIError(f"File not found: {file_path}") from e
 
             try:
@@ -566,13 +570,13 @@ class MisskeyAPI:
                     result = await self._process_response(resp, "drive/files/create")
                     file_id = FileIDExtractor.extract_file_id(result)
                     logger.debug(
-                        f"[Misskey API] 本地文件上传成功: {filename} -> {file_id}",
+                        f"[Misskey API] 本地Arquivo上传成功: {filename} -> {file_id}",
                     )
                     return {"id": file_id, "raw": result}
             finally:
                 f.close()
         except aiohttp.ClientError as e:
-            logger.error(f"[Misskey API] 文件上传网络错误: {e}")
+            logger.error(f"[Misskey API] Arquivo上传网络错误: {e}")
             raise APIConnectionError(f"Upload failed: {e}") from e
 
     async def find_files_by_hash(self, md5_hash: str) -> list[dict[str, Any]]:
@@ -586,11 +590,11 @@ class MisskeyAPI:
             logger.debug(f"[Misskey API] find-by-hash 请求: md5={md5_hash}")
             result = await self._make_request("drive/files/find-by-hash", data)
             logger.debug(
-                f"[Misskey API] find-by-hash 响应: 找到 {len(result) if isinstance(result, list) else 0} 个文件",
+                f"[Misskey API] find-by-hash 响应: 找到 {len(result) if isinstance(result, list) else 0} 个Arquivo",
             )
             return result if isinstance(result, list) else []
         except Exception as e:
-            logger.error(f"[Misskey API] 根据哈希查找文件失败: {e}")
+            logger.error(f"[Misskey API] 根据哈希查找Arquivo失败: {e}")
             raise
 
     async def find_files_by_name(
@@ -610,11 +614,11 @@ class MisskeyAPI:
             logger.debug(f"[Misskey API] find 请求: name={name}, folder_id={folder_id}")
             result = await self._make_request("drive/files/find", data)
             logger.debug(
-                f"[Misskey API] find 响应: 找到 {len(result) if isinstance(result, list) else 0} 个文件",
+                f"[Misskey API] find 响应: 找到 {len(result) if isinstance(result, list) else 0} 个Arquivo",
             )
             return result if isinstance(result, list) else []
         except Exception as e:
-            logger.error(f"[Misskey API] 根据名称查找文件失败: {e}")
+            logger.error(f"[Misskey API] 根据名称查找Arquivo失败: {e}")
             raise
 
     async def find_files(
@@ -632,15 +636,15 @@ class MisskeyAPI:
 
         try:
             logger.debug(
-                f"[Misskey API] 列表文件请求: limit={limit}, folder_id={folder_id}, type={type}",
+                f"[Misskey API] 列表Arquivo请求: limit={limit}, folder_id={folder_id}, type={type}",
             )
             result = await self._make_request("drive/files", data)
             logger.debug(
-                f"[Misskey API] 列表文件响应: 找到 {len(result) if isinstance(result, list) else 0} 个文件",
+                f"[Misskey API] 列表Arquivo响应: 找到 {len(result) if isinstance(result, list) else 0} 个Arquivo",
             )
             return result if isinstance(result, list) else []
         except Exception as e:
-            logger.error(f"[Misskey API] 列表文件失败: {e}")
+            logger.error(f"[Misskey API] 列表Arquivo失败: {e}")
             raise
 
     async def _download_with_existing_session(
@@ -699,7 +703,7 @@ class MisskeyAPI:
 
         """
         if not url:
-            raise APIError("URL不能为空")
+            raise APIError("A URL não pode ficar vazia")
 
         # 通过本地上传获取即时文件 ID（下载文件 → 上传 → 返回 ID）
         try:
@@ -849,7 +853,9 @@ class MisskeyAPI:
 
         """
         if not text and not media_urls and not local_files:
-            raise APIError("消息内容不能为空：需要文本或媒体文件")
+            raise APIError(
+                "O conteúdo da mensagem não pode ficar vazio: informe texto ou mídia"
+            )
 
         file_ids = []
 
@@ -895,11 +901,13 @@ class MisskeyAPI:
                 result = await self.upload_file(file_path)
                 if result and result.get("id"):
                     file_ids.append(result["id"])
-                    logger.debug(f"[Misskey API] 本地文件上传成功: {result['id']}")
+                    logger.debug(f"[Misskey API] 本地Arquivo上传成功: {result['id']}")
                 else:
-                    logger.error(f"[Misskey API] 本地文件上传失败: {file_path}")
+                    logger.error(
+                        f"[Misskey API] 本地Falha ao enviar o arquivo: {file_path}"
+                    )
             except Exception as e:
-                logger.error(f"[Misskey API] 本地文件处理失败 {file_path}: {e}")
+                logger.error(f"[Misskey API] 本地Arquivo处理失败 {file_path}: {e}")
                 continue
         return file_ids
 
@@ -960,4 +968,4 @@ class MisskeyAPI:
             note_kwargs.update(kwargs)
             return await self.create_note(**note_kwargs)
 
-        raise APIError(f"不支持的消息类型: {message_type}")
+        raise APIError(f"Tipo de mensagem incompatível: {message_type}")

@@ -20,7 +20,7 @@ def _normalize_api_base(api_base: str) -> str:
 
 @register_provider_adapter(
     "openai_embedding",
-    "OpenAI API Embedding 提供商适配器",
+    "Adaptador de provedor de embeddings da API OpenAI",
     provider_type=ProviderType.EMBEDDING,
 )
 class OpenAIEmbeddingProvider(EmbeddingProvider):

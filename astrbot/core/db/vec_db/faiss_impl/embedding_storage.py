@@ -44,8 +44,7 @@ def _safe_temp_dir() -> str:
             return tmp
 
         raise OSError(
-            "_safe_temp_dir: 无法找到可写的纯 ASCII 临时目录。"
-            f" 检查过 SystemRoot\\Temp={temp_dir}, gettempdir={tmp}"
+            f"_safe_temp_dir: nenhum diretório temporário gravável com caminho apenas em ASCII encontrado. SystemRoot\\\\Temp verificado: {temp_dir}, gettempdir={tmp}"
         )
 
     return tempfile.gettempdir()
@@ -65,7 +64,7 @@ class EmbeddingStorage:
             import faiss
         except ImportError:
             raise ImportError(
-                "faiss 未安装。请使用 'pip install faiss-cpu' 或 'pip install faiss-gpu' 安装。",
+                "faiss não instalado. Instale com 'pip install faiss-cpu' ou 'pip install faiss-gpu'.",
             )
         self.dimension = dimension
         self.path = path
@@ -75,8 +74,7 @@ class EmbeddingStorage:
         else:
             if dimension <= 0:
                 raise ValueError(
-                    f"无效的嵌入向量维度: {dimension}。请检查该知识库使用的 Embedding "
-                    "Provider 是否正确配置了 embedding_dimensions。",
+                    f"Dimensão de embeddings inválida: {dimension}. Verifique se embedding_dimensions está configurado corretamente no provedor de embeddings desta base de conhecimento.",
                 )
             base_index = faiss.IndexFlatL2(dimension)
             self.index = faiss.IndexIDMap(base_index)
@@ -132,7 +130,7 @@ class EmbeddingStorage:
         assert self.index is not None, "FAISS index is not initialized."
         if vector.shape[0] != self.dimension:
             raise ValueError(
-                f"向量维度不匹配, 期望: {self.dimension}, 实际: {vector.shape[0]}",
+                f"Dimensão do vetor incompatível. Esperado: {self.dimension}; recebido: {vector.shape[0]}",
             )
         self.index.add_with_ids(vector.reshape(1, -1), np.array([id], dtype=np.int64))
         await self.save_index()
@@ -142,11 +140,11 @@ class EmbeddingStorage:
         assert self.index is not None, "FAISS index is not initialized."
         if len(vectors.shape) != 2:
             raise ValueError(
-                f"向量必须是二维数组, 当前维度: {len(vectors.shape)}",
+                f"O vetor deve ser um array de duas dimensões. Dimensões atuais: {len(vectors.shape)}",
             )
         if vectors.shape[1] != self.dimension:
             raise ValueError(
-                f"向量维度不匹配, 期望: {self.dimension}, 实际: {vectors.shape[1]}",
+                f"Dimensão do vetor incompatível. Esperado: {self.dimension}; recebido: {vectors.shape[1]}",
             )
         self.index.add_with_ids(vectors, np.array(ids, dtype=np.int64))
         await self.save_index()
@@ -160,7 +158,7 @@ class EmbeddingStorage:
         vector = np.asarray(vector, dtype=np.float32).ravel()
         if vector.shape[0] != self.dimension:
             raise ValueError(
-                f"向量维度不匹配, 期望: {self.dimension}, 实际: {vector.shape[0]}",
+                f"Dimensão do vetor incompatível. Esperado: {self.dimension}; recebido: {vector.shape[0]}",
             )
         distances, indices = self.index.search(vector.reshape(1, -1), k)
         return distances, indices

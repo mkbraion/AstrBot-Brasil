@@ -2,11 +2,11 @@
   <v-dialog v-model="dialog" max-width="500px" persistent>
     <v-card>
       <v-card-title class="text-h3 pa-4 pb-0 pl-6">
-        配置 Tavily API Key
+        Configurar chave de API do Tavily
       </v-card-title>
       <v-card-text>
         <p class="mb-4 text-body-2 text-medium-emphasis">
-          为了使用基于网页的知识库功能，需要提供 Tavily API Key。您可以从 <a href="https://tavily.com/" target="_blank">Tavily 官网</a> 获取。
+          Para usar páginas da web na base de conhecimento, informe uma chave de API do Tavily. Obtenha-a no <a href="https://tavily.com/" target="_blank">site oficial do Tavily</a> .
         </p>
         <v-text-field
           v-model="apiKey"
@@ -22,10 +22,10 @@
       <v-card-actions>
         <v-spacer />
         <v-btn variant="text" @click="closeDialog" :disabled="saving">
-          取消
+          Cancelar
         </v-btn>
         <v-btn color="primary" variant="tonal" @click="saveKey" :loading="saving">
-          保存
+          Salvar
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -63,7 +63,7 @@ const closeDialog = () => {
 
 const saveKey = async () => {
   if (!apiKey.value.trim()) {
-    errorMessage.value = 'API Key 不能为空'
+    errorMessage.value = 'API Key não pode ficar vazio'
     return
   }
   errorMessage.value = ''
@@ -73,7 +73,7 @@ const saveKey = async () => {
     const configResponse = await configProfileApi.get('default')
 
     if (configResponse.data.status !== 'ok') {
-      throw new Error('获取当前配置失败')
+      throw new Error('Falha ao obter a configuração atual')
     }
 
     const currentConfig = ((configResponse.data.data as any).config || {}) as any
@@ -93,10 +93,10 @@ const saveKey = async () => {
       emit('success')
       closeDialog()
     } else {
-      errorMessage.value = saveResponse.data.message || '保存失败，请检查 Key 是否正确'
+      errorMessage.value = saveResponse.data.message || 'Falha ao salvar. Verifique Key se está correto'
     }
   } catch (error: any) {
-    errorMessage.value = error.response?.data?.message || '保存失败，发生未知错误'
+    errorMessage.value = error.response?.data?.message || 'Falha ao salvar: erro desconhecido'
   } finally {
     saving.value = false
   }

@@ -67,7 +67,7 @@ class DifyAPIClient:
             if resp.status != 200:
                 text = await resp.text()
                 raise Exception(
-                    f"Dify /chat-messages 接口请求失败：{resp.status}. {text}",
+                    f"Falha na requisição a /chat-messages do Dify: {resp.status}. {text}",
                 )
             async for event in _stream_sse(resp):
                 yield event
@@ -96,7 +96,7 @@ class DifyAPIClient:
             if resp.status != 200:
                 text = await resp.text()
                 raise Exception(
-                    f"Dify /workflows/run 接口请求失败：{resp.status}. {text}",
+                    f"Falha na requisição a /workflows/run do Dify: {resp.status}. {text}",
                 )
             async for event in _stream_sse(resp):
                 yield event
@@ -145,7 +145,7 @@ class DifyAPIClient:
                     content_type=mime_type or "application/octet-stream",
                 )
         else:
-            raise ValueError("file_path 和 file_data 不能同时为 None")
+            raise ValueError("file_path e file_data não podem ser None ao mesmo tempo")
 
         async with self.session.post(
             url,
@@ -154,7 +154,9 @@ class DifyAPIClient:
         ) as resp:
             if resp.status != 200 and resp.status != 201:
                 text = await resp.text()
-                raise Exception(f"Dify 文件上传失败：{resp.status}. {text}")
+                raise Exception(
+                    f"Falha ao enviar arquivo ao Dify: {resp.status}. {text}"
+                )
             return await resp.json()  # {"id": "xxx", ...}
 
     async def close(self) -> None:

@@ -293,7 +293,7 @@ async function loadPlugins() {
         : activatedPlugins.filter(plugin => !plugin.reserved)
     }
   } catch (error) {
-    console.error('加载插件列表失败:', error)
+    console.error('Falha ao carregar os plugins:', error)
     pluginList.value = []
   } finally {
     loading.value = false

@@ -106,7 +106,9 @@ class DiscordPlatformEvent(AstrMessageEvent):
                 await channel.send(**kwargs)
 
         except Exception as e:
-            logger.error(f"[Discord] 发送消息时发生未知错误: {e}", exc_info=True)
+            logger.error(
+                f"[Discord] 发送消息时发生Erro desconhecido: {e}", exc_info=True
+            )
 
         await super().send(message)
 
@@ -313,7 +315,7 @@ class DiscordPlatformEvent(AstrMessageEvent):
                     file_content = getattr(i, "file", None)
 
                     if not file_content:
-                        logger.warning(f"[Discord] Image 组件没有 file 属性: {i}")
+                        logger.warning(f"[Discord] Image 组件没Falha em file 属性: {i}")
                         continue
 
                     if file_content.startswith("http"):
@@ -346,7 +348,7 @@ class DiscordPlatformEvent(AstrMessageEvent):
 
                 except Exception:
                     # 使用 getattr 来安全地访问 i.file，以防 i 本身就是问题
-                    file_info = getattr(i, "file", "未知")
+                    file_info = getattr(i, "file", "Desconhecido")
                     logger.error(
                         "[Discord] 处理图片时发生未知严重错误: %s",
                         describe_media_ref(file_info),
@@ -357,7 +359,9 @@ class DiscordPlatformEvent(AstrMessageEvent):
                 try:
                     audio_ref = getattr(i, "file", None) or getattr(i, "url", None)
                     if not audio_ref:
-                        logger.warning(f"[Discord] Record 组件没有 file/url 属性: {i}")
+                        logger.warning(
+                            f"[Discord] Record 组件没Falha em file/url 属性: {i}"
+                        )
                         continue
 
                     audio_data = await MediaResolver(
@@ -382,7 +386,7 @@ class DiscordPlatformEvent(AstrMessageEvent):
                         )
                     )
                 except Exception:
-                    audio_ref = getattr(i, "file", "未知")
+                    audio_ref = getattr(i, "file", "Desconhecido")
                     logger.error(
                         "[Discord] 处理语音时发生未知严重错误: %s",
                         describe_media_ref(audio_ref),
@@ -416,12 +420,12 @@ class DiscordPlatformEvent(AstrMessageEvent):
                             )
                         else:
                             logger.warning(
-                                f"[Discord] 获取文件失败，路径不存在: {file_path_str}",
+                                f"[Discord] 获取Arquivo失败，路径不存在: {file_path_str}",
                             )
                     else:
-                        logger.warning(f"[Discord] 获取文件失败: {i.name}")
+                        logger.warning(f"[Discord] 获取Arquivo失败: {i.name}")
                 except Exception as e:
-                    logger.warning(f"[Discord] 处理文件失败: {i.name}, 错误: {e}")
+                    logger.warning(f"[Discord] 处理Arquivo失败: {i.name}, 错误: {e}")
             elif isinstance(i, DiscordEmbed):
                 # Discord Embed消息
                 embeds.append(i.to_discord_embed())

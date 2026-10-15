@@ -703,7 +703,7 @@ async function loadProviderConfigs(force = false) {
       }
     }
   } catch (error) {
-    console.error("Failed to load provider list:", error);
+    console.error("Falha ao carregar os provedores:", error);
     if (!providersLoaded.value) providerConfigs.value = [];
   } finally {
     loadingProviders.value = false;

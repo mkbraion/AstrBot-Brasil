@@ -8,7 +8,7 @@
                 @click="toggleNervousMode" flat variant="text" :color="isNervousMode ? 'primary' : ''" />
         </div>
 
-        <span style="color: gray; padding-left: 16px;">We're developing Astr Live Mode on ChatUI & Desktop right now. Stay tuned!</span>
+        <span style="color: gray; padding-left: 16px;">Estamos desenvolvendo o modo ao vivo no ChatUI e no aplicativo para computador. Acompanhe as novidades!</span>
 
         <div class="live-mode-content">
             <div class="center-circle-container" @click="handleCircleClick">
@@ -30,23 +30,23 @@
             </div>
 
             <div class="metrics-container" v-if="Object.keys(metrics).length > 0">
-                <span v-if="metrics.wav_assemble_time">WAV Assemble: {{ (metrics.wav_assemble_time * 1000).toFixed(0)
+                <span v-if="metrics.wav_assemble_time">Montagem do WAV: {{ (metrics.wav_assemble_time * 1000).toFixed(0)
                     }}ms</span>
-                <span v-if="metrics.llm_ttft">LLM First Token Latency: {{ (metrics.llm_ttft * 1000).toFixed(0)
+                <span v-if="metrics.llm_ttft">Tempo até o primeiro token do modelo: {{ (metrics.llm_ttft * 1000).toFixed(0)
                     }}ms</span>
-                <span v-if="metrics.llm_total_time">LLM Total Latency: {{ (metrics.llm_total_time * 1000).toFixed(0)
+                <span v-if="metrics.llm_total_time">Tempo total do modelo: {{ (metrics.llm_total_time * 1000).toFixed(0)
                     }}ms</span>
-                <span v-if="metrics.tts_first_frame_time">TTS First Frame Latency: {{ (metrics.tts_first_frame_time *
+                <span v-if="metrics.tts_first_frame_time">Tempo até o primeiro trecho de voz: {{ (metrics.tts_first_frame_time *
                     1000).toFixed(0) }}ms</span>
-                <span v-if="metrics.tts_total_time">TTS Total Larency: {{ (metrics.tts_total_time * 1000).toFixed(0)
+                <span v-if="metrics.tts_total_time">Tempo total da síntese de voz: {{ (metrics.tts_total_time * 1000).toFixed(0)
                     }}ms</span>
-                <span v-if="metrics.speak_to_first_frame">Speak -> First TTS Frame: {{ (metrics.speak_to_first_frame *
+                <span v-if="metrics.speak_to_first_frame">Fala -> primeiro trecho de voz: {{ (metrics.speak_to_first_frame *
                     1000).toFixed(0) }}ms</span>
-                <span v-if="metrics.wav_to_tts_total_time">Speak -> End: {{ (metrics.wav_to_tts_total_time *
+                <span v-if="metrics.wav_to_tts_total_time">Fala -> conclusão: {{ (metrics.wav_to_tts_total_time *
                     1000).toFixed(0) }}ms</span>
-                <span v-if="metrics.stt">STT Provider: {{ metrics.stt }}</span>
-                <span v-if="metrics.tts">TTS Provider: {{ metrics.tts }}</span>
-                <span v-if="metrics.chat_model">Chat Model: {{ metrics.chat_model }}</span>
+                <span v-if="metrics.stt">Provedor de reconhecimento de fala: {{ metrics.stt }}</span>
+                <span v-if="metrics.tts">Provedor de síntese de voz: {{ metrics.tts }}</span>
+                <span v-if="metrics.chat_model">Modelo de conversa: {{ metrics.chat_model }}</span>
             </div>
         </div>
     </div>
@@ -70,14 +70,14 @@ const isDark = computed(() => theme.global.current.value.dark);
 const vadRecording = useVADRecording();
 
 // 状态
-const isActive = ref(false);  // Live Mode 是否激活
-const isExploding = ref(false); // 是否正在展示爆炸动画
-const isCodeMode = ref(false); // 是否开启代码模式
-const isNervousMode = ref(false); // 是否开启紧张模式
+const isActive = ref(false);  // Live Mode Indica se está ativo
+const isExploding = ref(false); // Indica se a animação de explosão está sendo exibida
+const isCodeMode = ref(false); // Indica se o modo de código está ativo
+const isNervousMode = ref(false); // Indica se o modo de tensão está ativo
 // 使用 VAD 提供的 isSpeaking 状态
 const isSpeaking = computed(() => vadRecording.isSpeaking.value);
-const isListening = ref(false);  // 是否在监听
-const isProcessing = ref(false);  // 是否在处理
+const isListening = ref(false);  // Indica se está ouvindo
+const isProcessing = ref(false);  // Indica se está processando
 
 // WebSocket
 let ws: WebSocket | null = null;
@@ -87,13 +87,13 @@ let audioContext: AudioContext | null = null;
 let analyser: AnalyserNode | null = null;
 const botEnergy = ref(0);
 let energyLoopId: number;
-let isPlaying = ref(false); // UI 状态：是否正在播放
+let isPlaying = ref(false); // UI Estado: indica se está reproduzindo
 
 // 音频播放队列管理
-const rawAudioQueue: Uint8Array[] = []; // 待解码队列
-const audioBufferQueue: AudioBuffer[] = []; // 待播放队列
+const rawAudioQueue: Uint8Array[] = []; // Fila de decodificação
+const audioBufferQueue: AudioBuffer[] = []; // Fila de reprodução
 let isDecoding = false;
-let isPlayingAudio = false; // 内部状态：是否正在播放音频
+let isPlayingAudio = false; // Estado interno: indica se o áudio está sendo reproduzido
 let currentSource: AudioBufferSourceNode | null = null;
 
 
@@ -119,10 +119,10 @@ let currentStamp = '';
 
 const statusText = computed(() => {
     if (!isActive.value) return 'Astr Live';
-    if (isProcessing.value) return '正在处理...';
-    if (isSpeaking.value) return '正在说话...';
-    if (isListening.value) return '正在听...';
-    return '准备就绪';
+    if (isProcessing.value) return 'Processando...';
+    if (isSpeaking.value) return 'Falando...';
+    if (isListening.value) return 'Ouvindo...';
+    return 'Pronto';
 });
 
 const getIcon = computed(() => {
@@ -184,7 +184,7 @@ async function startLiveMode() {
         await vadRecording.startRecording(
             // onSpeechStart 回调
             () => {
-                console.log('[Live Mode] VAD 检测到开始说话');
+                console.log('[Live Mode] VAD Início da fala detectado');
                 isListening.value = false;
                 currentStamp = generateStamp();
 
@@ -199,7 +199,7 @@ async function startLiveMode() {
             },
             // onSpeechEnd 回调
             (audio: Float32Array) => {
-                console.log('[Live Mode] VAD 检测到语音结束，音频长度:', audio.length);
+                console.log('[Live Mode] VAD Fim da fala detectado; duração do áudio:', audio.length);
 
                 // 将完整音频转换为 PCM16 并发送
                 if (ws && ws.readyState === WebSocket.OPEN) {
@@ -240,8 +240,8 @@ async function startLiveMode() {
         isListening.value = true;
 
     } catch (error) {
-        console.error('启动 Live Mode 失败:', error);
-        alert('启动失败，请检查麦克风权限或网络连接');
+        console.error('Iniciar Live Mode falhou:', error);
+        alert('Falha ao iniciar. Verifique a permissão do microfone e a conexão de rede');
         await stopLiveMode();
     }
 }
@@ -277,7 +277,7 @@ function connectWebSocket(): Promise<void> {
         // 获取存储的 token
         const token = localStorage.getItem('token');
         if (!token) {
-            reject(new Error('未登录，请先登录'));
+            reject(new Error('Entre na sua conta primeiro'));
             return;
         }
 
@@ -286,25 +286,25 @@ function connectWebSocket(): Promise<void> {
         ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
-            console.log('[Live Mode] WebSocket 连接成功');
+            console.log('[Live Mode] WebSocket conexão estabelecida');
             resolve();
         };
 
         ws.onerror = (error) => {
-            console.error('[Live Mode] WebSocket 错误:', error);
+            console.error('[Live Mode] WebSocket erro:', error);
             reject(error);
         };
 
         ws.onmessage = handleWebSocketMessage;
 
         ws.onclose = () => {
-            console.log('[Live Mode] WebSocket 连接关闭');
+            console.log('[Live Mode] WebSocket conexão encerrada');
         };
 
         // 超时处理
         setTimeout(() => {
             if (ws?.readyState !== WebSocket.OPEN) {
-                reject(new Error('WebSocket 连接超时'));
+                reject(new Error('WebSocket tempo de conexão esgotado'));
             }
         }, 5000);
     });
@@ -358,8 +358,8 @@ function handleWebSocketMessage(event: MessageEvent) {
                 break;
 
             case 'error':
-                console.error('[Live Mode] 错误:', message.data);
-                alert('处理出错: ' + message.data);
+                console.error('[Live Mode] erro:', message.data);
+                alert('Erro no processamento: ' + message.data);
                 isProcessing.value = false;
                 isListening.value = true;
                 break;
@@ -369,7 +369,7 @@ function handleWebSocketMessage(event: MessageEvent) {
                 break;
         }
     } catch (error) {
-        console.error('[Live Mode] 处理消息失败:', error);
+        console.error('[Live Mode] Falha ao processar a mensagem:', error);
     }
 }
 
@@ -391,7 +391,7 @@ function playAudioChunk(base64Data: string) {
         processRawAudioQueue();
 
     } catch (error) {
-        console.error('[Live Mode] 接收音频数据失败:', error);
+        console.error('[Live Mode] Falha ao receber dados de áudio:', error);
     }
 }
 
@@ -415,7 +415,7 @@ async function processRawAudioQueue() {
                     playNextAudio();
                 }
             } catch (err) {
-                console.error('[Live Mode] 解码音频失败:', err);
+                console.error('[Live Mode] Falha ao decodificar o áudio:', err);
             }
         }
     } finally {
@@ -463,10 +463,10 @@ function playNextAudio() {
         };
 
     } catch (error) {
-        console.error('[Live Mode] 播放音频失败:', error);
+        console.error('[Live Mode] Falha ao reproduzir o áudio:', error);
         isPlayingAudio = false;
         isPlaying.value = false;
-        playNextAudio(); // 尝试播放下一个
+        playNextAudio(); // Tentar reproduzir o próximo
     }
 }
 

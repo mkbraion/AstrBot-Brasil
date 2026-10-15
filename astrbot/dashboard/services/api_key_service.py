@@ -68,7 +68,7 @@ class ApiKeyService:
         if raw_scopes is None:
             return list(DEFAULT_OPEN_API_SCOPES)
         if not isinstance(raw_scopes, list):
-            raise ApiKeyServiceError("Invalid scopes")
+            raise ApiKeyServiceError("Escopos inválidos")
 
         scopes = []
         invalid_scopes = []
@@ -78,7 +78,7 @@ class ApiKeyService:
             else:
                 invalid_scopes.append(str(scope))
         if invalid_scopes:
-            raise ApiKeyServiceError(f"Invalid scopes: {', '.join(invalid_scopes)}")
+            raise ApiKeyServiceError(f"Escopos inválidos: {', '.join(invalid_scopes)}")
         if CONFIG_EDIT_ADMIN_SCOPE in scopes and "config" not in scopes:
             raise ApiKeyServiceError(
                 f"{CONFIG_EDIT_ADMIN_SCOPE} requires the config scope"
@@ -89,7 +89,7 @@ class ApiKeyService:
             scopes.extend(OPEN_API_SCOPE_INCLUDES.get(scope, ()))
         normalized_scopes = list(dict.fromkeys(scopes))
         if not normalized_scopes:
-            raise ApiKeyServiceError("At least one valid scope is required")
+            raise ApiKeyServiceError("Pelo menos um escopo válido é obrigatório")
         return normalized_scopes
 
     @staticmethod
@@ -99,9 +99,9 @@ class ApiKeyService:
         try:
             expires_in_days_int = int(expires_in_days)
         except (TypeError, ValueError) as exc:
-            raise ApiKeyServiceError("expires_in_days must be an integer") from exc
+            raise ApiKeyServiceError("expires_in_days deve ser um inteiro") from exc
         if expires_in_days_int <= 0:
-            raise ApiKeyServiceError("expires_in_days must be greater than 0")
+            raise ApiKeyServiceError("expires_in_days deve ser maior que 0")
         return datetime.now(timezone.utc) + timedelta(days=expires_in_days_int)
 
     async def list_api_keys(self) -> list[dict]:
@@ -129,10 +129,10 @@ class ApiKeyService:
 
     async def revoke_api_key(self, key_id: str | None) -> bool:
         if not key_id:
-            raise ApiKeyServiceError("Missing key: key_id")
+            raise ApiKeyServiceError("Chave ausente: key_id")
         return await self.db.revoke_api_key(key_id)
 
     async def delete_api_key(self, key_id: str | None) -> bool:
         if not key_id:
-            raise ApiKeyServiceError("Missing key: key_id")
+            raise ApiKeyServiceError("Chave ausente: key_id")
         return await self.db.delete_api_key(key_id)

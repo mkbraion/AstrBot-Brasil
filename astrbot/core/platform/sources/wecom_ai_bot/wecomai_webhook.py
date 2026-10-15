@@ -28,14 +28,18 @@ class WecomAIBotWebhookClient:
         self.webhook_url = webhook_url.strip()
         self.timeout_seconds = timeout_seconds
         if not self.webhook_url:
-            raise WecomAIBotWebhookError("消息推送 webhook URL 不能为空")
+            raise WecomAIBotWebhookError(
+                "A URL do webhook de envio de mensagens não pode ficar vazia"
+            )
         self._webhook_key = self._extract_webhook_key()
 
     def _extract_webhook_key(self) -> str:
         parsed = urlparse(self.webhook_url)
         key = parse_qs(parsed.query).get("key", [""])[0].strip()
         if not key:
-            raise WecomAIBotWebhookError("消息推送 webhook URL 缺少 key 参数")
+            raise WecomAIBotWebhookError(
+                "O webhook de envio de mensagens não contém o parâmetro key"
+            )
         return key
 
     def _build_upload_url(self, media_type: Literal["file", "voice"]) -> str:
@@ -69,12 +73,12 @@ class WecomAIBotWebhookClient:
                 text = await response.text()
                 if response.status != 200:
                     raise WecomAIBotWebhookError(
-                        f"Webhook 请求失败: HTTP {response.status}, {text}"
+                        f"Falha na requisição ao webhook. HTTP {response.status}, {text}"
                     )
                 result = await response.json(content_type=None)
                 if result.get("errcode") != 0:
                     raise WecomAIBotWebhookError(
-                        f"Webhook 返回错误: {result.get('errcode')} {result.get('errmsg')}"
+                        f"O webhook retornou um erro: {result.get('errcode')} {result.get('errmsg')}"
                     )
         logger.debug("企业微信消息推送成功: %s", payload.get("msgtype", "unknown"))
 
@@ -104,7 +108,7 @@ class WecomAIBotWebhookClient:
         self, file_path: Path, media_type: Literal["file", "voice"]
     ) -> str:
         if not file_path.exists() or not file_path.is_file():
-            raise WecomAIBotWebhookError(f"文件不存在: {file_path}")
+            raise WecomAIBotWebhookError(f"Arquivo não encontrado: {file_path}")
 
         content_type = (
             mimetypes.guess_type(str(file_path))[0] or "application/octet-stream"
@@ -126,16 +130,18 @@ class WecomAIBotWebhookClient:
                 text = await response.text()
                 if response.status != 200:
                     raise WecomAIBotWebhookError(
-                        f"上传媒体失败: HTTP {response.status}, {text}"
+                        f"Falha ao enviar mídia. HTTP {response.status}, {text}"
                     )
                 result = await response.json(content_type=None)
                 if result.get("errcode") != 0:
                     raise WecomAIBotWebhookError(
-                        f"上传媒体失败: {result.get('errcode')} {result.get('errmsg')}"
+                        f"Falha ao enviar mídia: {result.get('errcode')} {result.get('errmsg')}"
                     )
                 media_id = result.get("media_id", "")
                 if not media_id:
-                    raise WecomAIBotWebhookError("上传媒体失败: 返回缺少 media_id")
+                    raise WecomAIBotWebhookError(
+                        "Falha ao enviar mídia: media_id ausente na resposta"
+                    )
                 return str(media_id)
 
     async def send_file(self, file_path: Path) -> None:

@@ -53,7 +53,7 @@ class MCPShutdownTimeoutError(asyncio.TimeoutError):
     def __init__(self, names: list[str], timeout: float) -> None:
         self.names = names
         self.timeout = timeout
-        message = f"MCP 服务关闭超时（{timeout:g} 秒）：{', '.join(names)}"
+        message = f"Tempo limite para encerrar o serviço MCP ({timeout:g} segundos): {', '.join(names)}"
         super().__init__(message)
 
 
@@ -95,30 +95,30 @@ def _resolve_timeout(
     default: float = DEFAULT_MCP_INIT_TIMEOUT_SECONDS,
 ) -> float:
     """Resolve timeout with precedence: explicit argument > env value > default."""
-    source = f"环境变量 {env_name}"
+    source = f"Variável de ambiente {env_name}"
     if timeout is None:
         timeout = os.getenv(env_name, str(default))
     else:
-        source = "显式参数 timeout"
+        source = "Parâmetro explícito timeout"
 
     try:
         timeout_value = float(timeout)
     except (TypeError, ValueError):
         logger.warning(
-            f"超时配置（{source}）={timeout!r} 无效，使用默认值 {default:g} 秒。"
+            f"超时配置（{source}）={timeout!r} 无效，使用默认值 {default:g} segundos。"
         )
         return default
 
     if timeout_value <= 0:
         logger.warning(
-            f"超时配置（{source}）={timeout_value:g} 必须大于 0，使用默认值 {default:g} 秒。"
+            f"超时配置（{source}）={timeout_value:g} 必须大于 0，使用默认值 {default:g} segundos。"
         )
         return default
 
     if timeout_value > MAX_MCP_TIMEOUT_SECONDS:
         logger.warning(
             f"超时配置（{source}）={timeout_value:g} 过大，已限制为最大值 "
-            f"{MAX_MCP_TIMEOUT_SECONDS:g} 秒，以避免长时间等待。"
+            f"{MAX_MCP_TIMEOUT_SECONDS:g} segundos，以避免长时间等待。"
         )
         return MAX_MCP_TIMEOUT_SECONDS
 
@@ -206,7 +206,7 @@ async def _quick_test_mcp_connection(config: dict) -> tuple[bool, str]:
                     return False, f"HTTP {response.status}: {response.reason}"
 
     except asyncio.TimeoutError:
-        return False, f"连接超时: {timeout}秒"
+        return False, f"Tempo limite da conexão esgotado: {timeout}segundos"
     except Exception as e:
         return False, f"{e!s}"
 
@@ -524,7 +524,7 @@ class FunctionToolManager:
                 if isinstance(args_val, (list, tuple))
                 else (0 if args_val is None else 1)
             )
-            logger.debug(f"  命令可执行文件: {executable}, 参数数量: {args_count}")
+            logger.debug(f"  命令可执行Arquivo: {executable}, 参数数量: {args_count}")
             return
 
         if "url" in cfg:
@@ -569,7 +569,9 @@ class FunctionToolManager:
             # 配置文件不存在错误处理
             with open(mcp_json_file, "w", encoding="utf-8") as f:
                 json.dump(DEFAULT_MCP_CONFIG, f, ensure_ascii=False, indent=4)
-            logger.info(f"未找到 MCP 服务配置文件，已创建默认配置文件 {mcp_json_file}")
+            logger.info(
+                f"未找到 MCP 服务配置Arquivo，已创建默认A configuração {mcp_json_file}"
+            )
             return MCPInitSummary(total=0, success=0, failed=[])
 
         with open(mcp_json_file, encoding="utf-8") as f:
@@ -1052,7 +1054,7 @@ class FunctionToolManager:
             if func_tool.handler_module_path in star_map:
                 if not star_map[func_tool.handler_module_path].activated:
                     raise ValueError(
-                        f"此函数调用工具所属的插件 {star_map[func_tool.handler_module_path].name} 已被禁用，请先在管理面板启用再激活此工具。",
+                        f"O plugin desta ferramenta de função, {star_map[func_tool.handler_module_path].name}, está desativado. Ative-o no painel antes de ativar a ferramenta.",
                     )
 
             func_tool.active = True
@@ -1093,7 +1095,7 @@ class FunctionToolManager:
             if func_tool.handler_module_path in star_map:
                 if not star_map[func_tool.handler_module_path].activated:
                     raise ValueError(
-                        f"此函数调用工具所属的插件 {star_map[func_tool.handler_module_path].name} 已被禁用，请先在管理面板启用再激活此工具。",
+                        f"O plugin desta ferramenta de função, {star_map[func_tool.handler_module_path].name}, está desativado. Ative-o no painel antes de ativar a ferramenta.",
                     )
 
             func_tool.active = True
@@ -1206,13 +1208,13 @@ class FunctionToolManager:
                             logger.warning("没有找到可用的 ModelScope MCP 服务器")
                     else:
                         raise Exception(
-                            f"ModelScope API 请求失败: HTTP {response.status}",
+                            f"Falha na requisição à API do ModelScope. HTTP {response.status}",
                         )
 
         except aiohttp.ClientError as e:
-            raise Exception(f"网络连接错误: {e!s}")
+            raise Exception(f"Erro de conexão de rede: {e!s}")
         except Exception as e:
-            raise Exception(f"同步 ModelScope MCP 服务器时发生错误: {e!s}")
+            raise Exception(f"Erro ao sincronizar servidores MCP do ModelScope: {e!s}")
 
     def __str__(self) -> str:
         return str(self.func_list)

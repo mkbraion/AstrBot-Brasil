@@ -43,7 +43,7 @@ class CommandService:
 
     async def toggle_command(self, handler_full_name: str | None, enabled) -> dict:
         if handler_full_name is None or enabled is None:
-            raise CommandServiceError("handler_full_name 与 enabled 均为必填。")
+            raise CommandServiceError("handler_full_name e enabled são obrigatórios.")
 
         if isinstance(enabled, str):
             enabled = enabled.lower() in ("1", "true", "yes", "on")
@@ -62,7 +62,7 @@ class CommandService:
         aliases=None,
     ) -> dict:
         if not handler_full_name or not new_name:
-            raise CommandServiceError("handler_full_name 与 new_name 均为必填。")
+            raise CommandServiceError("handler_full_name e new_name são obrigatórios.")
 
         try:
             await rename_command(handler_full_name, new_name, aliases=aliases)
@@ -77,7 +77,9 @@ class CommandService:
         permission: str | None,
     ) -> dict:
         if not handler_full_name or not permission:
-            raise CommandServiceError("handler_full_name 与 permission 均为必填。")
+            raise CommandServiceError(
+                "handler_full_name e permission são obrigatórios."
+            )
 
         try:
             await update_command_permission(handler_full_name, permission)

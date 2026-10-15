@@ -768,14 +768,14 @@ class QQOfficialMessageEvent(AstrMessageEvent):
 
             result = await self.bot.api._http.request(route, json=payload)
             if result is None:
-                err_msg = "上传图片API返回None，触发重试"
+                err_msg = "A API de envio de imagens retornou None; tentando novamente"
                 raise APIReturnNoneError(err_msg)
             return result
 
         try:
             result = await _do_upload()
         except APIReturnNoneError:
-            logger.warning(f"上传图片API返回None，共尝试5次后放弃: {payload}")
+            logger.warning(f"上传ImagemAPI返回None，共尝试5次后放弃: {payload}")
             raise
 
         if not isinstance(result, dict):
@@ -873,7 +873,7 @@ class QQOfficialMessageEvent(AstrMessageEvent):
         async def _do_upload():
             result = await self.bot.api._http.request(route, json=payload)
             if result is None:
-                err_msg = "上传文件API返回None，触发重试"
+                err_msg = "A API de envio de arquivos retornou None; tentando novamente"
                 raise APIReturnNoneError(err_msg)
             return result
 
@@ -937,7 +937,9 @@ class QQOfficialMessageEvent(AstrMessageEvent):
         async def _do_request():
             result = await self.bot.api._http.request(route, json=payload)
             if result is None:
-                err_msg = "发送消息API返回None，触发重试"
+                err_msg = (
+                    "A API de envio de mensagens retornou None; tentando novamente"
+                )
                 raise APIReturnNoneError(err_msg)
             return result
 
@@ -1000,7 +1002,7 @@ class QQOfficialMessageEvent(AstrMessageEvent):
                             target_format="tencent_silk",
                         )
                     except Exception as e:
-                        logger.error(f"处理语音时出错: {e}")
+                        logger.error(f"处理Voz时出错: {e}")
                         record_file_path = None
             elif isinstance(i, Video) and not video_file_source:
                 if is_file_uri(i.file):

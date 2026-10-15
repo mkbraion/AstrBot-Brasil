@@ -339,7 +339,7 @@ async function emitUpdate(val) {
         settings.computer_use_local_permissions = permissions
       }
     } catch (error) {
-      console.warn('Failed to initialize local permissions:', error)
+      console.warn("Falha ao inicializar as permissões locais:", error)
     }
   }
 }

@@ -69,7 +69,7 @@ class OTTSProvider:
             self.last_sync_time = local_time
         except Exception as e:
             if time.time() - self.last_sync_time > 3600:
-                raise RuntimeError("时间同步失败") from e
+                raise RuntimeError("Falha na sincronização de horário") from e
 
     async def _generate_signature(self) -> str:
         await self._sync_time()
@@ -108,9 +108,9 @@ class OTTSProvider:
                 return str(file_path.resolve())
             except Exception as e:
                 if attempt == self.retry_count - 1:
-                    raise RuntimeError(f"OTTS请求失败: {e!s}") from e
+                    raise RuntimeError(f"Falha na requisição ao OTTS: {e!s}") from e
                 await asyncio.sleep(0.5 * (attempt + 1))
-        raise RuntimeError("OTTS未返回音频文件")
+        raise RuntimeError("O OTTS não retornou um arquivo de áudio")
 
 
 class AzureNativeProvider(TTSProvider):
@@ -121,7 +121,7 @@ class AzureNativeProvider(TTSProvider):
             "",
         ).strip()
         if not re.fullmatch(AZURE_TTS_SUBSCRIPTION_KEY_PATTERN, self.subscription_key):
-            raise ValueError("无效的Azure订阅密钥")
+            raise ValueError("Chave de assinatura do Azure inválida")
         self.region = provider_config.get("azure_tts_region", "eastus").strip()
         self.endpoint = (
             f"https://{self.region}.tts.speech.microsoft.com/cognitiveservices/v1"
@@ -224,26 +224,26 @@ class AzureTTSProvider(TTSProvider):
             try:
                 match = re.match(r"other\[(.*)\]", key_value, re.DOTALL)
                 if not match:
-                    raise ValueError("无效的other[...]格式，应形如 other[{...}]")
+                    raise ValueError("Formato other[...] inválido. Use other[{...}]")
                 json_str = match.group(1).strip()
                 otts_config = json.loads(json_str)
                 otts_config.setdefault("custom_headers", config.get("custom_headers"))
                 required = {"OTTS_SKEY", "OTTS_URL", "OTTS_AUTH_TIME"}
                 if missing := required - otts_config.keys():
-                    raise ValueError(f"缺少OTTS参数: {', '.join(missing)}")
+                    raise ValueError(f"Parâmetro OTTS ausente: {', '.join(missing)}")
                 return OTTSProvider(otts_config)
             except json.JSONDecodeError as e:
-                error_msg = (
-                    f"JSON解析失败，请检查格式（错误位置：行 {e.lineno} 列 {e.colno}）\n"
-                    f"错误详情: {e.msg}\n"
-                    f"错误上下文: {json_str[max(0, e.pos - 30) : e.pos + 30]}"
-                )
+                error_msg = f"Falha ao interpretar JSON. Verifique o formato (linha {e.lineno}, coluna {e.colno})\nDetalhes do erro: {e.msg}\nContexto do erro: {json_str[max(0, e.pos - 30) : e.pos + 30]}"
                 raise ValueError(error_msg) from e
             except KeyError as e:
-                raise ValueError(f"配置错误: 缺少必要参数 {e}") from e
+                raise ValueError(
+                    f"Erro de configuração: parâmetro obrigatório ausente {e}"
+                ) from e
         if re.fullmatch(AZURE_TTS_SUBSCRIPTION_KEY_PATTERN, key_value):
             return AzureNativeProvider(config, self.provider_settings)
-        raise ValueError("订阅密钥格式无效，应为32位或84位字母数字或other[...]格式")
+        raise ValueError(
+            "Formato de chave de assinatura inválido. Use 32 ou 84 caracteres alfanuméricos ou o formato other[...]"
+        )
 
     async def get_audio(self, text: str) -> str:
         # Both backends keep one mutable client; protect its entire lifetime.

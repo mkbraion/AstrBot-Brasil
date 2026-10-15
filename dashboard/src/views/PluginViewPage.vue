@@ -94,12 +94,12 @@ const parseContentDispositionFilename = (headerValue) => {
 
 const normalizePluginEndpoint = (endpoint) => {
   if (typeof endpoint !== "string") {
-    throw new Error("Plugin bridge endpoint must be a string.");
+    throw new Error("O endpoint da ponte do plugin deve ser um texto.");
   }
 
   const trimmed = endpoint.trim().replace(/^\/+/, "");
   if (!trimmed) {
-    throw new Error("Plugin bridge endpoint cannot be empty.");
+    throw new Error("O endpoint da ponte do plugin não pode ficar vazio.");
   }
   if (
     trimmed.includes("\\") ||
@@ -107,14 +107,14 @@ const normalizePluginEndpoint = (endpoint) => {
     trimmed.includes("?") ||
     trimmed.includes("#")
   ) {
-    throw new Error("Plugin bridge endpoint is invalid.");
+    throw new Error("O endpoint da ponte do plugin é inválido.");
   }
 
   const segments = trimmed.split("/");
   if (
     segments.some((segment) => !segment || segment === "." || segment === "..")
   ) {
-    throw new Error("Plugin bridge endpoint is invalid.");
+    throw new Error("O endpoint da ponte do plugin é inválido.");
   }
   return segments.map((segment) => encodeURIComponent(segment)).join("/");
 };
@@ -376,7 +376,7 @@ const handleBridgeRequest = async (message) => {
   const { requestId, action } = message;
   try {
     if (!requestId) {
-      throw new Error("Missing plugin bridge request id.");
+      throw new Error("ID da requisição à ponte do plugin ausente.");
     }
 
     if (action === "api:get") {
@@ -384,7 +384,7 @@ const handleBridgeRequest = async (message) => {
         params: message.params || {},
       });
       if (response.data?.status === "error") {
-        throw new Error(response.data.message || "Plugin GET request failed.");
+        throw new Error(response.data.message || "Falha na requisição GET do plugin.");
       }
       sendBridgeResponse(requestId, true, response.data?.data ?? response.data);
       return;
@@ -396,7 +396,7 @@ const handleBridgeRequest = async (message) => {
         message.body || {},
       );
       if (response.data?.status === "error") {
-        throw new Error(response.data.message || "Plugin POST request failed.");
+        throw new Error(response.data.message || "Falha na requisição POST do plugin.");
       }
       sendBridgeResponse(requestId, true, response.data?.data ?? response.data);
       return;
@@ -426,7 +426,7 @@ const handleBridgeRequest = async (message) => {
       );
       if (response.data?.status === "error") {
         throw new Error(
-          response.data.message || "Plugin upload request failed.",
+          response.data.message || "Falha na requisição de envio do plugin.",
         );
       }
       sendBridgeResponse(requestId, true, response.data?.data ?? response.data);
@@ -485,7 +485,7 @@ const handleBridgeRequest = async (message) => {
       if (!response.ok) {
         const errorMessage = await getFetchErrorMessage(
           response,
-          `Plugin SSE request failed with status ${response.status}.`,
+          `Falha na requisição SSE do plugin. Status: ${response.status}.`,
         );
         closeSSEConnection(subscriptionId);
         throw new Error(errorMessage);
@@ -514,7 +514,7 @@ const handleBridgeRequest = async (message) => {
     sendBridgeResponse(
       requestId,
       false,
-      getBridgeErrorMessage(error, "Plugin bridge request failed."),
+      getBridgeErrorMessage(error, "Falha na requisição à ponte do plugin."),
     );
   }
 };

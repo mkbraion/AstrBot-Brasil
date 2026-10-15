@@ -118,12 +118,12 @@ class WeixinOfficialAccountServer:
         """生成消息预览文本，供占位符使用"""
         if isinstance(msg, TextMessage):
             t = cast(str, msg.content).strip()
-            return (t[:limit] + "...") if len(t) > limit else (t or "空消息")
+            return (t[:limit] + "...") if len(t) > limit else (t or "Mensagem vazia")
         if isinstance(msg, ImageMessage):
-            return "图片"
+            return "Imagem"
         if isinstance(msg, VoiceMessage):
-            return "语音"
-        return getattr(msg, "type", "未知消息")
+            return "Voz"
+        return getattr(msg, "type", "Mensagem desconhecida")
 
     async def handle_callback(self, request) -> str:
         """处理回调请求，可被统一 webhook 入口复用
@@ -185,13 +185,13 @@ class WeixinOfficialAccountServer:
                     else:
                         return _reply_text(
                             cached_xml
-                            + "\n【后续消息还在缓冲中，回复任意文字继续获取】"
+                            + "\n【As próximas mensagens ainda estão no buffer. Responda com qualquer texto para continuar】"
                         )
 
                 task: asyncio.Task | None = cast(asyncio.Task | None, state.get("task"))
                 placeholder = (
-                    f"【正在思考'{state.get('preview', '...')}'中，已思考"
-                    f"{int(time.monotonic() - state.get('started_at', time.monotonic()))}s，回复任意文字尝试获取回复】"
+                    f"【Pensando em '{state.get('preview', '...')}' há "
+                    f"{int(time.monotonic() - state.get('started_at', time.monotonic()))}s. Responda com qualquer texto para tentar obter a resposta】"
                 )
 
                 # same msgid => WeChat retry: wait a little; new msgid => user trigger: just placeholder
@@ -222,7 +222,7 @@ class WeixinOfficialAccountServer:
                                     )
                                     return _reply_text(
                                         cached_xml
-                                        + "\n【后续消息还在缓冲中，回复任意文字继续获取】"
+                                        + "\n【As próximas mensagens ainda estão no buffer. Responda com qualquer texto para continuar】"
                                     )
                             logger.info(
                                 f"wx finished in window but not final; return placeholder: user={from_user} msg_id={msg_id} "
@@ -233,7 +233,9 @@ class WeixinOfficialAccountServer:
                                 "wx task failed in passive window", exc_info=True
                             )
                             self.user_buffer.pop(from_user, None)
-                            return _reply_text("处理消息失败，请稍后再试。")
+                            return _reply_text(
+                                "Falha ao processar a mensagem. Tente novamente mais tarde."
+                            )
 
                     logger.info(
                         f"wx passive window timeout: user={from_user} msg_id={msg_id}"
@@ -246,9 +248,7 @@ class WeixinOfficialAccountServer:
             # create new trigger when state is empty, and store state in buffer
             logger.debug(f"wx new trigger: user={from_user} msg_id={msg_id}")
             preview = self._preview(msg)
-            placeholder = (
-                f"【正在思考'{preview}'中，已思考0s，回复任意文字尝试获取回复】"
-            )
+            placeholder = f"【Pensando em '{preview}' há 0 s. Responda com qualquer texto para tentar obter a resposta】"
             logger.info(
                 f"wx start task: user={from_user} msg_id={msg_id} preview={preview}"
             )
@@ -283,7 +283,7 @@ class WeixinOfficialAccountServer:
                         else:
                             return _reply_text(
                                 cached_xml
-                                + "\n【后续消息还在缓冲中，回复任意文字继续获取】"
+                                + "\n【As próximas mensagens ainda estão no buffer. Responda com qualquer texto para continuar】"
                             )
                     logger.info(
                         f"wx not finished in first window; return placeholder: user={from_user} msg_id={msg_id} "
@@ -292,14 +292,16 @@ class WeixinOfficialAccountServer:
                 except Exception:
                     logger.critical("wx task failed in first window", exc_info=True)
                     self.user_buffer.pop(from_user, None)
-                    return _reply_text("处理消息失败，请稍后再试。")
+                    return _reply_text(
+                        "Falha ao processar a mensagem. Tente novamente mais tarde."
+                    )
 
             logger.info(f"wx first window timeout: user={from_user} msg_id={msg_id}")
             return _reply_text(placeholder)
 
     async def start_polling(self) -> None:
         logger.info(
-            f"将在 {self.callback_server_host}:{self.port} 端口启动 微信公众平台 适配器。",
+            f"将在 {self.callback_server_host}:{self.port} 端口启动 Adaptador da plataforma oficial do WeChat。",
         )
         await self.server.run_task(
             host=self.callback_server_host,
@@ -312,7 +314,9 @@ class WeixinOfficialAccountServer:
 
 
 @register_platform_adapter(
-    "weixin_official_account", "微信公众平台 适配器", support_streaming_message=False
+    "weixin_official_account",
+    "Adaptador da plataforma oficial do WeChat",
+    support_streaming_message=False,
 )
 class WeixinOfficialAccountPlatformAdapter(Platform):
     def __init__(
@@ -379,7 +383,10 @@ class WeixinOfficialAccountPlatformAdapter(Platform):
                 return result
             except asyncio.TimeoutError:
                 logger.info(f"callback 处理消息超时: message_id={msg.id}")
-                return create_reply("处理消息超时，请稍后再试。", msg)
+                return create_reply(
+                    "Tempo limite para processar a mensagem esgotado. Tente novamente mais tarde.",
+                    msg,
+                )
             except Exception as e:
                 logger.error(f"转换消息时出现异常: {e}")
             finally:
@@ -395,13 +402,13 @@ class WeixinOfficialAccountPlatformAdapter(Platform):
         message_chain: MessageChain,
     ) -> None:
         await super().send_by_session(session, message_chain)
-        raise Exception("微信公众号不支持发送主动消息")
+        raise Exception("A conta oficial do WeChat não permite mensagens proativas")
 
     @override
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             "weixin_official_account",
-            "微信公众平台 适配器",
+            "Adaptador da plataforma oficial do WeChat",
             id=self.config.get("id", "weixin_official_account"),
             support_streaming_message=False,
             support_proactive_message=True,
@@ -412,7 +419,9 @@ class WeixinOfficialAccountPlatformAdapter(Platform):
         # 如果启用统一 webhook 模式，则不启动独立服务器
         webhook_uuid = self.config.get("webhook_uuid")
         if self.unified_webhook_mode and webhook_uuid:
-            log_webhook_info(f"{self.meta().id}(微信公众平台)", webhook_uuid)
+            log_webhook_info(
+                f"{self.meta().id}(Plataforma oficial do WeChat)", webhook_uuid
+            )
             # 保持运行状态，等待 shutdown
             await self.server.shutdown_event.wait()
         else:
@@ -446,7 +455,7 @@ class WeixinOfficialAccountPlatformAdapter(Platform):
             abm.session_id = abm.sender.user_id
         elif msg.type == "image":
             assert isinstance(msg, ImageMessage)
-            abm.message_str = "[图片]"
+            abm.message_str = "[Imagem]"
             abm.self_id = str(msg.target)
             abm.message = [Image(file=cast(str, msg.image), url=cast(str, msg.image))]
             abm.type = MessageType.FRIEND_MESSAGE

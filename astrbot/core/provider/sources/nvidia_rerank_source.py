@@ -8,7 +8,9 @@ from ..register import register_provider_adapter
 
 
 @register_provider_adapter(
-    "nvidia_rerank", "NVIDIA Rerank 适配器", provider_type=ProviderType.RERANK
+    "nvidia_rerank",
+    "Adaptador de reclassificação da NVIDIA",
+    provider_type=ProviderType.RERANK,
 )
 class NvidiaRerankProvider(RerankProvider):
     def __init__(self, provider_config: dict, provider_settings: dict) -> None:

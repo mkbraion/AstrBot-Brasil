@@ -3,7 +3,7 @@
         <div style="flex-grow: 1; width: 100%; border: 1px solid #eee; border-radius: 8px; padding: 16px">
             <v-banner lines="one">
                 <template v-slot:text>
-                    建议您更换使用新版知识库功能。
+                    Recomendamos usar a nova base de conhecimento.
                 </template>
             </v-banner>
             <!-- knowledge card -->
@@ -164,15 +164,15 @@
                     <v-chip v-if="currentKB.rerank_provider_id" color="tertiary" variant="tonal" size="small"
                         rounded="sm">
                         <v-icon start size="small">mdi-sort-variant</v-icon>
-                        重排序模型: {{rerankProviderConfigs.
-                            find(provider => provider.id === currentKB.rerank_provider_id)?.rerank_model || '未设置'}}
+                        Modelo de reclassificação: {{rerankProviderConfigs.
+                            find(provider => provider.id === currentKB.rerank_provider_id)?.rerank_model || 'Não definido'}}
                     </v-chip>
-                    <small style="margin-left: 8px;">💡 使用方式: 在聊天页中输入 "/kb use {{ currentKB.collection_name }}"</small>
+                    <small style="margin-left: 8px;">💡 Como usar: Digite na página de conversa "/kb use {{ currentKB.collection_name }}"</small>
                 </div>
 
                 <v-card-text>
                     <v-tabs v-model="activeTab">
-                        <v-tab value="import">导入数据</v-tab>
+                        <v-tab value="import">Importar dados</v-tab>
                         <v-tab value="search">{{ tm('contentDialog.tabs.search') }}</v-tab>
                     </v-tabs>
 
@@ -181,12 +181,12 @@
                         <v-window-item value="import">
                             <div class="import-container pa-4">
                                 <div class="mb-8">
-                                    <h2>导入数据</h2>
-                                    <p class="text-subtitle-1">选择数据源并导入内容到知识库</p>
+                                    <h2>Importar dados</h2>
+                                    <p class="text-subtitle-1">Selecione uma origem de dados e importe o conteúdo para a base de conhecimento</p>
                                 </div>
 
                                 <!-- 数据源选择下拉列表 -->
-                                <v-select v-model="dataSource" :items="dataSourceOptions" :label="'数据源选择'"
+                                <v-select v-model="dataSource" :items="dataSourceOptions" :label="'Selecionar origem de dados'"
                                     variant="outlined" item-title="title" item-value="value"
                                     prepend-inner-icon="mdi-database"></v-select>
 
@@ -499,8 +499,8 @@ export default {
             activeTab: 'import',
             dataSource: 'file',
             dataSourceOptions: [
-                { title: '从文件', value: 'file', icon: 'mdi-file-upload' },
-                { title: '从URL', value: 'url', icon: 'mdi-web' }
+                { title: 'De arquivo', value: 'file', icon: 'mdi-file-upload' },
+                { title: 'EmURL', value: 'url', icon: 'mdi-web' }
             ],
             selectedFile: null,
             chunkSize: null,
@@ -631,7 +631,7 @@ export default {
                     }
                     if (plugins.length > 0) {
                         this.installed = true;
-                        this.pluginCurrentVersion = plugins[0].version || '未知';
+                        this.pluginCurrentVersion = plugins[0].version || 'Desconhecido';
                         this.getKBCollections();
                         // 自动检查更新
                         this.checkPluginUpdate();
@@ -654,11 +654,11 @@ export default {
                 if (onlineResponse.data.status === 'ok') {
                     const knowledgeBasePlugin = onlineResponse.data.data['astrbot_plugin_knowledge_base'];
                     if (knowledgeBasePlugin) {
-                        this.pluginLatestVersion = knowledgeBasePlugin.version || '未知';
+                        this.pluginLatestVersion = knowledgeBasePlugin.version || 'Desconhecido';
 
                         // 比较版本
                         if (this.pluginCurrentVersion && this.pluginLatestVersion &&
-                            this.pluginCurrentVersion !== '未知' && this.pluginLatestVersion !== '未知') {
+                            this.pluginCurrentVersion !== 'Desconhecido' && this.pluginLatestVersion !== 'Desconhecido') {
                             this.pluginHasUpdate = this.pluginCurrentVersion != this.pluginLatestVersion
                         }
 
@@ -1020,7 +1020,7 @@ export default {
         // URL导入相关方法
         async startImportFromUrl() {
             if (!this.importUrl) {
-                this.showSnackbar('Please enter a URL', 'warning');
+                this.showSnackbar("Informe uma URL", 'warning');
                 return;
             }
 
@@ -1036,14 +1036,14 @@ export default {
                 const addTaskResponse = await pluginExtensionApi.post('url_2_kb/add', payload);
 
                 if (!addTaskResponse.data.task_id) {
-                    throw new Error(addTaskResponse.data.message || 'Failed to start import task: No task_id received.');
+                    throw new Error(addTaskResponse.data.message || "Falha ao iniciar a importação: task_id não recebido.");
                 }
 
                 const taskId = addTaskResponse.data.task_id;
                 this.pollTaskStatus(taskId);
 
             } catch (error) {
-                const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred.';
+                const errorMessage = error.response?.data?.message || error.message || "Ocorreu um erro desconhecido.";
                 this.showSnackbar(`Error: ${errorMessage}`, 'error');
                 this.importing = false;
             }
@@ -1065,14 +1065,14 @@ export default {
                     } else if (taskStatus === 'failed') {
                         clearInterval(this.pollingInterval);
                         this.pollingInterval = null;
-                        const failureReason = taskData.result || 'Unknown reason.';
+                        const failureReason = taskData.result || "Motivo desconhecido.";
                         this.showSnackbar(`${this.tm('importFromUrl.importFailed')}: ${failureReason}`, 'error');
                         this.importing = false;
                     }
                 } catch (error) {
                     clearInterval(this.pollingInterval);
                     this.pollingInterval = null;
-                    const errorMessage = error.response?.data?.message || error.message || 'An unknown error occurred during polling.';
+                    const errorMessage = error.response?.data?.message || error.message || "Ocorreu um erro desconhecido durante a consulta.";
                     this.showSnackbar(`Polling Error: ${errorMessage}`, 'error');
                     this.importing = false;
                 }
@@ -1129,7 +1129,7 @@ export default {
             } else if (successCount > 0) {
                 this.showSnackbar('Import partially complete. See console for details.', 'warning');
             } else {
-                this.showSnackbar('Import failed. No chunks were uploaded.', 'error');
+                this.showSnackbar("Falha na importação. Nenhum bloco foi enviado.", 'error');
             }
 
             this.importing = false;
@@ -1158,7 +1158,7 @@ export default {
             });
 
             if (response.data.status !== 'ok') {
-                throw new Error(response.data.message || 'Chunk upload failed');
+                throw new Error(response.data.message || "Falha ao enviar o bloco");
             }
             return response.data;
         },

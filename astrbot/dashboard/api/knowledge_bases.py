@@ -89,7 +89,7 @@ async def list_knowledge_bases(
             page=_to_int(request.query_params.get("page"), 1),
             page_size=_to_int(request.query_params.get("page_size"), 20),
         ),
-        prefix="获取知识库列表失败",
+        prefix="Falha ao obter as bases de conhecimento",
     )
 
 
@@ -101,7 +101,7 @@ async def create_knowledge_base(
 ):
     return await _run(
         lambda: service.create_kb(payload.canonical_payload()),
-        prefix="创建知识库失败",
+        prefix="Falha ao criar a base de conhecimento",
     )
 
 
@@ -113,7 +113,7 @@ async def get_knowledge_base_task(
 ):
     return await _run(
         lambda: service.get_upload_progress(task_id),
-        prefix="获取上传进度失败",
+        prefix="Falha ao obter o progresso do envio",
     )
 
 
@@ -123,7 +123,10 @@ async def get_knowledge_base(
     _auth: AuthContext = Depends(require_kb_scope),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run(lambda: service.get_kb(kb_id), prefix="获取知识库详情失败")
+    return await _run(
+        lambda: service.get_kb(kb_id),
+        prefix="Falha ao obter os detalhes da base de conhecimento",
+    )
 
 
 @router.put("/knowledge-bases/{kb_id}")
@@ -135,7 +138,7 @@ async def update_knowledge_base(
 ):
     return await _run(
         lambda: service.update_kb({**payload.canonical_payload(), "kb_id": kb_id}),
-        prefix="更新知识库失败",
+        prefix="Falha ao atualizar a base de conhecimento",
     )
 
 
@@ -146,7 +149,8 @@ async def delete_knowledge_base(
     service: KnowledgeBaseService = Depends(get_service),
 ):
     return await _run(
-        lambda: service.delete_kb({"kb_id": kb_id}), prefix="删除知识库失败"
+        lambda: service.delete_kb({"kb_id": kb_id}),
+        prefix="Falha ao excluir a base de conhecimento",
     )
 
 
@@ -158,7 +162,7 @@ async def get_knowledge_base_stats(
 ):
     return await _run(
         lambda: service.get_kb_stats(kb_id),
-        prefix="获取知识库统计失败",
+        prefix="Falha ao obter as estatísticas da base de conhecimento",
     )
 
 
@@ -176,7 +180,7 @@ async def list_knowledge_base_documents(
             page_size=_to_int(request.query_params.get("page_size"), 100),
             search=request.query_params.get("search"),
         ),
-        prefix="获取文档列表失败",
+        prefix="Falha ao obter os documentos",
     )
 
 
@@ -195,7 +199,7 @@ async def upload_knowledge_base_document(
             files=files,
         )
 
-    return await _run(_operation, prefix="上传文档失败")
+    return await _run(_operation, prefix="Falha ao enviar o documento")
 
 
 @router.post("/knowledge-bases/{kb_id}/documents/import")
@@ -208,7 +212,7 @@ async def import_knowledge_base_documents(
     body = payload.model_dump(exclude_none=True)
     return await _run(
         lambda: service.import_documents({"kb_id": kb_id, **body}),
-        prefix="导入文档失败",
+        prefix="Falha ao importar o documento",
     )
 
 
@@ -222,7 +226,7 @@ async def import_knowledge_base_document_url(
     body = payload.model_dump(exclude_none=True)
     return await _run(
         lambda: service.upload_document_from_url({"kb_id": kb_id, **body}),
-        prefix="从URL上传文档失败",
+        prefix="Falha ao enviar o documento por URL",
     )
 
 
@@ -235,7 +239,7 @@ async def get_knowledge_base_document(
 ):
     return await _run(
         lambda: service.get_document(kb_id=kb_id, doc_id=document_id),
-        prefix="获取文档详情失败",
+        prefix="Falha ao obter os detalhes do documento",
     )
 
 
@@ -248,7 +252,7 @@ async def delete_knowledge_base_document(
 ):
     return await _run(
         lambda: service.delete_document({"kb_id": kb_id, "doc_id": document_id}),
-        prefix="删除文档失败",
+        prefix="Falha ao excluir o documento",
     )
 
 
@@ -269,7 +273,7 @@ async def list_knowledge_base_chunks(
             page=_to_int(request.query_params.get("page"), 1),
             page_size=_to_int(request.query_params.get("page_size"), 100),
         ),
-        prefix="获取块列表失败",
+        prefix="Falha ao obter os blocos de texto",
     )
 
 
@@ -288,7 +292,7 @@ async def delete_knowledge_base_chunk(
         lambda: service.delete_chunk(
             {"kb_id": kb_id, "chunk_id": chunk_id, "doc_id": document_id}
         ),
-        prefix="删除文本块失败",
+        prefix="Falha ao excluir o bloco de texto",
     )
 
 
@@ -302,7 +306,7 @@ async def retrieve_knowledge_base(
     body = payload.model_dump(exclude_none=True)
     return await _run(
         lambda: service.retrieve({"kb_id": kb_id, **body}),
-        prefix="检索失败",
+        prefix="Falha na busca",
     )
 
 
@@ -317,7 +321,7 @@ async def dashboard_list_kbs(
             page=_to_int(request.query_params.get("page"), 1),
             page_size=_to_int(request.query_params.get("page_size"), 20),
         ),
-        prefix="获取知识库列表失败",
+        prefix="Falha ao obter as bases de conhecimento",
     )
 
 
@@ -327,7 +331,9 @@ async def dashboard_create_kb(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.create_kb, prefix="创建知识库失败")
+    return await _run_json(
+        request, service.create_kb, prefix="Falha ao criar a base de conhecimento"
+    )
 
 
 @legacy_router.get("/get")
@@ -338,7 +344,7 @@ async def dashboard_get_kb(
 ):
     return await _run(
         lambda: service.get_kb(request.query_params.get("kb_id")),
-        prefix="获取知识库详情失败",
+        prefix="Falha ao obter os detalhes da base de conhecimento",
     )
 
 
@@ -348,7 +354,9 @@ async def dashboard_update_kb(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.update_kb, prefix="更新知识库失败")
+    return await _run_json(
+        request, service.update_kb, prefix="Falha ao atualizar a base de conhecimento"
+    )
 
 
 @legacy_router.post("/delete")
@@ -357,7 +365,9 @@ async def dashboard_delete_kb(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.delete_kb, prefix="删除知识库失败")
+    return await _run_json(
+        request, service.delete_kb, prefix="Falha ao excluir a base de conhecimento"
+    )
 
 
 @legacy_router.get("/stats")
@@ -368,7 +378,7 @@ async def dashboard_get_kb_stats(
 ):
     return await _run(
         lambda: service.get_kb_stats(request.query_params.get("kb_id")),
-        prefix="获取知识库统计失败",
+        prefix="Falha ao obter as estatísticas da base de conhecimento",
     )
 
 
@@ -385,7 +395,7 @@ async def dashboard_list_documents(
             page_size=_to_int(request.query_params.get("page_size"), 100),
             search=request.query_params.get("search"),
         ),
-        prefix="获取文档列表失败",
+        prefix="Falha ao obter os documentos",
     )
 
 
@@ -403,7 +413,7 @@ async def dashboard_upload_document(
             files=files,
         )
 
-    return await _run(_operation, prefix="上传文档失败")
+    return await _run(_operation, prefix="Falha ao enviar o documento")
 
 
 @legacy_router.post("/document/import")
@@ -412,7 +422,9 @@ async def dashboard_import_documents(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.import_documents, prefix="导入文档失败")
+    return await _run_json(
+        request, service.import_documents, prefix="Falha ao importar o documento"
+    )
 
 
 @legacy_router.post("/document/upload/url")
@@ -424,7 +436,7 @@ async def dashboard_upload_document_from_url(
     return await _run_json(
         request,
         service.upload_document_from_url,
-        prefix="从URL上传文档失败",
+        prefix="Falha ao enviar o documento por URL",
     )
 
 
@@ -436,7 +448,7 @@ async def dashboard_get_upload_progress(
 ):
     return await _run(
         lambda: service.get_upload_progress(request.query_params.get("task_id")),
-        prefix="获取上传进度失败",
+        prefix="Falha ao obter o progresso do envio",
     )
 
 
@@ -451,7 +463,7 @@ async def dashboard_get_document(
             kb_id=request.query_params.get("kb_id"),
             doc_id=request.query_params.get("doc_id"),
         ),
-        prefix="获取文档详情失败",
+        prefix="Falha ao obter os detalhes do documento",
     )
 
 
@@ -461,7 +473,9 @@ async def dashboard_delete_document(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.delete_document, prefix="删除文档失败")
+    return await _run_json(
+        request, service.delete_document, prefix="Falha ao excluir o documento"
+    )
 
 
 @legacy_router.get("/chunk/list")
@@ -477,7 +491,7 @@ async def dashboard_list_chunks(
             page=_to_int(request.query_params.get("page"), 1),
             page_size=_to_int(request.query_params.get("page_size"), 100),
         ),
-        prefix="获取块列表失败",
+        prefix="Falha ao obter os blocos de texto",
     )
 
 
@@ -487,7 +501,9 @@ async def dashboard_delete_chunk(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.delete_chunk, prefix="删除文本块失败")
+    return await _run_json(
+        request, service.delete_chunk, prefix="Falha ao excluir o bloco de texto"
+    )
 
 
 @legacy_router.post("/retrieve")
@@ -496,4 +512,4 @@ async def dashboard_retrieve(
     _username: str = Depends(require_dashboard_user),
     service: KnowledgeBaseService = Depends(get_service),
 ):
-    return await _run_json(request, service.retrieve, prefix="检索失败")
+    return await _run_json(request, service.retrieve, prefix="Falha na busca")

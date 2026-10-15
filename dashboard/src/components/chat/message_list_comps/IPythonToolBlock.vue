@@ -60,7 +60,7 @@ const code = computed(() => {
             return props.toolCall.args.code;
         }
     } catch (err) {
-        console.error('Failed to get iPython code:', err);
+        console.error("Falha ao obter o código do IPython:", err);
     }
     return null;
 });
@@ -89,7 +89,7 @@ const highlightedCode = computed(() => {
             props.isDark ? 'dark' : 'light'
         );
     } catch (err) {
-        console.error('Failed to highlight code:', err);
+        console.error("Falha ao realçar o código:", err);
         return `<pre><code>${escapeHtml(code.value)}</code></pre>`;
     }
 });
@@ -106,7 +106,7 @@ onMounted(async () => {
         shikiHighlighter.value = await ensureShikiLanguages(['python']);
         shikiReady.value = true;
     } catch (err) {
-        console.error('Failed to initialize Shiki:', err);
+        console.error("Falha ao inicializar o Shiki:", err);
     }
 });
 </script>

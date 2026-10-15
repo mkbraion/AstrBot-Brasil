@@ -81,7 +81,7 @@ class CommandGroupFilter(HandlerFilter):
                     if cmd_th:
                         line += f" ({cmd_th})"
                     else:
-                        line += " (无参数指令)"
+                        line += " (comando sem parâmetros)"
 
                     if sub_filter.handler_md and sub_filter.handler_md.desc:
                         line += f": {sub_filter.handler_md.desc}"
@@ -138,7 +138,8 @@ class CommandGroupFilter(HandlerFilter):
                 + self.print_cmd_tree(self.sub_command_filters, event=event, cfg=cfg)
             )
             raise ValueError(
-                f"参数不足。{self.group_name} 指令组下有如下指令，请参考：\n" + tree,
+                f"Parâmetros insuficientes.{self.group_name}: comandos disponíveis neste grupo:\n"
+                + tree,
             )
 
         return self.startswith(event.message_str)

@@ -112,7 +112,7 @@ class KnowledgeBaseService:
 
     @staticmethod
     def format_failed_doc_error(file_name: str, error: Exception) -> str:
-        message = str(error).strip() or "上传失败：发生未知错误。"
+        message = str(error).strip() or "Falha no envio: erro desconhecido."
         if message.startswith(file_name):
             return message
         return f"{file_name}: {message}"
@@ -349,45 +349,53 @@ class KnowledgeBaseService:
         payload = self._canonical_kb_payload(data)
         kb_name = payload.get("kb_name")
         if not kb_name:
-            raise KnowledgeBaseServiceError("知识库名称不能为空")
+            raise KnowledgeBaseServiceError(
+                "O nome da base de conhecimento não pode ficar vazio"
+            )
 
         embedding_provider_id = payload.get("embedding_provider_id")
         rerank_provider_id = payload.get("rerank_provider_id")
 
         if not embedding_provider_id:
-            raise KnowledgeBaseServiceError("缺少参数 embedding_provider_id")
+            raise KnowledgeBaseServiceError("Parâmetro embedding_provider_id ausente")
         provider = await kb_manager.provider_manager.get_provider_by_id(
             embedding_provider_id,
         )
         if not provider or not isinstance(provider, EmbeddingProvider):
             raise KnowledgeBaseServiceError(
-                f"嵌入模型不存在或类型错误({type(provider)})"
+                f"Modelo de embeddings ausente ou de tipo inválido ({type(provider)})"
             )
         try:
             vec = await provider.get_embedding("astrbot")
             if len(vec) != provider.get_dim():
                 raise ValueError(
-                    f"嵌入向量维度不匹配，实际是 {len(vec)}，然而配置是 {provider.get_dim()}",
+                    f"Dimensão do vetor de embeddings incompatível. Valor real: {len(vec)}; valor configurado: {provider.get_dim()}",
                 )
         except Exception as exc:
-            raise KnowledgeBaseServiceError(f"测试嵌入模型失败: {exc!s}") from exc
+            raise KnowledgeBaseServiceError(
+                f"Falha ao testar o modelo de embeddings: {exc!s}"
+            ) from exc
 
         if rerank_provider_id:
             rerank_provider = await kb_manager.provider_manager.get_provider_by_id(
                 rerank_provider_id,
             )
             if not isinstance(rerank_provider, RerankProvider):
-                raise KnowledgeBaseServiceError("重排序模型不存在")
+                raise KnowledgeBaseServiceError(
+                    "Modelo de reclassificação não encontrado"
+                )
             try:
                 result = await rerank_provider.rerank(
                     query="astrbot",
                     documents=["astrbot knowledge base"],
                 )
                 if not result:
-                    raise ValueError("重排序模型返回结果异常")
+                    raise ValueError(
+                        "O modelo de reclassificação retornou um resultado inválido"
+                    )
             except Exception as exc:
                 raise KnowledgeBaseServiceError(
-                    f"测试重排序模型失败: {exc!s}，请检查平台日志输出。"
+                    f"Falha ao testar o modelo de reclassificação: {exc!s}. Consulte os registros da plataforma."
                 ) from exc
 
         kb_helper = await kb_manager.create_kb(
@@ -402,14 +410,14 @@ class KnowledgeBaseService:
             top_k_sparse=payload.get("top_k_sparse"),
             top_m_final=payload.get("top_m_final"),
         )
-        return kb_helper.kb.model_dump(), "创建知识库成功"
+        return kb_helper.kb.model_dump(), "Base de conhecimento criada"
 
     async def get_kb(self, kb_id: str | None) -> dict[str, Any]:
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         return kb_helper.kb.model_dump()
 
     async def get_kb_from_dashboard_query(self, kb_id: str | None) -> dict[str, Any]:
@@ -419,7 +427,7 @@ class KnowledgeBaseService:
         payload = self._canonical_kb_payload(data)
         kb_id = payload.get("kb_id")
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
 
         update_keys = [
             "kb_name",
@@ -435,11 +443,13 @@ class KnowledgeBaseService:
         ]
         provided_updates = {key: payload[key] for key in update_keys if key in payload}
         if not provided_updates:
-            raise KnowledgeBaseServiceError("至少需要提供一个更新字段")
+            raise KnowledgeBaseServiceError(
+                "Informe pelo menos um campo para atualizar"
+            )
 
         current_kb = await self.get_kb_manager().get_kb(kb_id)
         if not current_kb:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         current = current_kb.kb
         update_data = {key: getattr(current, key, None) for key in update_keys}
         update_data.update(provided_updates)
@@ -449,25 +459,25 @@ class KnowledgeBaseService:
             **update_data,
         )
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
-        return kb_helper.kb.model_dump(), "更新知识库成功"
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
+        return kb_helper.kb.model_dump(), "Base de conhecimento atualizada"
 
     async def delete_kb(self, data: object) -> tuple[None, str]:
         payload = self._payload(data)
         kb_id = payload.get("kb_id")
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         success = await self.get_kb_manager().delete_kb(kb_id)
         if not success:
-            raise KnowledgeBaseServiceError("知识库不存在")
-        return None, "删除知识库成功"
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
+        return None, "Base de conhecimento excluída"
 
     async def get_kb_stats(self, kb_id: str | None) -> dict[str, Any]:
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         kb = kb_helper.kb
         return {
             "kb_id": kb.kb_id,
@@ -493,10 +503,10 @@ class KnowledgeBaseService:
         search: str | None = None,
     ) -> dict[str, Any]:
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
 
         if search is not None:
             search = search.strip()
@@ -542,7 +552,7 @@ class KnowledgeBaseService:
         files,
     ) -> dict[str, Any]:
         if content_type and "multipart/form-data" not in content_type:
-            raise KnowledgeBaseServiceError("Content-Type 须为 multipart/form-data")
+            raise KnowledgeBaseServiceError("Content-Type deve ser multipart/form-data")
 
         kb_id = form_data.get("kb_id")
         chunk_size = int(form_data.get("chunk_size", 512))
@@ -551,14 +561,14 @@ class KnowledgeBaseService:
         tasks_limit = int(form_data.get("tasks_limit", 3))
         max_retries = int(form_data.get("max_retries", 3))
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
 
         file_list = []
         for key in files.keys():
             if key == "file" or key.startswith("file") or key == "files[]":
                 file_list.extend(files.getlist(key))
         if not file_list:
-            raise KnowledgeBaseServiceError("缺少文件")
+            raise KnowledgeBaseServiceError("Arquivo ausente")
 
         task_id = str(uuid.uuid4())
         system_temp_root = Path(get_astrbot_system_tmp_path())
@@ -592,7 +602,7 @@ class KnowledgeBaseService:
         try:
             kb_helper = await self.get_kb_manager().get_kb(kb_id)
             if not kb_helper:
-                raise KnowledgeBaseServiceError("知识库不存在")
+                raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         except Exception:
             self._cleanup_staging_dir(staging_dir)
             raise
@@ -625,11 +635,13 @@ class KnowledgeBaseService:
     def validate_import_request(data: dict[str, Any]):
         kb_id = data.get("kb_id")
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
 
         documents = data.get("documents")
         if not documents or not isinstance(documents, list):
-            raise KnowledgeBaseServiceError("缺少参数 documents 或格式错误")
+            raise KnowledgeBaseServiceError(
+                "Parâmetro documents ausente ou com formato inválido"
+            )
 
         for doc in documents:
             if (
@@ -638,14 +650,16 @@ class KnowledgeBaseService:
                 or "chunks" not in doc
             ):
                 raise KnowledgeBaseServiceError(
-                    "文档格式错误，必须包含 file_name 和 chunks"
+                    "Formato de documento inválido. Deve conter file_name e chunks"
                 )
             if not isinstance(doc["chunks"], list):
-                raise KnowledgeBaseServiceError("chunks 必须是列表")
+                raise KnowledgeBaseServiceError("chunks deve ser uma lista")
             if not all(
                 isinstance(chunk, str) and chunk.strip() for chunk in doc["chunks"]
             ):
-                raise KnowledgeBaseServiceError("chunks 必须是非空字符串列表")
+                raise KnowledgeBaseServiceError(
+                    "chunks deve ser uma lista de textos não vazios"
+                )
 
         return (
             kb_id,
@@ -663,7 +677,7 @@ class KnowledgeBaseService:
 
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
 
         task_id = str(uuid.uuid4())
         self.init_task(task_id, status="pending")
@@ -685,9 +699,9 @@ class KnowledgeBaseService:
 
     def get_upload_progress(self, task_id: str | None) -> dict[str, Any]:
         if not task_id:
-            raise KnowledgeBaseServiceError("缺少参数 task_id")
+            raise KnowledgeBaseServiceError("Parâmetro task_id ausente")
         if task_id not in self.upload_tasks:
-            raise KnowledgeBaseServiceError("找不到该任务")
+            raise KnowledgeBaseServiceError("Tarefa não encontrada")
 
         task_info = self.upload_tasks[task_id]
         status = task_info["status"]
@@ -716,15 +730,15 @@ class KnowledgeBaseService:
         doc_id: str | None,
     ) -> dict[str, Any]:
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         if not doc_id:
-            raise KnowledgeBaseServiceError("缺少参数 doc_id")
+            raise KnowledgeBaseServiceError("Parâmetro doc_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         doc = await kb_helper.get_document(doc_id)
         if not doc:
-            raise KnowledgeBaseServiceError("文档不存在")
+            raise KnowledgeBaseServiceError("Documento não encontrado")
         return doc.model_dump()
 
     async def get_document_from_dashboard_query(
@@ -740,14 +754,14 @@ class KnowledgeBaseService:
         kb_id = payload.get("kb_id")
         doc_id = payload.get("doc_id")
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         if not doc_id:
-            raise KnowledgeBaseServiceError("缺少参数 doc_id")
+            raise KnowledgeBaseServiceError("Parâmetro doc_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         await kb_helper.delete_document(doc_id)
-        return None, "删除文档成功"
+        return None, "Documento excluído"
 
     async def delete_chunk(self, data: object) -> tuple[None, str]:
         payload = self._payload(data)
@@ -755,16 +769,16 @@ class KnowledgeBaseService:
         chunk_id = payload.get("chunk_id")
         doc_id = payload.get("doc_id")
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         if not chunk_id:
-            raise KnowledgeBaseServiceError("缺少参数 chunk_id")
+            raise KnowledgeBaseServiceError("Parâmetro chunk_id ausente")
         if not doc_id:
-            raise KnowledgeBaseServiceError("缺少参数 doc_id")
+            raise KnowledgeBaseServiceError("Parâmetro doc_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
         await kb_helper.delete_chunk(chunk_id, doc_id)
-        return None, "删除文本块成功"
+        return None, "Bloco de texto excluído"
 
     async def list_chunks(
         self,
@@ -775,12 +789,12 @@ class KnowledgeBaseService:
         page_size: int,
     ) -> dict[str, Any]:
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         if not doc_id:
-            raise KnowledgeBaseServiceError("缺少参数 doc_id")
+            raise KnowledgeBaseServiceError("Parâmetro doc_id ausente")
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
 
         offset = (page - 1) * page_size
         return {
@@ -816,10 +830,12 @@ class KnowledgeBaseService:
         debug = payload.get("debug", False)
 
         if not query:
-            raise KnowledgeBaseServiceError("缺少参数 query")
+            raise KnowledgeBaseServiceError("Parâmetro query ausente")
         kb_manager = self.get_kb_manager()
         if not kb_names or not isinstance(kb_names, list):
-            raise KnowledgeBaseServiceError("缺少参数 kb_names 或格式错误")
+            raise KnowledgeBaseServiceError(
+                "Parâmetro kb_names ausente ou com formato inválido"
+            )
 
         top_k = payload.get("top_k", 5)
         results = await kb_manager.retrieve(
@@ -854,14 +870,14 @@ class KnowledgeBaseService:
         payload = self._payload(data)
         kb_id = payload.get("kb_id")
         if not kb_id:
-            raise KnowledgeBaseServiceError("缺少参数 kb_id")
+            raise KnowledgeBaseServiceError("Parâmetro kb_id ausente")
         url = payload.get("url")
         if not url:
-            raise KnowledgeBaseServiceError("缺少参数 url")
+            raise KnowledgeBaseServiceError("Parâmetro url ausente")
 
         kb_helper = await self.get_kb_manager().get_kb(kb_id)
         if not kb_helper:
-            raise KnowledgeBaseServiceError("知识库不存在")
+            raise KnowledgeBaseServiceError("Base de conhecimento não encontrada")
 
         task_id = str(uuid.uuid4())
         self.init_task(task_id, status="pending")

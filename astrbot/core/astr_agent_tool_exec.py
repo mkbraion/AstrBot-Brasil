@@ -815,7 +815,7 @@ async def call_local_llm_tool(
         elif method_name == "call":
             ready_to_call = handler(context, *args, **kwargs)
         else:
-            raise ValueError(f"未知的方法名: {method_name}")
+            raise ValueError(f"Método desconhecido: {method_name}")
     except ValueError as e:
         raise Exception(f"Tool execution ValueError: {e}") from e
     except TypeError as e:

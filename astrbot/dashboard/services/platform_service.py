@@ -43,8 +43,8 @@ class PlatformService:
         platform_adapter = self.find_platform_by_uuid(webhook_uuid)
 
         if not platform_adapter:
-            logger.warning(f"未找到 webhook_uuid 为 {webhook_uuid} 的平台")
-            raise PlatformServiceError("未找到对应平台", 404)
+            logger.warning(f"未找到 webhook_uuid para {webhook_uuid} 的平台")
+            raise PlatformServiceError("Plataforma correspondente não encontrada", 404)
 
         try:
             return await platform_adapter.webhook_callback(request_obj)
@@ -52,10 +52,12 @@ class PlatformService:
             logger.error(
                 f"平台 {platform_adapter.meta().name} 未实现 webhook_callback 方法"
             )
-            raise PlatformServiceError("平台未支持统一 Webhook 模式", 500) from exc
+            raise PlatformServiceError(
+                "A plataforma não oferece o modo de webhook unificado", 500
+            ) from exc
         except Exception as exc:
             logger.error(f"处理 webhook 回调时发生错误: {exc}", exc_info=True)
-            raise PlatformServiceError("处理回调失败", 500) from exc
+            raise PlatformServiceError("Falha ao processar o callback", 500) from exc
 
     def find_platform_by_uuid(self, webhook_uuid: str) -> Platform | None:
         for platform in self.platform_manager.platform_insts:
@@ -69,7 +71,9 @@ class PlatformService:
             return self.platform_manager.get_all_stats()
         except Exception as exc:
             logger.error(f"获取平台统计信息失败: {exc}", exc_info=True)
-            raise PlatformServiceError(f"获取统计信息失败: {exc}", 500) from exc
+            raise PlatformServiceError(
+                f"Falha ao obter as estatísticas: {exc}", 500
+            ) from exc
 
     async def handle_platform_registration(
         self,
@@ -79,7 +83,7 @@ class PlatformService:
         try:
             action = str(payload.get("action", "")).strip().lower()
             if not action:
-                raise PlatformServiceError("Missing action", 400)
+                raise PlatformServiceError("Ação ausente", 400)
 
             platform_config = payload.get("platform_config")
             if not isinstance(platform_config, dict):
@@ -107,7 +111,7 @@ class PlatformService:
                 )
 
             raise PlatformServiceError(
-                f"Unsupported platform registration: {platform_type}",
+                f"Registro de plataforma incompatível: {platform_type}",
                 404,
             )
         except PlatformServiceError:
@@ -142,7 +146,7 @@ class PlatformService:
                 payload.get("device_code") or payload.get("registration_code") or ""
             ).strip()
             if not device_code:
-                raise PlatformServiceError("Missing device_code", 400)
+                raise PlatformServiceError("device_code ausente", 400)
             result = await poll_app_registration_once(
                 domain=domain,
                 device_code=device_code,
@@ -162,7 +166,7 @@ class PlatformService:
                     logger.error(f"获取飞书机器人信息失败: {exc}", exc_info=True)
             return result
 
-        raise PlatformServiceError(f"Unsupported action: {action}", 400)
+        raise PlatformServiceError(f"Ação incompatível: {action}", 400)
 
     async def _handle_dingtalk_registration(
         self,
@@ -187,13 +191,13 @@ class PlatformService:
                 payload.get("device_code") or payload.get("registration_code") or ""
             ).strip()
             if not device_code:
-                raise PlatformServiceError("Missing device_code", 400)
+                raise PlatformServiceError("device_code ausente", 400)
             result = await poll_dingtalk_app_registration_once(device_code)
             if result.get("status") == "created":
                 result["platform_id_suffix"] = random_platform_id_suffix()
             return result
 
-        raise PlatformServiceError(f"Unsupported action: {action}", 400)
+        raise PlatformServiceError(f"Ação incompatível: {action}", 400)
 
     async def _handle_qqofficial_registration(
         self,
@@ -219,16 +223,16 @@ class PlatformService:
             ).strip()
             bind_key = str(payload.get("bind_key") or "").strip()
             if not task_id:
-                raise PlatformServiceError("Missing task_id", 400)
+                raise PlatformServiceError("task_id ausente", 400)
             if not bind_key:
-                raise PlatformServiceError("Missing bind_key", 400)
+                raise PlatformServiceError("bind_key ausente", 400)
             return await poll_qqofficial_login_once(
                 platform_config=platform_config,
                 task_id=task_id,
                 bind_key=bind_key,
             )
 
-        raise PlatformServiceError(f"Unsupported action: {action}", 400)
+        raise PlatformServiceError(f"Ação incompatível: {action}", 400)
 
     async def _handle_weixin_oc_registration(
         self,
@@ -251,7 +255,7 @@ class PlatformService:
                 payload.get("qrcode") or payload.get("registration_code") or ""
             ).strip()
             if not qrcode:
-                raise PlatformServiceError("Missing qrcode", 400)
+                raise PlatformServiceError("qrcode ausente", 400)
             result = await poll_weixin_oc_login_once(
                 platform_config=platform_config,
                 qrcode=qrcode,
@@ -260,4 +264,4 @@ class PlatformService:
                 result["platform_id_suffix"] = random_platform_id_suffix()
             return result
 
-        raise PlatformServiceError(f"Unsupported action: {action}", 400)
+        raise PlatformServiceError(f"Ação incompatível: {action}", 400)

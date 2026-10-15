@@ -109,7 +109,7 @@ class WecomAIBotServer:
 
         if not all([msg_signature, timestamp, nonce]):
             logger.error("消息回调参数缺失")
-            return "缺少必要参数", 400
+            return "Parâmetros obrigatórios ausentes", 400
 
         # 类型检查确保不为 None
         assert msg_signature is not None
@@ -138,7 +138,7 @@ class WecomAIBotServer:
 
             if ret_code != WecomAIBotConstants.SUCCESS or not message_data:
                 logger.error("消息解密失败，错误码: %d", ret_code)
-                return "消息解密失败", 400
+                return "Falha ao descriptografar a mensagem", 400
 
             # 调用消息处理器
             response = None
@@ -150,7 +150,7 @@ class WecomAIBotServer:
                     )
                 except Exception as e:
                     logger.error("消息处理器执行异常: %s", e)
-                    return "消息处理异常", 500
+                    return "Erro ao processar a mensagem", 500
 
             if response:
                 return response, 200, {"Content-Type": "text/plain"}
@@ -158,7 +158,7 @@ class WecomAIBotServer:
 
         except Exception as e:
             logger.error("处理消息时发生异常: %s", e)
-            return "内部服务器错误", 500
+            return "Erro interno do servidor", 500
 
     async def start_server(self) -> None:
         """启动服务器"""

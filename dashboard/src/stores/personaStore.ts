@@ -59,9 +59,9 @@ export const usePersonaStore = defineStore("persona", {
     // 当前文件夹名称
     currentFolderName(): string {
       if (this.breadcrumbPath.length === 0) {
-        return '根目录';
+        return 'Diretório raiz';
       }
-      return this.breadcrumbPath[this.breadcrumbPath.length - 1]?.name || '根目录';
+      return this.breadcrumbPath[this.breadcrumbPath.length - 1]?.name || 'Diretório raiz';
     },
   },
 
@@ -100,7 +100,7 @@ export const usePersonaStore = defineStore("persona", {
         if (response.data.status === 'ok') {
           this.folderTree = response.data.data || [];
         } else {
-          throw new Error(response.data.message || '获取文件夹树失败');
+          throw new Error(response.data.message || 'Falha ao obter a árvore de pastas');
         }
       } finally {
         this.treeLoading = false;
@@ -179,7 +179,7 @@ export const usePersonaStore = defineStore("persona", {
       const response = await personaApi.move(personaId, targetFolderId);
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '移动人格失败');
+        throw new Error(response.data.message || 'Falha ao mover a persona');
       }
 
       // 刷新当前文件夹内容和文件夹树
@@ -198,7 +198,7 @@ export const usePersonaStore = defineStore("persona", {
       });
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '移动文件夹失败');
+        throw new Error(response.data.message || 'Falha ao mover a pasta');
       }
 
       // 刷新当前文件夹内容和文件夹树
@@ -222,7 +222,7 @@ export const usePersonaStore = defineStore("persona", {
       });
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '创建文件夹失败');
+        throw new Error(response.data.message || 'Falha ao criar a pasta');
       }
 
       // 刷新当前文件夹内容和文件夹树
@@ -245,7 +245,7 @@ export const usePersonaStore = defineStore("persona", {
       const response = await personaApi.updateFolder(data.folder_id, data);
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '更新文件夹失败');
+        throw new Error(response.data.message || 'Falha ao atualizar a pasta');
       }
 
       // 刷新当前文件夹内容和文件夹树
@@ -266,7 +266,7 @@ export const usePersonaStore = defineStore("persona", {
       const response = await personaApi.deleteFolder(folderId);
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '删除文件夹失败');
+        throw new Error(response.data.message || 'Falha ao excluir a pasta');
       }
 
       // If the active folder was deleted, return to its parent instead of
@@ -285,7 +285,7 @@ export const usePersonaStore = defineStore("persona", {
       const response = await personaApi.delete(personaId);
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '删除人格失败');
+        throw new Error(response.data.message || 'Falha ao excluir a persona');
       }
 
       // 刷新当前文件夹内容
@@ -299,7 +299,7 @@ export const usePersonaStore = defineStore("persona", {
       const response = await personaApi.reorder(items);
 
       if (response.data.status !== 'ok') {
-        throw new Error(response.data.message || '更新排序失败');
+        throw new Error(response.data.message || 'Falha ao atualizar a ordenação');
       }
 
       // 刷新当前文件夹内容

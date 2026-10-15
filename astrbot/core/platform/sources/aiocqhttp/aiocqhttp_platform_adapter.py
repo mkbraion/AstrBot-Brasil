@@ -29,7 +29,7 @@ from .aiocqhttp_message_event import AiocqhttpMessageEvent
 
 @register_platform_adapter(
     "aiocqhttp",
-    "适用于 OneBot V11 标准的消息平台适配器，支持反向 WebSockets。",
+    "Adaptador de mensagens do padrão OneBot V11, com suporte a WebSockets reversos.",
     support_streaming_message=False,
 )
 class AiocqhttpAdapter(Platform):
@@ -47,7 +47,7 @@ class AiocqhttpAdapter(Platform):
 
         self.metadata = PlatformMetadata(
             name="aiocqhttp",
-            description="适用于 OneBot 标准的消息平台适配器，支持反向 WebSockets。",
+            description="Adaptador de mensagens do padrão OneBot, com suporte a WebSockets reversos.",
             id=cast(str, self.config.get("id")),
             support_streaming_message=False,
         )
@@ -230,7 +230,7 @@ class AiocqhttpAdapter(Platform):
 
         message_str = ""
         if not isinstance(event.message, list):
-            err = f"aiocqhttp: 无法识别的消息类型: {event.message!s}，此条消息将被忽略。如果您在使用 go-cqhttp，请将其配置文件中的 message.post-format 更改为 array。"
+            err = f"aiocqhttp: tipo de mensagem desconhecido: {event.message!s}; a mensagem será ignorada. Se usar go-cqhttp, altere message.post-format para array em seu arquivo de configuração."
             logger.critical(err)
             try:
                 await self.bot.send(event, err)
@@ -293,12 +293,12 @@ class AiocqhttpAdapter(Platform):
                                 a = File(name=file_name, url=file_url)
                                 abm.message.append(a)
                             else:
-                                logger.error(f"获取文件失败: {ret}")
+                                logger.error(f"获取Arquivo失败: {ret}")
 
                         except ActionFailed as e:
-                            logger.error(f"获取文件失败: {e}，此消息段将被忽略。")
+                            logger.error(f"获取Arquivo失败: {e}，此消息段将被忽略。")
                         except BaseException as e:
-                            logger.error(f"获取文件失败: {e}，此消息段将被忽略。")
+                            logger.error(f"获取Arquivo失败: {e}，此消息段将被忽略。")
 
             elif t == "reply":
                 for m in m_group:
@@ -349,7 +349,7 @@ class AiocqhttpAdapter(Platform):
                 for m in m_group:
                     try:
                         if m["data"]["qq"] == "all":
-                            abm.message.append(At(qq="all", name="全体成员"))
+                            abm.message.append(At(qq="all", name="todos os membros"))
                             continue
 
                         at_info = await self.bot.call_action(

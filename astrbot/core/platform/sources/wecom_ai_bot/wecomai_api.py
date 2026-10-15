@@ -59,14 +59,14 @@ class WecomAIBotAPIClient:
             )
 
             if ret != WecomAIBotConstants.SUCCESS:
-                logger.error(f"消息解密失败，错误码: {ret}")
+                logger.error(f"Falha ao descriptografar a mensagem，错误码: {ret}")
                 return ret, None
 
             # 解析 JSON
             if decrypted_msg:
                 try:
                     message_data = json.loads(decrypted_msg)
-                    logger.debug(f"解密成功，消息内容: {message_data}")
+                    logger.debug(f"解密成功，消息Conteúdo: {message_data}")
                     return WecomAIBotConstants.SUCCESS, message_data
                 except json.JSONDecodeError as e:
                     logger.error(f"JSON 解析失败: {e}, 原始消息: {decrypted_msg}")
@@ -165,31 +165,31 @@ class WecomAIBotAPIClient:
         """
         try:
             # 下载图片
-            logger.info(f"开始下载加密图片: {image_url}")
+            logger.info(f"开始下载加密Imagem: {image_url}")
 
             async with aiohttp.ClientSession() as session:
                 async with session.get(image_url, timeout=15) as response:
                     if response.status != 200:
-                        error_msg = f"图片下载失败，状态码: {response.status}"
+                        error_msg = f"Falha ao baixar a imagem. Código de status: {response.status}"
                         logger.error(error_msg)
                         return False, error_msg
 
                     encrypted_data = await response.read()
-                    logger.info(f"图片下载成功，大小: {len(encrypted_data)} 字节")
+                    logger.info(f"Imagem下载成功，大小: {len(encrypted_data)} 字节")
 
             # 准备解密密钥
             if aes_key_base64 is None:
                 aes_key_base64 = self.encoding_aes_key
 
             if not aes_key_base64:
-                raise ValueError("AES 密钥不能为空")
+                raise ValueError("A chave AES não pode ficar vazia")
 
             # Base64 解码密钥
             aes_key = base64.b64decode(
                 aes_key_base64 + "=" * (-len(aes_key_base64) % 4),
             )
             if len(aes_key) != 32:
-                raise ValueError("无效的 AES 密钥长度: 应为 32 字节")
+                raise ValueError("Tamanho de chave AES inválido: deve ter 32 bytes")
 
             iv = aes_key[:16]  # 初始向量为密钥前 16 字节
 
@@ -200,25 +200,27 @@ class WecomAIBotAPIClient:
             # 去除 PKCS#7 填充
             pad_len = decrypted_data[-1]
             if pad_len > 32:  # AES-256 块大小为 32 字节
-                raise ValueError("无效的填充长度 (大于32字节)")
+                raise ValueError(
+                    "Tamanho de preenchimento inválido (maior que 32 bytes)"
+                )
 
             decrypted_data = decrypted_data[:-pad_len]
-            logger.info(f"图片解密成功，解密后大小: {len(decrypted_data)} 字节")
+            logger.info(f"Imagem解密成功，解密后大小: {len(decrypted_data)} 字节")
 
             return True, decrypted_data
 
         except aiohttp.ClientError as e:
-            error_msg = f"图片下载失败: {e!s}"
+            error_msg = f"Falha ao baixar a imagem: {e!s}"
             logger.error(error_msg)
             return False, error_msg
 
         except ValueError as e:
-            error_msg = f"参数错误: {e!s}"
+            error_msg = f"Parâmetro inválido: {e!s}"
             logger.error(error_msg)
             return False, error_msg
 
         except Exception as e:
-            error_msg = f"图片处理异常: {e!s}"
+            error_msg = f"Erro ao processar a imagem: {e!s}"
             logger.error(error_msg)
             return False, error_msg
 

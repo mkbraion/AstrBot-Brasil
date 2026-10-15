@@ -170,7 +170,7 @@ class AstrBotConfig(dict):
             for k, v in schema.items():
                 if v["type"] not in DEFAULT_VALUE_MAP:
                     raise TypeError(
-                        f"不受支持的配置类型 {v['type']}。支持的类型有：{DEFAULT_VALUE_MAP.keys()}",
+                        f"Tipo de configuração incompatível: {v['type']}. Tipos aceitos: {DEFAULT_VALUE_MAP.keys()}",
                     )
                 if "default" in v:
                     default = v["default"]
@@ -387,7 +387,7 @@ class AstrBotConfig(dict):
             del self[key]
             self.save_config()
         except KeyError:
-            raise AttributeError(f"没有找到 Key: '{key}'")
+            raise AttributeError(f"Chave não encontrada: '{key}'")
 
     def __setattr__(self, key, value) -> None:
         self[key] = value

@@ -20,7 +20,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "sensevoice_stt_selfhost",
-    "SenseVoice 自托管语音识别 模型部署",
+    "Implantação do modelo de reconhecimento de fala SenseVoice local",
     provider_type=ProviderType.SPEECH_TO_TEXT,
 )
 class ProviderSenseVoiceSTTSelfHost(STTProvider):
@@ -69,10 +69,10 @@ class ProviderSenseVoiceSTTSelfHost(STTProvider):
                 matches = re.findall(r"<\|([^|]+)\|>", res[0])
                 if len(matches) >= 2:
                     emotion = matches[1]
-                    text = f"(当前的情绪：{emotion}) {text}"
+                    text = f"(Emoção atual: {emotion}) {text}"
                 else:
                     logger.warning("未能提取到情绪信息")
             return text
         except Exception as e:
-            logger.error(f"处理音频文件时出错: {e}")
+            logger.error(f"处理音频Arquivo时出错: {e}")
             raise

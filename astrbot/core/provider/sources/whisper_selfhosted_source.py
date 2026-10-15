@@ -14,7 +14,7 @@ from ..register import register_provider_adapter
 
 @register_provider_adapter(
     "openai_whisper_selfhost",
-    "OpenAI Whisper 模型部署",
+    "Implantação do modelo OpenAI Whisper",
     provider_type=ProviderType.SPEECH_TO_TEXT,
 )
 class ProviderOpenAIWhisperSelfHost(STTProvider):
@@ -58,7 +58,7 @@ class ProviderOpenAIWhisperSelfHost(STTProvider):
         loop = asyncio.get_running_loop()
 
         if not self.model:
-            raise RuntimeError("Whisper 模型未初始化")
+            raise RuntimeError("Modelo Whisper não inicializado")
 
         async with MediaResolver(
             audio_url,

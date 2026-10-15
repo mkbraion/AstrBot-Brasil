@@ -62,7 +62,9 @@ class MyEventHandler(dingtalk_stream.EventHandler):
 
 
 @register_platform_adapter(
-    "dingtalk", "钉钉机器人官方 API 适配器", support_streaming_message=True
+    "dingtalk",
+    "Adaptador da API oficial de bots do DingTalk",
+    support_streaming_message=True,
 )
 class DingtalkPlatformAdapter(Platform):
     def __init__(
@@ -155,7 +157,7 @@ class DingtalkPlatformAdapter(Platform):
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             name="dingtalk",
-            description="钉钉机器人官方 API 适配器",
+            description="Adaptador da API oficial de bots do DingTalk",
             id=cast(str, self.config.get("id")),
             support_streaming_message=True,
             support_proactive_message=True,
@@ -381,7 +383,7 @@ class DingtalkPlatformAdapter(Platform):
         ):
             if resp.status != 200:
                 logger.error(
-                    f"下载钉钉文件失败: {resp.status}, {await resp.text()}",
+                    f"下载钉钉Arquivo失败: {resp.status}, {await resp.text()}",
                 )
                 return ""
             resp_data = await resp.json()
@@ -394,7 +396,9 @@ class DingtalkPlatformAdapter(Platform):
                 ),
             )
             if not download_url:
-                logger.error(f"下载钉钉文件失败: 未找到 downloadUrl, 响应: {resp_data}")
+                logger.error(
+                    f"下载钉钉Arquivo失败: 未找到 downloadUrl; resposta: {resp_data}"
+                )
                 return ""
             await download_file(download_url, str(f_path))
         return str(f_path)
@@ -408,7 +412,7 @@ class DingtalkPlatformAdapter(Platform):
             if access_token:
                 return access_token
         except Exception as e:
-            logger.warning(f"通过 dingtalk_stream 获取 access_token 失败: {e}")
+            logger.warning(f"通过 dingtalk_stream 获取 access_token: {e}")
 
         payload = {"appKey": self.client_id, "appSecret": self.client_secret}
         async with aiohttp.ClientSession() as session:
@@ -418,7 +422,7 @@ class DingtalkPlatformAdapter(Platform):
             ) as resp:
                 if resp.status != 200:
                     logger.error(
-                        f"获取钉钉机器人 access_token 失败: {resp.status}, {await resp.text()}",
+                        f"获取钉钉机器人 access_token: {resp.status}, {await resp.text()}",
                     )
                     return ""
                 data = await resp.json()
@@ -511,7 +515,7 @@ class DingtalkPlatformAdapter(Platform):
             if p.exists() and p.is_file():
                 p.unlink()
         except Exception as e:
-            logger.warning(f"清理临时文件失败: {file_path}, {e}")
+            logger.warning(f"清理临时Arquivo失败: {file_path}, {e}")
 
     async def _prepare_voice_for_dingtalk(self, input_path: str) -> tuple[str, bool]:
         """优先转换为 OGG(Opus)，不可用时回退 AMR。"""
@@ -523,7 +527,7 @@ class DingtalkPlatformAdapter(Platform):
             converted = await convert_audio_format(input_path, "ogg")
             return converted, converted != input_path
         except Exception as e:
-            logger.warning(f"钉钉语音转 OGG 失败，回退 AMR: {e}")
+            logger.warning(f"钉钉Voz转 OGG 失败，回退 AMR: {e}")
             converted = await convert_audio_format(input_path, "amr")
             return converted, converted != input_path
 
@@ -633,7 +637,7 @@ class DingtalkPlatformAdapter(Platform):
                         },
                     )
                 except Exception as e:
-                    logger.warning(f"钉钉语音发送失败: {e}")
+                    logger.warning(f"钉钉Voz发送失败: {e}")
                     continue
                 finally:
                     if converted_audio:
@@ -690,7 +694,7 @@ class DingtalkPlatformAdapter(Platform):
                         },
                     )
                 except Exception as e:
-                    logger.warning(f"钉钉文件发送失败: {e}")
+                    logger.warning(f"钉钉Arquivo发送失败: {e}")
                     continue
 
     async def send_message_chain_to_group(
@@ -808,7 +812,7 @@ class DingtalkPlatformAdapter(Platform):
                 retry_count += 1
                 delay = _dingtalk_reconnect_delay(retry_count)
                 logger.info(
-                    f"钉钉适配器将在 {delay} 秒后重连 (第 {retry_count} 次)...",
+                    f"钉钉适配器将在 {delay} segundos后重连 (第 {retry_count} 次)...",
                 )
                 self._terminated_event.wait(delay)
 
@@ -841,7 +845,7 @@ class DingtalkPlatformAdapter(Platform):
                                 return
                             should_cancel_task = True
                             handle_retry(
-                                f"钉钉 SDK task 异常退出: {exc}",
+                                f"A tarefa do SDK DingTalk foi encerrada com erro: {exc}",
                                 time.monotonic() - start_time,
                             )
                             continue
@@ -853,7 +857,7 @@ class DingtalkPlatformAdapter(Platform):
                         return
                     should_cancel_task = True
                     handle_retry(
-                        f"钉钉机器人启动失败: {e}",
+                        f"Falha ao iniciar o bot do DingTalk: {e}",
                         time.monotonic() - start_time,
                     )
                     continue

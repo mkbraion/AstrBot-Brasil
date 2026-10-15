@@ -282,7 +282,7 @@ async function handlePickWorkspaceDirectory() {
             }
         }
     } catch (error) {
-        console.warn('[chat-project] Failed to pick workspace directory.', error);
+        console.warn("[chat-project] Falha ao selecionar o diretório da área de trabalho.", error);
     } finally {
         pickingWorkspaceDirectory.value = false;
     }

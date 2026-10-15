@@ -120,7 +120,7 @@ async function getEmbeddingDimensions(providerConfig) {
   try {
     const providerId = String(providerConfig?.id || '')
     if (!providerId) {
-      useToast().error('缺少提供商 ID')
+      useToast().error('Provedor ausente ID')
       return
     }
     const response = await providerApi.embeddingDimension(providerId, providerConfig)
@@ -128,7 +128,7 @@ async function getEmbeddingDimensions(providerConfig) {
     if (response.data.status != "error" && response.data.data?.embedding_dimensions) {
       console.log(response.data.data.embedding_dimensions)
       providerConfig.embedding_dimensions = response.data.data.embedding_dimensions
-      useToast().success("获取成功: " + response.data.data.embedding_dimensions)
+      useToast().success("Dados obtidos: " + response.data.data.embedding_dimensions)
     } else {
       useToast().error(response.data.message)
     }

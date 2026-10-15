@@ -79,7 +79,7 @@ const maybeShowFirstNotice = async () => {
 
     localStorage.setItem(FIRST_NOTICE_SEEN_KEY, "1");
   } catch (error) {
-    console.error("Failed to load first notice:", error);
+    console.error("Falha ao carregar o aviso inicial:", error);
   }
 };
 
@@ -101,7 +101,7 @@ onMounted(() => {
         );
       }
     } catch (error) {
-      console.error("Failed to load version info:", error);
+      console.error("Falha ao carregar as informações da versão:", error);
     }
     await maybeShowFirstNotice();
   }, 1000);

@@ -16,7 +16,7 @@ _DEFAULT_MODEL = "text-embedding-v4"
 
 @register_provider_adapter(
     "dashscope_embedding",
-    "阿里云百炼(DashScope) Embedding 提供商适配器",
+    "Adaptador de provedor de embeddings do Alibaba Cloud Bailian (DashScope)",
     provider_type=ProviderType.EMBEDDING,
 )
 class DashScopeEmbeddingProvider(EmbeddingProvider):
@@ -36,7 +36,9 @@ class DashScopeEmbeddingProvider(EmbeddingProvider):
             "DASHSCOPE_API_KEY", ""
         )
         if not self.api_key:
-            raise ValueError("阿里云百炼(DashScope) Embedding API Key 不能为空。")
+            raise ValueError(
+                "A chave de API de embeddings do Alibaba Cloud Bailian (DashScope) não pode ficar vazia."
+            )
 
         self.base_url = provider_config.get("embedding_api_base", _DEFAULT_API_BASE)
         self.model = provider_config.get("embedding_model", _DEFAULT_MODEL)

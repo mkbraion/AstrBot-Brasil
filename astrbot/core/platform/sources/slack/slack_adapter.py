@@ -30,7 +30,7 @@ from .slack_event import SlackMessageEvent
 
 @register_platform_adapter(
     "slack",
-    "适用于 Slack 的消息平台适配器，支持 Socket Mode 和 Webhook Mode。",
+    "Adaptador de mensagens do Slack, com suporte a Socket Mode e modo webhook.",
     support_streaming_message=False,
 )
 class SlackAdapter(Platform):
@@ -56,17 +56,17 @@ class SlackAdapter(Platform):
         )
 
         if not self.bot_token:
-            raise ValueError("Slack bot_token 是必需的")
+            raise ValueError("bot_token do Slack é obrigatório")
 
         if self.connection_mode == "socket" and not self.app_token:
-            raise ValueError("Socket Mode 需要 app_token")
+            raise ValueError("O Socket Mode exige app_token")
 
         if self.connection_mode == "webhook" and not self.signing_secret:
-            raise ValueError("Webhook Mode 需要 signing_secret")
+            raise ValueError("O modo webhook exige signing_secret")
 
         self.metadata = PlatformMetadata(
             name="slack",
-            description="适用于 Slack 的消息平台适配器，支持 Socket Mode 和 Webhook Mode。",
+            description="Adaptador de mensagens do Slack, com suporte a Socket Mode e modo webhook.",
             id=cast(str, self.config.get("id")),
             support_streaming_message=False,
         )
@@ -345,7 +345,7 @@ class SlackAdapter(Platform):
                 logger.error(
                     f"Failed to download slack file: {resp.status} {await resp.text()}",
                 )
-                raise Exception(f"下载文件失败: {resp.status}")
+                raise Exception(f"Falha ao baixar o arquivo: {resp.status}")
 
     async def run(self) -> None:
         self.bot_self_id = await self.get_bot_user_id()
@@ -353,7 +353,7 @@ class SlackAdapter(Platform):
 
         if self.connection_mode == "socket":
             if not self.app_token:
-                raise ValueError("Socket Mode 需要 app_token")
+                raise ValueError("O Socket Mode exige app_token")
 
             # 创建 Socket 客户端
             self.socket_client = SlackSocketClient(
@@ -367,7 +367,7 @@ class SlackAdapter(Platform):
 
         elif self.connection_mode == "webhook":
             if not self.signing_secret:
-                raise ValueError("Webhook Mode 需要 signing_secret")
+                raise ValueError("O modo webhook exige signing_secret")
 
             # 创建 Webhook 客户端
             self.webhook_client = SlackWebhookClient(
@@ -393,7 +393,7 @@ class SlackAdapter(Platform):
 
         else:
             raise ValueError(
-                f"不支持的连接模式: {self.connection_mode}，请使用 'socket' 或 'webhook'",
+                f"Modo de conexão incompatível: {self.connection_mode}; use 'socket' ou 'webhook'",
             )
 
     async def _handle_webhook_event(self, event_data: dict) -> None:

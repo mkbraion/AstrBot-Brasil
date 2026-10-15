@@ -113,7 +113,7 @@ async def create_config_profile(
             payload.config,
             allow_admin_id_change=_can_edit_admin_ids(auth),
         ),
-        "创建成功",
+        "Criado",
     )
 
 
@@ -143,7 +143,7 @@ async def update_config_profile(
         two_factor_code=request.headers.get("X-2FA-Code"),
         allow_admin_id_change=_can_edit_admin_ids(auth),
     )
-    return ok(message=message or "保存成功")
+    return ok(message=message or "Salvo")
 
 
 @router.patch("/config-profiles/{config_id}")
@@ -154,7 +154,7 @@ async def rename_config_profile(
     service: ConfigProfileService = Depends(get_service),
 ):
     await service.rename_profile(config_id, payload.name)
-    return ok(message="更新成功")
+    return ok(message="Atualizado")
 
 
 @router.delete("/config-profiles/{config_id}")
@@ -164,7 +164,7 @@ async def delete_config_profile(
     service: ConfigProfileService = Depends(get_service),
 ):
     await service.delete_profile(config_id)
-    return ok(message="删除成功")
+    return ok(message="Excluído")
 
 
 @router.get("/system-config/schema")
@@ -207,7 +207,7 @@ async def update_system_config(
         two_factor_code=request.headers.get("X-2FA-Code"),
         allow_admin_id_change=_can_edit_admin_ids(auth),
     )
-    return ok(message=message or "保存成功")
+    return ok(message=message or "Salvo")
 
 
 @router.get("/config-routes")
@@ -225,7 +225,7 @@ async def replace_config_routes(
     service: ConfigRoutingService = Depends(get_routing_service),
 ):
     await service.replace_route_mapping(payload.routing)
-    return ok(message="更新成功")
+    return ok(message="Atualizado")
 
 
 @router.put("/config-routes/{umo}")
@@ -236,7 +236,7 @@ async def upsert_config_route(
     service: ConfigRoutingService = Depends(get_routing_service),
 ):
     await service.set_route(umo, payload.config_id)
-    return ok(message="更新成功")
+    return ok(message="Atualizado")
 
 
 @router.delete("/config-routes/{umo}")
@@ -246,7 +246,7 @@ async def delete_config_route(
     service: ConfigRoutingService = Depends(get_routing_service),
 ):
     await service.delete_route_by_umo(umo)
-    return ok(message="删除成功")
+    return ok(message="Excluído")
 
 
 @legacy_router.get("/default")
@@ -279,7 +279,7 @@ async def create_dashboard_alias_config_profile(
                 body.get("config"),
                 allow_admin_id_change=_can_edit_admin_ids(auth),
             ),
-            "创建成功",
+            "Criado",
         )
     except ValueError as exc:
         return _alias_error(str(exc))
@@ -295,7 +295,7 @@ async def get_dashboard_alias_config_profile(
     if system_config.lower() == "1":
         return ok(service.get_system_schema())
     if not id:
-        return _alias_error("缺少配置文件 ID")
+        return _alias_error("ID da configuração ausente")
     try:
         return ok(service.get_profile(id))
     except ValueError as exc:
@@ -311,10 +311,10 @@ async def delete_dashboard_alias_config_profile(
     body = await _json_or_empty(request)
     config_id = body.get("id")
     if not config_id:
-        return _alias_error("缺少配置文件 ID")
+        return _alias_error("ID da configuração ausente")
     try:
         await service.delete_profile(str(config_id))
-        return ok(message="删除成功")
+        return ok(message="Excluído")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -328,10 +328,10 @@ async def rename_dashboard_alias_config_profile(
     body = await _json_or_empty(request)
     config_id = body.get("id")
     if not config_id:
-        return _alias_error("缺少配置文件 ID")
+        return _alias_error("ID da configuração ausente")
     try:
         await service.rename_profile(str(config_id), body.get("name"))
-        return ok(message="更新成功")
+        return ok(message="Atualizado")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -346,9 +346,9 @@ async def update_dashboard_alias_astrbot_config(
     config = body.get("config")
     config_id = body.get("conf_id")
     if not isinstance(config, dict):
-        return _alias_error("Invalid config payload")
+        return _alias_error("Dados de configuração inválidos")
     if not config_id:
-        return _alias_error("Config file None does not exist")
+        return _alias_error("A configuração None não existe")
     try:
         message = await service.update_profile(
             str(config_id),
@@ -356,7 +356,7 @@ async def update_dashboard_alias_astrbot_config(
             two_factor_code=request.headers.get("X-2FA-Code"),
             allow_admin_id_change=_can_edit_admin_ids(auth),
         )
-        return ok(message=message or "保存成功~")
+        return ok(message=message or "Salvo")
     except ValueError as exc:
         return _alias_error(str(exc))
 
@@ -472,8 +472,8 @@ async def update_dashboard_alias_config_routes(
     try:
         await service.replace_routes(body)
     except ValueError:
-        return _alias_error("缺少或错误的路由表数据")
-    return ok(message="更新成功")
+        return _alias_error("Tabela de rotas ausente ou inválida")
+    return ok(message="Atualizado")
 
 
 @legacy_router.post("/umo_abconf_route/update")
@@ -486,8 +486,8 @@ async def upsert_dashboard_alias_config_route(
     try:
         await service.upsert_route(body)
     except ValueError:
-        return _alias_error("缺少 UMO 或配置文件 ID")
-    return ok(message="更新成功")
+        return _alias_error("UMO ou ID da configuração ausente")
+    return ok(message="Atualizado")
 
 
 @legacy_router.post("/umo_abconf_route/delete")
@@ -500,5 +500,5 @@ async def delete_dashboard_alias_config_route(
     try:
         await service.delete_route(body)
     except ValueError:
-        return _alias_error("缺少 UMO")
-    return ok(message="删除成功")
+        return _alias_error("UMO ausente")
+    return ok(message="Excluído")

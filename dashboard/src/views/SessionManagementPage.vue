@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="session-management-page">
     <v-container fluid class="pa-0">
       <v-card flat>
@@ -1685,7 +1685,7 @@ export default {
           this.groups = response.data.data.groups || []
         }
       } catch (error) {
-        console.error('加载分组失败:', error)
+        console.error('Falha ao carregar os grupos:', error)
       }
       this.groupsLoading = false
     },
@@ -1700,7 +1700,7 @@ export default {
           this.availableUmos = response.data.data.umos || []
         }
       } catch (error) {
-        console.error('加载会话列表失败:', error)
+        console.error('Falha ao carregar as sessões:', error)
       }
       this.loadingUmos = false
     },

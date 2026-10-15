@@ -167,7 +167,9 @@ class WecomServer:
         await self.shutdown_event.wait()
 
 
-@register_platform_adapter("wecom", "wecom 适配器", support_streaming_message=False)
+@register_platform_adapter(
+    "wecom", "Adaptador do WeCom", support_streaming_message=False
+)
 class WecomPlatformAdapter(Platform):
     WECHAT_KF_TEXT_CONTENT_DEDUP_TTL_SECONDS = 15
 
@@ -273,11 +275,13 @@ class WecomPlatformAdapter(Platform):
         # 企业微信客服不支持主动发送
         if hasattr(self.client, "kf_message"):
             await super().send_by_session(session, message_chain)
-            raise Exception("企业微信客服模式不支持 send_by_session 主动发送。")
+            raise Exception(
+                "O modo de atendimento do WeCom não permite envios proativos por send_by_session."
+            )
         if not self.agent_id:
             await super().send_by_session(session, message_chain)
             raise Exception(
-                f"send_by_session 失败：无法为会话 {session.session_id} 推断 agent_id。",
+                f"Falha em send_by_session: não foi possível determinar agent_id para a sessão {session.session_id}.",
             )
 
         message_obj = AstrBotMessage()
@@ -298,7 +302,7 @@ class WecomPlatformAdapter(Platform):
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             "wecom",
-            "wecom 适配器",
+            "Adaptador do WeCom",
             id=self.config.get("id", "wecom"),
             support_streaming_message=False,
             support_proactive_message=True,
@@ -341,7 +345,7 @@ class WecomPlatformAdapter(Platform):
         # 如果启用统一 webhook 模式，则不启动独立服务器
         webhook_uuid = self.config.get("webhook_uuid")
         if self.unified_webhook_mode and webhook_uuid:
-            log_webhook_info(f"{self.meta().id}(企业微信)", webhook_uuid)
+            log_webhook_info(f"{self.meta().id}(WeCom)", webhook_uuid)
             # 保持运行状态，等待 shutdown
             await self.server.shutdown_event.wait()
         else:
@@ -371,7 +375,7 @@ class WecomPlatformAdapter(Platform):
             abm.session_id = abm.sender.user_id
             abm.raw_message = msg
         elif isinstance(msg, ImageMessage):
-            abm.message_str = "[图片]"
+            abm.message_str = "[Imagem]"
             abm.self_id = str(msg.agent)
             abm.message = [Image(file=msg.image, url=msg.image)]
             abm.type = MessageType.FRIEND_MESSAGE
@@ -490,7 +494,7 @@ class WecomPlatformAdapter(Platform):
         elif msgtype == "file":
             media_id = msg.get("file", {}).get("media_id", "")
             if not media_id:
-                logger.warning(f"微信客服文件消息缺少 media_id: {msg}")
+                logger.warning(f"微信客服Arquivo消息缺少 media_id: {msg}")
                 return
 
             resp: Response = await asyncio.get_running_loop().run_in_executor(

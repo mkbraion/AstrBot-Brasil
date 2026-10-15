@@ -251,8 +251,8 @@
         </v-card-text>
         <v-card-actions class="pa-4">
           <v-spacer></v-spacer>
-          <v-btn variant="text" @click="showManualModelDialog = false">取消</v-btn>
-          <v-btn color="primary" variant="tonal" @click="confirmManualModel">添加</v-btn>
+          <v-btn variant="text" @click="showManualModelDialog = false">Cancelar</v-btn>
+          <v-btn color="primary" variant="tonal" @click="confirmManualModel">Adicionar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -581,15 +581,15 @@ async function saveLegacyProvider() {
         newSelectedProviderConfig.value
       )
       if (res.data.status === 'error') {
-        throw new Error(res.data.message || '更新失败!')
+        throw new Error(res.data.message || 'Falha ao atualizar!')
       }
-      showMessage(res.data.message || '更新成功!')
+      showMessage(res.data.message || 'Atualizado!')
     } else {
       const res = await providerApi.create(newSelectedProviderConfig.value)
       if (res.data.status === 'error') {
-        throw new Error(res.data.message || '添加失败!')
+        throw new Error(res.data.message || 'Falha ao adicionar!')
       }
-      showMessage(res.data.message || '添加成功!')
+      showMessage(res.data.message || 'Adicionado!')
       legacyProviderDrafts.value = legacyProviderDrafts.value.filter(
         (provider) => provider !== selectedDraft
       )
@@ -640,7 +640,7 @@ function isProviderTesting(providerId) {
 async function testSingleProvider(provider) {
   if (isProviderTesting(provider.id)) return
   if (provider.enable === false) {
-    showMessage('该提供商未被用户启用', 'error')
+    showMessage('Este provedor não foi ativado pelo usuário', 'error')
     return
   }
   await testProvider(provider)

@@ -189,7 +189,7 @@ async function loadProviderConfigs(force = false) {
       providersLoaded.value = true;
     }
   } catch (error) {
-    console.error("Failed to load provider list:", error);
+    console.error("Falha ao carregar os provedores:", error);
   } finally {
     loadingProviders.value = false;
   }

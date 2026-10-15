@@ -38,7 +38,7 @@ async def _post_json(
         async with session.post(endpoint, json=payload) as response:
             data = await response.json(content_type=None)
     if not isinstance(data, dict):
-        raise RuntimeError("飞书接口响应格式异常")
+        raise RuntimeError("Formato de resposta da API Lark inválido")
     return data
 
 
@@ -52,7 +52,7 @@ async def _get_json(
         async with session.get(endpoint, headers=headers) as response:
             data = await response.json(content_type=None)
     if not isinstance(data, dict):
-        raise RuntimeError("飞书接口响应格式异常")
+        raise RuntimeError("Formato de resposta da API Lark inválido")
     return data
 
 
@@ -71,22 +71,27 @@ async def request_lark_bot_info(
         },
     )
     if token_data.get("code") != 0:
-        raise RuntimeError(_string_field(token_data, "msg") or "获取飞书访问令牌失败")
+        raise RuntimeError(
+            _string_field(token_data, "msg")
+            or "Falha ao obter o token de acesso ao Lark"
+        )
 
     tenant_access_token = _string_field(token_data, "tenant_access_token")
     if not tenant_access_token:
-        raise RuntimeError("飞书访问令牌响应缺少 tenant_access_token")
+        raise RuntimeError("A resposta do token do Lark não contém tenant_access_token")
 
     bot_data = await _get_json(
         f"{open_base}{BOT_INFO_PATH}",
         headers={"Authorization": f"Bearer {tenant_access_token}"},
     )
     if bot_data.get("code") != 0:
-        raise RuntimeError(_string_field(bot_data, "msg") or "获取飞书机器人信息失败")
+        raise RuntimeError(
+            _string_field(bot_data, "msg") or "Falha ao obter os dados do bot Lark"
+        )
 
     bot = bot_data.get("bot")
     if not isinstance(bot, dict):
-        raise RuntimeError("飞书机器人信息响应缺少 bot 字段")
+        raise RuntimeError("A resposta dos dados do bot Lark não contém o campo bot")
 
     return LarkBotInfo(
         app_name=_string_field(bot, "app_name"),

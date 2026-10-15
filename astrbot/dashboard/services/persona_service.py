@@ -30,11 +30,11 @@ class PersonaService:
         persona_id = payload.get("persona_id")
 
         if not persona_id:
-            raise PersonaServiceError("缺少必要参数: persona_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: persona_id")
 
         persona = await self.persona_mgr.get_persona(persona_id)
         if not persona:
-            raise PersonaServiceError("人格不存在")
+            raise PersonaServiceError("Persona não encontrada")
 
         return self.serialize_persona(persona)
 
@@ -56,9 +56,9 @@ class PersonaService:
         sort_order = payload.get("sort_order", 0)
 
         if not persona_id:
-            raise PersonaServiceError("人格ID不能为空")
+            raise PersonaServiceError("O ID da persona não pode ficar vazio")
         if not system_prompt:
-            raise PersonaServiceError("系统提示词不能为空")
+            raise PersonaServiceError("O prompt de sistema não pode ficar vazio")
 
         self._validate_begin_dialogs(begin_dialogs)
 
@@ -74,7 +74,7 @@ class PersonaService:
         )
 
         return {
-            "message": "人格创建成功",
+            "message": "Persona criada",
             "persona": self.serialize_persona(persona, empty_lists_for_tools=True),
         }
 
@@ -91,7 +91,7 @@ class PersonaService:
         custom_error_message = payload.get("custom_error_message")
 
         if not persona_id:
-            raise PersonaServiceError("缺少必要参数: persona_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: persona_id")
 
         if has_custom_error_message:
             custom_error_message = self._normalize_custom_error_message(
@@ -114,17 +114,17 @@ class PersonaService:
             update_kwargs["custom_error_message"] = custom_error_message
 
         await self.persona_mgr.update_persona(**update_kwargs)
-        return {"message": "人格更新成功"}
+        return {"message": "Persona atualizada"}
 
     async def delete_persona(self, data: object) -> dict:
         payload = self._payload(data)
         persona_id = payload.get("persona_id")
 
         if not persona_id:
-            raise PersonaServiceError("缺少必要参数: persona_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: persona_id")
 
         await self.persona_mgr.delete_persona(persona_id)
-        return {"message": "人格删除成功"}
+        return {"message": "Persona excluída"}
 
     async def move_persona(self, data: object) -> dict:
         payload = self._payload(data)
@@ -132,10 +132,10 @@ class PersonaService:
         folder_id = payload.get("folder_id")
 
         if not persona_id:
-            raise PersonaServiceError("缺少必要参数: persona_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: persona_id")
 
         await self.persona_mgr.move_persona_to_folder(persona_id, folder_id)
-        return {"message": "人格移动成功"}
+        return {"message": "Persona movida"}
 
     async def list_folders(self, parent_id: str | None) -> list[dict]:
         if parent_id == "":
@@ -151,11 +151,11 @@ class PersonaService:
         folder_id = payload.get("folder_id")
 
         if not folder_id:
-            raise PersonaServiceError("缺少必要参数: folder_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: folder_id")
 
         folder = await self.persona_mgr.get_folder(folder_id)
         if not folder:
-            raise PersonaServiceError("文件夹不存在")
+            raise PersonaServiceError("Pasta não encontrada")
 
         return self.serialize_folder(folder)
 
@@ -167,7 +167,7 @@ class PersonaService:
         sort_order = payload.get("sort_order", 0)
 
         if not name:
-            raise PersonaServiceError("文件夹名称不能为空")
+            raise PersonaServiceError("O nome da pasta não pode ficar vazio")
 
         folder = await self.persona_mgr.create_folder(
             name=name,
@@ -177,7 +177,7 @@ class PersonaService:
         )
 
         return {
-            "message": "文件夹创建成功",
+            "message": "Pasta criada",
             "folder": self.serialize_folder(folder),
         }
 
@@ -192,7 +192,7 @@ class PersonaService:
         sort_order = payload.get("sort_order")
 
         if not folder_id:
-            raise PersonaServiceError("缺少必要参数: folder_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: folder_id")
 
         await self.persona_mgr.update_folder(
             folder_id=folder_id,
@@ -202,35 +202,35 @@ class PersonaService:
             sort_order=sort_order,
         )
 
-        return {"message": "文件夹更新成功"}
+        return {"message": "Pasta atualizada"}
 
     async def delete_folder(self, data: object) -> dict:
         payload = self._payload(data)
         folder_id = payload.get("folder_id")
 
         if not folder_id:
-            raise PersonaServiceError("缺少必要参数: folder_id")
+            raise PersonaServiceError("Parâmetro obrigatório ausente: folder_id")
 
         await self.persona_mgr.delete_folder(folder_id)
-        return {"message": "文件夹删除成功"}
+        return {"message": "Pasta excluída"}
 
     async def reorder_items(self, data: object) -> dict:
         payload = self._payload(data)
         items = payload.get("items", [])
 
         if not items:
-            raise PersonaServiceError("items 不能为空")
+            raise PersonaServiceError("items não pode ficar vazio")
 
         for item in items:
             if not all(key in item for key in ("id", "type", "sort_order")):
                 raise PersonaServiceError(
-                    "每个 item 必须包含 id, type, sort_order 字段"
+                    "Cada item deve conter os campos id, type e sort_order"
                 )
             if item["type"] not in ("persona", "folder"):
-                raise PersonaServiceError("type 字段必须是 'persona' 或 'folder'")
+                raise PersonaServiceError("O campo type deve ser 'persona' ou 'folder'")
 
         await self.persona_mgr.batch_update_sort_order(items)
-        return {"message": "排序更新成功"}
+        return {"message": "Ordenação atualizada"}
 
     @staticmethod
     def serialize_persona(persona, empty_lists_for_tools: bool = False) -> dict:
@@ -269,14 +269,18 @@ class PersonaService:
     def _normalize_custom_error_message(value):
         if value is not None:
             if not isinstance(value, str):
-                raise PersonaServiceError("自定义报错回复信息必须是字符串")
+                raise PersonaServiceError(
+                    "A resposta de erro personalizada deve ser um texto"
+                )
             return value.strip() or None
         return None
 
     @staticmethod
     def _validate_begin_dialogs(begin_dialogs) -> None:
         if begin_dialogs and len(begin_dialogs) % 2 != 0:
-            raise PersonaServiceError("预设对话数量必须为偶数（用户和助手轮流对话）")
+            raise PersonaServiceError(
+                "O número de mensagens predefinidas deve ser par, alternando entre usuário e assistente"
+            )
 
     @staticmethod
     def _payload(data: object) -> dict:

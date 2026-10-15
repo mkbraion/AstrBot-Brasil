@@ -72,7 +72,7 @@ async def _post_json(
         response.raise_for_status()
         data = response.json()
     if not isinstance(data, dict):
-        raise RuntimeError("QQ 机器人绑定接口响应格式异常")
+        raise RuntimeError("Formato de resposta da associação de bot QQ inválido")
     retcode = data.get("retcode")
     if retcode is not None:
         try:
@@ -84,7 +84,7 @@ async def _post_json(
         message = (
             _string_field(data, "msg")
             or _string_field(data, "message")
-            or "QQ 机器人绑定接口返回失败"
+            or "A API de associação do bot QQ retornou uma falha"
         )
         raise RuntimeError(message)
     return data
@@ -119,9 +119,9 @@ def decrypt_qqofficial_secret(encrypted_secret: str, bind_key: str) -> str:
         key = base64.b64decode(bind_key)
         raw = base64.b64decode(encrypted_secret)
     except Exception as exc:
-        raise ValueError("QQ 机器人凭证解码失败") from exc
+        raise ValueError("Falha ao decodificar as credenciais do bot QQ") from exc
     if len(key) != 32 or len(raw) <= 28:
-        raise ValueError("QQ 机器人凭证密文格式异常")
+        raise ValueError("Formato das credenciais criptografadas do bot QQ inválido")
 
     nonce = raw[:12]
     tag = raw[-16:]
@@ -130,7 +130,7 @@ def decrypt_qqofficial_secret(encrypted_secret: str, bind_key: str) -> str:
     try:
         return cipher.decrypt_and_verify(ciphertext, tag).decode("utf-8")
     except Exception as exc:
-        raise ValueError("QQ 机器人凭证解密失败") from exc
+        raise ValueError("Falha ao descriptografar as credenciais do bot QQ") from exc
 
 
 def qqofficial_login_result(data: dict[str, Any], *, bind_key: str) -> dict[str, Any]:
@@ -160,7 +160,7 @@ def qqofficial_login_result(data: dict[str, Any], *, bind_key: str) -> dict[str,
             return {
                 "status": "error",
                 "qr_status": raw_status,
-                "message": "扫码成功但未返回完整 QQ 机器人凭证",
+                "message": "Código QR lido, mas as credenciais completas do bot QQ não foram retornadas",
             }
         try:
             secret = decrypt_qqofficial_secret(encrypted_secret, bind_key)
@@ -182,7 +182,7 @@ def qqofficial_login_result(data: dict[str, Any], *, bind_key: str) -> dict[str,
         return {
             "status": "expired",
             "qr_status": raw_status,
-            "message": "二维码已过期",
+            "message": "O código QR expirou",
         }
 
     return {"status": "pending", "qr_status": raw_status}
@@ -223,7 +223,7 @@ async def request_qqofficial_login_qr(
         payload = {}
     task_id = str(payload.get("task_id") or "").strip()
     if not task_id:
-        raise RuntimeError("QQ 机器人绑定任务响应缺少 task_id")
+        raise RuntimeError("A resposta da associação do bot QQ não contém task_id")
 
     return QQOfficialLoginRegistration(
         task_id=task_id,

@@ -51,7 +51,7 @@ export function useSessions(chatboxMode: boolean = false) {
                 const response = await chatApi.listSessions({ page, page_size: 30 });
                 if (requestId !== sessionsRequestId) return;
                 if (response.data.status !== 'ok') {
-                    throw new Error(response.data.message || 'Failed to load sessions');
+                    throw new Error(response.data.message || "Falha ao carregar as sessões");
                 }
                 const payload = response.data.data;
                 loaded.push(...payload.sessions);
@@ -89,7 +89,7 @@ export function useSessions(chatboxMode: boolean = false) {
                     const umoDetails = buildWebchatUmoDetails(sessionId, false);
                     await configRouteApi.upsert(umoDetails.umo, { config_id: selectedConfigId });
                 } catch (err) {
-                    console.error('Failed to bind config to session', err);
+                    console.error("Falha ao vincular a configuração à sessão", err);
                 }
             }
 
@@ -151,12 +151,12 @@ export function useSessions(chatboxMode: boolean = false) {
             const currentSessionId = currSessionId.value;
             const response = await chatApi.batchDeleteSessions({ session_ids: sessionIds });
             if (response.data?.status !== 'ok') {
-                throw new Error(response.data?.message || 'Failed to batch delete sessions');
+                throw new Error(response.data?.message || "Falha ao excluir as sessões em lote");
             }
 
             const data = response.data?.data;
             if (!isBatchDeleteResponseData(data)) {
-                throw new Error('Invalid batch delete response payload');
+                throw new Error("Resposta da exclusão em lote inválida");
             }
 
             const failedItems = data.failed_items;
@@ -207,7 +207,7 @@ export function useSessions(chatboxMode: boolean = false) {
             }
             editTitleDialog.value = false;
         } catch (err) {
-            console.error('重命名会话失败:', err);
+            console.error('Falha ao renomear a sessão:', err);
         }
     }
 

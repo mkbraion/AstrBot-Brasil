@@ -338,7 +338,7 @@ watch(
         dark ? "dark" : "light",
       );
     } catch (error) {
-      if (!cancelled) console.warn("Failed to highlight workspace file", error);
+      if (!cancelled) console.warn("Falha ao realçar o arquivo da área de trabalho", error);
     }
   },
 );

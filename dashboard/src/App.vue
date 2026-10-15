@@ -12,7 +12,7 @@
       <span>{{ toastStore.current.message }}</span>
     </div>
     <template #actions v-if="toastStore.current.closable">
-      <v-btn icon="mdi-close" variant="text" size="small" aria-label="Close notification" @click="snackbarShow = false" />
+      <v-btn icon="mdi-close" variant="text" size="small" aria-label="Fechar notificação" @click="snackbarShow = false" />
     </template>
   </v-snackbar>
 </template>
@@ -53,7 +53,7 @@ onMounted(() => {
       await globalWaitingRef.value?.check?.()
     } catch (error) {
       globalWaitingRef.value?.stop?.()
-      console.error('Tray restart backend failed:', error)
+      console.error("Falha ao reiniciar o backend pela bandeja:", error)
     }
   })
 })

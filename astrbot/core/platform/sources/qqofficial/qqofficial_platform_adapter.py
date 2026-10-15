@@ -281,7 +281,7 @@ class botClient(Client):
         await self.close()
 
 
-@register_platform_adapter("qq_official", "QQ 机器人官方 API 适配器")
+@register_platform_adapter("qq_official", "Adaptador da API oficial de bots do QQ")
 class QQOfficialPlatformAdapter(Platform):
     def __init__(
         self,
@@ -584,7 +584,7 @@ class QQOfficialPlatformAdapter(Platform):
     def meta(self) -> PlatformMetadata:
         return PlatformMetadata(
             name="qq_official",
-            description="QQ 机器人官方 API 适配器",
+            description="Adaptador da API oficial de bots do QQ",
             id=cast(str, self.config.get("id")),
             support_proactive_message=True,
         )
@@ -745,11 +745,11 @@ class QQOfficialPlatformAdapter(Platform):
                     ext_data = json.loads(ext_decoded)
                     emoji_text = ext_data.get("text", "")
                     if emoji_text:
-                        return f"[表情:{emoji_text}]"
+                        return f"[Emoji:{emoji_text}]"
                 except Exception:
                     pass
             # Fallback if parsing fails
-            return "[表情]"
+            return "[Emoji]"
 
         # Match face tags: <faceType=...>
         return re.sub(r"<faceType=\d+[^>]*>", replace_face, content)

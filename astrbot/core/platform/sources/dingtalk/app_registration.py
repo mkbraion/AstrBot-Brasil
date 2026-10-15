@@ -127,7 +127,10 @@ def dingtalk_registration_poll_result(raw: dict[str, Any]) -> dict[str, Any]:
         client_id = _string_field(raw, "client_id")
         client_secret = _string_field(raw, "client_secret")
         if not client_id or not client_secret:
-            return {"status": "error", "message": "扫码成功但未获取到钉钉应用凭证"}
+            return {
+                "status": "error",
+                "message": "Código QR lido, mas as credenciais do aplicativo DingTalk não foram obtidas",
+            }
         return {
             "status": "created",
             "client_id": client_id,
@@ -136,11 +139,15 @@ def dingtalk_registration_poll_result(raw: dict[str, Any]) -> dict[str, Any]:
     if status_raw == "FAIL":
         return {
             "status": "error",
-            "message": _string_field(raw, "fail_reason") or "钉钉扫码创建失败",
+            "message": _string_field(raw, "fail_reason")
+            or "Falha na criação por QR do DingTalk",
         }
     if status_raw == "EXPIRED":
-        return {"status": "expired", "message": "钉钉扫码已过期，请重新创建"}
+        return {
+            "status": "expired",
+            "message": "O código QR do DingTalk expirou. Crie outro",
+        }
     return {
         "status": "error",
-        "message": f"钉钉扫码创建返回未知状态: {status_raw or 'UNKNOWN'}",
+        "message": f"A criação por QR do DingTalk retornou um estado desconhecido: {status_raw or 'UNKNOWN'}",
     }
