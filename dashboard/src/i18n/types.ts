@@ -1,14 +1,14 @@
 /**
- * I18n TypeScript Type Definitions - Auto-generated from JSON
- * 国际化类型定义，从JSON文件自动推断，确保类型安全且自动同步
+ * Definições de tipos TypeScript para i18n — geradas automaticamente a partir de JSON
+ * Tipos de internacionalização inferidos dos arquivos JSON, com segurança de tipos e sincronização automática
  */
 
-// 从实际的翻译数据推断完整的翻译结构类型
+// Infere a estrutura completa a partir dos dados reais de tradução
 import type { Locale, Translations } from './translations';
 
 export type TranslationSchema = Translations;
 
-// TypeScript 助手：递归提取嵌套键路径
+// Auxiliar TypeScript: extrai recursivamente caminhos de chaves aninhadas
 type NestedKeyOf<T> = T extends object 
   ? {
       [K in keyof T & string]: T[K] extends object
@@ -17,28 +17,28 @@ type NestedKeyOf<T> = T extends object
     }[keyof T & string]
   : never;
 
-// 自动推断的翻译键联合类型 - 包含所有有效的点分隔键路径
+// União de chaves de tradução inferida automaticamente, incluindo caminhos válidos separados por pontos
 export type TranslationKey = NestedKeyOf<TranslationSchema>;
 
-// 语言环境类型 - 从可用语言加载器推断
+// Tipo de localidade inferido dos carregadores de idiomas disponíveis
 export type { Locale } from './translations';
 
-// 翻译函数类型
+// Tipo da função de tradução
 export type TranslationFunction = {
   (key: TranslationKey): string;
   (key: TranslationKey, params: Record<string, string | number>): string;
 };
 
-// 以下是保留的工具类型定义，这些不依赖具体的翻译结构
+// Tipos auxiliares mantidos, independentes da estrutura específica das traduções
 
-// 模块加载状态
+// Estado de carregamento do módulo
 export interface ModuleLoadingState {
   core: boolean;
   features: boolean;
   messages: boolean;
 }
 
-// 翻译配置
+// Configuração de tradução
 export interface I18nConfig {
   locale: Locale;
   fallbackLocale: Locale;
@@ -48,7 +48,7 @@ export interface I18nConfig {
   devMode: boolean;
 }
 
-// 验证结果
+// Resultado da validação
 export interface ValidationResult {
   isValid: boolean;
   missingKeys: string[];
@@ -63,7 +63,7 @@ export interface ValidationError {
   severity: 'error' | 'warning';
 }
 
-// 使用情况报告
+// Relatório de utilização
 export interface UsageReport {
   unusedKeys: string[];
   undefinedKeys: string[];
@@ -72,7 +72,7 @@ export interface UsageReport {
   usedKeys: number;
 }
 
-// 翻译统计信息
+// Estatísticas de tradução
 export interface TranslationStats {
   modules: {
     [moduleName: string]: {
@@ -95,7 +95,7 @@ export interface TranslationStats {
   };
 }
 
-// 开发工具类型
+// Tipos das ferramentas de desenvolvimento
 export interface DevToolsData {
   currentLocale: Locale;
   loadedModules: string[];
@@ -110,8 +110,8 @@ export interface DevToolsData {
   };
 }
 
-// Vue I18n 模块增强 - 为了避免编译时的模块查找问题，暂时注释掉
-// 这些类型定义在运行时仍然有效，但不会在编译时产生错误
+// Extensão do módulo Vue I18n comentada temporariamente para evitar problemas de resolução durante a compilação
+// Essas definições continuam válidas em execução, sem provocar erros de compilação
 /*
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
