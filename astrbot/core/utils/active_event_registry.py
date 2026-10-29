@@ -10,9 +10,9 @@ if TYPE_CHECKING:
 
 
 class ActiveEventRegistry:
-    """维护 unified_msg_origin 到活跃事件的映射。
+    """Mantém o mapeamento de unified_msg_origin para os eventos ativos.
 
-    用于在 reset 等场景下终止该会话正在处理的事件。
+    Permite encerrar eventos em processamento na sessão, como durante um reset.
     """
 
     def __init__(self) -> None:
@@ -38,34 +38,34 @@ class ActiveEventRegistry:
         event: AstrMessageEvent,
         callback: Callable[[], None],
     ) -> None:
-        """Register immediate Agent cancellation for an active event.
+        """Registra uma função para interromper imediatamente o agente de um evento ativo.
 
-        Args:
-            event: Event that owns the active Agent execution.
-            callback: Callback that requests cancellation of the active execution.
+        Argumentos:
+            event: Evento responsável pela execução ativa do agente.
+            callback: Função de retorno que solicita a interrupção da execução ativa.
         """
         self._agent_stop_callbacks[event] = callback
 
     def unregister_agent_stop_callback(self, event: AstrMessageEvent) -> None:
-        """Remove the Agent cancellation callback for an event.
+        """Remove a função de interrupção do agente associada a um evento.
 
-        Args:
-            event: Event whose active Agent execution has finished.
+        Argumentos:
+            event: Evento cuja execução ativa do agente foi concluída.
         """
         self._agent_stop_callbacks.pop(event, None)
 
     def get_background_stop_signal(self, event: AstrMessageEvent) -> asyncio.Event:
-        """Return the shared stop signal for an event's background execution.
+        """Retorna o sinal de parada compartilhado da execução em segundo plano de um evento.
 
-        Repeated calls for the same event reuse its signal, including a signal
-        propagated by reference into a background wakeup event. New user events
-        have independent signals.
+        Chamadas repetidas para o mesmo evento reutilizam o sinal, inclusive quando
+        ele é propagado por referência para um evento de reativação em segundo
+        plano. Novos eventos do usuário possuem sinais independentes.
 
-        Args:
-            event: Event that owns the background execution.
+        Argumentos:
+            event: Evento responsável pela execução em segundo plano.
 
-        Returns:
-            The in-memory stop signal shared by the event and its wakeup events.
+        Retorno:
+            Sinal de parada em memória compartilhado pelo evento e suas reativações.
         """
         signal = event.get_extra("_background_stop_signal")
         if signal is None:
@@ -80,16 +80,17 @@ class ActiveEventRegistry:
         event: AstrMessageEvent,
         task: asyncio.Task[None],
     ) -> None:
-        """Track a background task independently of its foreground execution.
+        """Acompanha uma tarefa em segundo plano independentemente da execução principal.
 
-        The registry retains the task and its owner by unified message origin
-        until completion. An already stopped owner causes immediate cancellation.
+        O registro mantém a tarefa e seu evento responsável pela origem unificada
+        da mensagem até a conclusão. Se o evento já tiver parado, a tarefa
+        será cancelada imediatamente.
 
-        Args:
-            event: Event that owns the task and its shared stop signal.
-            task: Background execution task to retain and remove on completion.
+        Argumentos:
+            event: Evento responsável pela tarefa e pelo sinal de parada compartilhado.
+            task: Tarefa em segundo plano a manter e remover após a conclusão.
 
-        Returns:
+        Retorno:
             None.
         """
         if task.done():
@@ -115,14 +116,14 @@ class ActiveEventRegistry:
         umo: str,
         exclude: AstrMessageEvent | None = None,
     ) -> int:
-        """终止指定 UMO 的所有活跃事件及其后台任务。
+        """Encerra todos os eventos ativos e as tarefas em segundo plano do UMO informado.
 
-        Args:
-            umo: 统一消息来源标识符。
-            exclude: 需要排除的事件（通常是发起 reset 的事件本身）。
+        Argumentos:
+            umo: Identificador da origem unificada da mensagem.
+            exclude: Evento a excluir (normalmente o que iniciou o reset).
 
-        Returns:
-            被终止的事件数量。
+        Retorno:
+            Quantidade de eventos encerrados.
         """
         events = set(self._events.get(umo, []))
         events.update(
@@ -140,17 +141,18 @@ class ActiveEventRegistry:
         umo: str,
         exclude: AstrMessageEvent | None = None,
     ) -> int:
-        """请求停止指定 UMO 的所有活跃事件中的 Agent 运行。
+        """Solicita a interrupção dos agentes de todos os eventos ativos do UMO informado.
 
-        与 stop_all 不同，这里不会调用 event.stop_event()，
-        因此不会中断事件传播，后续流程（如历史记录保存）仍可继续。
+        Ao contrário de stop_all, não chama event.stop_event(), evitando
+        interromper a propagação do evento e permitindo que etapas posteriores,
+        como o salvamento do histórico, continuem.
 
-        Args:
-            umo: 统一消息来源标识符。
-            exclude: 需要排除的事件。
+        Argumentos:
+            umo: Identificador da origem unificada da mensagem.
+            exclude: Evento a excluir.
 
-        Returns:
-            收到停止请求的事件数量，同一事件只计数一次。
+        Retorno:
+            Quantidade de eventos que receberam a solicitação de parada, sem duplicações.
         """
         tasks = self._background_tasks.get(umo, {})
         events = set(self._events.get(umo, []))
@@ -170,7 +172,7 @@ class ActiveEventRegistry:
                 and not task.done()
                 and task not in self._background_cancel_requested
             ):
-                # 重复停止请求不能打断任务正在执行的取消清理。
+                # Solicitações repetidas de parada não devem interromper a limpeza do cancelamento em andamento.
                 self._background_cancel_requested.add(task)
                 task.cancel()
         return count

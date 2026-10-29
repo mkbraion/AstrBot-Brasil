@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 
 
 class _PerLoopSessionLockManager:
-    """Per-event-loop session lock manager; keeps original simple semantics."""
+    """Gerenciador de bloqueios de sessão por loop de eventos; mantém a semântica simples original."""
 
     def __init__(self) -> None:
         self._locks: dict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
@@ -31,7 +31,7 @@ class _PerLoopSessionLockManager:
 
 
 class SessionLockManager:
-    """Thread-safe session lock manager with per-event-loop isolation."""
+    """Gerenciador de bloqueios de sessão seguro entre threads, com isolamento por loop de eventos."""
 
     def __init__(self) -> None:
         self._state_guard = threading.Lock()
@@ -40,7 +40,7 @@ class SessionLockManager:
         ] = weakref.WeakKeyDictionary()
 
     def _get_loop_manager(self) -> _PerLoopSessionLockManager:
-        """Get the lock manager for the current event loop."""
+        """Obtém o gerenciador de bloqueios do loop de eventos atual."""
         loop = asyncio.get_running_loop()
         with self._state_guard:
             return self._loop_managers.setdefault(loop, _PerLoopSessionLockManager())

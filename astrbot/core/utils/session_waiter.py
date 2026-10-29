@@ -1,4 +1,4 @@
-"""会话控制"""
+"""Controle de sessões"""
 
 import abc
 import asyncio
@@ -11,26 +11,26 @@ from typing import Any
 import astrbot.core.message.components as Comp
 from astrbot.core.platform import AstrMessageEvent
 
-USER_SESSIONS: dict[str, "SessionWaiter"] = {}  # 存储 SessionWaiter 实例
-FILTERS: list["SessionFilter"] = []  # 存储 SessionFilter 实例
+USER_SESSIONS: dict[str, "SessionWaiter"] = {}  # Armazena instâncias de SessionWaiter
+FILTERS: list["SessionFilter"] = []  # Armazena instâncias de SessionFilter
 
 
 class SessionController:
-    """控制一个 Session 是否已经结束"""
+    """Controla se uma sessão foi encerrada"""
 
     def __init__(self) -> None:
         self.future = asyncio.Future()
         self.current_event: asyncio.Event | None = None
-        """当前正在等待的所用的异步事件"""
+        """Evento assíncrono atualmente aguardado"""
         self.ts: float | None = None
-        """上次保持(keep)开始时的时间"""
+        """Horário de início da última chamada de keep"""
         self.timeout: float | int | None = None
-        """上次保持(keep)开始时的超时时间"""
+        """Tempo limite definido na última chamada de keep"""
 
         self.history_chains: list[list[Comp.BaseMessageComponent]] = []
 
     def stop(self, error: Exception | None = None) -> None:
-        """立即结束这个会话"""
+        """Encerra imediatamente esta sessão"""
         if not self.future.done():
             if error:
                 self.future.set_exception(error)
@@ -38,12 +38,12 @@ class SessionController:
                 self.future.set_result(None)
 
     def keep(self, timeout: float = 0, reset_timeout=False) -> None:
-        """保持这个会话
+        """Mantém esta sessão ativa
 
         Args:
-            timeout (float): 必填。会话超时时间。
-            当 reset_timeout 设置为 True 时, 代表重置超时时间, timeout 必须 > 0, 如果 <= 0 则立即结束会话。
-            当 reset_timeout 设置为 False 时, 代表继续维持原来的超时时间, 新 timeout = 原来剩余的timeout + timeout (可以 < 0)
+            timeout (float): Obrigatório. Tempo limite da sessão.
+            Quando reset_timeout for True, reinicia o tempo limite. timeout deve ser > 0; se for <= 0, encerra a sessão imediatamente.
+            Quando reset_timeout for False, mantém o prazo anterior: novo timeout = tempo restante + timeout (que pode ser < 0).
 
         """
         new_ts = time.time()
@@ -62,42 +62,42 @@ class SessionController:
                 return
 
         if self.current_event and not self.current_event.is_set():
-            self.current_event.set()  # 通知上一个 keep 结束
+            self.current_event.set()  # Sinaliza o encerramento do keep anterior
 
         new_event = asyncio.Event()
         self.ts = new_ts
         self.current_event = new_event
         self.timeout = timeout
 
-        asyncio.create_task(self._holding(new_event, timeout))  # 开始新的 keep
+        asyncio.create_task(self._holding(new_event, timeout))  # Inicia um novo keep
 
     async def _holding(self, event: asyncio.Event, timeout: float) -> None:
-        """等待事件结束或超时"""
+        """Aguarda a conclusão do evento ou o esgotamento do prazo"""
         try:
             await asyncio.wait_for(event.wait(), timeout)
         except asyncio.TimeoutError:
             if not self.future.done():
                 self.future.set_exception(TimeoutError("Tempo limite esgotado"))
         except asyncio.CancelledError:
-            pass  # 避免报错
+            pass  # Evita propagar o erro
         # finally:
 
     def get_history_chains(self) -> list[list[Comp.BaseMessageComponent]]:
-        """获取历史消息链"""
+        """Obtém o histórico das cadeias de mensagens"""
         return self.history_chains
 
 
 class SessionFilter:
-    """如何界定一个会话"""
+    """Define como identificar uma sessão"""
 
     @abc.abstractmethod
     def filter(self, event: AstrMessageEvent) -> str:
-        """根据事件返回一个会话标识符"""
+        """Retorna o identificador da sessão com base no evento"""
 
 
 class DefaultSessionFilter(SessionFilter):
     def filter(self, event: AstrMessageEvent) -> str:
-        """默认实现，返回统一消息来源字符串作为会话标识符"""
+        """Implementação padrão: usa a origem unificada da mensagem como identificador da sessão"""
         return event.unified_msg_origin
 
 
@@ -112,36 +112,36 @@ class SessionWaiter:
         self.session_filter = session_filter
         self.handler: (
             Callable[[SessionController, AstrMessageEvent], Awaitable[Any]] | None
-        ) = None  # 处理函数
+        ) = None  # Função de tratamento
 
         self.session_controller = SessionController()
         self.record_history_chains = record_history_chains
-        """是否记录历史消息链"""
+        """Indica se o histórico das cadeias de mensagens será registrado"""
 
         self._lock = asyncio.Lock()
-        """需要保证一个 session 同时只有一个 trigger"""
+        """Garante que cada sessão tenha apenas um acionamento por vez"""
 
     async def register_wait(
         self,
         handler: Callable[[SessionController, AstrMessageEvent], Awaitable[Any]],
         timeout: int = 30,
     ) -> Any:
-        """等待外部输入并处理"""
+        """Aguarda e processa uma entrada externa"""
         self.handler = handler
         USER_SESSIONS[self.session_id] = self
 
-        # 开始一个会话保持事件
+        # Inicia o período de manutenção da sessão
         self.session_controller.keep(timeout, reset_timeout=True)
 
         try:
             return await self.session_controller.future
         finally:
-            # Clean up once on success, failure, or cancellation. A shared filter
-            # can have another registration that must not be removed twice.
+            # Limpa uma única vez após sucesso, falha ou cancelamento. Um filtro
+            # compartilhado pode ter outro registro que não deve ser removido duas vezes.
             self._cleanup()
 
     def _cleanup(self, error: Exception | None = None) -> None:
-        """清理会话"""
+        """Limpa os recursos da sessão"""
         USER_SESSIONS.pop(self.session_id, None)
         try:
             FILTERS.remove(self.session_filter)
@@ -151,7 +151,7 @@ class SessionWaiter:
 
     @classmethod
     async def trigger(cls, session_id: str, event: AstrMessageEvent) -> None:
-        """外部输入触发会话处理"""
+        """Uma entrada externa aciona o processamento da sessão"""
         session = USER_SESSIONS.get(session_id)
         if not session or session.session_controller.future.done():
             return
@@ -163,7 +163,7 @@ class SessionWaiter:
                         [copy.deepcopy(comp) for comp in event.get_messages()],
                     )
                 try:
-                    # TODO: 这里使用 create_task，跟踪 task，防止超时后这里 handler 仍然在执行
+                    # TODO: Usar create_task e acompanhar a tarefa para impedir que o handler continue após o tempo limite
                     assert session.handler is not None
                     await session.handler(session.session_controller, event)
                 except Exception as e:
@@ -171,10 +171,10 @@ class SessionWaiter:
 
 
 def session_waiter(timeout: int = 30, record_history_chains: bool = False):
-    """装饰器：自动将函数注册为 SessionWaiter 处理函数，并等待外部输入触发执行。
+    """Decorador: registra automaticamente a função como manipulador de SessionWaiter e aguarda uma entrada externa para executá-la.
 
-    :param timeout: 超时时间（秒）
-    :param record_history_chain: 是否自动记录历史消息链。可以通过 controller.get_history_chains() 获取。深拷贝。
+    :param timeout: Tempo limite (em segundos)
+    :param record_history_chain: Se deve registrar automaticamente o histórico das cadeias de mensagens. Pode ser obtido com controller.get_history_chains() (cópia profunda).
     """
 
     def decorator(
