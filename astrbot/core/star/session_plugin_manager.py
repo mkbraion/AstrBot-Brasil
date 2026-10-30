@@ -1,28 +1,28 @@
-"""会话插件管理器 - 负责管理每个会话的插件启停状态"""
+"""Gerenciador de plugins de sessão - controla a ativação dos plugins em cada sessão"""
 
 from astrbot.core import logger, sp
 from astrbot.core.platform.astr_message_event import AstrMessageEvent
 
 
 class SessionPluginManager:
-    """管理会话级别的插件启停状态"""
+    """Gerencia o estado de ativação dos plugins por sessão"""
 
     @staticmethod
     async def is_plugin_enabled_for_session(
         session_id: str,
         plugin_name: str,
     ) -> bool:
-        """检查插件是否在指定会话中启用
+        """Verifica se o plugin está ativado na sessão informada
 
         Args:
-            session_id: 会话ID (unified_msg_origin)
-            plugin_name: 插件名称
+            session_id: ID da sessão (unified_msg_origin)
+            plugin_name: Nome do plugin
 
         Returns:
-            bool: True表示启用，False表示禁用
+            bool: True indica ativado; False indica desativado
 
         """
-        # 获取会话插件配置
+        # Obtém a configuração de plugins da sessão
         session_plugin_config = await sp.get_async(
             scope="umo",
             scope_id=session_id,
@@ -34,15 +34,15 @@ class SessionPluginManager:
         enabled_plugins = session_config.get("enabled_plugins", [])
         disabled_plugins = session_config.get("disabled_plugins", [])
 
-        # 如果插件在禁用列表中，返回False
+        # Se o plugin estiver na lista de desativados, retorna False
         if plugin_name in disabled_plugins:
             return False
 
-        # 如果插件在启用列表中，返回True
+        # Se o plugin estiver na lista de ativados, retorna True
         if plugin_name in enabled_plugins:
             return True
 
-        # 如果都没有配置，默认为启用（兼容性考虑）
+        # Se não houver configuração, mantém ativado por padrão (compatibilidade)
         return True
 
     @staticmethod
@@ -50,14 +50,14 @@ class SessionPluginManager:
         event: AstrMessageEvent,
         handlers: list,
     ) -> list:
-        """根据会话配置过滤处理器列表
+        """Filtra os manipuladores de acordo com a configuração da sessão
 
         Args:
-            event: 消息事件
-            handlers: 原始处理器列表
+            event: Evento de mensagem
+            handlers: Lista original de manipuladores
 
         Returns:
-            List: 过滤后的处理器列表
+            List: Lista de manipuladores filtrada
 
         """
         from astrbot.core.star.star import star_map
@@ -75,14 +75,14 @@ class SessionPluginManager:
         disabled_plugins = session_config.get("disabled_plugins", [])
 
         for handler in handlers:
-            # 获取处理器对应的插件
+            # Obtém o plugin associado ao manipulador
             plugin = star_map.get(handler.handler_module_path)
             if not plugin:
-                # 如果找不到插件元数据，允许执行（可能是系统插件）
+                # Se os metadados do plugin não forem encontrados, permite a execução (pode ser um plugin do sistema)
                 filtered_handlers.append(handler)
                 continue
 
-            # 跳过保留插件（系统插件）
+            # Ignora plugins reservados (plugins do sistema)
             if plugin.reserved:
                 filtered_handlers.append(handler)
                 continue
@@ -90,11 +90,11 @@ class SessionPluginManager:
             if plugin.name is None:
                 continue
 
-            # 检查插件是否在当前会话中启用
+            # Verifica se o plugin está ativado na sessão atual
             if plugin.name in disabled_plugins:
                 logger.debug(
-                    f"Plugin {plugin.name} is disabled in session {session_id}; "
-                    f"skipping handler {handler.handler_name}.",
+                    f"O plugin {plugin.name} está desativado na sessão {session_id}; "
+                    f"ignorando o manipulador {handler.handler_name}.",
                 )
             else:
                 filtered_handlers.append(handler)
