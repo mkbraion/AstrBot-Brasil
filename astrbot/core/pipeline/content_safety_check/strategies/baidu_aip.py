@@ -1,4 +1,4 @@
-"""使用此功能应该先 pip install baidu-aip"""
+"""Para usar este recurso, instale primeiro a dependência com pip install baidu-aip."""
 
 from typing import Any, cast
 
@@ -23,10 +23,10 @@ class BaiduAipStrategy(ContentSafetyStrategy):
         if "data" not in res:
             return False, ""
         count = len(res["data"])
-        parts = [f"Baidu content moderation found {count} violations:\n"]
+        parts = [f"A moderação de conteúdo do Baidu encontrou {count} violações:\n"]
         for i in res["data"]:
-            # 百度 AIP 返回结构是动态 dict；类型检查时 i 可能被推断为序列，转成 dict 后用 get 取字段
+            # A API do Baidu retorna um dict dinâmico; convertemos i para dict antes de acessar os campos com get
             parts.append(f"{cast(dict[str, Any], i).get('msg', '')};\n")
-        parts.append("\nEvaluation: " + res["conclusion"])
+        parts.append("\nAvaliação: " + res["conclusion"])
         info = "".join(parts)
         return False, info

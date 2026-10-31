@@ -10,7 +10,7 @@ from ..stage import Stage, register_stage
 
 @register_stage
 class WhitelistCheckStage(Stage):
-    """检查是否在群聊/私聊白名单"""
+    """Verifica a lista de permissões de grupos e conversas privadas."""
 
     async def initialize(self, ctx: PipelineContext) -> None:
         self.enable_whitelist_check = ctx.astrbot_config["platform_settings"][
@@ -33,18 +33,18 @@ class WhitelistCheckStage(Stage):
         event: AstrMessageEvent,
     ) -> None | AsyncGenerator[None, None]:
         if not self.enable_whitelist_check:
-            # 白名单检查未启用
+            # Verificação da lista de permissões desativada
             return
 
         if len(self.whitelist) == 0:
-            # 白名单为空，不检查
+            # Lista de permissões vazia: nenhuma verificação necessária
             return
 
         if event.get_platform_name() == "webchat":
-            # WebChat 豁免
+            # WebChat está isento da verificação
             return
 
-        # 检查是否在白名单
+        # Verifica se a sessão está na lista de permissões
         if self.wl_ignore_admin_on_group:
             if (
                 event.role == "admin"
@@ -63,9 +63,10 @@ class WhitelistCheckStage(Stage):
         ):
             if self.wl_log:
                 logger.info(
-                    f"Session ID {event.unified_msg_origin} is not in the session "
-                    "allowlist, so event propagation was stopped. Add this session "
-                    "ID in WebUI: Config -> Access Control -> Whitelist -> "
-                    "Whitelist ID List, using the profile assigned to this bot.",
+                    f"O ID de sessão {event.unified_msg_origin} não está na lista de "
+                    "permissões; por isso, a propagação do evento foi interrompida. "
+                    "Adicione esse ID na interface web, em Configurações > Controle "
+                    "de acesso > Lista de permissões > IDs permitidos, usando o "
+                    "perfil atribuído a este bot.",
                 )
             event.stop_event()

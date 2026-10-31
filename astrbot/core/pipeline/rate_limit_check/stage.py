@@ -13,23 +13,23 @@ from ..stage import Stage, register_stage
 
 @register_stage
 class RateLimitStage(Stage):
-    """检查是否需要限制消息发送的限流器。
+    """Verifica se é necessário limitar o envio de mensagens.
 
-    使用 Fixed Window 算法。
-    如果触发限流，将 stall 流水线，直到下一个时间窗口来临时自动唤醒。
+    Usa o algoritmo de janela fixa (Fixed Window).
+    Quando o limite é atingido, pausa o pipeline até a próxima janela de tempo.
     """
 
     def __init__(self) -> None:
-        # 存储每个会话的请求时间队列
+        # Armazena a fila de horários das requisições de cada sessão
         self.event_timestamps: defaultdict[str, deque[datetime]] = defaultdict(deque)
-        # 为每个会话设置一个锁，避免并发冲突
+        # Usa um bloqueio por sessão para evitar conflitos de concorrência
         self.locks: defaultdict[str, asyncio.Lock] = defaultdict(asyncio.Lock)
-        # 限流参数
+        # Parâmetros de limitação de taxa
         self.rate_limit_count: int = 0
         self.rate_limit_time: timedelta = timedelta(0)
 
     async def initialize(self, ctx: PipelineContext) -> None:
-        """初始化限流器，根据配置设置限流参数。"""
+        """Inicializa os parâmetros de limitação de taxa conforme a configuração."""
         self.rate_limit_count = ctx.astrbot_config["platform_settings"]["rate_limit"][
             "count"
         ]
@@ -38,20 +38,20 @@ class RateLimitStage(Stage):
         )
         self.rl_strategy = ctx.astrbot_config["platform_settings"]["rate_limit"][
             "strategy"
-        ]  # stall or discard
+        ]  # Modos: stall (aguardar) ou discard (descartar)
 
     async def process(
         self,
         event: AstrMessageEvent,
     ) -> None | AsyncGenerator[None, None]:
-        """检查并处理限流逻辑。如果触发限流，流水线会 stall 并在窗口期后自动恢复。
+        """Verifica e aplica a limitação de taxa. Quando o limite é atingido,
+        o pipeline aguarda e retoma automaticamente na próxima janela.
 
         Args:
-            event (AstrMessageEvent): 当前消息事件。
-            ctx (PipelineContext): 流水线上下文。
+            event (AstrMessageEvent): Evento da mensagem atual.
 
         Returns:
-            MessageEventResult: 继续或停止事件处理的结果。
+            None ou AsyncGenerator[None, None]: Resultado do processamento.
 
         """
         if self.rate_limit_count <= 0:
@@ -59,9 +59,9 @@ class RateLimitStage(Stage):
 
         umo = event.unified_msg_origin
 
-        async with self.locks[umo]:  # 确保同一会话不会并发修改队列
+        async with self.locks[umo]:  # Impede alterações simultâneas na fila da mesma sessão
             now = datetime.now()
-            # 检查并处理限流，可能需要多次检查直到满足条件
+            # Repete a verificação do limite até que a condição seja atendida
             while True:
                 timestamps = self.event_timestamps[umo]
                 self._remove_expired_timestamps(timestamps, now)
@@ -77,17 +77,17 @@ class RateLimitStage(Stage):
                 match self.rl_strategy:
                     case RateLimitStrategy.STALL.value:
                         logger.info(
-                            f"Session {umo} was rate-limited. Processing will "
-                            f"pause for {stall_duration:.2f} seconds according to the "
-                            "rate-limit policy.",
+                            f"A sessão {umo} atingiu o limite de requisições. O processamento "
+                            f"será pausado por {stall_duration:.2f} segundos, conforme "
+                            "a política de limitação de taxa.",
                         )
                         await asyncio.sleep(stall_duration)
                         now = datetime.now()
                     case RateLimitStrategy.DISCARD.value:
                         logger.info(
-                            f"Session {umo} was rate-limited. This request was "
-                            "discarded according to the rate-limit policy; the limit "
-                            f"resets in {stall_duration:.2f} seconds.",
+                            f"A sessão {umo} atingiu o limite de requisições. Esta solicitação "
+                            "foi descartada conforme a política de limitação de taxa; "
+                            f"o limite será redefinido em {stall_duration:.2f} segundos.",
                         )
                         return event.stop_event()
 
@@ -96,11 +96,11 @@ class RateLimitStage(Stage):
         timestamps: deque[datetime],
         now: datetime,
     ) -> None:
-        """移除时间窗口外的时间戳。
+        """Remove os registros de horário fora da janela atual.
 
         Args:
-            timestamps (Deque[datetime]): 当前会话的时间戳队列。
-            now (datetime): 当前时间，用于计算过期时间。
+            timestamps (deque[datetime]): Fila de horários da sessão atual.
+            now (datetime): Horário atual usado para calcular a expiração.
 
         """
         expiry_threshold: datetime = now - self.rate_limit_time

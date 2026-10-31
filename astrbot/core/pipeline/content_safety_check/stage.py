@@ -13,9 +13,9 @@ from .strategies.strategy import StrategySelector
 
 @register_stage
 class ContentSafetyCheckStage(Stage):
-    """检查内容安全
+    """Verifica a segurança do conteúdo.
 
-    当前只会检查文本的。
+    Atualmente, apenas o conteúdo textual é analisado.
     """
 
     async def initialize(self, ctx: PipelineContext) -> None:
@@ -27,7 +27,7 @@ class ContentSafetyCheckStage(Stage):
         event: AstrMessageEvent,
         check_text: str | None = None,
     ) -> AsyncGenerator[None, None]:
-        """检查内容安全"""
+        """Verifica a segurança do conteúdo."""
         if check_text is None:
             texts = [event.get_message_str()]
             reply_parser = ReplyChainParser()
@@ -46,11 +46,11 @@ class ContentSafetyCheckStage(Stage):
             if event.is_at_or_wake_command:
                 event.set_result(
                     MessageEventResult().message(
-                        "Your message or the model response contains inappropriate "
-                        "content and has been blocked.",
+                        "Sua mensagem ou a resposta do modelo contém conteúdo "
+                        "impróprio e foi bloqueada.",
                     ),
                 )
                 yield
             event.stop_event()
-            logger.info(f"Content safety check failed: {info}")
+            logger.info(f"Falha na verificação de segurança do conteúdo: {info}")
             return
