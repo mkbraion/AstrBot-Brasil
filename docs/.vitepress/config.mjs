@@ -555,6 +555,62 @@ export default defineConfig({
         }
       }
     },
+    "pt-BR": {
+      label: "Português (Brasil)",
+      lang: "pt-BR",
+      themeConfig: {
+        nav: [
+          { text: "Início", link: "https://astrbot.app" },
+          { text: "Blog", link: "https://blog.astrbot.app" },
+          { text: "Roteiro", link: "https://astrbot.featurebase.app/roadmap" },
+          { text: "API HTTP", link: "https://docs.astrbot.app/scalar.html" },
+        ],
+        sidebar: [
+          {
+            text: "Introdução",
+            items: [
+              { text: "O que é AstrBot?", link: "/pt-BR/what-is-astrbot" },
+              { text: "Comunidade", link: "/pt-BR/community" },
+              { text: "Perguntas frequentes", link: "/pt-BR/faq" },
+            ],
+          },
+          {
+            text: "Edição brasileira",
+            items: [
+              { text: "Instalação", link: "/instalacao-pt-BR" },
+              { text: "Configuração", link: "/configuracao-pt-BR" },
+              { text: "Solução de problemas", link: "/solucao-de-problemas-pt-BR" },
+              { text: "FAQ da edição brasileira", link: "/faq-pt-BR" },
+            ],
+          },
+        ],
+        outline: {
+          level: "deep",
+          label: "Nesta página",
+        },
+        darkModeSwitchLabel: "Alternar tema claro/escuro",
+        sidebarMenuLabel: "Artigos",
+        returnToTopLabel: "Voltar ao topo",
+        docFooter: {
+          prev: "Anterior",
+          next: "Próximo",
+        },
+        editLink: {
+          pattern: "https://github.com/AstrBotdevs/AstrBot/edit/master/docs/:path",
+          text: "Encontrou um problema nesta página? Edite-a no GitHub",
+        },
+        logo: "/favicon.svg",
+        socialLinks: [
+          { icon: "github", link: "https://github.com/AstrBotDevs/AstrBot" },
+        ],
+        footer: {
+          message: 'Publicado com&nbsp' +
+            '<a href="https://www.rainyun.com/NjY3OTQ5_" class="deployment-link" style="display: inline-flex; align-items: center;">' +
+            '<img src="https://www.rainyun.com/img/logo.d193755d.png" width="50" alt="Rainyun Logo">' +
+            '</a>',
+        },
+      },
+    },
   },
 
   themeConfig: {
@@ -575,6 +631,23 @@ export default defineConfig({
                   selectText: "选择",
                   navigateText: "切换",
                   closeText: "关闭",
+                },
+              },
+            },
+          },
+          "pt-BR": {
+            translations: {
+              button: {
+                buttonText: "Pesquisar documentação",
+                buttonAriaLabel: "Pesquisar documentação",
+              },
+              modal: {
+                noResultsText: "Nenhum resultado encontrado",
+                resetButtonTitle: "Limpar pesquisa",
+                footer: {
+                  selectText: "Selecionar",
+                  navigateText: "Navegar",
+                  closeText: "Fechar",
                 },
               },
             },
