@@ -8,7 +8,7 @@ Baixe o arquivo `AstrBot-vxxxxx-dashboard.zip` na página de [releases](https://
 
 ### Conta do primeiro acesso e senha aleatória
 
-Na primeira inicialização, a conta da WebUI é `astrbot` por padrão. A senha inicial é gerada aleatoriamente; ela não é um valor fixo definido no código. Consulte os logs de inicialização e entre usando a senha inicial exibida:
+Na primeira inicialização, a conta do painel Web é `astrbot` por padrão. A senha inicial é gerada aleatoriamente; ela não é um valor fixo definido no código. Consulte os logs de inicialização e entre usando a senha exibida nos logs da sua própria instalação:
 
 ```text
 [00:27:40.590] [Core] [INFO] [dashboard.server:523]:
@@ -23,7 +23,7 @@ Na primeira inicialização, a conta da WebUI é `astrbot` por padrão. A senha 
 Set dashboard.host in data/cmd_config.json to enable remote access.
 ```
 
-`UiYVpZxnW8k22IWqf0ru5pOy` é a senha padrão.
+O valor mostrado no trecho acima é apenas um exemplo de log. Ele não é uma senha padrão e não deve ser reutilizado: use a senha aleatória exibida nos logs da sua própria instalação.
 
 ### Esqueci a senha do painel
 
@@ -102,7 +102,7 @@ Após a reinicialização, o AstrBot gerará automaticamente uma senha aleatóri
 
 ### A senha está correta, mas não consigo entrar após atualizar o AstrBot
 
-Se você tem certeza de que a senha do painel está correta, mas ainda não consegue entrar após atualizar o AstrBot, os arquivos estáticos antigos da WebUI podem ser incompatíveis com a versão mais recente do backend.
+Se você tem certeza de que a senha do painel está correta, mas ainda não consegue entrar após atualizar o AstrBot, os arquivos estáticos antigos da interface web podem ser incompatíveis com a versão mais recente do backend.
 
 Solução:
 
@@ -117,13 +117,13 @@ Após a reinicialização, o AstrBot carregará ou baixará os arquivos da WebUI
 
 ### Como permitir que o AstrBot controle meu computador com macOS, Windows ou Linux?
 
-1. Na WebUI do AstrBot, abra `Config`, selecione o perfil usado pelo seu bot e acesse `AI → Capabilities → Agent Computer Use`. Defina `Computer Use Runtime` como `local`. Esta seção requer o Agent Runner de IA integrado do AstrBot.
-2. No mesmo perfil, acesse `Access Control → Administrators → Administrator IDs` e adicione seu ID de usuário (disponível pelo comando `/sid`).
-3. Clique em `Save Configuration` no canto inferior direito.
+1. No painel Web do AstrBot, abra `Configurações`, selecione o perfil usado pelo seu bot e acesse `IA → Recursos → Acesso do Agent ao computador`. Em `Runtime do Computer Use`, selecione `Máquina local` (valor interno `local`). Esse recurso requer a IA integrada do AstrBot.
+2. No mesmo perfil, acesse `Controle de acesso → Administradores → IDs dos administradores` e adicione seu ID de usuário (disponível pelo comando `/sid`).
+3. Clique em `Salvar configuração` no canto inferior direito.
 
 > [!TIP]
 > Por motivos de segurança, quando o ambiente de execução está definido como `local`, por padrão o AstrBot permite que apenas administradores do próprio AstrBot utilizem os recursos de controle do computador.
-> Você pode selecionar `sandbox` como ambiente de execução para permitir que todos os usuários utilizem esses recursos em um ambiente isolado. Para saber mais, consulte [Ambiente sandbox do AstrBot](/en/use/astrbot-agent-sandbox.md).
+> Você pode selecionar `sandbox` como ambiente de execução para permitir que todos os usuários utilizem esses recursos em um ambiente isolado. Para saber mais, consulte [Ambiente sandbox do AstrBot (documentação em inglês)](/en/use/astrbot-agent-sandbox.md).
 
 ### O bot não conversa em grupos
 
@@ -131,7 +131,7 @@ Após a reinicialização, o AstrBot carregará ou baixará os arquivos da WebUI
 
 ### Não tenho permissão para executar comandos de administrador
 
-1. Os comandos administrativos padrão são `/name, /provider, /dashboard_update, /op, /deop, /persona, /llm, /plugin, /model, /groupnew`. Use o comando `/sid` para obter o ID de um usuário. Em seguida, abra `Config`, selecione o perfil usado pelo bot, adicione o ID em `Access Control → Administrators → Administrator IDs` e clique em `Save Configuration` no canto inferior direito.
+1. Os comandos administrativos padrão são `/name, /provider, /dashboard_update, /op, /deop, /persona, /llm, /plugin, /model, /groupnew`. Use o comando `/sid` para obter o ID de um usuário. Em seguida, abra `Configurações`, selecione o perfil usado pelo bot, adicione o ID em `Controle de acesso → Administradores → IDs dos administradores` e clique em `Salvar configuração` no canto inferior direito.
 
 ### Caracteres chineses aparecem corrompidos ao renderizar imagens Markdown localmente (t2i)
 
@@ -143,18 +143,18 @@ Fonte recomendada: [Maple Mono](https://github.com/subframe7536/maple-font).
 
 Isso acontece porque a API do provedor retornou um texto vazio. Tente as seguintes etapas:
 
-1. Verifique se a API key ainda é válida.
+1. Verifique se a chave de API ainda é válida.
 2. Confira se o limite de chamadas ou a cota da API foi atingido.
 3. Verifique a conexão de rede.
-4. Tente redefinir.
-5. Reduza a quantidade máxima de mensagens da conversa.
+4. Tente redefinir a conversa.
+5. Reduza o limite de mensagens mantidas no histórico da conversa.
 6. Troque para outro modelo do mesmo provedor ou para um provedor diferente.
 
 ## Sobre plugins
 
 ### Não consigo instalar um plugin
 
-Os plugins são instalados pelo GitHub. O acesso ao GitHub pode ser instável em algumas redes. Configure e salve um proxy em `Settings → Network → Proxy & Dependency Sources → HTTP Proxy`. Na mesma página, você também pode definir um `GitHub Proxy Address` ou baixar o arquivo compactado do plugin e instalá-lo pela página de Plugins.
+Os plugins são instalados pelo GitHub. O acesso ao GitHub pode ser instável em algumas redes. Configure e salve um proxy em `Configurações → Rede → Proxy e fontes de dependências → Proxy HTTP`. Na mesma página, você também pode definir o `Endereço de proxy do GitHub` ou baixar o arquivo compactado do plugin e instalá-lo pela página de Plugins.
 
 ### Erro `No module named 'xxx'` após instalar um plugin
 
@@ -168,8 +168,8 @@ Isso acontece porque as dependências do plugin não foram instaladas corretamen
 
 Solução:
 
-Com base na mensagem de erro, consulte o README do plugin para instalar manualmente as dependências. Você pode instalar pacotes pela WebUI do AstrBot em `Data & Logs → Logs → Install pip Package`.
+Com base na mensagem de erro, consulte o README do plugin para instalar manualmente as dependências. Você pode instalar pacotes pelo painel Web do AstrBot em `Dados e Logs → Registros → Instalar pacote pip`.
 
-Digite o nome do pacote na janela, informe opcionalmente a URL de um repositório PyPI e clique em `Install`.
+Digite o nome do pacote na janela, informe opcionalmente a URL de um repositório PyPI e clique em `Instalar`.
 
-Se o autor do plugin não tiver incluído um arquivo `requirements.txt`, abra uma Issue no repositório do plugin solicitando que ele o adicione.
+Se o autor do plugin não tiver incluído um arquivo `requirements.txt`, abra uma issue no repositório do plugin solicitando que ele o adicione.
