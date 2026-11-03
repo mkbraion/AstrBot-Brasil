@@ -583,6 +583,12 @@ export default defineConfig({
               { text: "FAQ da edição brasileira", link: "/faq-pt-BR" },
             ],
           },
+          {
+            text: "Uso",
+            items: [
+              { text: "CLI do AstrBot", link: "/pt-BR/use/cli" },
+            ],
+          },
         ],
         outline: {
           level: "deep",
