@@ -48,6 +48,21 @@ O comando `astrbot init` cria os diretórios de dados e os arquivos de configura
 | `astrbot help` | Exibe a ajuda da CLI. |
 | `astrbot --version` | Exibe a versão da CLI do AstrBot. |
 
+## Inicialização
+
+O comando `astrbot init` prepara o diretório de trabalho do AstrBot e solicita confirmação antes de criar os arquivos e diretórios necessários. Em instalações automatizadas, você pode pular essa confirmação com `-y` ou `--yes`:
+
+| Opção | Finalidade |
+| --- | --- |
+| `-y, --yes` | Pula as perguntas de confirmação durante a inicialização. |
+
+Exemplos:
+
+```bash
+astrbot init --yes
+astrbot init -y
+```
+
 ## Iniciar o AstrBot
 
 ```bash
