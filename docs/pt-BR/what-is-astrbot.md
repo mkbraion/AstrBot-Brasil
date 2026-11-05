@@ -23,7 +23,7 @@ Esta documentação está dividida nas seguintes seções:
 
 - **Implantar o AstrBot**: consulte o guia de implantação para instalar rapidamente o AstrBot no seu computador ou servidor na nuvem.
 - **Conectar plataformas de mensagens**: siga as instruções para conectar o AstrBot às plataformas de sua preferência, como Discord, Telegram e Slack.
-- **Configurar modelos de IA**: o AstrBot oferece suporte a vários modelos de IA. Consulte [Como conectar serviços de modelos](/en/providers/start).
+- **Configurar modelos de IA**: o AstrBot oferece suporte a vários modelos de IA. Consulte [Como conectar serviços de modelos](/pt-BR/providers/start).
 
 ## Aviso
 

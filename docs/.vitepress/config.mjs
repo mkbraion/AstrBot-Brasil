@@ -584,6 +584,12 @@ export default defineConfig({
             ],
           },
           {
+            text: "Integração com IA",
+            items: [
+              { text: "Conectar serviços de modelos", link: "/pt-BR/providers/start" },
+            ],
+          },
+          {
             text: "Uso",
             items: [
               { text: "CLI do AstrBot", link: "/pt-BR/use/cli" },
