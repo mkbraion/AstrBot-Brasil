@@ -575,6 +575,12 @@ export default defineConfig({
             ],
           },
           {
+            text: "Implantação",
+            items: [
+              { text: "A partir do código-fonte", link: "/pt-BR/deploy/astrbot/cli" },
+            ],
+          },
+          {
             text: "Edição brasileira",
             items: [
               { text: "Instalação", link: "/instalacao-pt-BR" },
