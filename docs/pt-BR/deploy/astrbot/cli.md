@@ -70,7 +70,7 @@ python main.py
 Execute no Windows:
 
 ```bash
-venv\\Scripts\\activate
+venv\Scripts\activate
 python -m pip install -r requirements.txt -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 python main.py
 ```

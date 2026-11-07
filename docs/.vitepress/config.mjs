@@ -578,6 +578,7 @@ export default defineConfig({
             text: "Implantação",
             items: [
               { text: "A partir do código-fonte", link: "/pt-BR/deploy/astrbot/cli" },
+              { text: "Com Docker", link: "/pt-BR/deploy/astrbot/docker" },
             ],
           },
           {
