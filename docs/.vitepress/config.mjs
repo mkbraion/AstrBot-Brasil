@@ -599,6 +599,7 @@ export default defineConfig({
           {
             text: "Uso",
             items: [
+              { text: "Ambiente Agent Sandbox", link: "/pt-BR/use/astrbot-agent-sandbox" },
               { text: "CLI do AstrBot", link: "/pt-BR/use/cli" },
               { text: "Comandos integrados", link: "/pt-BR/use/command" },
             ],

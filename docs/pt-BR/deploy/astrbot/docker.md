@@ -40,7 +40,7 @@ docker compose -f compose-with-shipyard.yml up -d
 docker pull soulter/shipyard-ship:latest
 ```
 
-Para consultar os detalhes de configuração e uso, leia a documentação do [ambiente Agent Sandbox](/en/use/astrbot-agent-sandbox.md).
+Para consultar os detalhes de configuração e uso, leia a documentação do [ambiente Agent Sandbox](/pt-BR/use/astrbot-agent-sandbox).
 :::
 
 ## Implantar com Docker
@@ -146,7 +146,7 @@ sudo docker exec -it astrbot astrbot password --username <new-username>
 
 ## Configurar um proxy HTTP no Docker
 
-Configure o proxy HTTP na WebUI, em `Settings → Network → Proxy & Dependency Sources → HTTP Proxy`. O AstrBot acessa esse endereço **de dentro do próprio contêiner**. Portanto, `http://127.0.0.1:7890` aponta para o contêiner do AstrBot, e não para o host nem para outro contêiner.
+Configure o proxy HTTP na WebUI, em `Configurações → Rede → Proxy e fontes de dependências → Proxy HTTP (na interface em inglês: Settings → Network → Proxy & Dependency Sources → HTTP Proxy)`. O AstrBot acessa esse endereço **de dentro do próprio contêiner**. Portanto, `http://127.0.0.1:7890` aponta para o contêiner do AstrBot, e não para o host nem para outro contêiner.
 
 Se o proxy estiver em execução no host ou em outro contêiner cuja porta esteja publicada no host:
 
