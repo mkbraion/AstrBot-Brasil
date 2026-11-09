@@ -33,7 +33,7 @@ Ao habilitar **Executar código** (`Execute code`), o Agent recebe as ferramenta
 Ao habilitar **Permitir rede durante a execução** (`Allow network during execution`), o acesso à rede durante a execução de Shell/Python é permitido. Caso contrário, o acesso à rede durante a execução fica restrito.
 
 > [!TIP]
-> Essa configuração de rede controla se Shell/Python pode acessar a rede por meio de comandos como `curl` ou `wget`. Ela não controla o recurso [Pesquisa na Web](/en/use/websearch).
+> Essa configuração de rede controla se Shell/Python pode acessar a rede por meio de comandos como `curl` ou `wget`. Ela não controla o recurso [Pesquisa na Web](/pt-BR/use/websearch).
 
 O **Escopo de acesso a arquivos** (`File access scope`) tem três opções: **Desativado** (`Disabled`), **Espaço de trabalho** (`Workspace`) e **Ambiente inteiro** (`Entire environment`):
 
