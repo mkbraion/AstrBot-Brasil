@@ -21,9 +21,9 @@ A pesquisa utiliza ferramentas integradas. Você não precisa instalar um plugin
 4. Informe a chave de API do provedor. O Baidu AI Search utiliza uma única chave; os demais provedores aceitam uma lista. Uma chave é suficiente para começar, e várias chaves podem ser alternadas.
 5. Clique em `Save Configuration` no canto inferior direito.
 
-![Configurações de Pesquisa na Web na interface atual](/en/use/images/websearch-settings-en.png)
+![Configurações de Pesquisa na Web (captura da interface em inglês)](/en/use/images/websearch-settings-en.png)
 
-Essas configurações pertencem ao perfil selecionado. Alterar `default` não habilita a pesquisa para bots que utilizam outro perfil. Consulte o [guia da WebUI](/en/use/webui) para saber como atribuir perfis.
+Essas configurações pertencem ao perfil selecionado. Alterar `default` não habilita a pesquisa para bots que utilizam outro perfil. Consulte o [guia da WebUI](/pt-BR/use/webui) para saber como atribuir perfis.
 
 ## Escolher um provedor de pesquisa
 
@@ -62,7 +62,7 @@ Encontre a documentação oficial do bubblewrap e explique quais problemas essa 
 Com um provedor que ofereça extração de páginas, você também pode pedir:
 
 ```text
-Leia esta página e resuma as etapas de instalação: https://docs.astrbot.app/en/deploy/astrbot/docker.html
+Leia esta página e resuma as etapas de instalação: https://docs.astrbot.app/pt-BR/deploy/astrbot/docker.html
 ```
 
 O modelo decide se deve pesquisar, quais palavras-chave utilizar e se deve ler uma página em seguida. Habilitar a pesquisa não faz com que todas as mensagens acessem a Internet. Quando precisar de informações atuais, peça: “pesquise primeiro e depois responda”.
@@ -93,6 +93,6 @@ O provedor de pesquisa legado `default` não é mais compatível. Selecione um p
 
 ## Recursos relacionados
 
-- [Base de conhecimento](/en/use/knowledge-base): utilize manuais, perguntas frequentes e materiais internos enviados por você. A pesquisa na Web é útil para informações públicas que mudam com frequência.
-- [Orquestração de SubAgents](/en/use/subagent): disponibilize recursos de pesquisa para um Agent responsável por coletar informações.
-- [MCP](/en/use/mcp): adicione ferramentas de outros serviços de recuperação por meio de seus servidores MCP.
+- [Base de conhecimento](/pt-BR/use/knowledge-base): utilize manuais, perguntas frequentes e materiais internos enviados por você. A pesquisa na Web é útil para informações públicas que mudam com frequência.
+- [Orquestração de SubAgents](/pt-BR/use/subagent): disponibilize recursos de pesquisa para um Agent responsável por coletar informações.
+- [MCP](/pt-BR/use/mcp): adicione ferramentas de outros serviços de recuperação por meio de seus servidores MCP.

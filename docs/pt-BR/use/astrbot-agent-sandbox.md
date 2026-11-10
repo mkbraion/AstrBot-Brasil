@@ -26,7 +26,7 @@ O AstrBot fornece ao Agent um conjunto de ferramentas, incluindo Shell, Python e
 
 As permissões de membros e administradores são configuradas separadamente, conforme a matriz abaixo.
 
-![Matriz de políticas de permissão local](/en/use/images/config-local-permissions-en.png)
+![Matriz de políticas de permissão local (captura da interface em inglês)](/en/use/images/config-local-permissions-en.png)
 
 Ao habilitar **Executar código** (`Execute code`), o Agent recebe as ferramentas `astrbot_execute_shell` e `astrbot_execute_python` para executar comandos Shell e código Python no ambiente local.
 

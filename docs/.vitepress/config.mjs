@@ -599,6 +599,10 @@ export default defineConfig({
           {
             text: "Uso",
             items: [
+              { text: "WebUI", link: "/pt-BR/use/webui" },
+              { text: "Base de conhecimento", link: "/pt-BR/use/knowledge-base" },
+              { text: "MCP", link: "/pt-BR/use/mcp" },
+              { text: "Orquestração de SubAgents", link: "/pt-BR/use/subagent" },
               { text: "Ambiente Agent Sandbox", link: "/pt-BR/use/astrbot-agent-sandbox" },
               { text: "Pesquisa na Web", link: "/pt-BR/use/websearch" },
               { text: "CLI do AstrBot", link: "/pt-BR/use/cli" },
