@@ -20,7 +20,7 @@ Os caminhos abaixo correspondem à barra lateral atual, cuja ordem de menus é f
 | System Settings → Appearance → Customize Sidebar | Removido; a barra lateral usa o layout padrão |
 | Custom Rules / Future Tasks / SubAgents | Custom Rules fica no grupo `System` da barra lateral; Future Tasks e SubAgents ficam no grupo `Extensions` |
 
-Os endereços antigos de logs, rastreamento, conversas e estatísticas continuam redirecionando para as abas correspondentes. Os Agent Runners agora são salvos em cada perfil; eles não são mais criados como provedores de modelos. Consulte o [Modo de execução do Agent](/en/use/agent-runner) para ver as etapas de configuração.
+Os endereços antigos de logs, rastreamento, conversas e estatísticas continuam redirecionando para as abas correspondentes. Os Agent Runners agora são salvos em cada perfil; eles não são mais criados como provedores de modelos. Consulte o [Modo de execução do Agent](/pt-BR/use/agent-runner) para ver as etapas de configuração.
 
 ## Navegação da documentação
 
@@ -118,7 +118,7 @@ Use o ícone `{}`, identificado como `Edit Configuration File`, para editar em J
 
 ### Configurações do sistema
 
-As configurações globais ficam em `System Settings), na parte inferior da barra lateral.
+As configurações globais ficam em `System Settings`, na parte inferior da barra lateral.
 
 O título da página e a navegação entre seções permanecem fixos; somente o painel de configurações à direita rola.
 
