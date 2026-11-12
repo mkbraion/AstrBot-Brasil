@@ -607,7 +607,7 @@ export default defineConfig({
                 collapsed: false,
                 items: [
                   { text: "MCP", link: "/pt-BR/use/mcp" },
-                  { text: "Plugins (em inglês)", link: "/en/use/plugin" },
+                  { text: "Plugins", link: "/pt-BR/use/plugin" },
                   { text: "Skills (em inglês)", link: "/en/use/skills" },
                 ],
               },
