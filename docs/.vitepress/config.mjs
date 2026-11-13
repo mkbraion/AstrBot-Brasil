@@ -608,7 +608,7 @@ export default defineConfig({
                 items: [
                   { text: "MCP", link: "/pt-BR/use/mcp" },
                   { text: "Plugins", link: "/pt-BR/use/plugin" },
-                  { text: "Skills (em inglês)", link: "/en/use/skills" },
+                  { text: "Skills", link: "/pt-BR/use/skills" },
                 ],
               },
               {
@@ -617,7 +617,7 @@ export default defineConfig({
                 items: [
                   { text: "Ambiente Agent Sandbox", link: "/pt-BR/use/astrbot-agent-sandbox" },
                   { text: "Orquestração de SubAgents", link: "/pt-BR/use/subagent" },
-                  { text: "Recursos proativos (em inglês)", link: "/en/use/proactive-agent" },
+                  { text: "Recursos proativos", link: "/pt-BR/use/proactive-agent" },
                   { text: "Pesquisa na Web", link: "/pt-BR/use/websearch" },
                   { text: "Base de conhecimento", link: "/pt-BR/use/knowledge-base" },
                   { text: "Compactação de contexto", link: "/pt-BR/use/context-compress" },
@@ -626,7 +626,7 @@ export default defineConfig({
               },
               { text: "Regras personalizadas", link: "/pt-BR/use/custom-rules" },
               { text: "Modo de execução de agentes", link: "/pt-BR/use/agent-runner" },
-              { text: "Modo de Webhook unificado (em inglês)", link: "/en/use/unified-webhook" },
+              { text: "Modo de Webhook unificado", link: "/pt-BR/use/unified-webhook" },
             ],
           },
         ],
