@@ -597,6 +597,15 @@ export default defineConfig({
             ],
           },
           {
+            text: "Plataformas de mensagens",
+            items: [
+              { text: "Visão geral", link: "/pt-BR/platform/start" },
+              { text: "Telegram", link: "/pt-BR/platform/telegram" },
+              { text: "Discord", link: "/pt-BR/platform/discord" },
+              { text: "Slack", link: "/pt-BR/platform/slack" },
+            ],
+          },
+          {
             text: "Uso",
             items: [
               { text: "WebUI", link: "/pt-BR/use/webui" },
