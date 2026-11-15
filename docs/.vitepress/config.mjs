@@ -603,6 +603,8 @@ export default defineConfig({
               { text: "Telegram", link: "/pt-BR/platform/telegram" },
               { text: "Discord", link: "/pt-BR/platform/discord" },
               { text: "Slack", link: "/pt-BR/platform/slack" },
+              { text: "Lark", link: "/pt-BR/platform/lark" },
+              { text: "LINE", link: "/pt-BR/platform/line" },
             ],
           },
           {
