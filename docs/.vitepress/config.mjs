@@ -577,8 +577,11 @@ export default defineConfig({
           {
             text: "Implantação",
             items: [
-              { text: "A partir do código-fonte", link: "/pt-BR/deploy/astrbot/cli" },
+              { text: "Cliente desktop", link: "/pt-BR/deploy/astrbot/desktop" },
+              { text: "AstrBot Launcher", link: "/pt-BR/deploy/astrbot/launcher" },
               { text: "Com Docker", link: "/pt-BR/deploy/astrbot/docker" },
+              { text: "Com Kubernetes", link: "/pt-BR/deploy/astrbot/kubernetes" },
+              { text: "A partir do código-fonte", link: "/pt-BR/deploy/astrbot/cli" },
             ],
           },
           {
