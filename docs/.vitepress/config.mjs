@@ -577,11 +577,26 @@ export default defineConfig({
           {
             text: "Implantação",
             items: [
+              { text: "Gerenciador de pacotes (uv)", link: "/pt-BR/deploy/astrbot/package" },
               { text: "Cliente desktop", link: "/pt-BR/deploy/astrbot/desktop" },
               { text: "AstrBot Launcher", link: "/pt-BR/deploy/astrbot/launcher" },
               { text: "Com Docker", link: "/pt-BR/deploy/astrbot/docker" },
               { text: "Com Kubernetes", link: "/pt-BR/deploy/astrbot/kubernetes" },
+              { text: "Painel 1Panel", link: "/pt-BR/deploy/astrbot/1panel" },
+              { text: "Painel BT", link: "/pt-BR/deploy/astrbot/btpanel" },
               { text: "A partir do código-fonte", link: "/pt-BR/deploy/astrbot/cli" },
+              {
+                text: "Outras opções de implantação",
+                link: "/pt-BR/deploy/astrbot/other-deployments",
+                collapsed: true,
+                items: [
+                  { text: "CasaOS", link: "/pt-BR/deploy/astrbot/casaos" },
+                  { text: "Compshare (GPU)", link: "/pt-BR/deploy/astrbot/compshare" },
+                  { text: "Implantação comunitária", link: "/pt-BR/deploy/astrbot/community-deployment" },
+                  { text: "Gerenciador de pacotes do sistema (AUR)", link: "/pt-BR/deploy/astrbot/sys-pm" },
+                ],
+              },
+              { text: "Após a implantação", link: "/pt-BR/deploy/when-deployed" },
             ],
           },
           {
