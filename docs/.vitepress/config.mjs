@@ -612,6 +612,7 @@ export default defineConfig({
             text: "Integração com IA",
             items: [
               { text: "Conectar serviços de modelos", link: "/pt-BR/providers/start" },
+              { text: "Parâmetros personalizados do modelo", link: "/pt-BR/config/model-config" },
             ],
           },
           {
