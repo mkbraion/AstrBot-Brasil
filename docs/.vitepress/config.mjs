@@ -619,6 +619,10 @@ export default defineConfig({
             text: "Plataformas de mensagens",
             items: [
               { text: "Visão geral", link: "/pt-BR/platform/start" },
+              { text: "Aplicativo do WeCom", link: "/pt-BR/platform/wecom" },
+              { text: "Bot de IA do WeCom", link: "/pt-BR/platform/wecom_ai_bot" },
+              { text: "Conta oficial do WeChat", link: "/pt-BR/platform/weixin-official-account" },
+              { text: "WeChat pessoal", link: "/pt-BR/platform/weixin_oc" },
               { text: "Telegram", link: "/pt-BR/platform/telegram" },
               { text: "Discord", link: "/pt-BR/platform/discord" },
               { text: "Slack", link: "/pt-BR/platform/slack" },
