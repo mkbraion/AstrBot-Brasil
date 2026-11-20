@@ -619,6 +619,7 @@ export default defineConfig({
             text: "Plataformas de mensagens",
             items: [
               { text: "Visão geral", link: "/pt-BR/platform/start" },
+              { text: "OneBot v11", link: "/pt-BR/platform/aiocqhttp" },
               { text: "Aplicativo do WeCom", link: "/pt-BR/platform/wecom" },
               { text: "Bot de IA do WeCom", link: "/pt-BR/platform/wecom_ai_bot" },
               { text: "Conta oficial do WeChat", link: "/pt-BR/platform/weixin-official-account" },
@@ -627,6 +628,7 @@ export default defineConfig({
               { text: "Discord", link: "/pt-BR/platform/discord" },
               { text: "Slack", link: "/pt-BR/platform/slack" },
               { text: "Lark", link: "/pt-BR/platform/lark" },
+              { text: "DingTalk", link: "/pt-BR/platform/dingtalk" },
               { text: "LINE", link: "/pt-BR/platform/line" },
             ],
           },
