@@ -665,6 +665,20 @@ export default defineConfig({
               { text: "Modo de Webhook unificado", link: "/pt-BR/use/unified-webhook" },
             ],
           },
+          {
+            text: "Desenvolvimento",
+            items: [
+              {
+                text: "Desenvolvimento de plugins",
+                collapsed: false,
+                items: [
+                  { text: "Guia de desenvolvimento", link: "/pt-BR/dev/star/plugin-new" },
+                  { text: "Publicar plugin", link: "/pt-BR/dev/star/plugin-publish" },
+                ],
+              },
+              { text: "Integração de adaptadores de plataforma", link: "/pt-BR/dev/plugin-platform-adapter" },
+            ],
+          },
         ],
         outline: {
           level: "deep",
