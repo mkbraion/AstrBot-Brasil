@@ -612,6 +612,17 @@ export default defineConfig({
             text: "Integração com IA",
             items: [
               { text: "Conectar serviços de modelos", link: "/pt-BR/providers/start" },
+              {
+                text: "Provedores de modelos",
+                collapsed: true,
+                items: [
+                  { text: "Visão geral dos provedores de LLM", link: "/pt-BR/providers/llm" },
+                  { text: "302.AI", link: "/pt-BR/providers/302ai" },
+                  { text: "AIHubMix", link: "/pt-BR/providers/aihubmix" },
+                  { text: "MiraRouter", link: "/pt-BR/providers/mirarouter" },
+                  { text: "Imagens de entrada para modelos", link: "/pt-BR/providers/image-formats" },
+                ],
+              },
               { text: "Parâmetros personalizados do modelo", link: "/pt-BR/config/model-config" },
             ],
           },
