@@ -1,4 +1,4 @@
-"""Copied from astrbot.core.utils.version_comparator"""
+"""Copiado de astrbot.core.utils.version_comparator"""
 
 import re
 
@@ -6,11 +6,11 @@ import re
 class VersionComparator:
     @staticmethod
     def compare_version(v1: str, v2: str) -> int:
-        """Compare version numbers according to Semver semantics. Supports version numbers with more than 3 digits and handles pre-release tags.
+        """Compara números de versão de acordo com a semântica do SemVer. Oferece suporte a números de versão com mais de 3 dígitos e a identificadores de pré-lançamento.
 
-        Reference: https://semver.org/
+        Referência: https://semver.org/
 
-        Returns 1 if v1 > v2, -1 if v1 < v2, 0 if v1 == v2.
+        Retorna 1 se v1 > v2, -1 se v1 < v2, 0 se v1 == v2.
         """
         v1 = v1.lower().replace("v", "")
         v2 = v2.lower().replace("v", "")
@@ -24,7 +24,7 @@ class VersionComparator:
                 return [], None
             major_minor_patch = match.group(1).split(".")
             prerelease = match.group(2)
-            # buildmetadata = match.group(3)  # Build metadata is ignored in comparison
+            # buildmetadata = match.group(3)  # Metadados de build são ignorados na comparação
             parts = [int(x) for x in major_minor_patch]
             prerelease = VersionComparator._split_prerelease(prerelease)
             return parts, prerelease
@@ -32,7 +32,7 @@ class VersionComparator:
         v1_parts, v1_prerelease = split_version(v1)
         v2_parts, v2_prerelease = split_version(v2)
 
-        # Compare numeric parts
+        # Compara as partes numéricas
         length = max(len(v1_parts), len(v2_parts))
         v1_parts.extend([0] * (length - len(v1_parts)))
         v2_parts.extend([0] * (length - len(v2_parts)))
@@ -43,11 +43,11 @@ class VersionComparator:
             if v1_parts[i] < v2_parts[i]:
                 return -1
 
-        # Compare pre-release tags
+        # Compara os identificadores de pré-lançamento
         if v1_prerelease is None and v2_prerelease is not None:
-            return 1  # Version without pre-release tag is higher than one with it
+            return 1  # A versão sem identificador de pré-lançamento é superior à versão com esse identificador
         if v1_prerelease is not None and v2_prerelease is None:
-            return -1  # Version with pre-release tag is lower than one without it
+            return -1  # A versão com identificador de pré-lançamento é inferior à versão sem esse identificador
         if v1_prerelease is not None and v2_prerelease is not None:
             len_pre = max(len(v1_prerelease), len(v2_prerelease))
             for i in range(len_pre):
@@ -59,9 +59,9 @@ class VersionComparator:
                 if p1 is not None and p2 is None:
                     return 1
                 if isinstance(p1, int) and isinstance(p2, str):
-                    return -1
+                    return -1  # Identificadores numéricos têm precedência inferior à de identificadores textuais
                 if isinstance(p1, str) and isinstance(p2, int):
-                    return 1
+                    return 1  # Identificadores textuais têm precedência superior à de identificadores numéricos
                 if isinstance(p1, int) and isinstance(p2, int):
                     if p1 > p2:
                         return 1
@@ -72,9 +72,9 @@ class VersionComparator:
                         return 1
                     if p1 < p2:
                         return -1
-            return 0  # Pre-release tags are identical
+            return 0  # Os identificadores de pré-lançamento são idênticos
 
-        return 0  # Both numeric parts and pre-release tags are equal
+        return 0  # As partes numéricas e os identificadores de pré-lançamento são iguais
 
     @staticmethod
     def _split_prerelease(prerelease):
