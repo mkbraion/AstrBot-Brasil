@@ -623,6 +623,18 @@ export default defineConfig({
                   { text: "Imagens de entrada para modelos", link: "/pt-BR/providers/image-formats" },
                 ],
               },
+              {
+                text: "Executores de agentes",
+                link: "/pt-BR/providers/agent-runners",
+                collapsed: true,
+                items: [
+                  { text: "Executor integrado", link: "/pt-BR/providers/agent-runners/astrbot-agent-runner" },
+                  { text: "Dify", link: "/pt-BR/providers/agent-runners/dify" },
+                  { text: "Coze", link: "/pt-BR/providers/agent-runners/coze" },
+                  { text: "Alibaba Cloud Bailian", link: "/pt-BR/providers/agent-runners/dashscope" },
+                  { text: "DeerFlow", link: "/pt-BR/providers/agent-runners/deerflow" },
+                ],
+              },
               { text: "Parâmetros personalizados do modelo", link: "/pt-BR/config/model-config" },
             ],
           },
